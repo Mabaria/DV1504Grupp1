@@ -5,7 +5,6 @@
 class Panel 
 {
 public:
-
 	Panel(int width, int height, int top, int left, ID3D11Device *device);
 	~Panel();
 	
@@ -32,7 +31,6 @@ public:
 	const int GetNumberOfIndices() const;
 
 private:
-
 	// Pointer to main device until better solution.
 	ID3D11Device *mDevice;
 	// ---------------------------------------------
@@ -49,7 +47,7 @@ private:
 	int mTop;
 	int mLeft;
 	// -------------------------
-
+	
 	// May or may not be used depending on the panel.
 	ID3D11Texture2D *mTexture; 
 	ID3D11ShaderResourceView *mShaderResourceView;
