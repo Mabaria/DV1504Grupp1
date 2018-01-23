@@ -6,7 +6,7 @@ class Panel
 {
 public:
 
-	Panel(int width, int height, int top, int left);
+	Panel(int width, int height, int top, int left, ID3D11Device *device);
 	~Panel();
 	
 	const void SetWidth(int width);
@@ -21,17 +21,27 @@ public:
 	const void SetLeft(int left);
 	const int GetLeft() const;
 
-	const bool CreateVertexBuffer(float *vertices);
-	const bool CreateIndexBuffer(int *indices);
+	const void CreateVertexBuffer(float *vertices);
+	const void CreateIndexBuffer(int *indices, int numberOfIndices);
 
+	ID3D11RenderTargetView *rGetRenderTargetView() const;
+	const ID3D11ShaderResourceView *rGetShaderResourceView() const;
+
+	const ID3D11Buffer *GetVertexBuffer() const;
+	const ID3D11Buffer *GetIndexBuffer() const;
+	const int GetNumberOfIndices() const;
 
 private:
+
+	// Pointer to main device until better solution.
+	ID3D11Device *mDevice;
+	// ---------------------------------------------
 
 	// Render target for rendering to the panel.
 	ID3D11Texture2D *mRenderTarget;
 	ID3D11RenderTargetView *mRenderTargetView;
 	// -----------------------------------------
-
+	
 	// Viewport with parameters.
 	D3D11_VIEWPORT mViewport;
 	int mWidth;
@@ -41,7 +51,7 @@ private:
 	// -------------------------
 
 	// May or may not be used depending on the panel.
-	ID3D11Texture2D *mTexture; // DDSTextureLoader?
+	ID3D11Texture2D *mTexture; 
 	ID3D11ShaderResourceView *mShaderResourceView;
 	ID3D11Buffer *mVertexBuffer;
 	ID3D11Buffer *mIndexBuffer;
