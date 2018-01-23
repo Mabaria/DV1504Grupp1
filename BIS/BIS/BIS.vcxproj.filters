@@ -33,6 +33,9 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\UI\UIElements\Panel.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
     <ClInclude Include="Window.h">
       <Filter>Header Files\Graphics Engine</Filter>
     </ClInclude>
@@ -67,5 +70,8 @@
     <FxCompile Include="Test_PixelShader.hlsl">
       <Filter>Source Files\Graphics Engine\Test</Filter>
     </FxCompile>
+    <ClCompile Include="..\..\UI\UIElements\Panel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
