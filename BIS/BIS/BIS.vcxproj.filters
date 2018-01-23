@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\RoomHandler">
+      <UniqueIdentifier>{2035c083-98fa-4150-a312-6ef27844adec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\RoomHandler">
+      <UniqueIdentifier>{2a23bc03-bfc9-448f-bb9e-91eb4faa2ad9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -78,6 +84,24 @@
     <ClInclude Include="..\..\GraphicsEngine\Camera\Test_Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Room.h">
+      <Filter>Header Files\RoomHandler</Filter>
+    </ClInclude>
+    <ClInclude Include="Event.h">
+      <Filter>Header Files\RoomHandler</Filter>
+    </ClInclude>
+    <ClInclude Include="DeckHandler.h">
+      <Filter>Header Files\RoomHandler</Filter>
+    </ClInclude>
+    <ClInclude Include="Deck.h">
+      <Filter>Header Files\RoomHandler</Filter>
+    </ClInclude>
+    <ClInclude Include="EventLog.h">
+      <Filter>Header Files\RoomHandler</Filter>
+    </ClInclude>
+    <ClInclude Include="DangerEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -130,6 +154,24 @@
     </ClCompile>
     <ClCompile Include="..\..\GraphicsEngine\Camera\Test_Camera.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Event.cpp">
+      <Filter>Source Files\RoomHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="Room.cpp">
+      <Filter>Source Files\RoomHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="DeckHandler.cpp">
+      <Filter>Source Files\RoomHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="Deck.cpp">
+      <Filter>Source Files\RoomHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="EventLog.cpp">
+      <Filter>Source Files\RoomHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="DangerEvent.cpp">
+      <Filter>Source Files\RoomHandler</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
