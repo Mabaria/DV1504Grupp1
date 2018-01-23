@@ -1,4 +1,3 @@
-//#include "stdafx.h"
 #include "Panel.h"
 
 Panel::Panel(int width, int height, int top, int left, ID3D11Device *device)
@@ -143,7 +142,7 @@ const void Panel::CreateIndexBuffer(int * indices, int numberOfIndices)
 
 	D3D11_BUFFER_DESC indexBufferDesc{};
 	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	indexBufferDesc.Usage	  = D3D11_USAGE_DEFAULT;
 	indexBufferDesc.ByteWidth = (UINT)(sizeof(*indices));
 
 	D3D11_SUBRESOURCE_DATA indexData{};
