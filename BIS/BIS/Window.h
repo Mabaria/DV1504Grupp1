@@ -3,6 +3,22 @@
 #include <string>
 #include <Windows.h>
 
+/*
+
+	-- Window --
+
+	Simple win32 window
+
+	Open() is used for opening window (show window)
+	Close() is used for destroying window
+	IsOpen() checks if window is open
+	Update() does necessary message handling for window to function properly
+
+	Use GetClientSize() to receive size of the drawable surface
+
+*/
+
+
 struct Size {
 	int width, height;
 };
