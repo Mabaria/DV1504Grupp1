@@ -15,6 +15,7 @@
 	Update() does necessary message handling for window to function properly
 
 	Use GetClientSize() to receive size of the drawable surface
+	Use GetWindow() to receive HWND
 
 */
 
@@ -40,6 +41,7 @@ public:
 	bool Update();
 
 	const Size& GetClientSize();
+	const HWND& GetWindow() const;
 
 private:
 	int mClientWidth, mClientHeight;

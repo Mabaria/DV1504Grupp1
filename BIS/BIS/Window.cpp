@@ -148,3 +148,8 @@ const Size& Window::GetClientSize()
 
 	return this->mSize;
 }
+
+const HWND& Window::GetWindow() const
+{
+	return this->mHwnd;
+}
