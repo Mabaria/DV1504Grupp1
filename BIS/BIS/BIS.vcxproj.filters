@@ -46,6 +46,11 @@
     </ClInclude>
     <ClInclude Include="..\..\GraphicsEngine\Test_Graphics.h">
       <Filter>Test</Filter>
+    <ClInclude Include="..\..\UI\UIElements\Panel.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Window.h">
+      <Filter>Header Files\Graphics Engine</Filter>
     </ClInclude>
     <ClInclude Include="..\..\UI\UIElements\Panel2D.h">
       <Filter>Header Files</Filter>
@@ -80,6 +85,17 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\UI\UIElements\Panel2D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Test_VertexShader.hlsl">
+      <Filter>Source Files\Graphics Engine\Test</Filter>
+    </FxCompile>
+    <FxCompile Include="Test_PixelShader.hlsl">
+      <Filter>Source Files\Graphics Engine\Test</Filter>
+    </FxCompile>
+    <ClCompile Include="..\..\UI\UIElements\Panel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
