@@ -11,6 +11,30 @@ Panel::Panel(int width, int height, int top, int left, HWND handle)
 
 Panel::~Panel()
 {
+	if (this->mRenderTarget != nullptr)
+	{
+		this->mRenderTarget->Release();
+	}
+	if (this->mRenderTargetView != nullptr) 
+	{
+		this->mRenderTargetView->Release();
+	}
+	if (this->mTexture != nullptr)
+	{
+		this->mTexture->Release();
+	}
+	if (this->mShaderResourceView != nullptr)
+	{
+		this->mShaderResourceView->Release();
+	}
+	if (this->mVertexBuffer != nullptr)
+	{
+		this->mVertexBuffer->Release();
+	}
+	if (this->mIndexBuffer != nullptr)
+	{
+		this->mIndexBuffer->Release();
+	}
 }
 
 const void Panel::SetWidth(int width)
