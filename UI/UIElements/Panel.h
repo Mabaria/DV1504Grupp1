@@ -29,5 +29,6 @@ protected:
 	int mTop;
 	int mLeft;
 	HWND mHandle;
+
 private:
 };
