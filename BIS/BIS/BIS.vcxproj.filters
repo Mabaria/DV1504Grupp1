@@ -47,6 +47,12 @@
     <ClInclude Include="..\..\GraphicsEngine\Test_Graphics.h">
       <Filter>Test</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\UI\UIElements\Panel2D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UI\UIElements\Panel3D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
@@ -68,6 +74,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\UI\UIElements\Panel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UI\UIElements\Panel3D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UI\UIElements\Panel2D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
