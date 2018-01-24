@@ -75,11 +75,12 @@ bool TestAssimp() {
 
 	::PrintStatus(scene2, pFile, importer2);
 
-	std::cout << "Scene 1 Mesh 1 Face 1 indices: " << std::endl;
+
 	if (scene->HasMeshes())
 	{
 		std::cout << "Scene 1 numMeshes: " << scene->mNumMeshes << std::endl;
 		std::cout << "Scene 1 Mesh 1 numFaces: " << scene->mMeshes[0]->mNumFaces << std::endl;
+		std::cout << "Scene 1 Mesh 1 Face 1 indices: " << std::endl;
 		if (scene->mMeshes[0]->HasFaces())
 		{
 			for (unsigned int i = 0; i < scene->mMeshes[0]->mFaces[0].mNumIndices; i++)
