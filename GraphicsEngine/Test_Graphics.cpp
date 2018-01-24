@@ -1,4 +1,4 @@
-#include "Test_Graphics.h"
+#include "../GraphicsEngine/Test_Graphics.h"
 
 void Test_Window()
 {
@@ -92,9 +92,9 @@ void Test_D3D11()
 	);
 
 	direct3D.CreateShaders(
-		L"Test_VertexShader.hlsl",
+		L"../../GraphicsEngine/Test_VertexShader.hlsl",
 		L"",
-		L"Test_PixelShader.hlsl",
+		L"../../GraphicsEngine/Test_PixelShader.hlsl",
 		&pVS,
 		nullptr,
 		&pPS,
