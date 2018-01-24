@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Panel.h"
 #include <Windows.h>
+#include "Panel.h"
+
 
 class Panel3D : public Panel
 {
