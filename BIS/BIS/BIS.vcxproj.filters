@@ -39,6 +39,12 @@
     <ClInclude Include="Test_Graphics.h">
       <Filter>Header Files\Graphics Engine\´Test</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\UI\UIElements\Panel2D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UI\UIElements\Panel3D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -52,6 +58,12 @@
     </ClCompile>
     <ClCompile Include="Test_Graphics.cpp">
       <Filter>Source Files\Graphics Engine\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UI\UIElements\Panel3D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UI\UIElements\Panel2D.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
