@@ -13,6 +13,18 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\Graphics Engine">
+      <UniqueIdentifier>{64a7966f-f6ff-45ce-b994-9cf0a709300f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics Engine">
+      <UniqueIdentifier>{fe5e73aa-5ed2-4086-ae1a-893914a43dd8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Graphics Engine\Test">
+      <UniqueIdentifier>{e0d002a9-cc8c-4e06-8940-1ca6f9dc5be8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Graphics Engine\´Test">
+      <UniqueIdentifier>{c74a4b40-b3fd-4c62-815d-78d0bff30140}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -21,8 +33,7 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Logic\Timer.h">
-      <Filter>Header Files</Filter>
+
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -32,8 +43,6 @@
     <ClCompile Include="BIS.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Logic\Timer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+
   </ItemGroup>
 </Project>
