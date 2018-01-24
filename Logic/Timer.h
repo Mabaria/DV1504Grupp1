@@ -7,18 +7,18 @@ class Timer
 public:
 	Timer();
 	~Timer();
-	std::string WhenTimerStarted() const;
+	const std::string WhenTimerStarted() const;
 	const std::string WhenTimerStoped();
 	void StartTimer();
-	const int GetSec();
-	const int GetMin();
-	const int GetHour();
-	const int GetDay();
+	const int GetSeconds();
+	const int GetMinutes();
+	const int GetHours();
+	const int GetDays();
 	const std::string GetTimeAsStr();
-	const std::string GetSecAsStr();
-	const std::string GetMinAsStr();
-	const std::string GetHourAsStr();
-	const std::string GetDayAsStr();
+	const std::string GetSecondsAsStr();
+	const std::string GetMinutesAsStr();
+	const std::string GetHoursAsStr();
+	const std::string GetDaysAsStr();
 
 private:
 	time_t mStartTime;
