@@ -1,4 +1,4 @@
-#include "Window.h"
+#include "../GraphicsEngine/Window.h"
 
 // Necessary for window
 LRESULT CALLBACK WindowProcedure(

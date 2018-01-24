@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Window.h"
-#include "Direct3D.h"
+#include "../GraphicsEngine/Window.h"
+#include "../GraphicsEngine/DX/Direct3D.h"
 #include <iostream>
 
 

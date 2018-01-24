@@ -1,4 +1,4 @@
-#include "Direct3D.h"
+#include "../DX/Direct3D.h"
 
 
 D3D11::D3D11(
