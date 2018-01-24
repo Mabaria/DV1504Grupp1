@@ -16,7 +16,8 @@ Panel3D::Panel3D(int width, int height, int top, int left, HWND handle)
 		handle, 
 		0, 
 		GetModuleHandle(0),
-		0);	
+		0);
+	
 }
 
 Panel3D::~Panel3D()
