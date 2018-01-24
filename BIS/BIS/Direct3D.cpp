@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "Direct3D.h"
 
 
@@ -7,8 +6,8 @@ D3D11::D3D11(
 	const int width, 
 	const int height)
 {
-	this->mWidth = width;
-	this->mHeight = height;
+	this->mSize.width = width;
+	this->mSize.height = height;
 
 	this->mDevice = nullptr;
 	this->mContext = nullptr;
@@ -18,17 +17,16 @@ D3D11::D3D11(
 
 	this->mModeDesc = { 0 };
 
-
 	// -- Sample --
-	this->mSample = { 0 };
-	this->mSample.Count = 1;
-	this->mSample.Quality = 0;
+	this->mSampleDesc = { 0 };
+	this->mSampleDesc.Count = 1;
+	this->mSampleDesc.Quality = 0;
 
 	// -- Viewport --
 	this->mViewport.TopLeftX = 0.0f;
 	this->mViewport.TopLeftY = 0.0f;
-	this->mViewport.Width = (float)this->mWidth;
-	this->mViewport.Height = (float)this->mHeight;
+	this->mViewport.Width = (float)this->mSize.width;
+	this->mViewport.Height = (float)this->mSize.height;
 	this->mViewport.MinDepth = 0.1f;
 	this->mViewport.MaxDepth = 1.0f;
 
@@ -44,7 +42,7 @@ D3D11::D3D11(
 	this->mClearColor[2] = 0.0f;
 	this->mClearColor[3] = 1.0f;
 
-	this->ChangeSize(this->mWidth, this->mHeight);
+	this->ChangeSize(this->mSize);
 }
 
 D3D11::~D3D11()
@@ -66,20 +64,28 @@ void D3D11::ChangeClearColor(
 	this->mClearColor[2] = b;
 }
 
-void D3D11::ChangeSize(
-	const float width,
-	const float height)
+void D3D11::ChangeSize(const float width, const float height)
 {
-	this->mModeDesc.Width  = this->mWidth  = (UINT)width;
-	this->mModeDesc.Height = this->mHeight = (UINT)height;
+	this->mModeDesc.Width  = this->mSize.width  = (UINT)width;
+	this->mModeDesc.Height = this->mSize.height = (UINT)height;
+	this->mSwapChain->ResizeTarget(&this->mModeDesc);
+}
+
+void D3D11::ChangeSize(const Size size)
+{
+	this->mModeDesc.Width = this->mSize.width = (UINT)size.width;
+	this->mModeDesc.Height = this->mSize.height = (UINT)size.height;
 	this->mSwapChain->ResizeTarget(&this->mModeDesc);
 }
 
 const Size& D3D11::GetSize()
 {
-	this->mSize.width = this->mWidth;
-	this->mSize.height = this->mHeight;
 	return this->mSize;
+}
+
+const DXGI_SAMPLE_DESC& D3D11::GetSampleDesc() const
+{
+	return this->mSampleDesc;
 }
 
 void D3D11::ReleaseCOM(IUnknown *object)
@@ -216,12 +222,12 @@ void D3D11::CreateDeviceAndSwapChain(const HWND& window)
 {
 	DXGI_SWAP_CHAIN_DESC swap_chain_desc	= { 0 };
 	swap_chain_desc.BufferCount				= 1;
-	swap_chain_desc.BufferDesc.Width		= this->mWidth;
-	swap_chain_desc.BufferDesc.Height		= this->mHeight;
+	swap_chain_desc.BufferDesc.Width		= this->mSize.width;
+	swap_chain_desc.BufferDesc.Height		= this->mSize.height;
 	swap_chain_desc.BufferDesc.Format		= DXGI_FORMAT_R8G8B8A8_UNORM;
 	swap_chain_desc.BufferUsage				= DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	swap_chain_desc.OutputWindow			= window;
-	swap_chain_desc.SampleDesc				= this->mSample;
+	swap_chain_desc.SampleDesc				= this->mSampleDesc;
 	swap_chain_desc.Windowed				= TRUE;
 
 	HRESULT hr = D3D11CreateDeviceAndSwapChain(
@@ -251,12 +257,12 @@ void D3D11::CreateRenderTarget()
 	);
 
 	D3D11_TEXTURE2D_DESC depth_buffer_desc = { 0 };
-	depth_buffer_desc.Width				= this->mWidth;
-	depth_buffer_desc.Height			= this->mHeight;
+	depth_buffer_desc.Width				= this->mSize.width;
+	depth_buffer_desc.Height			= this->mSize.height;
 	depth_buffer_desc.MipLevels			= 1;
 	depth_buffer_desc.ArraySize			= 1;
 	depth_buffer_desc.Format			= DXGI_FORMAT_D24_UNORM_S8_UINT;
-	depth_buffer_desc.SampleDesc		= this->mSample;
+	depth_buffer_desc.SampleDesc		= this->mSampleDesc;
 	depth_buffer_desc.Usage				= D3D11_USAGE_DEFAULT;
 	depth_buffer_desc.BindFlags			= D3D11_BIND_DEPTH_STENCIL;
 
@@ -287,17 +293,17 @@ void D3D11::CreateRenderTarget()
 		this->mDepthBuffer);
 }
 
-IDXGISwapChain& D3D11::GetSwapChain() const
+IDXGISwapChain* D3D11::GetSwapChain() const
 {
-	return *this->mSwapChain;
+	return this->mSwapChain;
 }
 
-ID3D11DeviceContext& D3D11::GetContext() const
+ID3D11DeviceContext* D3D11::GetContext() const
 {
-	return *this->mContext;
+	return this->mContext;
 }
 
-ID3D11Device& D3D11::GetDevice() const
+ID3D11Device* D3D11::GetDevice() const
 {
-	return *this->mDevice;
+	return this->mDevice;
 }

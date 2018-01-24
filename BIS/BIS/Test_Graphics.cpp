@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "Test_Graphics.h"
 
 void Test_Window()
@@ -86,7 +85,7 @@ void Test_D3D11()
 
 	ID3D11Buffer *vertex_buffer = nullptr;
 
-	direct3D.GetDevice().CreateBuffer(
+	direct3D.GetDevice()->CreateBuffer(
 		&vertex_buffer_desc,
 		&vertex_data,
 		&vertex_buffer
@@ -104,15 +103,15 @@ void Test_D3D11()
 		&pInputLayout
 	);
 
-	direct3D.GetContext().VSSetShader(pVS, nullptr, 0);
-	direct3D.GetContext().GSSetShader(nullptr, nullptr, 0);
-	direct3D.GetContext().PSSetShader(pPS, nullptr, 0);
+	direct3D.GetContext()->VSSetShader(pVS, nullptr, 0);
+	direct3D.GetContext()->GSSetShader(nullptr, nullptr, 0);
+	direct3D.GetContext()->PSSetShader(pPS, nullptr, 0);
 
 	UINT stride = 4 * sizeof(float);
 	UINT offset = 0;
-	direct3D.GetContext().IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	direct3D.GetContext().IASetVertexBuffers(0, 1, &vertex_buffer, &stride, &offset);
-	direct3D.GetContext().IASetInputLayout(pInputLayout);
+	direct3D.GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	direct3D.GetContext()->IASetVertexBuffers(0, 1, &vertex_buffer, &stride, &offset);
+	direct3D.GetContext()->IASetInputLayout(pInputLayout);
 
 	window.Open();
 	ShowWindow(child_window, SW_NORMAL);
@@ -122,8 +121,8 @@ void Test_D3D11()
 		if (!window.Update())
 		{
 			direct3D.Clear();
-			direct3D.GetContext().Draw(3, 0);
-			direct3D.GetSwapChain().Present(1, 0);
+			direct3D.GetContext()->Draw(3, 0);
+			direct3D.GetSwapChain()->Present(1, 0);
 
 			direct3D.ChangeSize(
 				window.GetClientSize().width * width,

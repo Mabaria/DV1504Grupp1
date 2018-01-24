@@ -41,21 +41,15 @@ public:
 
 	void Clear();
 
-	IDXGISwapChain& GetSwapChain() const;
-	ID3D11DeviceContext& GetContext() const;
-	ID3D11Device& GetDevice() const;
+	IDXGISwapChain* GetSwapChain() const;
+	ID3D11DeviceContext* GetContext() const;
+	ID3D11Device* GetDevice() const;
+	const DXGI_SAMPLE_DESC& GetSampleDesc() const;
 
-	void ChangeClearColor(
-		const float r,
-		const float g,
-		const float b
-	);
+	void ChangeClearColor(const float r, const float g, const float b);
 
-	void ChangeSize(
-		const float width,
-		const float height
-	);
-
+	void ChangeSize(const float width, const float height);
+	void ChangeSize(const Size size);
 	const Size& GetSize();
 
 	void ReleaseCOM(IUnknown *object);
@@ -66,13 +60,12 @@ private:
 	IDXGISwapChain *mSwapChain;
 	ID3D11RenderTargetView *mBackBuffer;
 	ID3D11DepthStencilView *mDepthBuffer;
-	DXGI_MODE_DESC mModeDesc;
 
-	DXGI_SAMPLE_DESC mSample;
+	DXGI_MODE_DESC mModeDesc;
+	DXGI_SAMPLE_DESC mSampleDesc;
 	D3D11_VIEWPORT mViewport;
 
 	Size mSize;
-	int mWidth, mHeight; // Size of viewport
 	float mClearColor[4];
 	
 	void CreateDeviceAndSwapChain(const HWND& window);
