@@ -41,23 +41,14 @@
     <ClInclude Include="..\..\GraphicsEngine\DX\Direct3D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\GraphicsEngine\Test_Graphics.h">
-      <Filter>Test</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\UI\UIElements\Panel.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\GraphicsEngine\Test_Graphics.h">
+      <Filter>Test</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BIS.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\UI\UIElements\Panel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <Filter Include="Header Files">
       <UniqueIdentifier>{e4fdd6bb-133b-4ecc-a69f-88b3c0892322}</UniqueIdentifier>
     </Filter>
@@ -70,5 +61,14 @@
     <Filter Include="Test">
       <UniqueIdentifier>{aa4a76fe-128f-4ecc-bbfd-f78b2f002482}</UniqueIdentifier>
     </Filter>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BIS.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UI\UIElements\Panel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
