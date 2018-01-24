@@ -16,7 +16,11 @@ void Panel2D::AddButton(int width, int height, int top, int left, LPCTSTR name, 
 	// Push button into list of UI elements.
 }
 
-void Panel2D::AddTextbox()
+void Panel2D::AddTextbox(int width, int height, int top, int left, LPCTSTR name)
 {
 	// Push textbox into list of UI elements.
+}
+
+void Panel2D::Update()
+{
 }
