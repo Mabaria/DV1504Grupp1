@@ -1,9 +1,7 @@
 #include "Room.h"
 
-Room::Room(std::string name, std::string deckName)
+Room::Room()
 {
-	this->mName = name;
-	this->mDeckName = deckName;
 }
 
 Room::~Room()
@@ -11,28 +9,28 @@ Room::~Room()
 
 }
 
-const bool Room::HasEvents() const
+
+void Room::AddEvent(EventType type)
 {
-	return this->mEvents.size() > 0;
+	// TODO
 }
 
-// Returns true if successful
-const bool Room::AddEvent(EventType type)
+void Room::SetName(std::string name)
 {
-	
+	this->mName = name;
 }
 
-// Returns true if successful
-const bool Room::AddEvent(EventType type)
+void Room::SetRoomEventIndex(int index)
 {
+	this->mRoomEventIndex = index;
 }
 
-const std::string Room::GetName() const
+std::string Room::GetName() const
 {
 	return this->mName;
 }
 
-const std::string Room::GetDeck() const
+int Room::GetRoomEventIndex() const
 {
-	return this->mDeckName;
+	return this->mRoomEventIndex;
 }

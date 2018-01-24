@@ -8,31 +8,24 @@ EventLog::~EventLog()
 {
 }
 
-bool EventLog::AddEvent(EventType type, EventState state, Room *room)
+void EventLog::AddEvent(EventType type, int roomEventIndex)
 {
-	this->mEvents.push_back(Event(type, state, room));
+	this->mEvents.push_back(Event(type, roomEventIndex));
 }
 
-// Get event as a string to print
-// [DD.MM.YYYY] [hh:mm] <<Event type>>, Started/Stopped
-const std::string EventLog::GetEventStringAt(int index) const
+void EventLog::SaveToFile(std::string filePath)
 {
-	return this->mEvents[i].getString();
-}
-
-void EventLog::SaveToFile(string filePath)
-{
-	ofstream file;
+	std::ofstream file;
 	file.open(filePath);
 
 	for (int i = 0; i < this->mEvents.size(); i++)
 	{
-		file << this->mEvents[i].getString() << "\n";
+		file << "EVENT TEXT" << "\n";
 	}
 
 	file.close();
 }
 
-void EventLog::LoadFromFile(string filePath)
+void EventLog::LoadFromFile(std::string filePath)
 {
 }

@@ -25,7 +25,6 @@
 *
 */
 
-
 class EventLog
 {
 public:
@@ -33,17 +32,13 @@ public:
 	EventLog();
 	~EventLog();
 
-	bool AddEvent(EventType type, EventState state, Room room);
+	void AddEvent(EventType type, int roomEventIndex);
 	
-	// Get event as a string to print
-	// [DD.MM.YYYY] [hh:mm] <<Event type>>, Started/Stopped
-	const std::string GetEventStringAt(int index) const;
-
-	void SaveToFile(string filePath);
-	void LoadFromFile(string filePath);
+	void SaveToFile(std::string filePath);
+	void LoadFromFile(std::string filePath);
 
 private:
 
 	std::vector<Event> mEvents;
 		
-}
+};

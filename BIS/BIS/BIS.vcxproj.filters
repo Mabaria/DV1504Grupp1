@@ -33,17 +33,23 @@
     <ClInclude Include="Event.h">
       <Filter>Header Files\RoomHandler</Filter>
     </ClInclude>
-    <ClInclude Include="DeckHandler.h">
-      <Filter>Header Files\RoomHandler</Filter>
-    </ClInclude>
     <ClInclude Include="Deck.h">
       <Filter>Header Files\RoomHandler</Filter>
     </ClInclude>
     <ClInclude Include="EventLog.h">
       <Filter>Header Files\RoomHandler</Filter>
     </ClInclude>
-    <ClInclude Include="DangerEvent.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Boat.h">
+      <Filter>Header Files\RoomHandler</Filter>
+    </ClInclude>
+    <ClInclude Include="ActiveLog.h">
+      <Filter>Header Files\RoomHandler</Filter>
+    </ClInclude>
+    <ClInclude Include="RoomEvent.h">
+      <Filter>Header Files\RoomHandler</Filter>
+    </ClInclude>
+    <ClInclude Include="EventType.h">
+      <Filter>Header Files\RoomHandler</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -59,16 +65,19 @@
     <ClCompile Include="Room.cpp">
       <Filter>Source Files\RoomHandler</Filter>
     </ClCompile>
-    <ClCompile Include="DeckHandler.cpp">
-      <Filter>Source Files\RoomHandler</Filter>
-    </ClCompile>
     <ClCompile Include="Deck.cpp">
       <Filter>Source Files\RoomHandler</Filter>
     </ClCompile>
     <ClCompile Include="EventLog.cpp">
       <Filter>Source Files\RoomHandler</Filter>
     </ClCompile>
-    <ClCompile Include="DangerEvent.cpp">
+    <ClCompile Include="Boat.cpp">
+      <Filter>Source Files\RoomHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="ActiveLog.cpp">
+      <Filter>Source Files\RoomHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="RoomEvent.cpp">
       <Filter>Source Files\RoomHandler</Filter>
     </ClCompile>
   </ItemGroup>

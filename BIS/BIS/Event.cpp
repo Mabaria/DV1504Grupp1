@@ -1,11 +1,14 @@
 #include "Event.h"
 
-// Event(Time time, EventType type, EventState state, Room *room)
-Event::Event(EventType type, EventState state, Room *room)
+Event::Event()
+{
+
+}
+
+Event::Event(EventType type, int roomEventIndex)
 {
 	this->mType = type;
-	this->mState = state;
-	this->mpRoom = room;
+	this->mRoomEventIndex = roomEventIndex;
 }
 
 Event::~Event()
@@ -16,40 +19,22 @@ Event::~Event()
 //const TimeObject Event::getStartTime() const;
 //const TimeObject Event::getElapsedTime() const;
 
-std::string Event::getString() const
+void Event::SetRoomIndex(int index)
 {
-	std::string line = "";
+	this->mRoomEventIndex = index;
+}
 
-	// line += date and time
-	
-	switch (this->mType)
-	{
-		case Fire:
-			line += " A fire";
-			break;
-		case Water:
-			line += " A water leakage";
-			break;
-		case Gas:
-			line += " A gas leakage";
-			break;
-		default:
-			line += " UNKNOWN_EVENT_TYPE";
-			break;
-	}
+void Event::SetType(EventType type)
+{
+	this->mType = type;
+}
 
-	switch (this->mState)
-	{
-		case Start:
-			line += " has started";
-			break;
-		case Stop:
-			line += " has been taken care of";
-			break;
-		default:
-			line += " UNKNOWN_EVENT_STATE";
-			break;
-	}
+int Event::GetRoomIndex() const
+{
+	return this->mRoomEventIndex;
+}
 
-	line += this->mpRoom->GetName() + ", " + this->mpRoom->GetDeck() + ".";
+EventType Event::GetType() const
+{
+	return this->mType;
 }

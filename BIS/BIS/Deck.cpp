@@ -1,20 +1,49 @@
-#include "Room.h"
+#include "Deck.h"
 
-Deck::Deck(std::string name)
+Deck::Deck()
 {
-	this->mName = name;
 }
 
 Deck::~Deck()
 {
 }
 
-const std::string Deck::GetName() const
+void Deck::AddRoom()
+{
+	this->mRoomCount++;
+}
+
+void Deck::SetName(std::string name)
+{
+	this->mName = name;
+}
+
+void Deck::SetRoomCap(int cap)
+{
+	this->mRoomCap = cap;
+}
+
+void Deck::SetRoomStartIndex(int index)
+{
+	this->mRoomStartIndex = index;
+}
+
+std::string Deck::GetName() const
 {
 	return this->mName;
 }
 
-void Deck::AddRoom(std::name)
+int Deck::GetRoomCap() const
 {
-	this->mRooms.push_back(Room(name));
+	return this->mRoomCap;
+}
+
+int Deck::GetRoomCount() const
+{
+	return this->mRoomCount;
+}
+
+int Deck::GetRoomStartIndex() const
+{
+	return this->mRoomStartIndex;
 }

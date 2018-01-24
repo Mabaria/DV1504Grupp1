@@ -1,45 +1,28 @@
 #pragma once
 
-#include <vector>
-#include <sstream>
-
-#include "Room.h"
-
-// All types of an event.
-// Row-style allows an easy management of adding/ removing types to list
-enum EventType
-{
-	Fire,
-	Water,
-	Gas
-};
-
-enum EventState
-{
-	Start,
-	Stop
-};
+#include "EventType.h"
 
 class Event
 {
 public:
 	
-	// Event(Time time, EventType type, EventState state, Room *room);
-	Event(EventType type, EventState state, Room *room);
+	Event();
+	Event(EventType type, int roomEventIndex = -1);
 	~Event();
 
 	// Time
 	//const TimeObject getStartTime() const;
 	//const TimeObject getElapsedTime() const;
 
-	std::string getString() const;
+	void SetRoomIndex(int index);
+	void SetType(EventType type);
 
+	int GetRoomIndex() const;
+	EventType GetType() const;
 
 private:
 
-	//TimeType mStartTime;
+	//TimeType mTime;
+	int mRoomEventIndex;
 	EventType mType;
-	EventState mState;
-
-	Room* mpRoom;
 };
