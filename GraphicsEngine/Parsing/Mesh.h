@@ -14,8 +14,10 @@ struct Vertex
 class Mesh
 {
 public:
-	Mesh(const std::string &filePath); /* Throws an std::string containing the
-									   error message on failure */
+	Mesh(const std::string &filePath); /* Takes a filepath and creates an object
+									   using the Assimp scene structure.
+									   Throws an std::string containing the
+									   error message on failure. */
 	~Mesh();
 
 	std::vector<Vertex>* GetVertexVectorPtr(); 	/* Returns a pointer to the
@@ -23,8 +25,7 @@ public:
 
 	std::vector<std::vector<unsigned int>>* GetIndexVectorsPtr(); /*
 	Returns a pointer to the vector of unsigned int vectors containing indices.
-	Contains one vector per sub-mesh.
-																  */
+	Contains one vector per sub-mesh.*/
 	aiMaterial* GetMaterialPtr(unsigned int materialIndex); /* Get pointer to
 															material for given
 															material index*/
