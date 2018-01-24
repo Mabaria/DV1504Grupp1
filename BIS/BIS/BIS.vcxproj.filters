@@ -39,6 +39,9 @@
     <ClInclude Include="Test_Graphics.h">
       <Filter>Header Files\Graphics Engine\´Test</Filter>
     </ClInclude>
+    <ClInclude Include="Direct3D.h">
+      <Filter>Header Files\Graphics Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -53,5 +56,16 @@
     <ClCompile Include="Test_Graphics.cpp">
       <Filter>Source Files\Graphics Engine\Test</Filter>
     </ClCompile>
+    <ClCompile Include="Direct3D.cpp">
+      <Filter>Source Files\Graphics Engine</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Test_VertexShader.hlsl">
+      <Filter>Source Files\Graphics Engine\Test</Filter>
+    </FxCompile>
+    <FxCompile Include="Test_PixelShader.hlsl">
+      <Filter>Source Files\Graphics Engine\Test</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

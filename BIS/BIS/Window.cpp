@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "Window.h"
 
 // Necessary for window
