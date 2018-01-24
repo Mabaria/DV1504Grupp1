@@ -37,7 +37,7 @@ public:
 
 	void Open();
 	void Close();
-	bool IsOpen();
+	const bool IsOpen() const;
 	bool Update();
 
 	const Size& GetClientSize();

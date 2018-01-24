@@ -86,7 +86,7 @@ void Window::Open()
 	}
 }
 
-bool Window::IsOpen()
+const bool Window::IsOpen() const
 {
 	return this->mIsOpen;
 }
