@@ -18,6 +18,7 @@ namespace
 		}
 		else
 		{
+			// std::boolalpha makes bools print as "true/false", neat huh?
 			std::cout << "Scene succesfully created!" << std::endl;
 			std::cout << "File: " << pFile << std::endl;
 			std::cout << "Has Materials: " << std::boolalpha << scene->HasMaterials() << std::endl;
