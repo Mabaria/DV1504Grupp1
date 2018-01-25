@@ -119,6 +119,9 @@
     <ClInclude Include="..\..\UI\UIElements\Panel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\UI\UIElements\MeshObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -207,6 +210,9 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Test_VertexShader.hlsl" />
+    <ClCompile Include="..\..\UI\UIElements\MeshObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\UI\UIElements\Panel.cpp">
