@@ -148,6 +148,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\UI\UIElements\MeshObject.h" />
+    <ClInclude Include="Direct3D.h" />
     <ClInclude Include="..\..\GraphicsEngine\DX\Direct3D.h" />
     <ClInclude Include="..\..\GraphicsEngine\Test_Graphics.h" />
     <ClInclude Include="..\..\GraphicsEngine\Window.h" />
@@ -162,6 +164,7 @@
     <ClCompile Include="..\..\GraphicsEngine\Test_Graphics.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\Window.cpp" />
     <ClCompile Include="..\..\Logic\Timer.cpp" />
+    <ClCompile Include="..\..\UI\UIElements\MeshObject.cpp" />
     <ClCompile Include="..\..\UI\UIElements\Panel.cpp" />
     <ClCompile Include="..\..\UI\UIElements\Panel2D.cpp" />
     <ClCompile Include="..\..\UI\UIElements\Panel3D.cpp" />
