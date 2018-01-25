@@ -14,7 +14,24 @@ public:
 	
 	D3D11& rGetDirect3D();
 
-	const bool AddMeshObject(std::vector<std::vector<unsigned int>> indices, std::vector<Vertex> vertices);
+	// Creates buffers for and adds mesh objects into the vector of mesh objects.
+	const bool AddMeshObject
+	(
+		std::vector<std::vector<unsigned int>> indices, 
+		std::vector<Vertex> vertices
+	);
+
+	// Pass through for the create shader function in D3D11.
+	bool CreateShaders(
+		LPCWSTR vertexShaderPath,
+		LPCWSTR geometryShaderPath,
+		LPCWSTR pixelShaderPath,
+		ID3D11VertexShader **pVertexshader,
+		ID3D11GeometryShader **pGeometryShader,
+		ID3D11PixelShader **pPixelShader,
+		D3D11_INPUT_ELEMENT_DESC inputElementDesc[],
+		UINT nrOfElements,
+		ID3D11InputLayout **pInputLayout);
 
 	const void Update();
 	const void Draw();
@@ -24,6 +41,15 @@ private:
 	std::vector<MeshObject> mMeshObjects;
 	HWND mPanelWindow;
 
-	const bool CreateVertexBuffer(std::vector<Vertex> vertices, ID3D11Buffer *vertexBuffer);
-	const bool CreateIndexBuffer(std::vector<unsigned int> indices, ID3D11Buffer *indexBuffer);
+	// Private functions because they will only be used within the class.
+	const bool CreateVertexBuffer
+	(
+		std::vector<Vertex> vertices, 
+		ID3D11Buffer *vertexBuffer
+	);
+	const bool CreateIndexBuffer
+	(
+		std::vector<unsigned int> indices, 
+		ID3D11Buffer *indexBuffer
+	);
 };

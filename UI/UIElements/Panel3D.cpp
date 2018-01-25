@@ -3,6 +3,7 @@
 Panel3D::Panel3D(int width, int height, int top, int left, HWND handle)
 	:Panel(width, height, top, left, handle), mDirect3D(handle, width, height)
 {
+	// Creating a child window that will be the canvas to draw on for the panel.
 	this->mPanelWindow = CreateWindowEx(
 		0,
 		L"PanelWindowClass", 
@@ -17,6 +18,7 @@ Panel3D::Panel3D(int width, int height, int top, int left, HWND handle)
 		GetModuleHandle(0),
 		0);
 	
+	
 }
 
 Panel3D::~Panel3D()
@@ -28,19 +30,56 @@ D3D11 & Panel3D::rGetDirect3D()
 	return this->mDirect3D;
 }
 
-const bool Panel3D::AddMeshObject(std::vector<std::vector<unsigned int>> indices, std::vector<Vertex> vertices)
+const bool Panel3D::AddMeshObject
+(
+	std::vector<std::vector<unsigned int>> indices, 
+	std::vector<Vertex> vertices
+)
 {
 	bool result = false;
 	MeshObject new_mesh_object = MeshObject(indices, vertices);
-	// TODO: Create buffers for mesh object.
+	
+	// Creating buffers for the mesh object.
+	for (int i = 0; i < indices.size(); i++)
+	{
+		this->CreateIndexBuffer(indices[i], new_mesh_object.pGetIndexBuffer(i));
+	}
+	this->CreateVertexBuffer(vertices, new_mesh_object.pGetVertexBuffer());
 
+	// Pushing the mesh object into the vector of mesh objects.
 	this->mMeshObjects.push_back(new_mesh_object);
-
 
 	return result;
 }
 
-const bool Panel3D::CreateVertexBuffer(std::vector<Vertex> vertices, ID3D11Buffer *vertexBuffer)
+bool Panel3D::CreateShaders(
+	LPCWSTR vertexShaderPath, 
+	LPCWSTR geometryShaderPath, 
+	LPCWSTR pixelShaderPath, 
+	ID3D11VertexShader ** pVertexshader, 
+	ID3D11GeometryShader ** pGeometryShader, 
+	ID3D11PixelShader ** pPixelShader, 
+	D3D11_INPUT_ELEMENT_DESC inputElementDesc[], 
+	UINT nrOfElements, 
+	ID3D11InputLayout ** pInputLayout)
+{
+	return this->mDirect3D.CreateShaders(
+		vertexShaderPath,
+		geometryShaderPath,
+		pixelShaderPath,
+		pVertexshader,
+		pGeometryShader,
+		pPixelShader,
+		inputElementDesc,
+		nrOfElements,
+		pInputLayout);
+}
+
+const bool Panel3D::CreateVertexBuffer
+(
+	std::vector<Vertex> vertices, 
+	ID3D11Buffer *vertexBuffer
+)
 {
 	bool result = true;
 
@@ -56,10 +95,15 @@ const bool Panel3D::CreateVertexBuffer(std::vector<Vertex> vertices, ID3D11Buffe
 	{
 		result = false;
 	}
+
 	return result;
 }
 
-const bool Panel3D::CreateIndexBuffer(std::vector<unsigned int> indices, ID3D11Buffer * indexBuffer)
+const bool Panel3D::CreateIndexBuffer
+(
+	std::vector<unsigned int> indices, 
+	ID3D11Buffer * indexBuffer
+)
 {
 	bool result = true;
 
@@ -75,10 +119,16 @@ const bool Panel3D::CreateIndexBuffer(std::vector<unsigned int> indices, ID3D11B
 	{
 		result = false;
 	}
+
 	return result;
 }
 
 const void Panel3D::Update()
 {
 
+}
+
+const void Panel3D::Draw()
+{
+	
 }
