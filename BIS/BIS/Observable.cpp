@@ -1,5 +1,13 @@
 #include "Observable.h"
 
+Observable::Observable()
+{
+}
+
+Observable::~Observable()
+{
+}
+
 void Observable::AddObserver(Observer * rObserver)
 {
 	this->mObserverList.push_back(rObserver);
@@ -7,14 +15,15 @@ void Observable::AddObserver(Observer * rObserver)
 
 bool Observable::RemoveObserver(Observer * rObserver)
 {
-	for (std::vector<Observer*>::const_iterator iter = this->mObserverList.begin();
-		iter != this->mObserverList.end();
-		++iter)
+	for (unsigned int i = 0; i < this->mObserverList.size(); i++)
 	{
-		if (*iter == rObserver) {
-
+		// Remove the observer if it exists in the list
+		if (this->mObserverList[i] == rObserver) {
+			this->mObserverList.erase(this->mObserverList.begin() + i);
+			return true;
 		}
 	}
+	return false;
 }
 
 void Observable::NotifyObservers(const std::string & event) const
@@ -25,7 +34,7 @@ void Observable::NotifyObservers(const std::string & event) const
 	{
 		if (*iter != 0)
 		{
-			(*iter)->Update(event);
+			(*iter)->Update(event); // Call update on every observer in the list
 		}
 	}
 }

@@ -6,6 +6,8 @@
 class Observable
 {
 public:
+	Observable();
+	~Observable();
 
 	void AddObserver(Observer *rObserver);
 	bool RemoveObserver(Observer *rObserver);
