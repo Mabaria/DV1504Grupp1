@@ -57,4 +57,20 @@ const std::vector<Vertex> MeshObject::GetVertices() const
 	return this->mVertices;
 }
 
+ID3D11Buffer * MeshObject::rGetVertexBuffer()
+{
+	return this->mpVertexBuffer;
+}
+
+ID3D11Buffer * MeshObject::rGetIndexBuffer(int index)
+{
+	ID3D11Buffer *to_return = nullptr;
+	// If statement to avoid OOB.
+	if (index > 0 && index < this->mIndices.size())
+	{
+		to_return = this->mpIndexBuffers[index];
+	}
+	return to_return;
+}
+
 
