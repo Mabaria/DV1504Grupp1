@@ -48,7 +48,7 @@ bool TestAssimp() {
 	// mTextureCoords - UV coords of vertices
 	// mFaces - Contains the index information for each face
 	Assimp::Importer importer;
-	std::string pFile = "../../Models/OBJTEST2.obj";
+	std::string pFile = "../../Models/spider.obj";
 
 	//! Scene reference: http://assimp.sourceforge.net/lib_html/structai_scene.html
 	const aiScene *scene = importer.ReadFile(pFile,
@@ -75,32 +75,36 @@ bool TestAssimp() {
 
 	::PrintStatus(scene2, pFile, importer2);
 
-
-	if (scene->HasMeshes())
+	if (scene)
 	{
-		std::cout << "Scene 1 numMeshes: " << scene->mNumMeshes << std::endl;
-		std::cout << "Scene 1 Mesh 1 numFaces: " << scene->mMeshes[0]->mNumFaces << std::endl;
-		std::cout << "Scene 1 Mesh 1 Face 1 indices: " << std::endl;
-		if (scene->mMeshes[0]->HasFaces())
+		if (scene->HasMeshes())
 		{
-			for (unsigned int i = 0; i < scene->mMeshes[0]->mFaces[0].mNumIndices; i++)
+			std::cout << "Scene 1 numMeshes: " << scene->mNumMeshes << std::endl;
+			std::cout << "Scene 1 Mesh 1 numFaces: " << scene->mMeshes[0]->mNumFaces << std::endl;
+			std::cout << "Scene 1 Mesh 1 Face 1 indices: " << std::endl;
+			if (scene->mMeshes[0]->HasFaces())
 			{
-				std::cout << scene->mMeshes[0]->mFaces[0].mIndices[i] << std::endl;
+				for (unsigned int i = 0; i < scene->mMeshes[0]->mFaces[0].mNumIndices; i++)
+				{
+					std::cout << scene->mMeshes[0]->mFaces[0].mIndices[i] << std::endl;
+				}
 			}
 		}
+		system("pause");
 	}
-	system("pause");
 
-	std::cout << "Scene 2 Mesh 1 Face 1  indices: " << std::endl;
-	if (scene2->HasMeshes())
+	if (scene2)
 	{
-		for (unsigned int i = 0; i < scene2->mMeshes[0]->mFaces[0].mNumIndices; i++)
+		std::cout << "Scene 2 Mesh 1 Face 1  indices: " << std::endl;
+		if (scene2->HasMeshes())
 		{
-			std::cout << scene2->mMeshes[0]->mFaces[0].mIndices[i] << std::endl;
+			for (unsigned int i = 0; i < scene2->mMeshes[0]->mFaces[0].mNumIndices; i++)
+			{
+				std::cout << scene2->mMeshes[0]->mFaces[0].mIndices[i] << std::endl;
+			}
 		}
+		system("pause");
 	}
-	system("pause");
-
 
 
 	return true;
