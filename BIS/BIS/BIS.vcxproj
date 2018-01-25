@@ -148,6 +148,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\UI\UIElements\MeshObject.h" />
     <ClInclude Include="Direct3D.h" />
     <ClInclude Include="..\..\UI\UIElements\Panel.h" />
     <ClInclude Include="..\..\UI\UIElements\Panel2D.h" />
@@ -158,6 +159,7 @@
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\UI\UIElements\MeshObject.cpp" />
     <ClCompile Include="..\..\UI\UIElements\Panel.cpp" />
     <ClCompile Include="..\..\UI\UIElements\Panel2D.cpp" />
     <ClCompile Include="..\..\UI\UIElements\Panel3D.cpp" />
