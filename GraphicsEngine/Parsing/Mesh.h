@@ -22,7 +22,7 @@ public:
 	vertices used by all the "submeshes" in this object. The "submeshes" are divided
 	by index vectors, and the double vector<vector<unsigned int>> contains one
 	unsigned int vector per submesh. These may or may not have different materials
-	and will require one indexed drawcall per submesh. 
+	and will require one indexed drawcall per submesh.  
 
 	A mesh object can exist with only one submesh, however it should not exist
 	with 0 meshes.*/
