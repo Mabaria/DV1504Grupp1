@@ -30,6 +30,9 @@
     <ClInclude Include="..\..\GraphicsEngine\Parsing\Mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_Boat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -45,6 +48,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\GraphicsEngine\Parsing\Test_Mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\GraphicsEngine\Parsing\Test_Boat.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

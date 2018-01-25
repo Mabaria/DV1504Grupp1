@@ -101,7 +101,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
@@ -152,6 +152,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\GraphicsEngine\Parsing\Mesh.h" />
     <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_AssImp.h" />
+    <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_Boat.h" />
     <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_Mesh.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -159,6 +160,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\GraphicsEngine\Parsing\Mesh.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\Parsing\Test_AssImp.cpp" />
+    <ClCompile Include="..\..\GraphicsEngine\Parsing\Test_Boat.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\Parsing\Test_Mesh.cpp" />
     <ClCompile Include="BIS.cpp" />
     <ClCompile Include="stdafx.cpp">
