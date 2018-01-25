@@ -20,16 +20,12 @@ public:
 
 	const void Translate(float x, float y, float z);
 	const void Rotate(float pitch, float yaw, float roll);
-	const void SetView(	float eyeX, float eyeY, float eyeZ, 
-						float lookX, float lookY, float lookZ, 
-						float upX, float upY, float upZ);
-	const void SetOrthographicProjection(float width, float height, float nearZ, float farZ);
-
+	
 	const std::vector<std::vector<unsigned int>> GetIndices() const;
 	const std::vector<Vertex> GetVertices() const;
 
-	ID3D11Buffer* rGetVertexBuffer();
-	ID3D11Buffer* rGetIndexBuffer(int index);
+	ID3D11Buffer* pGetVertexBuffer();
+	ID3D11Buffer* pGetIndexBuffer(int index);
 
 private:
 	std::vector<std::vector<unsigned int>> mIndices;
@@ -40,6 +36,4 @@ private:
 	int mNumberOfIndexBuffers;
 
 	XMMATRIX mWorld;
-	XMMATRIX mView;
-	XMMATRIX mProjection;
 };
