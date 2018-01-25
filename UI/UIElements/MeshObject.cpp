@@ -62,12 +62,12 @@ const int MeshObject::GetNumberOfIndexBuffers() const
 	return this->mNumberOfIndexBuffers;
 }
 
-ID3D11Buffer * MeshObject::rGetVertexBuffer()
+ID3D11Buffer * MeshObject::pGetVertexBuffer()
 {
 	return this->mpVertexBuffer;
 }
 
-ID3D11Buffer * MeshObject::rGetIndexBuffer(int index)
+ID3D11Buffer * MeshObject::pGetIndexBuffer(int index)
 {
 	ID3D11Buffer *to_return = nullptr;
 	// If statement to avoid OOB.

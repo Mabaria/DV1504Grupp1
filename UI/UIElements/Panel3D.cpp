@@ -18,6 +18,7 @@ Panel3D::Panel3D(int width, int height, int top, int left, HWND handle)
 		GetModuleHandle(0),
 		0);
 	
+	
 }
 
 Panel3D::~Panel3D()
@@ -168,4 +169,9 @@ const void Panel3D::Draw()
 				0);			// Base vertex location.
 		}
 	}
+}
+
+const void Panel3D::Draw()
+{
+	
 }
