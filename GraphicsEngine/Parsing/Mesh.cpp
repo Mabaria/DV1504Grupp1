@@ -24,14 +24,14 @@ Mesh::~Mesh()
 
 }
 
-std::vector<Vertex>* Mesh::GetVertexVectorPtr() 
+std::vector<Vertex> Mesh::GetVertexVector() 
 {
-	return &this->mVertexVector;
+	return this->mVertexVector;
 } 
 
-std::vector<std::vector<unsigned int>>* Mesh::GetIndexVectorsPtr() 
+std::vector<std::vector<unsigned int>> Mesh::GetIndexVectors() 
 {
-	return &this->mIndexVectors;
+	return this->mIndexVectors;
 } 
 
 unsigned int Mesh::GetNumMeshes() const
