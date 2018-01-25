@@ -33,13 +33,13 @@
     <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_Boat.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Observer.h">
+    <ClInclude Include="..\..\IO\ObserverPattern\Observable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Observable.h">
+    <ClInclude Include="..\..\IO\ObserverPattern\Observer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Test_Obs.h">
+    <ClInclude Include="..\..\IO\ObserverPattern\Test_Obs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -62,10 +62,10 @@
     <ClCompile Include="..\..\GraphicsEngine\Parsing\Test_Boat.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Observable.cpp">
+    <ClCompile Include="..\..\IO\ObserverPattern\Observable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Test_Obs.cpp">
+    <ClCompile Include="..\..\IO\ObserverPattern\Test_Obs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
