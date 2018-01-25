@@ -18,7 +18,7 @@ bool TestMesh()
 	}
 	std::cout << "Mesh created successfully!" << std::endl;
 	system("pause");
-
+	/* Outdated test stuff
 	std::vector<std::vector<unsigned int>> *indices = 
 		testMesh1->GetIndexVectorsPtr();
 
@@ -27,6 +27,7 @@ bool TestMesh()
 	{
 		std::cout << indices[0][0][i] << std::endl;
 	}
+	*/
 
 	system("pause");
 	delete testMesh1;
