@@ -148,19 +148,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\IO\ObserverPattern\Observable.h" />
+    <ClInclude Include="..\..\IO\ObserverPattern\Observer.h" />
+    <ClInclude Include="..\..\IO\ObserverPattern\Test_Obs.h" />
     <ClInclude Include="Direct3D.h" />
-    <ClInclude Include="Observable.h" />
-    <ClInclude Include="Observer.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Test_Graphics.h" />
-    <ClInclude Include="Test_Obs.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\IO\ObserverPattern\Observable.cpp" />
+    <ClCompile Include="..\..\IO\ObserverPattern\Test_Obs.cpp" />
     <ClCompile Include="BIS.cpp" />
     <ClCompile Include="Direct3D.cpp" />
-    <ClCompile Include="Observable.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -168,7 +169,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Test_Graphics.cpp" />
-    <ClCompile Include="Test_Obs.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
