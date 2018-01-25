@@ -18,6 +18,14 @@ public:
 									   using the Assimp scene structure.
 									   Throws an std::string containing the
 									   error message on failure. */
+	/* One Mesh object gives you access to one(1) vertex vector containing all the
+	vertices used by all the "submeshes" in this object. The "submeshes" are divided
+	by index vectors, and the double vector<vector<unsigned int>> contains one
+	unsigned int vector per submesh. These may or may not have different materials
+	and will require one indexed drawcall per submesh. 
+
+	A mesh object can exist with only one submesh, however it should not exist
+	with 0 meshes.*/
 	~Mesh();
 
 	std::vector<Vertex>* GetVertexVectorPtr(); 	/* Returns a pointer to the
@@ -25,13 +33,16 @@ public:
 
 	std::vector<std::vector<unsigned int>>* GetIndexVectorsPtr(); /*
 	Returns a pointer to the vector of unsigned int vectors containing indices.
-	Contains one vector per sub-mesh.*/
+	Contains one vector per sub-mesh.
+	Indices are in triangle primitive form, most likely
+	Please don't shoot me if they are triangle strip*/
 	aiMaterial* GetMaterialPtr(unsigned int materialIndex); /* Get pointer to
 															material for given
 															material index*/
 	unsigned int GetSubmeshMaterialIndex(unsigned int submeshIndex); /*
 	Get material index for a given submesh */
 
+	// The Has..() functions assumes that all the submeshes are in the same format
 	bool HasNormals() const; // Checks the first submesh for normals
 	bool HasTextureCoords() const; // Check the first submesh for texcoords
 	unsigned int GetNumMeshes() const; // Returns number of submeshes
