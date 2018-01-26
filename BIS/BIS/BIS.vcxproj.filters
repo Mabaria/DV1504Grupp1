@@ -122,6 +122,9 @@
     <ClInclude Include="..\..\UI\UIElements\MeshObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\UI\UIElements\Test_Panel.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

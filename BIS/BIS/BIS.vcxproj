@@ -155,6 +155,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\UI\UIElements\MeshObject.h" />
+    <ClInclude Include="..\..\UI\UIElements\Test_Panel.h" />
     <ClInclude Include="Direct3D.h" />
     <ClInclude Include="..\..\GraphicsEngine\DX\Direct3D.h" />
     <ClInclude Include="..\..\GraphicsEngine\Test_Graphics.h" />
