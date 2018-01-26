@@ -70,6 +70,7 @@ bool Panel3D::CreateShadersAndSetup(
 		inputElementDesc,
 		nrOfElements,
 		pInputLayout);
+
 	// Setting shaders to the pipeline.
 	this->mDirect3D.GetContext()->VSSetShader(*pVertexshader, nullptr, 0);
 	this->mDirect3D.GetContext()->GSSetShader(*pGeometryShader, nullptr, 0);

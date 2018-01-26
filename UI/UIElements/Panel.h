@@ -31,6 +31,8 @@ public:
 	const void ScaleY(int scale);
 
 	// Returns whether or not the parameters intersect the panel.
+	// Assumes click coordinates in pixels starting from the top left
+	// corner of the main window.
 	const bool Intersects(int x, int y);
 
 	// Returns the position of the click with regard 
