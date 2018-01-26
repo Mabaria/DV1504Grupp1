@@ -24,8 +24,8 @@ public:
 	const std::vector<std::vector<unsigned int>> GetIndices() const;
 	const std::vector<Vertex> GetVertices() const;
 
-	ID3D11Buffer* pGetVertexBuffer();
-	ID3D11Buffer* pGetIndexBuffer(int index);
+	ID3D11Buffer **pGetVertexBuffer();
+	ID3D11Buffer **pGetIndexBuffer(int index);
 	const int GetNumberOfIndexBuffers() const;
 
 private:

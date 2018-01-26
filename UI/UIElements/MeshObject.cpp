@@ -4,7 +4,7 @@ MeshObject::MeshObject(std::vector<std::vector<unsigned int>> indices, std::vect
 {
 	this->mIndices				= indices;
 	this->mVertices				= vertices;
-	this->mNumberOfIndexBuffers = indices.size();
+	this->mNumberOfIndexBuffers = (int)indices.size();
 
 	this->mWorld				= XMMatrixIdentity();
 
@@ -41,12 +41,12 @@ const std::vector<Vertex> MeshObject::GetVertices() const
 	return this->mVertices;
 }
 
-ID3D11Buffer * MeshObject::pGetVertexBuffer()
+ID3D11Buffer ** MeshObject::pGetVertexBuffer()
 {
-	return this->mpVertexBuffer;
+	return &this->mpVertexBuffer;
 }
 
-ID3D11Buffer * MeshObject::pGetIndexBuffer(int index)
+ID3D11Buffer ** MeshObject::pGetIndexBuffer(int index)
 {
 	ID3D11Buffer *to_return = nullptr;
 	// If statement to avoid OOB.
@@ -54,7 +54,7 @@ ID3D11Buffer * MeshObject::pGetIndexBuffer(int index)
 	{
 		to_return = this->mpIndexBuffers[index];
 	}
-	return to_return;
+	return &to_return;
 }
 
 const int MeshObject::GetNumberOfIndexBuffers() const
