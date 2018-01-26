@@ -10,14 +10,17 @@ void Picking::GetWorldRay(
 {
 	// Declaring variables used throughout
 	DirectX::XMMATRIX inverseProjection, inverseView;
-	DirectX::XMVECTOR directionVector, originVector;
 	DirectX::XMFLOAT4X4 fInverseView;
 
 	// Making sure screen positions are between -1.0 and 1.0
-	nScreenX = (nScreenX - 1.0f) * 2.0f;
-	nScreenY = (nScreenY - 1.0f) * 2.0f;
+	nScreenX = nScreenX * 2.0f - 1.0f;
+	nScreenY = nScreenY * 2.0f - 1.0f;
 
-	// TODO: Aspect ratio support here? http://www.rastertek.com/dx11tut47.html
+	// TODO: Is this correct? http://www.rastertek.com/dx11tut47.html
+	// Fits screen coordinates to viewport
+	nScreenX /= DirectX::XMVectorGetX(projectionMatrix.r[0]);
+	nScreenY /= DirectX::XMVectorGetY(projectionMatrix.r[1]);
+
 
 	// Inversing the matrices
 	inverseProjection =
@@ -28,8 +31,11 @@ void Picking::GetWorldRay(
 	// Get float data from inverse view matrix
 	DirectX::XMStoreFloat4x4(&fInverseView, inverseView);
 
+	// Extract camera position from view Matrix
+	rRayOrigin = inverseView.r[3];
+
 	// Extract a direction from the view matrix
-	directionVector = {
+	rRayDirection = {
 		// x
 		(nScreenX * fInverseView._11) +
 		(nScreenY * fInverseView._21) +
@@ -45,7 +51,5 @@ void Picking::GetWorldRay(
 		// w
 		0.0f	// Should maybe be 1.0f
 	};
-
-	// Extract camera position from view Matrix
-
+	return;
 }
