@@ -2,15 +2,32 @@
 
 EventLog::EventLog()
 {
+	//int nr = this->mLogEvents.size();
 }
 
 EventLog::~EventLog()
 {
 }
 
-void EventLog::AddEvent(EventType type, int roomEventIndex)
+int EventLog::AddLogEvent(Event::Type type, int roomIndex)
 {
-	this->mEvents.push_back(Event(type, roomEventIndex));
+	LogEvent newEvent;
+	int eventIndex;
+
+	eventIndex = (int)this->mLogEvents.size();
+
+	newEvent.SetRoomEventIndex(this->mpActiveLog->AddEvent(eventIndex, roomIndex));
+	newEvent.SetType(type);
+
+	this->mLogEvents.insert(this->mLogEvents.begin() + eventIndex, newEvent);
+	this->SaveToFile("eventlog.txt");
+
+	return newEvent.GetRoomEventIndex();
+}
+
+void EventLog::SetActiveLog(ActiveLog *pActiveLog)
+{
+	this->mpActiveLog = pActiveLog;
 }
 
 void EventLog::SaveToFile(std::string filePath)
@@ -18,7 +35,7 @@ void EventLog::SaveToFile(std::string filePath)
 	std::ofstream file;
 	file.open(filePath);
 
-	for (int i = 0; i < this->mEvents.size(); i++)
+	for (int i = 0; i < this->mLogEvents.size(); i++)
 	{
 		file << "EVENT TEXT" << "\n";
 	}

@@ -8,38 +8,43 @@ ActiveLog::~ActiveLog()
 {
 }
 
-void ActiveLog::AddEvent(int eventIndex, int roomIndex)
+int ActiveLog::AddEvent(int eventIndex, int roomIndex)
 {
-	int foundIndex = -1;
+	int index = -1;
 
-	for (int i = 0; i < this->mEventIndices.size() && foundIndex == -1; i++)
+	for (int i = 0; i < this->mRoomEvents.size() && index == -1; i++)
 	{
-		if (this->mEventIndices[i].GetRoomIndex() == roomIndex)
+		if (this->mRoomEvents[i].GetRoomIndex() == roomIndex)
 		{
-			foundIndex = i;
+			index = i;
 		}
 	}
 
 	// If room already exist
-	if (foundIndex != -1)
+	if (index != -1)
 	{
-		this->mEventIndices[foundIndex].AddEvent(eventIndex);
+		this->mRoomEvents[index].AddEvent(eventIndex);
 	}
 	else
 	{
-		RoomEvent newRoomEvent(eventIndex);
+		RoomEvent newRoomEvent;
+
+		newRoomEvent.SetRoomIndex(roomIndex);
 		newRoomEvent.AddEvent(eventIndex);
 
-		this->mEventIndices.push_back(newRoomEvent);
+		index = (int)this->mRoomEvents.size();
+		this->mRoomEvents.push_back(newRoomEvent);
 	}
+
+	return index;
 }
 
 void ActiveLog::RemoveEvent(int index)
 {
-	this->mEventIndices.erase(this->mEventIndices.begin() + index);
+	this->mRoomEvents.erase(this->mRoomEvents.begin() + index);
 }
 
-RoomEvent ActiveLog::operator[](int index)
-{
-	return this->mEventIndices[index];
-}
+//RoomEvent ActiveLog::operator[](int index)
+//{
+//	return this->mRoomEvents[index];
+//}

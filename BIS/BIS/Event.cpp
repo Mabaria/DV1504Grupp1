@@ -1,40 +1,31 @@
 #include "Event.h"
 
-Event::Event()
+std::string Event::GetString(Event::Type type)
 {
-
+	switch (type)
+	{
+		case Fire:
+			return "Fire";
+		case Water:
+			return "Water";
+		case Gas:
+			return "Gas";
+		default:
+			return "unkownEventType";
+	}
 }
 
-Event::Event(EventType type, int roomEventIndex)
+int Event::GetID(Event::Type type)
 {
-	this->mType = type;
-	this->mRoomEventIndex = roomEventIndex;
-}
-
-Event::~Event()
-{
-
-}
-
-//const TimeObject Event::getStartTime() const;
-//const TimeObject Event::getElapsedTime() const;
-
-void Event::SetRoomIndex(int index)
-{
-	this->mRoomEventIndex = index;
-}
-
-void Event::SetType(EventType type)
-{
-	this->mType = type;
-}
-
-int Event::GetRoomIndex() const
-{
-	return this->mRoomEventIndex;
-}
-
-EventType Event::GetType() const
-{
-	return this->mType;
+	switch (type)
+	{
+		case Fire:
+			return 0;
+		case Water:
+			return 1;
+		case Gas:
+			return 2;
+		default:
+			return (-1);
+	}
 }

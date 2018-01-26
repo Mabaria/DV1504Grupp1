@@ -14,18 +14,16 @@ public:
 	void AddRoom();
 
 	void SetName(std::string name);
-	void SetRoomCap(int cap);
-	void SetRoomStartIndex(int index);
+	void SetRoomOffset(int index);
+	void PushRoomOffset(int value = 1);
 
 	std::string GetName() const;
-	int GetRoomCap() const;
 	int GetRoomCount() const;
-	int GetRoomStartIndex() const;
+	int GetRoomOffset() const;
 
 private:
 
 	std::string mName;
-	int mRoomCap;
 	int mRoomCount;
-	int mRoomStartIndex;
+	int mRoomOffset;
 };

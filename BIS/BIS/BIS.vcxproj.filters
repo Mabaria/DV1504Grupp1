@@ -13,12 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\RoomHandler">
-      <UniqueIdentifier>{2035c083-98fa-4150-a312-6ef27844adec}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\RoomHandler">
-      <UniqueIdentifier>{2a23bc03-bfc9-448f-bb9e-91eb4faa2ad9}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -27,29 +21,32 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Room.h">
-      <Filter>Header Files\RoomHandler</Filter>
-    </ClInclude>
-    <ClInclude Include="Event.h">
-      <Filter>Header Files\RoomHandler</Filter>
-    </ClInclude>
-    <ClInclude Include="Deck.h">
-      <Filter>Header Files\RoomHandler</Filter>
-    </ClInclude>
-    <ClInclude Include="EventLog.h">
-      <Filter>Header Files\RoomHandler</Filter>
+    <ClInclude Include="ActiveLog.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Boat.h">
-      <Filter>Header Files\RoomHandler</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ActiveLog.h">
-      <Filter>Header Files\RoomHandler</Filter>
+    <ClInclude Include="Deck.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EventLog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Room.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RoomEvent.h">
-      <Filter>Header Files\RoomHandler</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EventType.h">
-      <Filter>Header Files\RoomHandler</Filter>
+    <ClInclude Include="Sensor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LogEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Event.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -59,26 +56,32 @@
     <ClCompile Include="BIS.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Event.cpp">
-      <Filter>Source Files\RoomHandler</Filter>
-    </ClCompile>
-    <ClCompile Include="Room.cpp">
-      <Filter>Source Files\RoomHandler</Filter>
-    </ClCompile>
-    <ClCompile Include="Deck.cpp">
-      <Filter>Source Files\RoomHandler</Filter>
-    </ClCompile>
-    <ClCompile Include="EventLog.cpp">
-      <Filter>Source Files\RoomHandler</Filter>
-    </ClCompile>
-    <ClCompile Include="Boat.cpp">
-      <Filter>Source Files\RoomHandler</Filter>
-    </ClCompile>
     <ClCompile Include="ActiveLog.cpp">
-      <Filter>Source Files\RoomHandler</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="RoomEvent.cpp">
-      <Filter>Source Files\RoomHandler</Filter>
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Room.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sensor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EventLog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Deck.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Boat.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LogEvent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Event.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

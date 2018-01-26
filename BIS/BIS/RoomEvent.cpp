@@ -1,8 +1,8 @@
 #include "RoomEvent.h"
 
-RoomEvent::RoomEvent(int roomIndex)
+RoomEvent::RoomEvent()
 {
-	this->mRoomIndex = roomIndex;
+	this->mRoomIndex = -1;
 }
 
 RoomEvent::~RoomEvent()
@@ -24,7 +24,7 @@ int RoomEvent::GetRoomIndex() const
 	return this->mRoomIndex;
 }
 
-int RoomEvent::operator[](int index) const
-{
-	return this->mEventIndices[index];
-}
+//int RoomEvent::operator[](int index) const
+//{
+//	return this->mEventIndices[index];
+//}

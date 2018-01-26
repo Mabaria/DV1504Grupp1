@@ -1,28 +1,19 @@
 #pragma once
 
-#include "EventType.h"
+#include <string>
+#include <vector>
 
-class Event
+namespace Event
 {
-public:
-	
-	Event();
-	Event(EventType type, int roomEventIndex = -1);
-	~Event();
+	 // All types of an event.
+	 // Row-style allows an easy management of adding/ removing types to list
+	 enum Type
+	 {
+	 	Fire,
+	 	Water,
+	 	Gas
+	 };
 
-	// Time
-	//const TimeObject getStartTime() const;
-	//const TimeObject getElapsedTime() const;
-
-	void SetRoomIndex(int index);
-	void SetType(EventType type);
-
-	int GetRoomIndex() const;
-	EventType GetType() const;
-
-private:
-
-	//TimeType mTime;
-	int mRoomEventIndex;
-	EventType mType;
-};
+	 std::string GetString(Type type);
+	 int GetID(Type type);
+}
