@@ -16,9 +16,7 @@ Panel3D::Panel3D(int width, int height, int top, int left, HWND handle)
 		handle, 
 		0, 
 		GetModuleHandle(0),
-		0);
-	
-	
+		0);	
 }
 
 Panel3D::~Panel3D()
@@ -52,7 +50,7 @@ const bool Panel3D::AddMeshObject
 	return result;
 }
 
-bool Panel3D::CreateShaders(
+bool Panel3D::CreateShadersAndSetup(
 	LPCWSTR vertexShaderPath, 
 	LPCWSTR geometryShaderPath, 
 	LPCWSTR pixelShaderPath, 
@@ -63,7 +61,7 @@ bool Panel3D::CreateShaders(
 	UINT nrOfElements, 
 	ID3D11InputLayout ** pInputLayout)
 {
-	return this->mDirect3D.CreateShaders(
+	bool result = this->mDirect3D.CreateShaders(
 		vertexShaderPath,
 		geometryShaderPath,
 		pixelShaderPath,
@@ -73,6 +71,14 @@ bool Panel3D::CreateShaders(
 		inputElementDesc,
 		nrOfElements,
 		pInputLayout);
+	// Setting shaders to the pipeline.
+	this->mDirect3D.GetContext()->VSSetShader(*pVertexshader, nullptr, 0);
+	this->mDirect3D.GetContext()->GSSetShader(*pGeometryShader, nullptr, 0);
+	this->mDirect3D.GetContext()->PSSetShader(*pPixelShader, nullptr, 0);
+	
+	// Setting up input assembler.
+	this->mDirect3D.GetContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	this->mDirect3D.GetContext()->IASetInputLayout(*pInputLayout);
 }
 
 const bool Panel3D::CreateVertexBuffer
@@ -125,10 +131,37 @@ const bool Panel3D::CreateIndexBuffer
 
 const void Panel3D::Update()
 {
-
+	// TODO: Update the panel?
 }
 
 const void Panel3D::Draw()
 {
-	
+	// Stride (vertex size) is declared because it has to be referenced.
+	UINT stride = sizeof(Vertex);
+
+	for (int i = 0; i < this->mMeshObjects.size(); i++)
+	{
+		// For each mesh object their vertex buffer is set.
+		this->mDirect3D.GetContext()->IASetVertexBuffers(
+			0,											// Start slot.
+			1,											// Number of buffers.
+			&this->mMeshObjects[i].pGetVertexBuffer,	// Vertex buffer. 
+			&stride,									// Vertex size.
+			0);											// Offset.
+
+		for (int j = 0; j < this->mMeshObjects[i].GetNumberOfIndexBuffers(); i++)
+		{
+			// For each sub-mesh in the mesh object the index buffer is set and the
+			// sub-mesh is drawn.
+			this->mDirect3D.GetContext()->IASetIndexBuffer(
+				this->mMeshObjects[i].pGetIndexBuffer(j),	// Index buffer.
+				DXGI_FORMAT_R32_UINT,						// Format.
+				0);											// Offset.
+
+			this->mDirect3D.GetContext()->DrawIndexed(
+				this->mMeshObjects[i].GetIndices()[j].size(),	// Number of indices.
+				0,												// Start index location.
+				0);												// Base vertex location.
+		}
+	}
 }
