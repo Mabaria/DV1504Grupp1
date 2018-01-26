@@ -8,16 +8,20 @@ void Test_Input()
 	Window window(L"Test_Input", 1280, 720);
 
 
-	int nrOfKeys = 12;
+	int nrOfKeys = 16;
 	Keys keys[] = {
 		Keys::Enter,
 		Keys::W,
 		Keys::A,
 		Keys::S,
 		Keys::D,
+		Keys::Q,
+		Keys::E,
 		Keys::Ctrl,
 		Keys::Shift,
 		Keys::Space,
+		Keys::Tab,
+		Keys::Backspace,
 		Keys::One,
 		Keys::Two,
 		Keys::Three,
@@ -30,9 +34,13 @@ void Test_Input()
 		"A",
 		"S",
 		"D",
+		"Q",
+		"E",
 		"Ctrl",
 		"Shift",
 		"Space",
+		"Tab",
+		"Backspace",
 		"1",
 		"2",
 		"3",

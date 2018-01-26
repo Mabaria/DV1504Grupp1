@@ -46,6 +46,14 @@ LRESULT CALLBACK WindowProcedure(
 			InputDevice::SetKey(Keys::D, true);
 			break;
 
+		case 0x51:
+			InputDevice::SetKey(Keys::Q, true);
+			break;
+
+		case 0x45:
+			InputDevice::SetKey(Keys::E, true);
+			break;
+
 		case 16:
 			InputDevice::SetKey(Keys::Shift, true);
 			break;
@@ -56,6 +64,14 @@ LRESULT CALLBACK WindowProcedure(
 
 		case 0x20:
 			InputDevice::SetKey(Keys::Space, true);
+			break;
+
+		case VK_TAB:
+			InputDevice::SetKey(Keys::Tab, true);
+			break;
+
+		case VK_BACK:
+			InputDevice::SetKey(Keys::Backspace, true);
 			break;
 
 		case 49:
@@ -108,6 +124,14 @@ LRESULT CALLBACK WindowProcedure(
 			InputDevice::SetKey(Keys::D, false);
 			break;
 
+		case 0x51:
+			InputDevice::SetKey(Keys::Q, false);
+			break;
+
+		case 0x45:
+			InputDevice::SetKey(Keys::E, false);
+			break;
+
 		case 16:
 			InputDevice::SetKey(Keys::Shift, false);
 			break;
@@ -118,6 +142,14 @@ LRESULT CALLBACK WindowProcedure(
 
 		case 0x20:
 			InputDevice::SetKey(Keys::Space, false);
+			break;
+
+		case VK_TAB:
+			InputDevice::SetKey(Keys::Tab, false);
+			break;
+
+		case VK_BACK:
+			InputDevice::SetKey(Keys::Backspace, false);
 			break;
 
 		case 49:
