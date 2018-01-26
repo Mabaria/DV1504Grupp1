@@ -163,6 +163,7 @@
     <ClCompile Include="..\..\UI\UIElements\Panel.cpp" />
     <ClCompile Include="..\..\UI\UIElements\Panel2D.cpp" />
     <ClCompile Include="..\..\UI\UIElements\Panel3D.cpp" />
+    <ClCompile Include="..\..\UI\UIElements\Test_Panel.cpp" />
     <ClCompile Include="BIS.cpp" />
     <ClCompile Include="Direct3D.cpp" />
     <ClCompile Include="stdafx.cpp">

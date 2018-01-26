@@ -15,11 +15,9 @@ public:
 	D3D11& rGetDirect3D();
 
 	// Creates buffers for and adds mesh objects into the vector of mesh objects.
-	const bool AddMeshObject
-	(
+	const bool AddMeshObject(
 		std::vector<std::vector<unsigned int>> indices, 
-		std::vector<Vertex> vertices
-	);
+		std::vector<Vertex> vertices);
 
 	// Pass through for the create shader function in D3D11,
 	// setting shaders and setting up the input assembler.
@@ -48,14 +46,11 @@ private:
 
 	// Private functions because they should 
 	// only be used within the class.
-	const bool CreateVertexBuffer
-	(
+	const bool CreateVertexBuffer(
 		std::vector<Vertex> vertices, 
-		ID3D11Buffer *vertexBuffer
-	);
-	const bool CreateIndexBuffer
-	(
+		ID3D11Buffer *vertexBuffer);
+
+	const bool CreateIndexBuffer(
 		std::vector<unsigned int> indices, 
-		ID3D11Buffer *indexBuffer
-	);
+		ID3D11Buffer *indexBuffer);
 };

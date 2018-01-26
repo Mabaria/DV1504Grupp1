@@ -71,6 +71,9 @@
     <ClCompile Include="..\..\UI\UIElements\MeshObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\UI\UIElements\Test_Panel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\UI\UIElements\Panel.cpp">
