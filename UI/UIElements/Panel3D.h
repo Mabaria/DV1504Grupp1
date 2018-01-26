@@ -37,13 +37,6 @@ public:
 	// Handles the drawing of the 
 	// entire panel in one call.
 	const void Draw();
-	
-	// Returns whether or not the parameters intersect the panel.
-	const bool Intersects(int x, int y);
-
-	// Negative if it does not intersect the panel.
-	const float IntersectionFractionX(int x);
-	const float IntersectionFractionY(int y);
 
 private:
 	D3D11 mDirect3D;
