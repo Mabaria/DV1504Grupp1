@@ -78,4 +78,9 @@ ID3D11Buffer * MeshObject::pGetIndexBuffer(int index)
 	return to_return;
 }
 
+const int MeshObject::GetNumberOfIndexBuffers() const
+{
+	return this->mNumberOfIndexBuffers;
+}
+
 

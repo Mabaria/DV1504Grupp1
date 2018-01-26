@@ -37,6 +37,7 @@ public:
 	// Handles the drawing of the 
 	// entire panel in one call.
 	const void Draw();
+	
 
 private:
 	D3D11 mDirect3D;
