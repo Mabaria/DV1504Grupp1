@@ -169,6 +169,7 @@
     <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_Boat.h" />
     <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_Mesh.h" />
     <ClInclude Include="..\..\UI\UIElements\MeshObject.h" />
+    <ClInclude Include="..\..\UI\UIElements\Test_Panel.h" />
     <ClInclude Include="Direct3D.h" />
     <ClInclude Include="..\..\UI\UIElements\Panel.h" />
     <ClInclude Include="..\..\UI\UIElements\Panel2D.h" />
