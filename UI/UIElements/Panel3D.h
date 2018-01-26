@@ -21,8 +21,9 @@ public:
 		std::vector<Vertex> vertices
 	);
 
-	// Pass through for the create shader function in D3D11.
-	bool CreateShaders(
+	// Pass through for the create shader function in D3D11,
+	// setting shaders and setting up the input assembler.
+	bool CreateShadersAndSetup(
 		LPCWSTR vertexShaderPath,
 		LPCWSTR geometryShaderPath,
 		LPCWSTR pixelShaderPath,
@@ -34,14 +35,19 @@ public:
 		ID3D11InputLayout **pInputLayout);
 
 	const void Update();
+
+	// Handles the drawing of the 
+	// entire panel in one call.
 	const void Draw();
+	
 
 private:
 	D3D11 mDirect3D;
 	std::vector<MeshObject> mMeshObjects;
 	HWND mPanelWindow;
 
-	// Private functions because they will only be used within the class.
+	// Private functions because they should 
+	// only be used within the class.
 	const bool CreateVertexBuffer
 	(
 		std::vector<Vertex> vertices, 
