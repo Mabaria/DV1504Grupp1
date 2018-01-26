@@ -74,7 +74,7 @@ const bool Panel::Intersects(int x, int y)
 	{
 		result = false;
 	}
-	else if (y < this->mTop || y > (this->mTop + this->mHeight));
+	else if (y < this->mTop || y > (this->mTop + this->mHeight))
 	{
 		result = false;
 	}

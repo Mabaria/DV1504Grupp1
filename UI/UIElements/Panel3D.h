@@ -2,7 +2,7 @@
 
 #include <Windows.h>
 #include "Panel.h"
-#include "../../BIS/BIS/Direct3D.h"
+#include "../../GraphicsEngine/DX/Direct3D.h"
 #include "MeshObject.h"
 #include <vector>
 
