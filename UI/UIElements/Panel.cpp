@@ -70,11 +70,11 @@ const bool Panel::Intersects(int x, int y)
 
 	// If it doesn't intersect in either direction it doesn't intersect.
 	// Two statements for readability.
-	if (x < this->mLeft || x >(this->mLeft + this->mWidth))
+	if (x < this->mLeft || x > (this->mLeft + this->mWidth))
 	{
 		result = false;
 	}
-	else if (y < this->mTop || y >(this->mTop + this->mHeight));
+	else if (y < this->mTop || y > (this->mTop + this->mHeight));
 	{
 		result = false;
 	}
@@ -91,8 +91,8 @@ const Fraction Panel::IntersectionFraction(int x, int y)
 
 	if (Intersects(x, y))
 	{
-		fraction.x = (x - this->mLeft) / this->mWidth;
-		fraction.y = (y - this->mTop) / this->mHeight;
+		fraction.x = ((float)x - (float)this->mLeft) / (float)this->mWidth;
+		fraction.y = ((float)y - (float)this->mTop) / (float)this->mHeight;
 	}
 	return fraction;
 }
