@@ -168,6 +168,7 @@
     <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_AssImp.h" />
     <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_Boat.h" />
     <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_Mesh.h" />
+    <ClInclude Include="Picking.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -185,6 +186,7 @@
     <ClCompile Include="..\..\Logic\Timer.cpp" />
     <ClCompile Include="..\..\IO\ObserverPattern\Test_Obs.cpp" />
     <ClCompile Include="BIS.cpp" />
+    <ClCompile Include="Picking.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
