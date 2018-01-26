@@ -3,8 +3,7 @@
 
 namespace Picking
 {
-	void GetWorldRay
-	(
+	void GetWorldRay (
 		const DirectX::XMMATRIX &projectionMatrix,
 		const DirectX::XMMATRIX &viewMatrix,
 		float nScreenX,
