@@ -3,7 +3,8 @@
 #include <vector>
 #include <fstream>
 
-#include "Event.h"
+#include "LogEvent.h"
+#include "ActiveLog.h"
 
 /* An event should be able to describe:
 	* A danger event (Fire, Water, Gas etc.)
@@ -25,7 +26,6 @@
 *
 */
 
-
 class EventLog
 {
 public:
@@ -33,17 +33,15 @@ public:
 	EventLog();
 	~EventLog();
 
-	bool AddEvent(EventType type, EventState state, Room room);
-	
-	// Get event as a string to print
-	// [DD.MM.YYYY] [hh:mm] <<Event type>>, Started/Stopped
-	const std::string GetEventStringAt(int index) const;
+	int AddLogEvent(Event::Type type, int roomIndex);
 
-	void SaveToFile(string filePath);
-	void LoadFromFile(string filePath);
+	void SetActiveLog(ActiveLog *pActiveLog);
+	
+	void SaveToFile(std::string filePath);
+	void LoadFromFile(std::string filePath);
 
 private:
 
-	std::vector<Event> mEvents;
-		
-}
+	std::vector<LogEvent> mLogEvents;
+	ActiveLog *mpActiveLog;
+};

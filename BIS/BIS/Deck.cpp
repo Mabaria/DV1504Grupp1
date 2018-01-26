@@ -2,7 +2,8 @@
 
 Deck::Deck(std::string name)
 {
-	this->mName = name;
+	this->mRoomCount = 0;
+	this->mRoomOffset = 0;
 }
 
 Deck::~Deck()
@@ -11,10 +12,35 @@ Deck::~Deck()
 
 const std::string Deck::GetName() const
 {
+	this->mRoomCount++;
+}
+
+void Deck::SetName(std::string name)
+{
+	this->mName = name;
+}
+
+void Deck::SetRoomOffset(int index)
+{
+	this->mRoomOffset = index;
+}
+
+void Deck::PushRoomOffset(int value)
+{
+	this->mRoomOffset++;
+}
+
+std::string Deck::GetName() const
+{
 	return this->mName;
 }
 
-void Deck::AddRoom(std::name)
+int Deck::GetRoomCount() const
 {
-	this->mRooms.push_back(Room(name));
+	return this->mRoomCount;
+}
+
+int Deck::GetRoomOffset() const
+{
+	return this->mRoomOffset;
 }

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include <vector>
 #include "Room.h"
 
@@ -7,14 +8,22 @@ class Deck
 {
 public:
 
-	Deck(std::string name);
+	Deck();
 	~Deck();
 	
-	const std::string GetName() const;
-	void AddRoom(std::name);
+	void AddRoom();
+
+	void SetName(std::string name);
+	void SetRoomOffset(int index);
+	void PushRoomOffset(int value = 1);
+
+	std::string GetName() const;
+	int GetRoomCount() const;
+	int GetRoomOffset() const;
 
 private:
 
-	string mName;
-	std::vector<Room> mRooms;
+	std::string mName;
+	int mRoomCount;
+	int mRoomOffset;
 };

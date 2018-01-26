@@ -1,55 +1,31 @@
 #include "Event.h"
 
-// Event(Time time, EventType type, EventState state, Room *room)
-Event::Event(EventType type, EventState state, Room *room)
+std::string Event::GetString(Event::Type type)
 {
-	this->mType = type;
-	this->mState = state;
-	this->mpRoom = room;
-}
-
-Event::~Event()
-{
-
-}
-
-//const TimeObject Event::getStartTime() const;
-//const TimeObject Event::getElapsedTime() const;
-
-std::string Event::getString() const
-{
-	std::string line = "";
-
-	// line += date and time
-	
-	switch (this->mType)
+	switch (type)
 	{
 		case Fire:
-			line += " A fire";
-			break;
+			return "Fire";
 		case Water:
-			line += " A water leakage";
-			break;
+			return "Water";
 		case Gas:
-			line += " A gas leakage";
-			break;
+			return "Gas";
 		default:
-			line += " UNKNOWN_EVENT_TYPE";
-			break;
+			return "unkownEventType";
 	}
+}
 
-	switch (this->mState)
+int Event::GetID(Event::Type type)
+{
+	switch (type)
 	{
-		case Start:
-			line += " has started";
-			break;
-		case Stop:
-			line += " has been taken care of";
-			break;
+		case Fire:
+			return 0;
+		case Water:
+			return 1;
+		case Gas:
+			return 2;
 		default:
-			line += " UNKNOWN_EVENT_STATE";
-			break;
+			return (-1);
 	}
-
-	line += this->mpRoom->GetName() + ", " + this->mpRoom->GetDeck() + ".";
 }

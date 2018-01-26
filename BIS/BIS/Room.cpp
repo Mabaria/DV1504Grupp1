@@ -1,9 +1,12 @@
 #include "Room.h"
 
-Room::Room(std::string name, std::string deckName)
+Room::Room()
 {
-	this->mName = name;
-	this->mDeckName = deckName;
+	this->mSensor.AddInputType(Event::Fire);
+	this->mSensor.AddInputType(Event::Water);
+	this->mSensor.AddInputType(Event::Gas);
+
+	this->mIndex = -1;
 }
 
 Room::~Room()
@@ -11,28 +14,57 @@ Room::~Room()
 
 }
 
-const bool Room::HasEvents() const
+
+void Room::AddEvent(Event::Type type)
 {
-	return this->mEvents.size() > 0;
+	this->mSensor.Trigger(type);
 }
 
-// Returns true if successful
-const bool Room::AddEvent(EventType type)
+void Room::SetIndex(int index)
 {
-	
+	this->mSensor.SetRoomIndex(this->mIndex);
 }
 
-// Returns true if successful
-const bool Room::AddEvent(EventType type)
+void Room::SetName(std::string name)
 {
+	this->mName = name;
 }
 
-const std::string Room::GetName() const
+void Room::SetDeckName(std::string name)
+{
+	this->mDeckName = name;
+}
+
+void Room::SetRoomEventIndex(int index)
+{
+	this->mRoomEventIndex = index;
+	this->mSensor.SetRoomEventIndex(index);
+}
+
+void Room::SetEventLog(EventLog *pEventLog)
+{
+	this->mSensor.SetEventLog(pEventLog);
+}
+
+std::string Room::GetName() const
 {
 	return this->mName;
 }
 
-const std::string Room::GetDeck() const
+int Room::GetRoomEventIndex() const
 {
-	return this->mDeckName;
+	return this->mRoomEventIndex;
+}
+
+std::string Room::WriteString() const
+{
+	std::string print = "";
+	print += "r#" + this->mIndex;
+	print += this->mDeckName;
+	print += " / ";
+	print += this->mName;
+	print += " / ";
+	print += this->mSensor.WriteString();
+
+	return print;
 }

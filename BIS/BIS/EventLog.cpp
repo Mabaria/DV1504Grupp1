@@ -2,37 +2,47 @@
 
 EventLog::EventLog()
 {
+	//int nr = this->mLogEvents.size();
 }
 
 EventLog::~EventLog()
 {
 }
 
-bool EventLog::AddEvent(EventType type, EventState state, Room *room)
+int EventLog::AddLogEvent(Event::Type type, int roomIndex)
 {
-	this->mEvents.push_back(Event(type, state, room));
+	LogEvent newEvent;
+	int eventIndex;
+
+	eventIndex = (int)this->mLogEvents.size();
+
+	newEvent.SetRoomEventIndex(this->mpActiveLog->AddEvent(eventIndex, roomIndex));
+	newEvent.SetType(type);
+
+	this->mLogEvents.insert(this->mLogEvents.begin() + eventIndex, newEvent);
+	this->SaveToFile("eventlog.txt");
+
+	return newEvent.GetRoomEventIndex();
 }
 
-// Get event as a string to print
-// [DD.MM.YYYY] [hh:mm] <<Event type>>, Started/Stopped
-const std::string EventLog::GetEventStringAt(int index) const
+void EventLog::SetActiveLog(ActiveLog *pActiveLog)
 {
-	return this->mEvents[i].getString();
+	this->mpActiveLog = pActiveLog;
 }
 
-void EventLog::SaveToFile(string filePath)
+void EventLog::SaveToFile(std::string filePath)
 {
-	ofstream file;
+	std::ofstream file;
 	file.open(filePath);
 
-	for (int i = 0; i < this->mEvents.size(); i++)
+	for (int i = 0; i < this->mLogEvents.size(); i++)
 	{
-		file << this->mEvents[i].getString() << "\n";
+		file << "EVENT TEXT" << "\n";
 	}
 
 	file.close();
 }
 
-void EventLog::LoadFromFile(string filePath)
+void EventLog::LoadFromFile(std::string filePath)
 {
 }

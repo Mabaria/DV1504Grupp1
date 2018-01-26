@@ -1,30 +1,38 @@
 #pragma once
 
-#include <vector>
+#include <string>
 #include "EventLog.h"
-
-
+#include "Event.h"
+#include "Sensor.h"
 
 class Room
 {
 public:
 
-	Room(std::string name, std::string deckName);
+	Room();
 	~Room();
 
-	const bool HasEvents() const;
+	void AddEvent(Event::Type type);
 
-	// Returns true if successful
-	const bool AddEvent(EventType type);
-	const bool RemoveEvent(EventType type);
+	void SetIndex(int index);
+	void SetName(std::string name);
+	void SetDeckName(std::string name);
+	void SetRoomEventIndex(int index);
+	
+	void SetEventLog(EventLog *pEventLog);
 
-	const std::string GetName() const;
-	const std::string GetDeck() const;
+	std::string GetName() const;
+	int GetRoomEventIndex() const;
+
+	std::string WriteString() const;
 
 private:
 
+	// Name and index of this room
+	int mIndex;
 	std::string mName;
 	std::string mDeckName;
 
-	std::vector<> mEvents;
+	int mRoomEventIndex;
+	Sensor mSensor;
 };
