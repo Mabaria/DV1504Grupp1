@@ -68,9 +68,6 @@
     <ClCompile Include="BIS.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\IO\ObserverPattern\Observable.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\IO\ObserverPattern\Test_Obs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
