@@ -21,6 +21,7 @@ Panel3D::Panel3D(int width, int height, int top, int left, HWND handle)
 
 Panel3D::~Panel3D()
 {
+
 }
 
 D3D11 & Panel3D::rGetDirect3D()

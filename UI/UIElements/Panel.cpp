@@ -62,3 +62,37 @@ const void Panel::ScaleY(int scale)
 {
 	this->mTop = scale * this->mTop;
 }
+
+const bool Panel::Intersects(int x, int y)
+{
+	// Assumes intersection.
+	bool result = true;
+
+	// If it doesn't intersect in either direction it doesn't intersect.
+	// Two statements for readability.
+	if (x < this->mLeft || x >(this->mLeft + this->mWidth))
+	{
+		result = false;
+	}
+	else if (y < this->mTop || y >(this->mTop + this->mHeight));
+	{
+		result = false;
+	}
+	return result;
+}
+
+const Fraction Panel::IntersectionFraction(int x, int y)
+{
+	// Returns the fraction as -1, -1 in case 
+	// the click does not intersect the panel.
+	Fraction fraction;
+	fraction.x = -1.0f;
+	fraction.y = -1.0f;
+
+	if (Intersects(x, y))
+	{
+		fraction.x = (x - this->mLeft) / this->mWidth;
+		fraction.y = (y - this->mTop) / this->mHeight;
+	}
+	return fraction;
+}
