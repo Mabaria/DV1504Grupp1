@@ -60,6 +60,9 @@
     <ClInclude Include="..\..\GraphicsEngine\Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Picking.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -84,6 +87,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\GraphicsEngine\DX\Direct3D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Picking.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
