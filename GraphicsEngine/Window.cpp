@@ -7,11 +7,176 @@ LRESULT CALLBACK WindowProcedure(
 	_In_ WPARAM wParam,
 	_In_ LPARAM lParam)
 {
+	POINT cursor_pos = { 0 };
+	RECT client_rect = { 0 };
+	RECT window_rect = { 0 };
+
 	switch (message)
 	{
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		return 0;
+
+	case WM_KEYDOWN:
+	{
+		switch (wParam)
+		{
+
+		case VK_ESCAPE:
+			InputDevice::SetKey(Keys::Esc, true);
+			break;
+
+		case VK_RETURN:
+			InputDevice::SetKey(Keys::Enter, true);
+			break;
+
+		case 0x57:
+			InputDevice::SetKey(Keys::W, true);
+			break;
+
+		case 0x41:
+			InputDevice::SetKey(Keys::A, true);
+			break;
+
+		case 0x53:
+			InputDevice::SetKey(Keys::S, true);
+			break;
+
+		case 0x44:
+			InputDevice::SetKey(Keys::D, true);
+			break;
+
+		case 16:
+			InputDevice::SetKey(Keys::Shift, true);
+			break;
+
+		case 17:
+			InputDevice::SetKey(Keys::Ctrl, true);
+			break;
+
+		case 0x20:
+			InputDevice::SetKey(Keys::Space, true);
+			break;
+
+		case 49:
+			InputDevice::SetKey(Keys::One, true);
+			break;
+
+		case 50:
+			InputDevice::SetKey(Keys::Two, true);
+			break;
+
+		case 51:
+			InputDevice::SetKey(Keys::Three, true);
+			break;
+
+		case 52:
+			InputDevice::SetKey(Keys::Four, true);
+			break;
+
+		}
+
+		break;
+	}
+
+	case WM_KEYUP:
+	{
+		switch (wParam)
+		{
+
+		case VK_ESCAPE:
+			InputDevice::SetKey(Keys::Esc, false);
+			break;
+
+		case VK_RETURN:
+			InputDevice::SetKey(Keys::Enter, false);
+			break;
+
+		case 0x57:
+			InputDevice::SetKey(Keys::W, false);
+			break;
+
+		case 0x41:
+			InputDevice::SetKey(Keys::A, false);
+			break;
+
+		case 0x53:
+			InputDevice::SetKey(Keys::S, false);
+			break;
+
+		case 0x44:
+			InputDevice::SetKey(Keys::D, false);
+			break;
+
+		case 16:
+			InputDevice::SetKey(Keys::Shift, false);
+			break;
+
+		case 17:
+			InputDevice::SetKey(Keys::Ctrl, false);
+			break;
+
+		case 0x20:
+			InputDevice::SetKey(Keys::Space, false);
+			break;
+
+		case 49:
+			InputDevice::SetKey(Keys::One, false);
+			break;
+
+		case 50:
+			InputDevice::SetKey(Keys::Two, false);
+			break;
+
+		case 51:
+			InputDevice::SetKey(Keys::Three, false);
+			break;
+
+		case 52:
+			InputDevice::SetKey(Keys::Four, false);
+			break;
+		}
+
+		break;
+	}
+
+	case WM_MOUSEMOVE:
+	{
+		GetCursorPos(&cursor_pos);
+		GetWindowRect(hWnd, &window_rect);
+		GetClientRect(hWnd, &client_rect);
+
+		// Set a relative position from the client area
+		cursor_pos.x -= window_rect.left + 8;
+		cursor_pos.y -= window_rect.top + 31;
+		InputDevice::SetMousePosition(
+			(float)cursor_pos.x,
+			(float)cursor_pos.y
+		);
+
+		// Set a percentage across the client screen
+		InputDevice::SetMousePositionPercentage(
+			(float)cursor_pos.x / (float)client_rect.right,
+			(float)cursor_pos.y / (float)client_rect.bottom
+		);
+		break;
+	}
+
+	case WM_LBUTTONDOWN:
+		InputDevice::SetMouseButton(Buttons::Left, true);
+		break;
+
+	case WM_LBUTTONUP:
+		InputDevice::SetMouseButton(Buttons::Left, false);
+		break;
+
+	case WM_RBUTTONDOWN:
+		InputDevice::SetMouseButton(Buttons::Right, true);
+		break;
+
+	case WM_RBUTTONUP:
+		InputDevice::SetMouseButton(Buttons::Right, false);
+		break;
 
 	default:
 		break;

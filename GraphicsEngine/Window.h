@@ -2,6 +2,7 @@
 
 #include <string>
 #include <Windows.h>
+#include "../IO/InputDevice.h"
 
 /*
 

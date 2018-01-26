@@ -27,6 +27,18 @@
     <ClCompile Include="..\..\GraphicsEngine\Test_Graphics.cpp">
       <Filter>Test</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\IO\Test_Input.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\IO\InputDevice.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\IO\Mouse.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\IO\Keyboard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -43,6 +55,18 @@
     </ClInclude>
     <ClInclude Include="..\..\GraphicsEngine\Test_Graphics.h">
       <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\IO\InputDevice.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\IO\Test_Input.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\IO\Mouse.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\IO\Keyboard.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
