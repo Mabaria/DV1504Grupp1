@@ -26,6 +26,7 @@ public:
 
 	ID3D11Buffer* pGetVertexBuffer();
 	ID3D11Buffer* pGetIndexBuffer(int index);
+	const int GetNumberOfIndexBuffers() const;
 
 private:
 	std::vector<std::vector<unsigned int>> mIndices;
