@@ -168,35 +168,3 @@ const void Panel3D::Draw()
 		}
 	}
 }
-
-const void Panel3D::Draw()
-{
-	// Stride (vertex size) is declared because it has to be referenced.
-	UINT stride = sizeof(Vertex);
-
-	for (int i = 0; i < this->mMeshObjects.size(); i++)
-	{
-		// For each mesh object their vertex buffer is set.
-		this->mDirect3D.GetContext()->IASetVertexBuffers(
-			0,											// Start slot.
-			1,											// Number of buffers.
-			&this->mMeshObjects[i].pGetVertexBuffer,	// Vertex buffer. 
-			&stride,									// Vertex size.
-			0);											// Offset.
-
-		for (int j = 0; j < this->mMeshObjects[i].GetNumberOfIndexBuffers(); i++)
-		{
-			// For each sub-mesh in the mesh object the index buffer is set and the
-			// sub-mesh is drawn.
-			this->mDirect3D.GetContext()->IASetIndexBuffer(
-				this->mMeshObjects[i].pGetIndexBuffer(j),	// Index buffer.
-				DXGI_FORMAT_R32_UINT,						// Format.
-				0);											// Offset.
-
-			this->mDirect3D.GetContext()->DrawIndexed(
-				this->mMeshObjects[i].GetIndices()[j].size(),	// Number of indices.
-				0,												// Start index location.
-				0);												// Base vertex location.
-		}
-	}
-}
