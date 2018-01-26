@@ -19,6 +19,17 @@ MeshObject::MeshObject(std::vector<std::vector<unsigned int>> indices, std::vect
 
 MeshObject::~MeshObject()
 {
+	for (int i = 0; i < this->mNumberOfIndexBuffers; i++)
+	{
+		if (this->mpIndexBuffers[i])
+		{
+			this->mpIndexBuffers[i]->Release();
+		}
+	}
+	if (this->mpVertexBuffer)
+	{
+		this->mpVertexBuffer->Release();
+	}
 }
 
 const void MeshObject::Translate(float x, float y, float z)
