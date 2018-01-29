@@ -6,7 +6,10 @@
 
 int main()
 {
-	Test_Input();
-
-	return 0;
+	TestMesh();
+//	TestAssimp();
+	//TestBoat();
+    return 0;
 }
+
+

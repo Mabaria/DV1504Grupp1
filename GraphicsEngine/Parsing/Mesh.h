@@ -28,8 +28,8 @@ public:
 	with 0 meshes.*/
 	~Mesh();
 
-	std::vector<Vertex>& GetVertexVector(); 	/* Returns a pointer to the
-												vector containing all vertices */
+	std::vector<std::vector<Vertex>>& GetVertexVectors(); 	/* Returns a pointer to the
+												vector containing all vertexvectors */
 
 	std::vector<std::vector<unsigned int>>& GetIndexVectors(); /*
 	Returns a pointer to the vector of unsigned int vectors containing indices.
@@ -56,7 +56,7 @@ private:
 
 	Assimp::Importer mImporter;
 	const aiScene *mScene;
-	std::vector<Vertex> mVertexVector;
+	std::vector<std::vector<Vertex>> mVertexVectors;
 	std::vector<std::vector<unsigned int>> mIndexVectors;
 	std::vector<unsigned int> mSubmeshMaterialIndexVector;
 
