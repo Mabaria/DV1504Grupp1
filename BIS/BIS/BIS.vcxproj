@@ -169,6 +169,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\GraphicsEngine\DX\Direct3D.cpp" />
+    <ClCompile Include="..\..\GraphicsEngine\Parsing\Mesh.cpp" />
+    <ClCompile Include="..\..\GraphicsEngine\Parsing\Test_Boat.cpp" />
+    <ClCompile Include="..\..\GraphicsEngine\Parsing\Test_Mesh.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\Test_Graphics.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\Window.cpp" />
     <ClCompile Include="..\..\IO\ObserverPattern\Test_Obs.cpp" />
