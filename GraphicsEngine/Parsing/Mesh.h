@@ -28,10 +28,10 @@ public:
 	with 0 meshes.*/
 	~Mesh();
 
-	std::vector<Vertex> GetVertexVector(); 	/* Returns a pointer to the
+	std::vector<Vertex>& GetVertexVector(); 	/* Returns a pointer to the
 												vector containing all vertices */
 
-	std::vector<std::vector<unsigned int>> GetIndexVectors(); /*
+	std::vector<std::vector<unsigned int>>& GetIndexVectors(); /*
 	Returns a pointer to the vector of unsigned int vectors containing indices.
 	Contains one vector per sub-mesh.
 	Indices are in triangle primitive form, most likely
