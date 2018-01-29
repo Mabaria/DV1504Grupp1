@@ -19,7 +19,7 @@ bool TestMesh()
 	std::cout << "Mesh created successfully!" << std::endl;
 	system("pause");
 	/* Outdated test stuff
-	std::vector<std::vector<unsigned int>> *indices = 
+	std::vector<std::vector<unsigned int>> *indices =
 		testMesh1->GetIndexVectorsPtr();
 
 	std::cout << "Printing indices for submesh #1: " << std::endl;
@@ -28,6 +28,8 @@ bool TestMesh()
 		std::cout << indices[0][0][i] << std::endl;
 	}
 	*/
+
+	float test = testMesh1->GetVertexVector()[0].x;
 
 	system("pause");
 	delete testMesh1;

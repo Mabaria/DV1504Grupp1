@@ -24,12 +24,12 @@ Mesh::~Mesh()
 
 }
 
-std::vector<Vertex> Mesh::GetVertexVector() 
+std::vector<Vertex>& Mesh::GetVertexVector() 
 {
 	return this->mVertexVector;
 } 
 
-std::vector<std::vector<unsigned int>> Mesh::GetIndexVectors() 
+std::vector<std::vector<unsigned int>>& Mesh::GetIndexVectors() 
 {
 	return this->mIndexVectors;
 } 
