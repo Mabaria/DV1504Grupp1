@@ -3,22 +3,50 @@
 
 AABB FromIndexedMeshToAABB(
 	Mesh &mesh,	// Const
-	int index) 
+	int index)
 {
-	AABB retAABB;
-	bool x;
-	// Change this to reference (&)
+	AABB retAABB = { 0.0f };
+
 	std::vector<unsigned int> &indexVector =
 		mesh.GetIndexVectors()[index];
+
+	if (indexVector.size() != 8)
+	{
+		// TODO: Incorrect size! add error handling
+		return retAABB;
+	}
 
 	std::vector<Vertex> &vertexVector =
 		mesh.GetVertexVector();
 
-	for (unsigned int i = 0; i < 8; i++)
-	{
-		Vertex &currVert = vertexVector[indexVector[i]];
+	// CRITICAL, out of range!
+	Vertex &currVert = vertexVector[indexVector[0]];
 
+	retAABB.x.max = retAABB.x.min = currVert.x;
+	retAABB.y.max = retAABB.y.min = currVert.y;
+	retAABB.z.max = retAABB.z.min = currVert.z;
+
+	for (unsigned int i = 1; i < 8; i++)
+	{
+		currVert = vertexVector[indexVector[i]];
+		
+		if (retAABB.x.max < currVert.x)
+			retAABB.x.max = currVert.x;
+		else if (retAABB.x.min > currVert.x)
+			retAABB.x.min = currVert.x;
+
+		if (retAABB.y.max < currVert.y)
+			retAABB.y.max = currVert.y;
+		else if (retAABB.y.min > currVert.y)
+			retAABB.y.min = currVert.y;
+		
+		if (retAABB.z.max < currVert.z)
+			retAABB.z.max = currVert.z;
+		else if (retAABB.z.min > currVert.z)
+			retAABB.z.min = currVert.z;
 	}
+
+	return retAABB;
 }
 
 void Picking::GetWorldRay(
