@@ -1,5 +1,22 @@
 #pragma once
 #include <DirectXMath.h>
+#include "../../GraphicsEngine/Parsing/Mesh.h"
+
+struct Ray {
+	DirectX::XMVECTOR origin;
+	DirectX::XMVECTOR direction;
+};
+
+struct AABB {
+	struct Extrema {
+		float min, max;
+	};
+	Extrema x, y, z;
+};
+
+AABB FromIndexedMeshToAABB(
+	Mesh &mesh,
+	int index);
 
 namespace Picking
 {
@@ -8,6 +25,9 @@ namespace Picking
 		const DirectX::XMMATRIX &viewMatrix,
 		float nScreenX,
 		float nScreenY,
-		DirectX::XMVECTOR &rRayOrigin,
-		DirectX::XMVECTOR &rRayDirection);
+		Ray &rRay);
+
+	bool IsRayIntersectingAABB(
+		const Ray &ray,
+		const AABB &box);
 }
