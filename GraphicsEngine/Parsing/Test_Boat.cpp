@@ -15,12 +15,12 @@ bool TestBoat() {
 	std::cout << "Mesh loaded." << std::endl;
 	system("pause");
 
-	std::vector<Vertex> vertVector = shipObj->GetVertexVector();
+	std::vector<std::vector<Vertex>> vertVector = shipObj->GetVertexVectors();
 	for (unsigned int i = 19; i < 25; i++)
 	{
-		std::cout << vertVector[i].x << ", "
-			<< vertVector[i].y << ", "
-			<< vertVector[i].z << std::endl;
+		std::cout << vertVector[0][i].x << ", "
+			<< vertVector[0][i].y << ", "
+			<< vertVector[0][i].z << std::endl;
 		
 	}
 

@@ -3,7 +3,7 @@
 #include <iostream>
 bool TestMesh()
 {
-	std::string filePath = "../../Models/OBJTEST2.obj";
+	std::string filePath = "../../Models/Bounding/Bound01.obj";
 	Mesh* testMesh1;
 	try
 	{
@@ -29,8 +29,8 @@ bool TestMesh()
 	}
 	*/
 
-	float test = testMesh1->GetVertexVector()[0].x;
-
+	std::vector<std::vector<unsigned int>> test = testMesh1->GetIndexVectors();
+	std::vector<std::vector<Vertex>> test2 = testMesh1->GetVertexVectors();
 	system("pause");
 	delete testMesh1;
 	return true;
