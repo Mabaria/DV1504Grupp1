@@ -3,7 +3,7 @@
 #include <iostream>
 bool TestMesh()
 {
-	std::string filePath = "../../Models/OBJTEST2.obj";
+	std::string filePath = "../../Models/Bounding/Bound01.obj";
 	Mesh* testMesh1;
 	try
 	{
