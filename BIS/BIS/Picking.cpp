@@ -7,28 +7,28 @@ AABB FromIndexedMeshToAABB(
 {
 	AABB retAABB = { 0.0f };
 
-	std::vector<unsigned int> &indexVector =
-		mesh.GetIndexVectors()[index];
+	//std::vector<unsigned int> &indexVector =
+	//	mesh.GetIndexVectors()[index];
 
-	if (indexVector.size() != 8)
+	std::vector<Vertex> &vertexVector =
+		mesh.GetVertexVector();
+
+	if ((index + 1) * 8 > vertexVector.size())
 	{
 		// TODO: Incorrect size! add error handling
 		return retAABB;
 	}
 
-	std::vector<Vertex> &vertexVector =
-		mesh.GetVertexVector();
-
 	// CRITICAL, out of range!
-	Vertex &currVert = vertexVector[indexVector[0]];
+	Vertex &currVert = vertexVector[index*8];
 
 	retAABB.x.max = retAABB.x.min = currVert.x;
 	retAABB.y.max = retAABB.y.min = currVert.y;
 	retAABB.z.max = retAABB.z.min = currVert.z;
 
-	for (unsigned int i = 1; i < 8; i++)
+	for (unsigned int i = index * 8 + 1; i < (index + 1) * 8; i++)
 	{
-		currVert = vertexVector[indexVector[i]];
+		currVert = vertexVector[i];
 		
 		if (retAABB.x.max < currVert.x)
 			retAABB.x.max = currVert.x;
