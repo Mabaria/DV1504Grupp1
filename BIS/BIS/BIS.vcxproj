@@ -157,6 +157,10 @@
     <ClInclude Include="..\..\GraphicsEngine\DX\Direct3D.h" />
     <ClInclude Include="..\..\GraphicsEngine\Test_Graphics.h" />
     <ClInclude Include="..\..\GraphicsEngine\Window.h" />
+    <ClInclude Include="..\..\IO\InputDevice.h" />
+    <ClInclude Include="..\..\IO\Keyboard.h" />
+    <ClInclude Include="..\..\IO\Mouse.h" />
+    <ClInclude Include="..\..\IO\Test_Input.h" />
     <ClInclude Include="..\..\IO\ObserverPattern\Observable.h" />
     <ClInclude Include="..\..\IO\ObserverPattern\Observer.h" />
     <ClInclude Include="..\..\IO\ObserverPattern\Test_Obs.h" />
@@ -171,6 +175,11 @@
     <ClCompile Include="..\..\GraphicsEngine\DX\Direct3D.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\Test_Graphics.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\Window.cpp" />
+    <ClCompile Include="..\..\IO\InputDevice.cpp" />
+    <ClCompile Include="..\..\IO\Keyboard.cpp" />
+    <ClCompile Include="..\..\IO\Mouse.cpp" />
+    <ClCompile Include="..\..\IO\Test_Input.cpp" />
+    <ClCompile Include="..\..\Logic\Timer.cpp" />
     <ClCompile Include="..\..\IO\ObserverPattern\Test_Obs.cpp" />
     <ClCompile Include="BIS.cpp" />
     <ClCompile Include="stdafx.cpp">
