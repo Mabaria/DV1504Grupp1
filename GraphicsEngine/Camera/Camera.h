@@ -25,7 +25,18 @@ public:
 
 	void SetCameraPosition(const DirectX::XMFLOAT3 &r_new_position);
 	void SetCameraPosition(const DirectX::XMVECTOR &r_new_position);
-	void SetCameraPosition(const float new_x, const float new_y, const float new_z);
+	void SetCameraPosition(const float new_x,
+		const float new_y,
+		const float new_z);
+
+	void MoveCamera(const DirectX::XMFLOAT3 &r_direction,
+		const float distance);
+	void MoveCamera(const DirectX::XMVECTOR &r_direction,
+		const float distance);
+	void MoveCamera(const float direction_x,
+		const float direction_y,
+		const float direction_z,
+		const float distance);
 
 	void SetUpVector(const DirectX::XMFLOAT3 &r_new_up);
 	void SetUpVector(const DirectX::XMVECTOR &r_new_up);
@@ -35,12 +46,12 @@ public:
 	void SetLookAt(const DirectX::XMVECTOR &r_new_look_at);
 	void SetLookAt(const float new_x, const float new_y, const float new_z);
 
-	void RotatePitchYawRoll(
+	void RotateCameraPitchYawRoll(
 		const float pitch,
 		const float yaw,
 		const float roll);
-	void RotatePitchYawRoll(DirectX::XMFLOAT3 &pitch_yaw_roll);
-	void RotatePitchYawRoll(DirectX::XMVECTOR &pitch_yaw_roll);
+	void RotateCameraPitchYawRoll(const DirectX::XMFLOAT3 &pitch_yaw_roll);
+	void RotateCameraPitchYawRoll(const DirectX::XMVECTOR &pitch_yaw_roll);
 
 	DirectX::XMVECTOR GetPosition() const;
 	DirectX::XMVECTOR GetUpVector() const;
