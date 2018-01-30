@@ -13,6 +13,7 @@ public:
 	~Room();
 
 	void AddEvent(Event::Type type);
+	void AddInputType(Event::Type type);
 
 	void SetIndex(int index);
 	void SetName(std::string name);

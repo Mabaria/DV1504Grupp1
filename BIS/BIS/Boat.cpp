@@ -26,7 +26,7 @@ void Boat::AddDeck(std::string name)
 	this->mDecks.push_back(newDeck);
 }
 
-void Boat::AddRoom(std::string roomName, std::string deckName)
+void Boat::AddRoom(std::string roomName, std::string deckName, int inputs[NR_OF_EVENT_TYPES])
 {
 	// Check early exit
 	if (this->GetRoomIndex(roomName, deckName) != -1)
@@ -43,6 +43,11 @@ void Boat::AddRoom(std::string roomName, std::string deckName)
 			newRoom.SetIndex((int)this->mRooms.size());
 			newRoom.SetName(roomName);
 			newRoom.SetDeckName(deckName);
+			
+			for (int j = 0; j < (sizeof(inputs)/sizeof(int)); j++)
+			{
+				newRoom.AddInputType((Event::Type)inputs[j]);
+			}
 
 			int offset = this->mDecks[i].GetRoomOffset() +
 						 this->mDecks[i].GetRoomCount();
@@ -168,4 +173,171 @@ void Boat::WriteFile(std::string filePath)
 
 void Boat::ReadFile(std::string filePath)
 {
+	// Clear current lists
+	this->mDecks.clear();
+	this->mRooms.clear();
+
+	std::ifstream file(filePath);
+
+	std::stringstream buffer;
+	std::string line;
+	std::string word;
+	int number;
+
+	if (file.is_open())
+	{
+		while (getline(file, line))
+		{
+			buffer.clear();
+
+			// Check first character of line
+			switch (line[0])
+			{
+				case 'b': // Boat specific line
+					buffer.str(line);	// Fill buffer with line
+
+					buffer >> word;
+					if (word == "boatmodel")
+					{
+						if (buffer >> word)
+							this->mModelName = word;
+						else // No following word
+							throw ("Boatmodel missing after 'boatmodel'.");
+					}
+					break;
+
+				case 'd': // Deck specific line
+					buffer.str(line);	// Fill buffer with line
+
+					buffer >> word; // Get first word
+					if (word[1] == '#') // deck line
+					{
+						Deck newDeck;
+
+						/**
+						*	Get index
+						*/
+						std::stringstream intParse;
+						for (int i = 2; i < word.size(); i++)
+						{
+							intParse << word[i];
+						}
+						intParse >> number;
+						newDeck.SetIndex(number);
+
+						/**
+						*	Get deck name
+						*/
+						buffer >> word;
+						newDeck.SetName(word);
+						
+						/**
+						*	Insert deck into list
+						*/
+						this->mDecks.push_back(newDeck);
+					}
+
+					else if (word[1] == 'e')	// deckcount
+					{
+						if (buffer >> number)
+							this->mDecks.reserve(number);
+						else // No following number
+							throw ("Number missing after 'deckcount'.");
+					}
+					break;
+
+				case 'r': // Room specific line
+					buffer.str(line);	// Fill buffer with line
+					buffer >> word;
+
+					if (word[1] == '#') // room line
+					{
+						Room newRoom;
+
+						/**
+						*	Get index
+						*/
+						std::stringstream intParse;
+						for (int i = 2; i < word.size(); i++)
+						{
+							intParse << word[i];
+						}
+						intParse >> number;
+
+						newRoom.SetIndex(number);
+						
+						/**
+						*	Get deck name
+						*/
+						buffer >> word; // Deck name
+						newRoom.SetDeckName(word);
+
+						/**
+						*	Get room name
+						*/
+						buffer >> word;	// Get rid of '/'
+
+						std::string tempName = "";
+
+						buffer >> word;
+
+						while (word != "/")
+						{
+							if (tempName != "")
+								tempName += " ";
+							tempName +=	word;
+
+							buffer >> word;
+						}
+
+						newRoom.SetName(tempName);
+
+						/**
+						*	Get sensor data
+						*/
+						buffer >> word; // 'sensor'
+						buffer >> number;	// roomEventIndex
+						newRoom.SetRoomEventIndex(number);
+
+						buffer >> word; // Get rid of '{'
+
+						while (buffer >> word)
+						{
+							if (word != "}")
+							{
+								number = std::stoi(word);
+								newRoom.AddInputType((Event::Type)number); // Cast int to enum
+							}
+							else	// word == '}'
+								break;
+						}
+
+							/**
+							*	Insert room into list
+							*/
+						this->mRooms.push_back(newRoom);
+					}
+
+					else if (word[1] == 'o')
+					{
+						if (buffer >> number)
+							this->mRooms.reserve(number);
+						else
+							throw ("Number missing after 'roomcount'.");
+
+					}
+					break;
+
+				default: // Comments
+					break;
+			}
+		}
+
+		// When end of file appears, close file and return from function
+		file.close();
+		return;
+	}
+
+	// If file could not be opened
+	throw("Can't open file '" + filePath + "', file not found");
 }

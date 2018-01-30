@@ -15,9 +15,19 @@ const std::string Deck::GetName() const
 	this->mRoomCount++;
 }
 
+void Deck::SetIndex(int index)
+{
+	this->mIndex = index;
+}
+
 void Deck::SetName(std::string name)
 {
 	this->mName = name;
+}
+
+void Deck::SetRoomCount(int count)
+{
+	this->mRoomCount = count;
 }
 
 void Deck::SetRoomOffset(int index)
