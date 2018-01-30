@@ -43,9 +43,9 @@ private:
 	std::vector<MeshObject> mMeshObjects;
 	HWND mPanelWindow;
 
-	// Private functions because they should 
-	// only be used within the class.
-	ID3D11Buffer **CreateVertexBuffer(std::vector<Vertex> vertices);
 
-	ID3D11Buffer **CreateIndexBuffer(std::vector<unsigned int> indices);
+	// Buffer creators take the buffer in slot [index] of the last mesh object
+	// in the vector of mesh objects and create a buffer from the data provided.
+	const void CreateVertexBuffer(std::vector<Vertex> vertices, int index);
+	const void CreateIndexBuffer(std::vector<unsigned int> indices, int index);
 };
