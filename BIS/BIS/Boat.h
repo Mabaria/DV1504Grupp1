@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <sstream>
 #include "Deck.h"
 #include "Room.h"
 #include "EventLog.h"
@@ -19,6 +20,7 @@ public:
 	
 	void AddDeck(std::string name);
 	void AddRoom(std::string roomName, std::string deckName);
+	void AddRoom(std::string roomName, std::string deckName, int inputs[NR_OF_EVENT_TYPES]);
 
 	std::string GetModelName() const;
 
@@ -28,6 +30,8 @@ public:
 
 	void WriteFile(std::string filePath);
 	void ReadFile(std::string filePath);
+
+	//void StoreBoundings(std::vector<AABB> boundings);
 
 private:
 	
@@ -42,4 +46,6 @@ private:
 
 	std::vector<Deck> mDecks;
 	std::vector<Room> mRooms;
+
+	//std::vector<AABB> mBoundings;
 };

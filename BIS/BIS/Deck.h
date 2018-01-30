@@ -13,7 +13,9 @@ public:
 	
 	void AddRoom();
 
+	void SetIndex(int index);
 	void SetName(std::string name);
+	void SetRoomCount(int count);
 	void SetRoomOffset(int index);
 	void PushRoomOffset(int value = 1);
 
@@ -23,7 +25,10 @@ public:
 
 private:
 
+	// Name and index of this deck
+	int mIndex;
 	std::string mName;
+
 	int mRoomCount;
 	int mRoomOffset;
 };

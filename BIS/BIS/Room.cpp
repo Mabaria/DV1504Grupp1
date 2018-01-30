@@ -2,6 +2,7 @@
 
 Room::Room()
 {
+	// TODO: delete these three lines, only for testing
 	this->mSensor.AddInputType(Event::Fire);
 	this->mSensor.AddInputType(Event::Water);
 	this->mSensor.AddInputType(Event::Gas);
@@ -20,8 +21,14 @@ void Room::AddEvent(Event::Type type)
 	this->mSensor.Trigger(type);
 }
 
+void Room::AddInputType(Event::Type type)
+{
+	this->mSensor.AddInputType(type);
+}
+
 void Room::SetIndex(int index)
 {
+	this->mIndex = index;
 	this->mSensor.SetRoomIndex(this->mIndex);
 }
 
@@ -59,7 +66,7 @@ int Room::GetRoomEventIndex() const
 std::string Room::WriteString() const
 {
 	std::string print = "";
-	print += "r#" + this->mIndex;
+	print += "r#" + std::to_string(this->mIndex) + " ";
 	print += this->mDeckName;
 	print += " / ";
 	print += this->mName;
