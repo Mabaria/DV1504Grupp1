@@ -329,12 +329,6 @@ void Window::HandleUpdates()
 		this->Close();	// Close window
 		break;
 
-	case WM_SIZE:
-		break;
-
-	case WM_MOUSEHWHEEL:
-		break;
-
 	default:
 		break;
 	}
