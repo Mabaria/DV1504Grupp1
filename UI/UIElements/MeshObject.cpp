@@ -5,7 +5,7 @@ MeshObject::MeshObject(std::vector<std::vector<unsigned int>> indices, std::vect
 	this->mIndices				= indices;
 	this->mVertices				= vertices;
 
-	// Doesn't matter which one determines the size as they are equal.
+	// Doesn't matter which one determines the size as they are (should be) equal.
 	this->mNumberOfBuffers		= (int)indices.size();
 	this->mWorld				= XMMatrixIdentity();
 }
@@ -16,11 +16,11 @@ MeshObject::~MeshObject()
 	{
 		if (this->mpIndexBuffers[i])
 		{
-			//this->mpIndexBuffers[i]->Release();
+			this->mpIndexBuffers[i]->Release();
 		}
 		if (this->mpVertexBuffers[i])
 		{
-			//this->mpVertexBuffers[i]->Release();
+			this->mpVertexBuffers[i]->Release();
 		}
 	}
 }
@@ -50,31 +50,14 @@ const std::vector<std::vector<Vertex>> MeshObject::GetVertices() const
 	return this->mVertices;
 }
 
-ID3D11Buffer ** MeshObject::pGetVertexBuffer(int index)
+ID3D11Buffer** MeshObject::pGetVertexBuffer(int index)
 {
-	ID3D11Buffer *to_return = nullptr;
-	// If statement to avoid OOB.
-	if (index >= 0 && index < this->mVertices.size())
-	{
-		to_return = this->mpVertexBuffers[index];
-	}
-	else
-	{
-		this->mpVertexBuffers.push_back(to_return);
-		to_return = this->mpVertexBuffers.back();
-	}
-	return &to_return;
+	return &this->mpVertexBuffers[index];
 }
 
-ID3D11Buffer ** MeshObject::pGetIndexBuffer(int index)
+ID3D11Buffer** MeshObject::pGetIndexBuffer(int index)
 {
-	ID3D11Buffer **to_return = nullptr;
-	// If statement to avoid OOB.
-	if (index > 0 && index < this->mIndices.size())
-	{
-		to_return = &this->mpIndexBuffers[index];
-	}
-	return to_return;
+	return &this->mpIndexBuffers[index];
 }
 
 const int MeshObject::GetNumberOfBuffers() const
@@ -82,67 +65,22 @@ const int MeshObject::GetNumberOfBuffers() const
 	return this->mNumberOfBuffers;
 }
 
-const void MeshObject::SetVertexBuffer(int index, ID3D11Buffer *vertexBuffer)
+const void MeshObject::SetVertexBuffer(ID3D11Buffer **vertexBuffer)
 {
-	if (index < this->mNumberOfBuffers)
-	{
-		this->mpVertexBuffers[index] = vertexBuffer;
-	}
-	else if (index == (this->mNumberOfBuffers + 1))
-	{
-		this->mpVertexBuffers.push_back(vertexBuffer);
-	}
-	else
-	{
-		MessageBoxA(NULL, "Vertex buffer out of bounds!", NULL, MB_OK);
-	}
+	this->mpVertexBuffers.back() = *vertexBuffer;
 }
 
-const void MeshObject::SetIndexBuffer(int index, ID3D11Buffer * indexBuffer)
+const void MeshObject::SetIndexBuffer(ID3D11Buffer **indexBuffer)
 {
-	if (index < this->mNumberOfBuffers)
-	{
-		this->mpIndexBuffers[index] = indexBuffer;
-	}
-	else if (index == (this->mNumberOfBuffers + 1))
-	{
-		this->mpIndexBuffers.push_back(indexBuffer);
-	}
-	else
-	{
-		MessageBoxA(NULL, "Index buffer out of bounds!", NULL, MB_OK);
-	}
+	this->mpIndexBuffers.back() = *indexBuffer;
 }
 
-const void MeshObject::AddIndexBuffer(ID3D11Buffer * indexBuffer)
+const void MeshObject::AddIndexBuffer()
 {
-	this->mpIndexBuffers.push_back(indexBuffer);
+	this->mpIndexBuffers.push_back(nullptr);
 }
 
-const void MeshObject::AddVertexBuffer(ID3D11Buffer ** vertexBuffer)
+const void MeshObject::AddVertexBuffer()
 {
-	this->mpVertexBuffers.push_back(*vertexBuffer);
+	this->mpVertexBuffers.push_back(nullptr);
 }
-
-ID3D11Buffer * MeshObject::pGetVertexBuffer()
-{
-	return &this->mpVertexBuffer;
-}
-
-ID3D11Buffer ** MeshObject::pGetIndexBuffer(int index)
-{
-	ID3D11Buffer *to_return = nullptr;
-	// If statement to avoid OOB.
-	if (index > 0 && index < this->mIndices.size())
-	{
-		to_return = this->mpIndexBuffers[index];
-	}
-	return &to_return;
-}
-
-const int MeshObject::GetNumberOfIndexBuffers() const
-{
-	return this->mNumberOfIndexBuffers;
-}
-
-

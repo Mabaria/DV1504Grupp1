@@ -87,9 +87,9 @@ void Test_Panel3D()
 	};
 
 	std::vector<Vertex> vert1;
-	vert1.push_back(v3);
-	vert1.push_back(v2);
 	vert1.push_back(v1);
+	vert1.push_back(v2);
+	vert1.push_back(v3);
 
 	vertices.push_back(vert1);
 
@@ -97,9 +97,9 @@ void Test_Panel3D()
 	std::vector<std::vector<unsigned int>> indices;
 
 	std::vector<unsigned int> i1;
+	i1.push_back(0);
 	i1.push_back(1);
 	i1.push_back(2);
-	i1.push_back(3);
 
 	indices.push_back(i1);
 
@@ -133,9 +133,6 @@ void Test_Panel3D()
 		window.Update();
 		panel1.Draw();
 		panel2.Draw();
-		/*panel1.rGetDirect3D().Clear();
-		panel1.rGetDirect3D().GetContext()->Draw(3, 0);
-		panel1.rGetDirect3D().GetSwapChain()->Present(1, 0);*/
 	}
 
 
