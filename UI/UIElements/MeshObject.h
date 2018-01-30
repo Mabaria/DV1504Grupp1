@@ -15,26 +15,34 @@ struct Vertex // Temporary struct until parsing is done.
 class MeshObject
 {
 public:
-	MeshObject(std::vector<std::vector<unsigned int>> indices, std::vector<Vertex> vertices);
+	MeshObject(std::vector<std::vector<unsigned int>> indices, std::vector<std::vector<Vertex>> vertices);
 	~MeshObject();
 
 	const void Translate(float x, float y, float z);
 	const void Rotate(float pitch, float yaw, float roll);
+	const void Scale(float x, float y, float z);
 	
 	const std::vector<std::vector<unsigned int>> GetIndices() const;
-	const std::vector<Vertex> GetVertices() const;
+	const std::vector<std::vector<Vertex>> GetVertices() const;
 
-	ID3D11Buffer **pGetVertexBuffer();
+	ID3D11Buffer **pGetVertexBuffer(int index);
 	ID3D11Buffer **pGetIndexBuffer(int index);
-	const int GetNumberOfIndexBuffers() const;
+	const int GetNumberOfBuffers() const;
+
+	const void SetVertexBuffer(int index, ID3D11Buffer *vertexBuffer);
+	const void SetIndexBuffer(int index, ID3D11Buffer *indexBuffer);
+
+	const void AddIndexBuffer(ID3D11Buffer* indexBuffer);
+	const void AddVertexBuffer(ID3D11Buffer** vertexBuffer);
 
 private:
 	std::vector<std::vector<unsigned int>> mIndices;
-	std::vector<Vertex> mVertices; // Pointer to the vector of all vertices.
-	ID3D11Buffer **mpIndexBuffers;
-	ID3D11Buffer *mpVertexBuffer;
+	std::vector<std::vector<Vertex>> mVertices;
 
-	int mNumberOfIndexBuffers;
+	std::vector<ID3D11Buffer*> mpIndexBuffers;
+	std::vector<ID3D11Buffer*> mpVertexBuffers;
+
+	int mNumberOfBuffers;
 
 	XMMATRIX mWorld;
 };
