@@ -6,6 +6,7 @@ Direct2D::Direct2D()
 	this->pWicFactory = NULL;
 	this->pDecoder = NULL;
 	this->pBitmapSrc = NULL;
+	this->pConverter = NULL;
 }
 
 Direct2D::~Direct2D()
@@ -43,8 +44,27 @@ void Direct2D::CreateRenderTarget(HWND window, unsigned int width, unsigned int 
 		&this->pRenderTarget);
 }
 
-void Direct2D::LoadImageToBitmap(std::string imageFilePath)
+void Direct2D::LoadImageToBitmap(LPCWSTR imageFilePath)
 {
-	this->pConverters[0]->Release()
+	ID2D1Bitmap *temp_bitmap;
+	std::string hehe;
+
+	this->pWicFactory->CreateFormatConverter(&this->pConverter);
+	this->pWicFactory->CreateDecoderFromFilename(imageFilePath,
+		NULL,
+		GENERIC_READ,
+		WICDecodeMetadataCacheOnDemand,
+		&this->pDecoder);
+	this->pDecoder->GetFrame(0, &this->pBitmapSrc);
+	this->pConverter->Initialize(this->pBitmapSrc,
+		GUID_WICPixelFormat32bppPBGRA,
+		WICBitmapDitherTypeNone,
+		NULL,
+		0.f,
+		WICBitmapPaletteTypeMedianCut);
+
+	/*this->pRenderTarget->CreateBitmapFromWicBitmap(this->pConverter, 
+		NULL, 
+		&this->mImages[0])*/
 }
 
