@@ -9,7 +9,7 @@
 class Panel3D : public Panel
 {
 public:
-	Panel3D(int width, int height, int top, int left, HWND handle);
+	Panel3D(int width, int height, int top, int left, HWND handle, LPCTSTR title);
 	~Panel3D();
 	
 	D3D11& rGetDirect3D();
@@ -17,7 +17,7 @@ public:
 	// Creates buffers for and adds mesh objects into the vector of mesh objects.
 	const bool AddMeshObject(
 		std::vector<std::vector<unsigned int>> indices, 
-		std::vector<Vertex> vertices);
+		std::vector<std::vector<Vertex>> vertices);
 
 	// Pass through for the create shader function in D3D11,
 	// setting shaders and setting up the input assembler.
@@ -45,11 +45,7 @@ private:
 
 	// Private functions because they should 
 	// only be used within the class.
-	const bool CreateVertexBuffer(
-		std::vector<Vertex> vertices, 
-		ID3D11Buffer *vertexBuffer);
+	ID3D11Buffer **CreateVertexBuffer(std::vector<Vertex> vertices);
 
-	const bool CreateIndexBuffer(
-		std::vector<unsigned int> indices, 
-		ID3D11Buffer *indexBuffer);
+	ID3D11Buffer **CreateIndexBuffer(std::vector<unsigned int> indices);
 };

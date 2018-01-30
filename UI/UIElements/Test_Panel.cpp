@@ -25,9 +25,10 @@ void Test_Panel3D()
 		360,					// Height.
 		0,						// Top (y coordinate of top edge).
 		0,						// Left (x coordinate of left edge).
-		window.GetWindow());	// Window handle to parent window of the panel.
+		window.GetWindow(),		// Window handle to parent window of the panel.
+		L"Test_Window");		// Name of the parent window.
 
-	Panel3D panel2(640, 360, 0, 640, window.GetWindow());
+	Panel3D panel2(640, 360, 0, 640, window.GetWindow(), L"Test_Window");
 
 
 	int click_x = 960;
@@ -58,37 +59,39 @@ void Test_Panel3D()
 	ID3D11GeometryShader *pGS		= nullptr;
 	ID3D11PixelShader *pPS			= nullptr;
 
-	D3D11_INPUT_ELEMENT_DESC input_desc = {
-		"POSITION",
-		0,
-		DXGI_FORMAT_R32G32B32_FLOAT,
-		0,
-		0,
-		D3D11_INPUT_PER_VERTEX_DATA
+	const UINT n_inputs = 3;
+
+	D3D11_INPUT_ELEMENT_DESC input_desc[n_inputs] = {
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 	};
 	
 	// Triangle vertices for drawing and mesh object test.
-	std::vector<Vertex> vertices;
+	std::vector<std::vector<Vertex>> vertices;
 	
 	Vertex v1 = {
-		-0.5f, -0.5f, 0.5f, // Position x, y, z
-		0.0f, 0.0f, 0.0f,	// Normal x, y, z
-		0.0f, 0.0f			// TexCoord u, v
+		-0.5f, -0.5f,  0.5f,	// Position x, y, z
+		 0.0f,  0.0f,  0.0f,	// Normal x, y, z
+		 0.0f,  0.0f			// TexCoord u, v
 	};
 	Vertex v2 = {
-		0.0f, 0.5f, 0.5f,
-		0.0f, 0.0f, 0.0f,
-		0.0f, 0.0f
+		 0.0f,  0.5f,  0.5f,
+		 0.0f,  0.0f,  0.0f,
+		 0.0f,  0.0f
 	};
 	Vertex v3 = {
-		0.5f, -0.5f, 0.5f,
-		0.0f, 0.0f, 0.0f,
-		0.0f, 0.0f
+		 0.5f, -0.5f,  0.5f,
+		 0.0f,  0.0f,  0.0f,
+		 0.0f,  0.0f
 	};
 
-	vertices.push_back(v1);
-	vertices.push_back(v2);
-	vertices.push_back(v3);
+	std::vector<Vertex> vert1;
+	vert1.push_back(v3);
+	vert1.push_back(v2);
+	vert1.push_back(v1);
+
+	vertices.push_back(vert1);
 
 	// A vector of vectors because Rikard.
 	std::vector<std::vector<unsigned int>> indices;
@@ -98,10 +101,11 @@ void Test_Panel3D()
 	i1.push_back(2);
 	i1.push_back(3);
 
+	indices.push_back(i1);
+
 	panel1.AddMeshObject(indices, vertices);
 	panel2.AddMeshObject(indices, vertices);
 
-	// Sick function bro.
 	panel1.CreateShadersAndSetup(
 		L"../../GraphicsEngine/Test_VertexShader.hlsl",
 		L"",
@@ -109,8 +113,8 @@ void Test_Panel3D()
 		&pVS,
 		&pGS,
 		&pPS,
-		&input_desc,
-		(UINT)1,
+		input_desc,
+		n_inputs,
 		&pInputLayout);
 
 	panel2.CreateShadersAndSetup(
@@ -120,11 +124,21 @@ void Test_Panel3D()
 		&pVS,
 		&pGS,
 		&pPS,
-		&input_desc,
-		(UINT)1,
+		input_desc,
+		n_inputs,
 		&pInputLayout);
 
-	//panel1.Draw();
+	while (window.IsOpen())
+	{
+		window.Update();
+		panel1.Draw();
+		panel2.Draw();
+		/*panel1.rGetDirect3D().Clear();
+		panel1.rGetDirect3D().GetContext()->Draw(3, 0);
+		panel1.rGetDirect3D().GetSwapChain()->Present(1, 0);*/
+	}
+
+
 	if (pVS)
 	{
 		pVS->Release();
