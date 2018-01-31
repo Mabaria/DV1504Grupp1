@@ -2,9 +2,14 @@
 
 Direct2D::Direct2D()
 {
-	this->pFactory = NULL;
-	this->pRenderTarget = NULL;
-	this->CreateFactory();
+	this->pFactory = nullptr;
+	this->pRenderTarget = nullptr;
+	this->pWicFactory = nullptr;
+	this->pConverter = nullptr;
+	this->pDecoder = nullptr;
+	this->pBitmapSrc = nullptr;
+
+	this->Init();
 }
 
 Direct2D::~Direct2D()
@@ -19,7 +24,8 @@ void Direct2D::CreateFactory()
 
 void Direct2D::Init()
 {
-
+	this->CreateFactory();
+	this->CreateWicFactory();
 }
 
 void Direct2D::CreateRenderTarget(
@@ -35,3 +41,61 @@ void Direct2D::CreateRenderTarget(
 		&this->pRenderTarget);
 }
 
+IWICFormatConverter *Direct2D::GetpFormatConverter()
+{
+	return this->pConverter;
+}
+
+IWICImagingFactory *Direct2D::GetpImagingFactory()
+{
+	return this->pWicFactory;
+}
+
+IWICBitmapDecoder *Direct2D::GetpBitmapDecoder()
+{
+	return this->pDecoder;
+}
+
+IWICBitmapFrameDecode *Direct2D::GetpBitmapSrc()
+{
+	return this->pBitmapSrc;
+}
+
+ID2D1Factory *Direct2D::GetpFactory()
+{
+	return this->pFactory;
+}
+
+ID2D1HwndRenderTarget *Direct2D::GetpRenderTarget()
+{
+	return this->pRenderTarget;
+}
+
+void Direct2D::SetpFormatConverter(IWICFormatConverter* pConverter)
+{
+	this->pConverter = pConverter;
+}
+
+void Direct2D::SetpImagingFactory(IWICImagingFactory *pWicFactory)
+{
+	this->pWicFactory = pWicFactory;
+}
+
+void Direct2D::SetpBitmapDecoder(IWICBitmapDecoder * pDecoder)
+{
+	this->pDecoder = pDecoder;
+}
+
+void Direct2D::SetpBitmapSrc(IWICBitmapFrameDecode * pBitmapSrc)
+{
+	this->pBitmapSrc = pBitmapSrc;
+}
+
+void Direct2D::CreateWicFactory()
+{
+	CoInitialize(nullptr);
+	CoCreateInstance(CLSID_WICImagingFactory,
+		nullptr,
+		CLSCTX_INPROC_SERVER,
+		IID_PPV_ARGS(&this->pWicFactory));
+}
