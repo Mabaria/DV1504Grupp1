@@ -47,6 +47,7 @@ public:
 	IDXGISwapChain* GetSwapChain() const;
 	ID3D11DeviceContext* GetContext() const;
 	ID3D11Device* GetDevice() const;
+
 	const DXGI_SAMPLE_DESC& GetSampleDesc() const;
 
 	void ChangeClearColor(const float r, const float g, const float b);
