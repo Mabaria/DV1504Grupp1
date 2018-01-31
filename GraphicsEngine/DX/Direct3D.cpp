@@ -37,12 +37,34 @@ D3D11::D3D11(
 	this->mContext->RSSetViewports(1, &this->mViewport);
 
 
-	this->mClearColor[0] = 0.0f;
-	this->mClearColor[1] = 0.0f;
-	this->mClearColor[2] = 0.0f;
+	this->mClearColor[0] = 1.0f;
+	this->mClearColor[1] = 1.0f;
+	this->mClearColor[2] = 1.0f;
 	this->mClearColor[3] = 1.0f;
 
 	this->ChangeSize(this->mSize);
+
+	// Temp - Blend
+
+	ID3D11BlendState* bs = nullptr;
+	D3D11_BLEND_DESC blend_desc = { 0 };
+	blend_desc.RenderTarget[0].BlendEnable				= TRUE;
+	blend_desc.RenderTarget[0].RenderTargetWriteMask	= D3D11_COLOR_WRITE_ENABLE_ALL;
+	blend_desc.RenderTarget[0].SrcBlend					= D3D11_BLEND_SRC_ALPHA;
+	blend_desc.RenderTarget[0].DestBlend				= D3D11_BLEND_INV_SRC_ALPHA;
+	blend_desc.RenderTarget[0].BlendOp					= D3D11_BLEND_OP_ADD;
+	blend_desc.RenderTarget[0].SrcBlendAlpha			= D3D11_BLEND_ZERO;
+	blend_desc.RenderTarget[0].DestBlendAlpha			= D3D11_BLEND_ZERO;
+	blend_desc.RenderTarget[0].BlendOpAlpha				= D3D11_BLEND_OP_ADD;
+
+	this->mDevice->CreateBlendState(&blend_desc, &bs);
+
+	float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+	UINT sampleMask = 0xffffffff;
+
+	this->mContext->OMSetBlendState(bs, blendFactor, sampleMask);
+
+	bs->Release();
 }
 
 D3D11::~D3D11()
