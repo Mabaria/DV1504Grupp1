@@ -1,6 +1,6 @@
 #pragma once
 #include <DirectXMath.h>
-#include "../../GraphicsEngine/Parsing/Mesh.h"
+#include "../GraphicsEngine/Parsing/Mesh.h"
 
 struct Ray {
 	DirectX::XMVECTOR origin;

@@ -160,6 +160,7 @@
     <ClInclude Include="..\..\IO\InputDevice.h" />
     <ClInclude Include="..\..\IO\Keyboard.h" />
     <ClInclude Include="..\..\IO\Mouse.h" />
+    <ClInclude Include="..\..\IO\Picking.h" />
     <ClInclude Include="..\..\IO\Test_Input.h" />
     <ClInclude Include="..\..\IO\ObserverPattern\Observable.h" />
     <ClInclude Include="..\..\IO\ObserverPattern\Observer.h" />
@@ -168,7 +169,7 @@
     <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_AssImp.h" />
     <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_Boat.h" />
     <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_Mesh.h" />
-    <ClInclude Include="Picking.h" />
+    <ClInclude Include="..\..\IO\Test_Picking.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -182,11 +183,12 @@
     <ClCompile Include="..\..\IO\InputDevice.cpp" />
     <ClCompile Include="..\..\IO\Keyboard.cpp" />
     <ClCompile Include="..\..\IO\Mouse.cpp" />
+    <ClCompile Include="..\..\IO\Picking.cpp" />
     <ClCompile Include="..\..\IO\Test_Input.cpp" />
+    <ClCompile Include="..\..\IO\Test_Picking.cpp" />
     <ClCompile Include="..\..\Logic\Timer.cpp" />
     <ClCompile Include="..\..\IO\ObserverPattern\Test_Obs.cpp" />
     <ClCompile Include="BIS.cpp" />
-    <ClCompile Include="Picking.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

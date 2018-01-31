@@ -5,24 +5,6 @@
     <FxCompile Include="..\..\GraphicsEngine\Test_VertexShader.hlsl" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stdafx.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_AssImp.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_Mesh.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\GraphicsEngine\Parsing\Mesh.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_Boat.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\IO\ObserverPattern\Observable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -32,62 +14,45 @@
     <ClInclude Include="..\..\IO\ObserverPattern\Test_Obs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\IO\ObserverPattern\Observable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\IO\ObserverPattern\Observer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\IO\ObserverPattern\Test_Obs.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\GraphicsEngine\DX\Direct3D.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\GraphicsEngine\Test_Graphics.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\GraphicsEngine\Window.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Picking.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+    <ClInclude Include="..\..\GraphicsEngine\DX\Direct3D.h" />
+    <ClInclude Include="..\..\GraphicsEngine\Test_Graphics.h" />
+    <ClInclude Include="..\..\GraphicsEngine\Window.h" />
+    <ClInclude Include="..\..\IO\InputDevice.h" />
+    <ClInclude Include="..\..\IO\Keyboard.h" />
+    <ClInclude Include="..\..\IO\Mouse.h" />
+    <ClInclude Include="..\..\IO\Test_Input.h" />
+    <ClInclude Include="..\..\IO\ObserverPattern\Observable.h" />
+    <ClInclude Include="..\..\IO\ObserverPattern\Observer.h" />
+    <ClInclude Include="..\..\IO\ObserverPattern\Test_Obs.h" />
+    <ClInclude Include="..\..\GraphicsEngine\Parsing\Mesh.h" />
+    <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_AssImp.h" />
+    <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_Boat.h" />
+    <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_Mesh.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="..\..\IO\Picking.h" />
+    <ClInclude Include="..\..\IO\Test_Picking.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BIS.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\IO\ObserverPattern\Test_Obs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\IO\ObserverPattern\Test_Obs.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\GraphicsEngine\Test_Graphics.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\GraphicsEngine\Window.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\GraphicsEngine\DX\Direct3D.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\GraphicsEngine\Parsing\Test_Mesh.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\GraphicsEngine\Parsing\Mesh.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\GraphicsEngine\Parsing\Test_Boat.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Picking.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    <ClCompile Include="..\..\GraphicsEngine\DX\Direct3D.cpp" />
+    <ClCompile Include="..\..\GraphicsEngine\Parsing\Mesh.cpp" />
+    <ClCompile Include="..\..\GraphicsEngine\Parsing\Test_Boat.cpp" />
+    <ClCompile Include="..\..\GraphicsEngine\Parsing\Test_Mesh.cpp" />
+    <ClCompile Include="..\..\GraphicsEngine\Test_Graphics.cpp" />
+    <ClCompile Include="..\..\GraphicsEngine\Window.cpp" />
+    <ClCompile Include="..\..\IO\InputDevice.cpp" />
+    <ClCompile Include="..\..\IO\Keyboard.cpp" />
+    <ClCompile Include="..\..\IO\Mouse.cpp" />
+    <ClCompile Include="..\..\IO\Test_Input.cpp" />
+    <ClCompile Include="..\..\Logic\Timer.cpp" />
+    <ClCompile Include="..\..\IO\ObserverPattern\Test_Obs.cpp" />
+    <ClCompile Include="BIS.cpp" />
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="..\..\IO\Picking.cpp" />
+    <ClCompile Include="..\..\IO\Test_Picking.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\GraphicsEngine\DX\Direct3D.h" />
