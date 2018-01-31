@@ -15,7 +15,9 @@ struct Vertex // Temporary struct until parsing is done.
 class MeshObject
 {
 public:
+	MeshObject();
 	MeshObject(
+		std::string name,
 		std::vector<std::vector<unsigned int>> indices, 
 		std::vector<std::vector<Vertex>> vertices);
 	~MeshObject();
@@ -34,6 +36,7 @@ public:
 
 	// What could it possibly do?
 	const int GetNumberOfBuffers() const;
+	const std::string GetName() const;
 
 	// Buffer setters set the last buffer in the vector to the buffer parameter.
 	const void SetVertexBuffer(ID3D11Buffer **vertexBuffer);
@@ -44,6 +47,7 @@ public:
 	const void AddVertexBuffer();
 
 private:
+	std::string mName;
 	std::vector<std::vector<unsigned int>> mIndices;
 	std::vector<std::vector<Vertex>> mVertices;
 
