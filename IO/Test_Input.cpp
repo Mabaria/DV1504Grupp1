@@ -46,7 +46,8 @@ void Test_Input()
 		"3",
 		"4",
 	};
-	
+
+	int count = 0;
 
 	window.Open();
 	while (window.IsOpen())
@@ -69,8 +70,21 @@ void Test_Input()
 		if (Mouse::IsButtonPressed(Buttons::Right) 
 			|| Mouse::IsButtonDown(Buttons::Left))
 		{
-			std::cout << Mouse::GetMouseXPercentage() << std::endl;
-			std::cout << Mouse::GetMouseYPercentage() << std::endl << std::endl;
+			std::cout << Mouse::GetXPercentage() << std::endl;
+			std::cout << Mouse::GetYPercentage() << std::endl << std::endl;
 		}
+
+		if (Mouse::GetScroll() > 0)
+		{
+			count++;
+			std::cout << count << std::endl;
+		}
+
+		if (Mouse::GetScroll() < 0)
+		{
+			count--;
+			std::cout << count << std::endl;
+		}
+		
 	}
 }

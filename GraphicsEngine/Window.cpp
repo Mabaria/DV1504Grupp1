@@ -210,9 +210,14 @@ LRESULT CALLBACK WindowProcedure(
 		InputDevice::SetMouseButton(Buttons::Right, false);
 		break;
 
+	case WM_MOUSEWHEEL:
+		InputDevice::SetMouseScroll(GET_WHEEL_DELTA_WPARAM(wParam) / 120.0f);
+		break;
+
 	default:
 		break;
 	}
+
 
 	return DefWindowProc(hWnd, message, wParam, lParam);
 }
@@ -223,6 +228,8 @@ Window::Window(
 	const int clientWidth, 
 	const int clientHeight)
 {
+
+
 	this->mClientWidth = clientWidth;
 	this->mClientHeight = clientHeight;
 	
@@ -298,6 +305,7 @@ void Window::Close()
 
 bool Window::Update()
 {
+	InputDevice::SetMouseScroll(0);
 	bool was_updated = false; // See if message is handled
 	if (PeekMessage(&this->mMsg, nullptr, 0, 0, PM_REMOVE))
 	{
@@ -307,18 +315,18 @@ bool Window::Update()
 		was_updated = true;
 	}
 
+
 	return was_updated;
 }
 
 void Window::HandleUpdates()
 {
+
+
 	switch (this->mMsg.message)
 	{
 	case WM_QUIT:
 		this->Close();	// Close window
-		break;
-
-	case WM_SIZE:
 		break;
 
 	default:
