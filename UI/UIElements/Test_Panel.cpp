@@ -12,8 +12,6 @@
 		Panel3D.cpp
 		MeshObject.h
 		MeshObject.cpp
-
-	Lycka till att merga btw lmao.
 */
 
 void Test_Panel3D()

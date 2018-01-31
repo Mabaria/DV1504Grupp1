@@ -3,14 +3,9 @@
 #include <vector>
 #include <DirectXMath.h>
 #include <d3d11.h>
-using namespace DirectX;
+#include "../../GraphicsEngine/Parsing/Mesh.h"
 
-struct Vertex // Temporary struct until parsing is done.
-{
-	float x, y, z;
-	float nx, ny, nz;
-	float tu, tv;
-};
+using namespace DirectX;
 
 class MeshObject
 {

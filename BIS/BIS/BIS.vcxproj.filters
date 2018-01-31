@@ -119,9 +119,6 @@
     <ClInclude Include="..\..\UI\UIElements\Panel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\UI\UIElements\MeshObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\UI\UIElements\Test_Panel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -170,9 +167,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\UI\UIElements\Panel2D.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\UI\UIElements\MeshObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\UI\UIElements\Test_Panel.cpp">
