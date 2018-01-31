@@ -20,33 +20,38 @@ const bool Mouse::IsButtonDown(const Buttons button)
 	return InputDevice::buttonsPressed[button];
 }
 
-const float Mouse::GetMouseX()
+const float Mouse::GetX()
 {
 	return InputDevice::mousePosition.x;
 }
 
-const float Mouse::GetMouseY()
+const float Mouse::GetY()
 {
 	return InputDevice::mousePosition.y;
 }
 
-const Position Mouse::GetMousePosition()
+const Position Mouse::GetPosition()
 {
 	return InputDevice::mousePosition;
 }
 
-const float Mouse::GetMouseXPercentage()
+const float Mouse::GetXPercentage()
 {
 	return InputDevice::mousePositionPercentage.x;
 }
 
-const float Mouse::GetMouseYPercentage()
+const float Mouse::GetYPercentage()
 {
 	return InputDevice::mousePositionPercentage.y;
 }
 
-const Position Mouse::GetMousePositionPercentage()
+const Position Mouse::GetPositionPercentage()
 {
 	return InputDevice::mousePositionPercentage;
+}
+
+const float Mouse::GetScroll()
+{
+	return InputDevice::scrollDirection;
 }
 
