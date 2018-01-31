@@ -1,10 +1,5 @@
 #include "MeshObject.h"
 
-MeshObject::MeshObject()
-{
-	this->mName = "";
-}
-
 MeshObject::MeshObject(std::string name,
 	std::vector<std::vector<unsigned int>> indices, 
 	std::vector<std::vector<Vertex>> vertices)
@@ -80,22 +75,12 @@ const std::string MeshObject::GetName() const
 	return this->mName;
 }
 
-const void MeshObject::SetVertexBuffer(ID3D11Buffer **vertexBuffer)
+const void MeshObject::AddVertexBuffer(ID3D11Buffer **vertexBuffer)
 {
-	this->mpVertexBuffers.back() = *vertexBuffer;
+	this->mpVertexBuffers.push_back(*vertexBuffer);
 }
 
-const void MeshObject::SetIndexBuffer(ID3D11Buffer **indexBuffer)
+const void MeshObject::AddIndexBuffer(ID3D11Buffer **indexBuffer)
 {
-	this->mpIndexBuffers.back() = *indexBuffer;
-}
-
-const void MeshObject::AddIndexBuffer()
-{
-	this->mpIndexBuffers.push_back(nullptr);
-}
-
-const void MeshObject::AddVertexBuffer()
-{
-	this->mpVertexBuffers.push_back(nullptr);
+	this->mpIndexBuffers.push_back(*indexBuffer);
 }

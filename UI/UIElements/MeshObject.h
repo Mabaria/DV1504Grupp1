@@ -10,7 +10,6 @@ using namespace DirectX;
 class MeshObject
 {
 public:
-	MeshObject();
 	MeshObject(
 		std::string name,
 		std::vector<std::vector<unsigned int>> indices, 
@@ -33,13 +32,10 @@ public:
 	const int GetNumberOfBuffers() const;
 	const std::string GetName() const;
 
-	// Buffer setters set the last buffer in the vector to the buffer parameter.
-	const void SetVertexBuffer(ID3D11Buffer **vertexBuffer);
-	const void SetIndexBuffer(ID3D11Buffer **indexBuffer);
-
-	// Buffer adders add an empty buffer pointer to the vector of buffers.
-	const void AddIndexBuffer();
-	const void AddVertexBuffer();
+	// Buffer adders add the parameter buffer to the end of the 
+	// vector of buffers.
+	const void AddVertexBuffer(ID3D11Buffer **vertexBuffer);
+	const void AddIndexBuffer(ID3D11Buffer **indexBuffer);
 
 private:
 	std::string mName;

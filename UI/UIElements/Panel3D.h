@@ -39,8 +39,8 @@ public:
 	// entire panel in one call.
 	const void Draw();
 
-	// Test validity of return value with MeshObject::GetName().
-	// Name is "" if there was no mesh object with the parameter name.
+	// Returns nullptr if there is no mesh object
+	// of the parameter name.
 	MeshObject* GetMeshObject(std::string name);
 
 private:
@@ -50,6 +50,6 @@ private:
 
 	// Buffer creators take the buffer in slot [index] of the last mesh object
 	// in the vector of mesh objects and create a buffer from the data provided.
-	const void CreateVertexBuffer(std::vector<Vertex> vertices, int index);
-	const void CreateIndexBuffer(std::vector<unsigned int> indices, int index);
+	const void CreateVertexBuffer(std::vector<Vertex> vertices);
+	const void CreateIndexBuffer(std::vector<unsigned int> indices);
 };

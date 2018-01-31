@@ -44,11 +44,10 @@ const bool Panel3D::AddMeshObject(
 	this->mMeshObjects.push_back(MeshObject(name, indices, vertices));
 	for (int i = 0; i < this->mMeshObjects.back().GetNumberOfBuffers(); i++)
 	{
-
-		this->mMeshObjects.back().AddIndexBuffer();
-		this->mMeshObjects.back().AddVertexBuffer();
-		this->CreateIndexBuffer(indices[i], i);
-		this->CreateVertexBuffer(vertices[i], i);
+		/*this->mMeshObjects.back().AddIndexBuffer();
+		this->mMeshObjects.back().AddVertexBuffer();*/
+		this->CreateIndexBuffer(indices[i]);
+		this->CreateVertexBuffer(vertices[i]);
 	}
 
 	return result;
@@ -89,9 +88,7 @@ bool Panel3D::CreateShadersAndSetup(
 	return result;
 }
 
-const void Panel3D::CreateVertexBuffer(
-	std::vector<Vertex> vertices,
-	int index)
+const void Panel3D::CreateVertexBuffer(std::vector<Vertex> vertices)
 {
 	ID3D11Buffer *vertex_buffer = nullptr;
 
@@ -112,12 +109,10 @@ const void Panel3D::CreateVertexBuffer(
 		MessageBoxA(NULL, "Vertex buffer creation failed.", NULL, MB_OK);
 		exit(-1);
 	}
-	this->mMeshObjects.back().SetVertexBuffer(&vertex_buffer);
+	this->mMeshObjects.back().AddVertexBuffer(&vertex_buffer);
 }
 
-const void Panel3D::CreateIndexBuffer(
-	std::vector<unsigned int> indices, 
-	int index)
+const void Panel3D::CreateIndexBuffer(std::vector<unsigned int> indices)
 {
 	ID3D11Buffer *index_buffer = nullptr;
 	
@@ -138,7 +133,7 @@ const void Panel3D::CreateIndexBuffer(
 		MessageBoxA(NULL, "Index buffer creation failed.", NULL, MB_OK);
 		exit(-1);
 	}
-	this->mMeshObjects.back().SetIndexBuffer(&index_buffer);
+	this->mMeshObjects.back().AddIndexBuffer(&index_buffer);
 }
 
 const void Panel3D::Update()
