@@ -2,18 +2,21 @@
 
 Camera::Camera(const DirectX::XMVECTOR & r_position,
 	const DirectX::XMVECTOR & r_up_vector,
-	const DirectX::XMVECTOR & r_look_at)
+	const DirectX::XMVECTOR & r_look_vector,
+	const CAMERAMODE camera_mode)
 {
-	this->mInit(r_position, r_up_vector, r_look_at);
+	this->mInit(r_position, r_up_vector, r_look_vector, camera_mode);
 }
 
 Camera::Camera(const DirectX::XMFLOAT3 & r_position,
 	const DirectX::XMFLOAT3 & r_up_vector,
-	const DirectX::XMFLOAT3 & r_look_at)
+	const DirectX::XMFLOAT3 & r_look_vector,
+	const CAMERAMODE camera_mode)
 {
 	this->mInit(DirectX::XMLoadFloat3(&r_position),
 		DirectX::XMLoadFloat3(&r_up_vector),
-		DirectX::XMLoadFloat3(&r_look_at));
+		DirectX::XMLoadFloat3(&r_look_vector),
+		camera_mode);
 }
 
 Camera::Camera(const float pos_x,
@@ -24,11 +27,13 @@ Camera::Camera(const float pos_x,
 	const float up_z,
 	const float look_x,
 	const float look_y,
-	const float look_z)
+	const float look_z,
+	const CAMERAMODE camera_mode)
 {
 	this->mInit(DirectX::XMVectorSet(pos_x, pos_y, pos_z, 0.0f),
 		DirectX::XMVectorSet(up_x, up_y, up_z, 0.0f),
-		DirectX::XMVectorSet(look_x, look_y, look_z, 0.0f));
+		DirectX::XMVectorSet(look_x, look_y, look_z, 0.0f),
+		camera_mode);
 }
 
 Camera::~Camera()
@@ -38,26 +43,37 @@ Camera::~Camera()
 
 void Camera::mInit(const DirectX::XMVECTOR & r_position,
 	const DirectX::XMVECTOR & r_up_vector,
-	const DirectX::XMVECTOR & r_look_at)
+	const DirectX::XMVECTOR & r_look_vector,
+	const CAMERAMODE camera_mode)
 {
 	this->mCameraPosition = r_position;
 	this->mUpVector = r_up_vector;
-	this->mLookAt = r_look_at;
+	this->mLookVector = r_look_vector;
+	this->mCameraMode = camera_mode;
 	this->mUpdateViewMatrix();
 }
 
 void Camera::mUpdateViewMatrix()
 {
-	this->mViewMatrix = DirectX::XMMatrixLookAtLH(this->mCameraPosition,
-		this->mLookAt,
-		this->mUpVector);
+	if (this->mCameraMode == LOOKAT)
+	{
+		this->mViewMatrix = DirectX::XMMatrixLookAtLH(this->mCameraPosition,
+			this->mLookVector,
+			this->mUpVector);
+	}
+	else
+	{
+		this->mViewMatrix = DirectX::XMMatrixLookToLH(this->mCameraPosition,
+			this->mLookVector,
+			this->mUpVector);
+	}
 }
 
 void Camera::mRotateViewMatrix(const DirectX::XMMATRIX & camRotationMatrix) 
 {
 	//! IF SOMETHING IS BROKEN WITH CAMERA ROTATION THIS IS PROBABLY THE ROOT CAUSE
-	this->mLookAt = 
-		DirectX::XMVector3TransformCoord(this->mLookAt, camRotationMatrix);
+	this->mLookVector = 
+		DirectX::XMVector3TransformCoord(this->mLookVector, camRotationMatrix);
 	this->mUpVector =
 		DirectX::XMVector3TransformCoord(this->mUpVector, camRotationMatrix);
 	this->mUpdateViewMatrix();
@@ -140,22 +156,27 @@ void Camera::SetUpVector(const float new_x,
 	this->mUpdateViewMatrix();
 }
 
-void Camera::SetLookAt(const DirectX::XMFLOAT3 & r_new_look_at)
+void Camera::SetLookVector(const DirectX::XMFLOAT3 & r_new_look_vector)
 {
-	this->mLookAt = DirectX::XMLoadFloat3(&r_new_look_at);
+	this->mLookVector = DirectX::XMLoadFloat3(&r_new_look_vector);
 	this->mUpdateViewMatrix();
 }
 
-void Camera::SetLookAt(const DirectX::XMVECTOR & r_new_look_at)
+void Camera::SetLookVector(const DirectX::XMVECTOR & r_new_look_vector)
 {
-	this->mLookAt = r_new_look_at;
+	this->mLookVector = r_new_look_vector;
 	this->mUpdateViewMatrix();
 }
 
-void Camera::SetLookAt(const float new_x, const float new_y, const float new_z)
+void Camera::SetLookVector(const float new_x, const float new_y, const float new_z)
 {
-	this->mLookAt = DirectX::XMVectorSet(new_x, new_y, new_z, 0.0f);
+	this->mLookVector = DirectX::XMVectorSet(new_x, new_y, new_z, 0.0f);
 	this->mUpdateViewMatrix();
+}
+
+void Camera::SetCameraMode(CAMERAMODE new_cameramode)
+{
+	this->mCameraMode = new_cameramode;
 }
 
 void Camera::RotateCameraPitchYawRoll(const float pitch,
@@ -190,9 +211,14 @@ DirectX::XMVECTOR Camera::GetUpVector() const
 	return this->mUpVector;
 }
 
-DirectX::XMVECTOR Camera::GetLookAt() const
+DirectX::XMVECTOR Camera::GetLookVector() const
 {
-	return this->mLookAt;
+	return this->mLookVector;
+}
+
+CAMERAMODE Camera::GetCameraMode() const
+{
+	return this->mCameraMode;
 }
 
 DirectX::XMMATRIX Camera::GetViewMatrix() const
