@@ -21,11 +21,14 @@ using namespace DirectX;
 class D3D11
 {
 public:
+	D3D11();
 	D3D11(
-		const HWND& window,
+		/*const HWND& window,*/
 		const int width, 
 		const int height);
 	~D3D11();
+
+	void Init(HWND window);
 
 	bool CreateShaders(
 		LPCWSTR vertexShaderPath,
@@ -44,6 +47,7 @@ public:
 	IDXGISwapChain* GetSwapChain() const;
 	ID3D11DeviceContext* GetContext() const;
 	ID3D11Device* GetDevice() const;
+
 	const DXGI_SAMPLE_DESC& GetSampleDesc() const;
 
 	void ChangeClearColor(const float r, const float g, const float b);
