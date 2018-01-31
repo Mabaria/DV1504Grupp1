@@ -7,5 +7,5 @@
 #include "Panel2D.h"
 #include "../../GraphicsEngine/Window.h"
 
-ID3D11Debug* Test_Panel3D();
+void Test_Panel3D();
 void Test_Panel2D();

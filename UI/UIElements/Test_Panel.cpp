@@ -16,7 +16,7 @@
 	Lycka till att merga btw lmao.
 */
 
-ID3D11Debug* Test_Panel3D()
+void Test_Panel3D()
 {
 	Window window(L"Test_Window", 1280, 720);
 	window.Open();
