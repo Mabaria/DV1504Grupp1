@@ -1,6 +1,6 @@
-#include "Deck.h"
+#include "Room.h"
 
-Deck::Deck()
+Deck::Deck(std::string name)
 {
 	this->mRoomCount = 0;
 	this->mRoomOffset = 0;

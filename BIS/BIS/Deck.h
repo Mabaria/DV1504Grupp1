@@ -1,41 +1,28 @@
 #pragma once
 
-#include <string>
 #include <vector>
 #include "Room.h"
-
-/**
-*	Deck is a simple structure that holds offset and length of its own rooms in
-* the Boat room list.
-*/
 
 class Deck
 {
 public:
 
-	Deck();
+	Deck(std::string name);
 	~Deck();
 	
-	// Deck specific
-	void SetIndex(int index);
-	void SetName(std::string name);
-	std::string GetName() const;
+	void AddRoom();
 
-	// Room specific
-	void AddRoom(); // Increases room counter
-	void SetRoomCount(int count);
+	void SetName(std::string name);
 	void SetRoomOffset(int index);
 	void PushRoomOffset(int value = 1);
+
+	std::string GetName() const;
 	int GetRoomCount() const;
 	int GetRoomOffset() const;
 
 private:
 
-	// Deck specific
-	int mIndex;
 	std::string mName;
-
-	// Room specific
 	int mRoomCount;
 	int mRoomOffset;
 };

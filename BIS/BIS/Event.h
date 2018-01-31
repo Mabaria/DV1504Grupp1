@@ -3,8 +3,6 @@
 #include <string>
 #include <vector>
 
-#define NR_OF_EVENT_TYPES 3
-
 namespace Event
 {
 	 // All types of an event.
