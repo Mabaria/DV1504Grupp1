@@ -78,6 +78,9 @@
     <ClInclude Include="..\..\GraphicsEngine\Camera\Test_Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Test_BoatOnScreen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -129,6 +132,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\GraphicsEngine\Camera\Test_Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Test_BoatOnScreen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
