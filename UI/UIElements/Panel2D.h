@@ -10,7 +10,7 @@ public:
 	~Panel2D();
 
 	void AddButton(int width, int height, int top, int left, LPCTSTR name, LPCTSTR text);
-	void AddTextbox(int width, int height, int top, int left, LPCTSTR name /* text? update? what? */);
+	void AddTextbox(int width, int height, int top, int left, LPCTSTR name);
 
 	void Update();
 

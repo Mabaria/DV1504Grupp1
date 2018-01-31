@@ -16,6 +16,7 @@ public:
 
 	// Creates buffers for and adds mesh objects into the vector of mesh objects.
 	const bool AddMeshObject(
+		std::string name,
 		std::vector<std::vector<unsigned int>> indices, 
 		std::vector<std::vector<Vertex>> vertices);
 
@@ -37,6 +38,10 @@ public:
 	// Handles the drawing of the 
 	// entire panel in one call.
 	const void Draw();
+
+	// Test validity of return value with MeshObject::GetName().
+	// Name is "" if there was no mesh object with the parameter name.
+	MeshObject* GetMeshObject(std::string name);
 
 private:
 	D3D11 mDirect3D;

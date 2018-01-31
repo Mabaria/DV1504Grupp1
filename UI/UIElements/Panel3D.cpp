@@ -1,7 +1,7 @@
 #include "Panel3D.h"
 
 Panel3D::Panel3D(int width, int height, int top, int left, HWND handle, LPCTSTR title)
-	:Panel(width, height, top, left, handle), mDirect3D(/*handle,*/ width, height)
+	:Panel(width, height, top, left, handle), mDirect3D(width, height)
 {
 	// Creating a child window that will be the canvas to draw on for the panel.
 	this->mPanelWindow = CreateWindowEx(
@@ -18,7 +18,6 @@ Panel3D::Panel3D(int width, int height, int top, int left, HWND handle, LPCTSTR 
 		GetModuleHandle(0),
 		0);	
 	this->mDirect3D.Init(this->mPanelWindow);
-	//this->mDirect3D = D3D11(handle, this->mWidth, this->mHeight);
 	ShowWindow(this->mPanelWindow, SW_NORMAL);
 }
 
@@ -33,6 +32,7 @@ D3D11 & Panel3D::rGetDirect3D()
 }
 
 const bool Panel3D::AddMeshObject(
+	std::string name,
 	std::vector<std::vector<unsigned int>> indices, 
 	std::vector<std::vector<Vertex>> vertices)
 {
@@ -42,9 +42,10 @@ const bool Panel3D::AddMeshObject(
 	// the destructor destroying the mesh object when out
 	// of scope. Adding buffers to the last element of
 	// the mesh object vector.
-	this->mMeshObjects.push_back(MeshObject(indices, vertices));
+	this->mMeshObjects.push_back(MeshObject(name, indices, vertices));
 	for (int i = 0; i < this->mMeshObjects.back().GetNumberOfBuffers(); i++)
 	{
+
 		this->mMeshObjects.back().AddIndexBuffer();
 		this->mMeshObjects.back().AddVertexBuffer();
 		this->CreateIndexBuffer(indices[i], i);
@@ -190,4 +191,17 @@ const void Panel3D::Draw()
 		}
 	}
 	this->mDirect3D.GetSwapChain()->Present(1, 0);
+}
+
+MeshObject* Panel3D::GetMeshObject(std::string name)
+{
+	MeshObject default_mesh_object;
+	for (int i = 0; i < this->mMeshObjects.size(); i++)
+	{
+		if (name == this->mMeshObjects[i].GetName())
+		{
+			return &this->mMeshObjects[i];
+		}
+	}
+	return &default_mesh_object;
 }

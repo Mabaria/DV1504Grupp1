@@ -103,8 +103,8 @@ void Test_Panel3D()
 
 	indices.push_back(i1);
 
-	panel1.AddMeshObject(indices, vertices);
-	panel2.AddMeshObject(indices, vertices);
+	panel1.AddMeshObject("tri", indices, vertices);
+	panel2.AddMeshObject("tri", indices, vertices);
 
 	panel1.CreateShadersAndSetup(
 		L"../../GraphicsEngine/Test_VertexShader.hlsl",
@@ -128,11 +128,14 @@ void Test_Panel3D()
 		n_inputs,
 		&pInputLayout);
 
+	//MeshObject* test_mesh_object = panel1.GetMeshObject("tri");
+	int i = 0;
 	while (window.IsOpen())
 	{
 		window.Update();
 		panel1.Draw();
 		panel2.Draw();
+		//test_mesh_object->Rotate(i++, i, i);
 	}
 
 

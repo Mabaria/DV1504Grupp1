@@ -1,13 +1,21 @@
 #include "MeshObject.h"
 
-MeshObject::MeshObject(std::vector<std::vector<unsigned int>> indices, std::vector<std::vector<Vertex>> vertices)
+MeshObject::MeshObject()
 {
-	this->mIndices				= indices;
-	this->mVertices				= vertices;
+	this->mName = "";
+}
+
+MeshObject::MeshObject(std::string name,
+	std::vector<std::vector<unsigned int>> indices, 
+	std::vector<std::vector<Vertex>> vertices)
+{
+	this->mName		= name;
+	this->mIndices	= indices;
+	this->mVertices	= vertices;
 
 	// Doesn't matter which one determines the size as they are (should be) equal.
-	this->mNumberOfBuffers		= (int)indices.size();
-	this->mWorld				= XMMatrixIdentity();
+	this->mNumberOfBuffers = (int)indices.size();
+	this->mWorld		   = XMMatrixIdentity();
 }
 
 MeshObject::~MeshObject()
@@ -63,6 +71,11 @@ ID3D11Buffer** MeshObject::pGetIndexBuffer(int index)
 const int MeshObject::GetNumberOfBuffers() const
 {
 	return this->mNumberOfBuffers;
+}
+
+const std::string MeshObject::GetName() const
+{
+	return this->mName;
 }
 
 const void MeshObject::SetVertexBuffer(ID3D11Buffer **vertexBuffer)
