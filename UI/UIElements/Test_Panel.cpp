@@ -1,4 +1,5 @@
 #include "Test_Panel.h"
+#include <dxgidebug.h>
 
 /*
 	FÖR DEN SOM REVIEWAR DETTA
@@ -137,7 +138,12 @@ void Test_Panel3D()
 		panel2.Draw();
 		//test_mesh_object->Rotate(i++, i, i);
 	}
+	
+	ID3D11Debug* d3d_debug = nullptr;
+	panel1.rGetDirect3D().GetDevice()->QueryInterface(__uuidof(ID3D11Debug), reinterpret_cast<void**>(&d3d_debug));
 
+
+	//IDXGIDebug::ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL);
 
 	if (pVS)
 	{
@@ -155,7 +161,10 @@ void Test_Panel3D()
 	{
 		pInputLayout->Release();
 	}
-
+	/*panel1.rGetDirect3D().~D3D11();
+	panel2.rGetDirect3D().~D3D11();*/
+	panel1.rGetDirect3D().ReleaseCOM(panel1.rGetDirect3D().GetDevice());
+	d3d_debug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
 }
 
 void Test_Panel2D()
