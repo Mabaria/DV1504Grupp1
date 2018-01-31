@@ -1,53 +1,54 @@
 #include "Picking.h"
 #include <algorithm>
+#include <fstream>
 
-AABB FromIndexedMeshToAABB(
-	Mesh &mesh,	// Const
-	int index)
-{
-	AABB retAABB = { 0.0f };
-
-	//std::vector<unsigned int> &indexVector =
-	//	mesh.GetIndexVectors()[index];
-
-	std::vector<Vertex> &vertexVector =
-		mesh.GetVertexVector();
-
-	if ((index + 1) * 8 > vertexVector.size())
-	{
-		// TODO: Incorrect size! add error handling
-		return retAABB;
-	}
-
-	// CRITICAL, out of range!
-	Vertex &currVert = vertexVector[index*8];
-
-	retAABB.x.max = retAABB.x.min = currVert.x;
-	retAABB.y.max = retAABB.y.min = currVert.y;
-	retAABB.z.max = retAABB.z.min = currVert.z;
-
-	for (unsigned int i = index * 8 + 1; i < (index + 1) * 8; i++)
-	{
-		currVert = vertexVector[i];
-		
-		if (retAABB.x.max < currVert.x)
-			retAABB.x.max = currVert.x;
-		else if (retAABB.x.min > currVert.x)
-			retAABB.x.min = currVert.x;
-
-		if (retAABB.y.max < currVert.y)
-			retAABB.y.max = currVert.y;
-		else if (retAABB.y.min > currVert.y)
-			retAABB.y.min = currVert.y;
-		
-		if (retAABB.z.max < currVert.z)
-			retAABB.z.max = currVert.z;
-		else if (retAABB.z.min > currVert.z)
-			retAABB.z.min = currVert.z;
-	}
-
-	return retAABB;
-}
+//AABB FromIndexedMeshToAABB(
+//	Mesh &mesh,	// Const
+//	int index)
+//{
+//	AABB retAABB = { 0.0f };
+//
+//	//std::vector<unsigned int> &indexVector =
+//	//	mesh.GetIndexVectors()[index];
+//
+//	std::vector<std::vector<Vertex>> &vertexVector =
+//		mesh.GetVertexVectors();
+//
+//	if (index > vertexVector.size())
+//	{
+//		// TODO: Incorrect size! add error handling
+//		return retAABB;
+//	}
+//
+//	// CRITICAL, out of range!
+//	Vertex &currVert = vertexVector[index][0];
+//
+//	retAABB.x.max = retAABB.x.min = currVert.x;
+//	retAABB.y.max = retAABB.y.min = currVert.y;
+//	retAABB.z.max = retAABB.z.min = currVert.z;
+//
+//	for (unsigned int i = 1; i < 8; i++)
+//	{
+//		currVert = vertexVector[index][i];
+//		
+//		if (retAABB.x.max < currVert.x)
+//			retAABB.x.max = currVert.x;
+//		else if (retAABB.x.min > currVert.x)
+//			retAABB.x.min = currVert.x;
+//
+//		if (retAABB.y.max < currVert.y)
+//			retAABB.y.max = currVert.y;
+//		else if (retAABB.y.min > currVert.y)
+//			retAABB.y.min = currVert.y;
+//		
+//		if (retAABB.z.max < currVert.z)
+//			retAABB.z.max = currVert.z;
+//		else if (retAABB.z.min > currVert.z)
+//			retAABB.z.min = currVert.z;
+//	}
+//
+//	return retAABB;
+//}
 
 void Picking::GetWorldRay(
 	const DirectX::XMMATRIX &projectionMatrix,
@@ -145,5 +146,28 @@ bool Picking::IsRayIntersectingAABB(
 	if ((tmin > tzmax) || (tzmin > tmax))
 		return false;
 
+	return true;
+}
+
+bool FillAABBVectorFromFile(const std::string &path, std::vector<AABB> &rList)
+{
+	AABB *pList;
+	int listSize = 0;
+
+	std::ifstream infile(path, std::ifstream::binary);
+	if (!infile.is_open())
+		return false;
+
+	infile.read((char*)&listSize, sizeof(int));
+	pList = new AABB[listSize];
+
+	infile.read((char*)pList, sizeof(AABB)*listSize);
+
+	for (int i = 0; i < listSize; i++)
+	{
+		rList.push_back(pList[i]);
+	}
+
+	delete[] pList;
 	return true;
 }
