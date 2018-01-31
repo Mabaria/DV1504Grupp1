@@ -7,7 +7,7 @@
 
 int main()
 {
-	Test_Input();
+	//Test_Input();
 	Test_Button();
 
 	return 0;
