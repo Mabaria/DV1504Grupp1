@@ -32,7 +32,7 @@ void TestCamera()
 
 	test1.GetPosition();
 	test2.GetUpVector();
-	test3.GetLookAt();
+	test3.GetLookVector();
 
 	test1.GetViewMatrix();
 	test2.GetViewMatrix();
