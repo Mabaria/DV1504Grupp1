@@ -25,10 +25,12 @@ MeshObject::~MeshObject()
 		if (this->mpIndexBuffers[i])
 		{
 			this->mpIndexBuffers[i]->Release();
+			this->mpIndexBuffers[i] = nullptr;
 		}
 		if (this->mpVertexBuffers[i])
 		{
 			this->mpVertexBuffers[i]->Release();
+			this->mpVertexBuffers[i] = nullptr;
 		}
 	}
 }

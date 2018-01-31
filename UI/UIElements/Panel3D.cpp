@@ -91,25 +91,25 @@ bool Panel3D::CreateShadersAndSetup(
 }
 
 const void Panel3D::CreateVertexBuffer(
-	std::vector<Vertex> vertices, 
+	std::vector<Vertex> vertices,
 	int index)
 {
 	ID3D11Buffer *vertex_buffer = nullptr;
 
 	// Assuming all meshes have the same format.
 	D3D11_BUFFER_DESC vertex_buffer_desc{};
-	vertex_buffer_desc.Usage	 = D3D11_USAGE_DEFAULT;
+	vertex_buffer_desc.Usage = D3D11_USAGE_DEFAULT;
 	vertex_buffer_desc.ByteWidth = (UINT)(sizeof(Vertex) * vertices.size());
 	vertex_buffer_desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 
 	D3D11_SUBRESOURCE_DATA vertex_buffer_data{};
 	vertex_buffer_data.pSysMem = vertices.data();
-	
+
 	if (FAILED(this->mDirect3D.GetDevice()->CreateBuffer(
-		&vertex_buffer_desc, 
-		&vertex_buffer_data, 
+		&vertex_buffer_desc,
+		&vertex_buffer_data,
 		&vertex_buffer)))
-	{		
+	{
 		MessageBoxA(NULL, "Vertex buffer creation failed.", NULL, MB_OK);
 		exit(-1);
 	}
@@ -163,7 +163,7 @@ const void Panel3D::Draw()
 
 	// Takes every set of buffers from every mesh object in the panel
 	// and draws them one by one.
-	for (int i = 0; i < this->mMeshObjects.size(); i++)
+	for (int i = 0; i < (int)this->mMeshObjects.size(); i++)
 	{
 		for (int j = 0; j < this->mMeshObjects[i].GetNumberOfBuffers(); j++)
 		{
@@ -195,13 +195,13 @@ const void Panel3D::Draw()
 
 MeshObject* Panel3D::GetMeshObject(std::string name)
 {
-	MeshObject default_mesh_object;
-	for (int i = 0; i < this->mMeshObjects.size(); i++)
+	
+	for (int i = 0; i < (int)this->mMeshObjects.size(); i++)
 	{
 		if (name == this->mMeshObjects[i].GetName())
 		{
 			return &this->mMeshObjects[i];
 		}
 	}
-	return &default_mesh_object;
+	return nullptr;
 }
