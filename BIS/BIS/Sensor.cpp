@@ -2,12 +2,18 @@
 
 Sensor::Sensor()
 {
-	this->mRoomEventIndex = -1;
+	this->mActiveEventIndex = -1;
 }
 
 Sensor::~Sensor()
 {
 }
+
+
+
+/**
+*	Sensor specific
+*/
 
 void Sensor::AddInputType(Event::Type type)
 {
@@ -33,21 +39,6 @@ void Sensor::RemoveInputType(Event::Type type)
 	}
 }
 
-void Sensor::SetEventLog(EventLog *pEventLog)
-{
-	this->mpEventLog = pEventLog;
-}
-
-void Sensor::SetRoomIndex(int index)
-{
-	this->mRoomIndex = index;
-}
-
-void Sensor::SetRoomEventIndex(int index)
-{
-	this->mRoomEventIndex = index;
-}
-
 bool Sensor::CanDetect(Event::Type type) const
 {
 	for (int i = 0; i < this->mInputTypes.size(); i++)
@@ -66,16 +57,55 @@ int Sensor::Trigger(Event::Type type)
 	if (!this->CanDetect(type))
 		return -1;
 
-	this->mRoomEventIndex = this->mpEventLog->AddLogEvent(type, this->mRoomIndex);
-	return this->mRoomEventIndex;
+	this->mActiveEventIndex = this->mpEventLog->AddLogEvent(type, this->mRoomIndex);
+	return this->mActiveEventIndex;
 }
+
+
+
+/**
+*	Log specific
+*/
+
+void Sensor::SetEventLog(EventLog *pEventLog)
+{
+	this->mpEventLog = pEventLog;
+}
+
+
+
+/**
+*	Event specific
+*/
+
+void Sensor::SetActiveEventIndex(int index)
+{
+	this->mActiveEventIndex = index;
+}
+
+
+
+/**
+*	Room specific
+*/
+
+void Sensor::SetRoomIndex(int index)
+{
+	this->mRoomIndex = index;
+}
+
+
+
+/**
+*	Disk specific
+*/
 
 std::string Sensor::WriteString() const
 {
 	std::stringstream ss;
 	
 	ss << "sensor ";
-	ss << this->mRoomEventIndex;
+	ss << this->mActiveEventIndex;
 	ss << " { ";
 
 	for (int i = 0; i < this->mInputTypes.size(); i++)

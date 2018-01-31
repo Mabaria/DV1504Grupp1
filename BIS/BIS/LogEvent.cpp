@@ -8,7 +8,7 @@ LogEvent::LogEvent()
 LogEvent::LogEvent(Event::Type type, int roomEventIndex)
 {
 	this->mType = type;
-	this->mRoomEventIndex = roomEventIndex;
+	this->mActiveEventIndex = roomEventIndex;
 }
 
 LogEvent::~LogEvent()
@@ -19,22 +19,34 @@ LogEvent::~LogEvent()
 //const TimeObject LogEvent::getStartTime() const;
 //const TimeObject LogEvent::getElapsedTime() const;
 
-void LogEvent::SetRoomEventIndex(int index)
-{
-	this->mRoomEventIndex = index;
-}
+
+
+/**
+*	Event specific
+*/
 
 void LogEvent::SetType(Event::Type type)
 {
 	this->mType = type;
 }
 
-int LogEvent::GetRoomEventIndex() const
-{
-	return this->mRoomEventIndex;
-}
-
 Event::Type LogEvent::GetType() const
 {
 	return this->mType;
+}
+
+
+
+/**
+*	Log specific
+*/
+
+void LogEvent::SetActiveEventIndex(int index)
+{
+	this->mActiveEventIndex = index;
+}
+
+int LogEvent::GetActiveEventIndex() const
+{
+	return this->mActiveEventIndex;
 }

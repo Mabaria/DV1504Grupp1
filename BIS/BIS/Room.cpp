@@ -16,15 +16,10 @@ Room::~Room()
 }
 
 
-void Room::AddEvent(Event::Type type)
-{
-	this->mSensor.Trigger(type);
-}
 
-void Room::AddInputType(Event::Type type)
-{
-	this->mSensor.AddInputType(type);
-}
+/**
+*	Room specific
+*/
 
 void Room::SetIndex(int index)
 {
@@ -37,15 +32,32 @@ void Room::SetName(std::string name)
 	this->mName = name;
 }
 
+std::string Room::GetName() const
+{
+	return this->mName;
+}
+
+
+
+/**
+*	Deck specific
+*/
+
 void Room::SetDeckName(std::string name)
 {
 	this->mDeckName = name;
 }
 
-void Room::SetRoomEventIndex(int index)
+
+
+/**
+*	Log specific
+*/
+
+void Room::SetActiveEventIndex(int index)
 {
-	this->mRoomEventIndex = index;
-	this->mSensor.SetRoomEventIndex(index);
+	this->mActiveEventIndex = index;
+	this->mSensor.SetActiveEventIndex(index);
 }
 
 void Room::SetEventLog(EventLog *pEventLog)
@@ -53,15 +65,32 @@ void Room::SetEventLog(EventLog *pEventLog)
 	this->mSensor.SetEventLog(pEventLog);
 }
 
-std::string Room::GetName() const
+
+
+/**
+*	Event specific
+*/
+
+void Room::AddEvent(Event::Type type)
 {
-	return this->mName;
+	this->mSensor.Trigger(type);
 }
 
-int Room::GetRoomEventIndex() const
+void Room::AddInputType(Event::Type type)
 {
-	return this->mRoomEventIndex;
+	this->mSensor.AddInputType(type);
 }
+
+int Room::GetActiveEventIndex() const
+{
+	return this->mActiveEventIndex;
+}
+
+
+
+/**
+*	Disk specific
+*/
 
 std::string Room::WriteString() const
 {

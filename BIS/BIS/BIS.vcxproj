@@ -156,6 +156,7 @@
   <ItemGroup>
     <ClInclude Include="ActiveLog.h" />
     <ClInclude Include="Boat.h" />
+    <ClInclude Include="BoatTester.h" />
     <ClInclude Include="Deck.h" />
     <ClInclude Include="LogEvent.h" />
     <ClInclude Include="EventLog.h" />
@@ -179,6 +180,7 @@
     <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_Boat.h" />
     <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_Mesh.h" />
     <ClInclude Include="RoomEvent.h" />
+    <ClInclude Include="ActiveEvent.h" />
     <ClInclude Include="Sensor.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -199,7 +201,7 @@
     <ClCompile Include="..\..\Logic\Timer.cpp" />
     <ClCompile Include="..\..\IO\ObserverPattern\Test_Obs.cpp" />
     <ClCompile Include="BIS.cpp" />
-    <ClCompile Include="DangerEvent.cpp" />
+    <ClCompile Include="BoatTester.cpp" />
     <ClCompile Include="Deck.cpp" />
     <ClCompile Include="LogEvent.cpp" />
     <ClCompile Include="EventLog.cpp" />
@@ -207,7 +209,7 @@
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="DeckHandler.cpp" />
     <ClCompile Include="Boat.cpp" />
-    <ClCompile Include="RoomEvent.cpp" />
+    <ClCompile Include="ActiveEvent.cpp" />
     <ClCompile Include="Sensor.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

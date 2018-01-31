@@ -8,11 +8,27 @@ Boat::~Boat()
 {
 }
 
-void Boat::CreateEvent(Event::Type type, std::string roomName, std::string deckName)
+
+
+/**
+*	Boat specific
+*/
+
+std::string Boat::GetModelName() const
 {
-	int index = this->GetRoomIndex(roomName, deckName);
-	this->mRooms[index].AddEvent(type);
+	return this->mModelName;
 }
+
+void Boat::SetModelName(std::string name)
+{
+	this->mModelName = name;
+}
+
+
+
+/**
+*	Build boat structure
+*/
 
 void Boat::AddDeck(std::string name)
 {
@@ -68,15 +84,11 @@ void Boat::AddRoom(std::string roomName, std::string deckName, int inputs[NR_OF_
 	throw("Deck '" + deckName + "' not found");
 }
 
-std::string Boat::GetModelName() const
-{
-	return this->mModelName;
-}
 
-void Boat::SetModelName(std::string name)
-{
-	this->mModelName = name;
-}
+
+/**
+*	Log specific
+*/
 
 void Boat::SetEventLog(EventLog *pEventLog)
 {
@@ -86,64 +98,23 @@ void Boat::SetEventLog(EventLog *pEventLog)
 	}
 }
 
-int Boat::GetRoomIndex(std::string roomName)
-{
-	for (int i = 0; i < this->mRooms.size(); i++)
-	{
-		if (this->mRooms[i].GetName() == roomName)
-			 return i;
-	}
+// TODO: SetActiveEventIndex
 
-	return -1;
+/**
+*	Event specific
+*/
+
+void Boat::CreateEvent(Event::Type type, std::string roomName, std::string deckName)
+{
+	int index = this->GetRoomIndex(roomName, deckName);
+	this->mRooms[index].AddEvent(type);
 }
 
-int Boat::GetRoomIndex(std::string roomName, std::string deckName)
-{
-	int deckIndex = this->GetDeckIndex(deckName);
 
-	// Check early exit
-	if (deckIndex == -1)
-		return -1;
 
-	int from = this->mDecks[deckIndex].GetRoomOffset();
-	int to = from + this->mDecks[deckIndex].GetRoomCount();
-
-	for (int i = from; i < to; i++)
-	{
-		if (this->mRooms[i].GetName() == roomName)
-			return i;
-	}
-
-	return -1;
-}
-
-int Boat::GetDeckIndex(std::string deckName)
-{
-	for (int i = 0; i < this->mDecks.size(); i++)
-	{
-		if (this->mDecks[i].GetName() == deckName)
-			return i;
-	}
-
-	return -1;
-}
-
-std::string Boat::GetDeckNameByRoomIndex(int index)
-{
-	int count;
-	int offset;
-
-	for (int i = 0; i < this->mDecks.size(); i++)
-	{
-		count = this->mDecks[i].GetRoomCount();
-		offset = this->mDecks[i].GetRoomOffset();
-
-		if (index >= offset && index <= (offset+count)) 
-			return this->mDecks[i].GetName();
-	}
-
-	return "DeckNotFound";
-}
+/**
+*	Disk specific
+*/
 
 void Boat::WriteFile(std::string filePath)
 {
@@ -297,7 +268,7 @@ void Boat::ReadFile(std::string filePath)
 						*/
 						buffer >> word; // 'sensor'
 						buffer >> number;	// roomEventIndex
-						newRoom.SetRoomEventIndex(number);
+						newRoom.SetActiveEventIndex(number);
 
 						buffer >> word; // Get rid of '{'
 
@@ -341,3 +312,69 @@ void Boat::ReadFile(std::string filePath)
 	// If file could not be opened
 	throw("Can't open file '" + filePath + "', file not found");
 }
+
+
+
+/**
+*	Private functions to Boat
+*/
+
+int Boat::GetRoomIndex(std::string roomName)
+{
+	for (int i = 0; i < this->mRooms.size(); i++)
+	{
+		if (this->mRooms[i].GetName() == roomName)
+			 return i;
+	}
+
+	return -1;
+}
+
+int Boat::GetRoomIndex(std::string roomName, std::string deckName)
+{
+	int deckIndex = this->GetDeckIndex(deckName);
+
+	// Check early exit
+	if (deckIndex == -1)
+		return -1;
+
+	int from = this->mDecks[deckIndex].GetRoomOffset();
+	int to = from + this->mDecks[deckIndex].GetRoomCount();
+
+	for (int i = from; i < to; i++)
+	{
+		if (this->mRooms[i].GetName() == roomName)
+			return i;
+	}
+
+	return -1;
+}
+
+int Boat::GetDeckIndex(std::string deckName)
+{
+	for (int i = 0; i < this->mDecks.size(); i++)
+	{
+		if (this->mDecks[i].GetName() == deckName)
+			return i;
+	}
+
+	return -1;
+}
+
+std::string Boat::GetDeckNameByRoomIndex(int index)
+{
+	int count;
+	int offset;
+
+	for (int i = 0; i < this->mDecks.size(); i++)
+	{
+		count = this->mDecks[i].GetRoomCount();
+		offset = this->mDecks[i].GetRoomOffset();
+
+		if (index >= offset && index <= (offset+count)) 
+			return this->mDecks[i].GetName();
+	}
+
+	return "DeckNotFound";
+}
+
