@@ -48,7 +48,6 @@ private:
 	std::vector<MeshObject> mMeshObjects;
 	HWND mPanelWindow;
 
-
 	// Buffer creators take the buffer in slot [index] of the last mesh object
 	// in the vector of mesh objects and create a buffer from the data provided.
 	const void CreateVertexBuffer(std::vector<Vertex> vertices, int index);

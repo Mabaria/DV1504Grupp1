@@ -23,7 +23,6 @@ Panel3D::Panel3D(int width, int height, int top, int left, HWND handle, LPCTSTR 
 
 Panel3D::~Panel3D()
 {
-
 }
 
 D3D11 & Panel3D::rGetDirect3D()
@@ -81,7 +80,7 @@ bool Panel3D::CreateShadersAndSetup(
 	this->mDirect3D.GetContext()->VSSetShader(*pVertexshader, nullptr, 0);
 	this->mDirect3D.GetContext()->GSSetShader(*pGeometryShader, nullptr, 0);
 	this->mDirect3D.GetContext()->PSSetShader(*pPixelShader, nullptr, 0);
-	
+
 	// Setting up input assembler.
 	this->mDirect3D.GetContext()->IASetPrimitiveTopology
 	(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

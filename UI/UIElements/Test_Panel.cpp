@@ -1,5 +1,4 @@
 #include "Test_Panel.h"
-#include <dxgidebug.h>
 
 /*
 	FÖR DEN SOM REVIEWAR DETTA
@@ -17,7 +16,7 @@
 	Lycka till att merga btw lmao.
 */
 
-void Test_Panel3D()
+ID3D11Debug* Test_Panel3D()
 {
 	Window window(L"Test_Window", 1280, 720);
 	window.Open();
@@ -59,6 +58,10 @@ void Test_Panel3D()
 	ID3D11VertexShader *pVS			= nullptr;
 	ID3D11GeometryShader *pGS		= nullptr;
 	ID3D11PixelShader *pPS			= nullptr;
+	ID3D11InputLayout *pInputLayout2 = nullptr;
+	ID3D11VertexShader *pVS2 = nullptr;
+	ID3D11GeometryShader *pGS2 = nullptr;
+	ID3D11PixelShader *pPS2 = nullptr;
 
 	const UINT n_inputs = 3;
 
@@ -122,49 +125,27 @@ void Test_Panel3D()
 		L"../../GraphicsEngine/Test_VertexShader.hlsl",
 		L"",
 		L"../../GraphicsEngine/Test_PixelShader.hlsl",
-		&pVS,
-		&pGS,
-		&pPS,
+		&pVS2,
+		&pGS2,
+		&pPS2,
 		input_desc,
 		n_inputs,
-		&pInputLayout);
+		&pInputLayout2);
 
-	//MeshObject* test_mesh_object = panel1.GetMeshObject("tri");
 	int i = 0;
 	while (window.IsOpen())
 	{
 		window.Update();
 		panel1.Draw();
 		panel2.Draw();
-		//test_mesh_object->Rotate(i++, i, i);
-	}
-	
-	ID3D11Debug* d3d_debug = nullptr;
-	panel1.rGetDirect3D().GetDevice()->QueryInterface(__uuidof(ID3D11Debug), reinterpret_cast<void**>(&d3d_debug));
+	}	
+	pVS->Release();		
+	pPS->Release();	
+	pInputLayout->Release();
 
-
-	//IDXGIDebug::ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL);
-
-	if (pVS)
-	{
-		pVS->Release();
-	}
-	if (pGS)
-	{
-		pGS->Release();
-	}
-	if (pPS)
-	{
-		pPS->Release();
-	}
-	if (pInputLayout)
-	{
-		pInputLayout->Release();
-	}
-	/*panel1.rGetDirect3D().~D3D11();
-	panel2.rGetDirect3D().~D3D11();*/
-	panel1.rGetDirect3D().ReleaseCOM(panel1.rGetDirect3D().GetDevice());
-	d3d_debug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
+	pInputLayout2->Release();
+	pVS2->Release();	
+	pPS2->Release();
 }
 
 void Test_Panel2D()
