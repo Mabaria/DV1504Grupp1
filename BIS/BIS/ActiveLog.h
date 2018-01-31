@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "RoomEvent.h"
+#include "ActiveEvent.h"
 
 class ActiveLog 
 {
@@ -10,15 +10,14 @@ public:
 	ActiveLog();
 	~ActiveLog();
 
-	// Will return index of RoomEvent
-	int AddEvent(int eventIndex, int roomIndex);
-
+	// Event specific
+	int AddEvent(int eventIndex, int roomIndex); /* Returns the index of the
+																									added event in the active
+																									list */
 	void RemoveEvent(int index);
-
-	//RoomEvent operator[](int index);
 
 private:
 	
-	// Active events
-	std::vector<RoomEvent> mRoomEvents;
+	// Event specific
+	std::vector<ActiveEvent> mActiveEvents;
 };

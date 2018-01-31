@@ -12,28 +12,38 @@ public:
 	Room();
 	~Room();
 
-	void AddEvent(Event::Type type);
-	void AddInputType(Event::Type type);
-
+	// Room specific
 	void SetIndex(int index);
 	void SetName(std::string name);
+	std::string GetName() const;
+
+	// Deck specific
 	void SetDeckName(std::string name);
-	void SetRoomEventIndex(int index);
-	
+
+	// Log specific
+	void SetActiveEventIndex(int index);
 	void SetEventLog(EventLog *pEventLog);
 
-	std::string GetName() const;
-	int GetRoomEventIndex() const;
+	// Event specific
+	void AddEvent(Event::Type type);
+	void AddInputType(Event::Type type);
+	int GetActiveEventIndex() const;
 
+	// Disk specific
 	std::string WriteString() const;
 
 private:
 
-	// Name and index of this room
+	// Room specific
 	int mIndex;
 	std::string mName;
+
+	// Deck specific
 	std::string mDeckName;
 
-	int mRoomEventIndex;
+	// Log specific
+	int mActiveEventIndex;
+
+	// Sensor specific
 	Sensor mSensor;
 };

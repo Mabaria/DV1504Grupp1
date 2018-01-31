@@ -2,33 +2,51 @@
 
 EventLog::EventLog()
 {
-	//int nr = this->mLogEvents.size();
 }
 
 EventLog::~EventLog()
 {
 }
 
-int EventLog::AddLogEvent(Event::Type type, int roomIndex)
-{
-	LogEvent newEvent;
-	int eventIndex;
 
-	eventIndex = (int)this->mLogEvents.size();
 
-	newEvent.SetRoomEventIndex(this->mpActiveLog->AddEvent(eventIndex, roomIndex));
-	newEvent.SetType(type);
-
-	this->mLogEvents.insert(this->mLogEvents.begin() + eventIndex, newEvent);
-	this->SaveToFile("eventlog.txt");
-
-	return newEvent.GetRoomEventIndex();
-}
+/**
+*	Log specific
+*/
 
 void EventLog::SetActiveLog(ActiveLog *pActiveLog)
 {
 	this->mpActiveLog = pActiveLog;
 }
+
+
+
+/**
+*	Event specific
+*/
+
+// Returns index in active log
+int EventLog::AddLogEvent(Event::Type type, int roomIndex)
+{
+	// Create an event to fill and push into the list
+	LogEvent newEvent;
+
+	int eventIndex = (int)this->mLogEvents.size();
+
+	newEvent.SetActiveEventIndex(this->mpActiveLog->AddEvent(eventIndex, roomIndex));
+	newEvent.SetType(type);
+
+	this->mLogEvents.insert(this->mLogEvents.begin() + eventIndex, newEvent);
+	this->SaveToFile("eventlog.txt");
+
+	return newEvent.GetActiveEventIndex();
+}
+
+
+
+/**
+*	Disk specific
+*/
 
 void EventLog::SaveToFile(std::string filePath)
 {
