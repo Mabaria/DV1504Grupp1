@@ -21,34 +21,82 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ActiveLog.h">
+    <ClInclude Include="..\..\GraphicsEngine\Camera\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Boat.h">
+    <ClInclude Include="..\..\GraphicsEngine\Camera\Test_Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DeckHandler.h">
-      <Filter>Header Files\RoomHandler</Filter>
-    </ClInclude>
-    <ClInclude Include="Deck.h">
+    <ClInclude Include="..\..\GraphicsEngine\DX\Direct3D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EventLog.h">
+    <ClInclude Include="..\..\GraphicsEngine\Test_Graphics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Room.h">
+    <ClInclude Include="..\..\GraphicsEngine\Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RoomEvent.h">
+    <ClInclude Include="..\..\IO\InputDevice.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Sensor.h">
+    <ClInclude Include="..\..\IO\Keyboard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LogEvent.h">
+    <ClInclude Include="..\..\IO\Mouse.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Event.h">
+    <ClInclude Include="..\..\IO\Test_Input.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\IO\ObserverPattern\Observable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\IO\ObserverPattern\Observer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\IO\ObserverPattern\Test_Obs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\GraphicsEngine\Parsing\Mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_AssImp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_Boat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_Mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Logic\Activelog\ActiveEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Logic\Activelog\ActiveLog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Logic\Boat\Boat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Logic\Boat\Deck.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Logic\Boat\Room.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Logic\Boat\Sensor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Logic\Event\Event.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Logic\Eventlog\EventLog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Logic\Eventlog\LogEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Logic\BoatTester.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -59,32 +107,81 @@
     <ClCompile Include="BIS.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ActiveLog.cpp">
+    <ClCompile Include="..\..\GraphicsEngine\Camera\Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RoomEvent.cpp">
+    <ClCompile Include="..\..\GraphicsEngine\Camera\Test_Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Room.cpp">
+    <ClCompile Include="..\..\GraphicsEngine\DX\Direct3D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Sensor.cpp">
+    <ClCompile Include="..\..\GraphicsEngine\Parsing\Mesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="EventLog.cpp">
+    <ClCompile Include="..\..\GraphicsEngine\Parsing\Test_Boat.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Deck.cpp">
+    <ClCompile Include="..\..\GraphicsEngine\Parsing\Test_Mesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Boat.cpp">
+    <ClCompile Include="..\..\GraphicsEngine\Test_Graphics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="LogEvent.cpp">
+    <ClCompile Include="..\..\GraphicsEngine\Window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Event.cpp">
+    <ClCompile Include="..\..\IO\InputDevice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\IO\Keyboard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\IO\Mouse.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\IO\Test_Input.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Logic\Timer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\IO\ObserverPattern\Test_Obs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Logic\Activelog\ActiveEvent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Logic\Activelog\ActiveLog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Logic\Boat\Boat.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Logic\Boat\Deck.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Logic\Boat\Room.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Logic\Boat\Sensor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Logic\Event\Event.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Logic\Eventlog\EventLog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Logic\Eventlog\LogEvent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Logic\BoatTester.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\..\GraphicsEngine\Test_PixelShader.hlsl" />
+    <FxCompile Include="..\..\GraphicsEngine\Test_VertexShader.hlsl" />
   </ItemGroup>
 </Project>

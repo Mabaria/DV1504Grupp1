@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Event.h"
+#include "../Event/Event.h"
 
 /* An event in the log will be able to describe:
 	*	Type (Fire, Water, Gas)

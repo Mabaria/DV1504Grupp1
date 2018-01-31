@@ -6,8 +6,8 @@
 #include <sstream>
 #include "Deck.h"
 #include "Room.h"
-#include "EventLog.h"
-#include "Event.h"
+#include "../Eventlog/EventLog.h"
+#include "../Event/Event.h"
 
 // TODO: Delete GetRoomIndex that only finds the room by name
 // (Two rooms can share the same name)

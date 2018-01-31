@@ -1,8 +1,8 @@
 #pragma once
 
 #include <string>
-#include "EventLog.h"
-#include "Event.h"
+#include "../Eventlog/EventLog.h"
+#include "../Event/Event.h"
 #include "Sensor.h"
 
 class Room

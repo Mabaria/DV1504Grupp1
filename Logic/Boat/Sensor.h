@@ -3,8 +3,8 @@
 #include <vector>
 #include <string>
 #include <sstream>
-#include "Event.h"
-#include "EventLog.h"
+#include "../Event/Event.h"
+#include "../Eventlog/EventLog.h"
 
 class Sensor
 {

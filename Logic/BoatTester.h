@@ -3,9 +3,9 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include "Boat.h"
-#include "EventLog.h"
-#include "ActiveLog.h"
+#include "Boat/Boat.h"
+#include "Eventlog/EventLog.h"
+#include "Activelog/ActiveLog.h"
 
 void TestBoat();
 
