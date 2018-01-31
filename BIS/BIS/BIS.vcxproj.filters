@@ -60,7 +60,10 @@
     <ClInclude Include="..\..\GraphicsEngine\Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\UI\UIElements\Direct2D.h">
+    <ClInclude Include="..\..\UI\UIElements\Button.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\GraphicsEngine\DX\Direct2D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -105,6 +108,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\UI\UIElements\Direct2D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UI\UIElements\Button.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -154,6 +154,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\GraphicsEngine\DX\Direct2D.h" />
     <ClInclude Include="..\..\GraphicsEngine\DX\Direct3D.h" />
     <ClInclude Include="..\..\GraphicsEngine\Test_Graphics.h" />
     <ClInclude Include="..\..\GraphicsEngine\Window.h" />
@@ -168,7 +169,7 @@
     <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_AssImp.h" />
     <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_Boat.h" />
     <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_Mesh.h" />
-    <ClInclude Include="..\..\UI\UIElements\Direct2D.h" />
+    <ClInclude Include="..\..\UI\UIElements\Button.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -182,6 +183,7 @@
     <ClCompile Include="..\..\IO\Test_Input.cpp" />
     <ClCompile Include="..\..\Logic\Timer.cpp" />
     <ClCompile Include="..\..\IO\ObserverPattern\Test_Obs.cpp" />
+    <ClCompile Include="..\..\UI\UIElements\Button.cpp" />
     <ClCompile Include="..\..\UI\UIElements\Direct2D.cpp" />
     <ClCompile Include="BIS.cpp" />
     <ClCompile Include="stdafx.cpp">
