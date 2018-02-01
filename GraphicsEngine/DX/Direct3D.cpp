@@ -1,8 +1,17 @@
 #include "../DX/Direct3D.h"
 
 
+D3D11::D3D11()
+{
+	this->mDevice = nullptr;
+	this->mContext = nullptr;
+	this->mSwapChain = nullptr;
+	this->mBackBuffer = nullptr;
+	this->mDepthBuffer = nullptr;
+}
+
 D3D11::D3D11(
-	const HWND& window, 
+	/*const HWND& window,*/ 
 	const int width, 
 	const int height)
 {
@@ -30,19 +39,10 @@ D3D11::D3D11(
 	this->mViewport.MinDepth = 0.1f;
 	this->mViewport.MaxDepth = 1.0f;
 
-
-	this->CreateDeviceAndSwapChain(window);
-	this->CreateRenderTarget();
-
-	this->mContext->RSSetViewports(1, &this->mViewport);
-
-
 	this->mClearColor[0] = 0.0f;
 	this->mClearColor[1] = 0.0f;
 	this->mClearColor[2] = 0.0f;
 	this->mClearColor[3] = 1.0f;
-
-	this->ChangeSize(this->mSize);
 }
 
 D3D11::~D3D11()
@@ -52,6 +52,15 @@ D3D11::~D3D11()
 	this->ReleaseCOM(this->mSwapChain);
 	this->ReleaseCOM(this->mBackBuffer);
 	this->ReleaseCOM(this->mDepthBuffer);
+}
+
+void D3D11::Init(HWND window)
+{
+	this->CreateDeviceAndSwapChain(window);
+	this->CreateRenderTarget();
+
+	this->mContext->RSSetViewports(1, &this->mViewport);
+	this->ChangeSize(this->mSize);
 }
 
 void D3D11::ChangeClearColor(

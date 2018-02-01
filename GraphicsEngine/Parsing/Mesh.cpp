@@ -7,6 +7,7 @@ Mesh::Mesh(const std::string &filePath)
 		for (unsigned int i = 0; i < this->mScene->mNumMeshes; i++)
 		{
 			this->mIndexVectors.push_back(std::vector<unsigned int>());
+			this->mVertexVectors.push_back(std::vector<Vertex>());
 			// Add vectors for every submesh
 		}
 		this->PopulateVectors();
@@ -24,9 +25,9 @@ Mesh::~Mesh()
 
 }
 
-std::vector<Vertex>& Mesh::GetVertexVector() 
+std::vector<std::vector<Vertex>>& Mesh::GetVertexVectors() 
 {
-	return this->mVertexVector;
+	return this->mVertexVectors;
 } 
 
 std::vector<std::vector<unsigned int>>& Mesh::GetIndexVectors() 
@@ -164,7 +165,7 @@ void Mesh::PopulateVectors()
 					temp_tex_v
 
 				}; 	
-				this->mVertexVector.push_back(new_vert);
+				this->mVertexVectors[m].push_back(new_vert);
 				// For every mesh, for every vertex,
 				// create a "Vertex" that combines
 				// Vertex positions, vertex normals and vertex UVs
