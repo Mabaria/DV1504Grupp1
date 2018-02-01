@@ -3,19 +3,19 @@
 #include <d3dcompiler.h>
 #include <DirectXMath.h>
 
-enum LOOKMODE {
+enum LOOK_MODE {
 	LOOKAT = 0,
 	LOOKTO = 1
 };
 
-enum PROJECTIONMODE {
+enum PROJECTION_MODE {
 	PERSPECTIVE = 0,
 	ORTHOGRAPHIC = 1
 };
 /*
 Camera contains everything you (should) need regarding view and projection matrices.
-LOOKMODE determines if you want the look vector to represent look AT or look TO.
-PROJECTIONMODE sets if you want to use perspective of orthographic. Keep in mind that
+LOOK_MODE determines if you want the look vector to represent look AT or look TO.
+PROJECTION_MODE sets if you want to use perspective of orthographic. Keep in mind that
 after swapping you have to set the related variables for the type you are swapping to,
 or else you are gonna have a bad time.
 */
@@ -29,8 +29,8 @@ public:
 		const float view_height_or_aspect_ratio,
 		const float near_z,
 		const float far_z,
-		const LOOKMODE camera_mode = LOOKAT,
-		const PROJECTIONMODE projection_mode = PERSPECTIVE);
+		const LOOK_MODE camera_mode = LOOKAT,
+		const PROJECTION_MODE projection_mode = PERSPECTIVE);
 
 	Camera(const DirectX::XMFLOAT3 &r_position,
 		const DirectX::XMFLOAT3 &r_up_vector,
@@ -39,8 +39,8 @@ public:
 		const float view_height_or_aspect_ratio,
 		const float near_z,
 		const float far_z,
-		const LOOKMODE camera_mode = LOOKAT,
-		const PROJECTIONMODE projection_mode = PERSPECTIVE);
+		const LOOK_MODE camera_mode = LOOKAT,
+		const PROJECTION_MODE projection_mode = PERSPECTIVE);
 
 	Camera(const float pos_x,
 		const float pos_y,
@@ -55,8 +55,8 @@ public:
 		const float view_height_or_aspect_ratio,
 		const float near_z,
 		const float far_z,
-		const LOOKMODE camera_mode = LOOKAT,
-		const PROJECTIONMODE projection_mode = PERSPECTIVE);
+		const LOOK_MODE camera_mode = LOOKAT,
+		const PROJECTION_MODE projection_mode = PERSPECTIVE);
 
 	~Camera();
 
@@ -87,7 +87,7 @@ public:
 	void SetLookVector(const DirectX::XMVECTOR &r_new_look_vector);
 	void SetLookVector(const float new_x, const float new_y, const float new_z);
 
-	void SetLookMode(const LOOKMODE new_look_mode);
+	void SetLookMode(const LOOK_MODE new_look_mode);
 
 	void RotateCameraPitchYawRoll(
 		const float pitch,
@@ -99,14 +99,14 @@ public:
 	DirectX::XMVECTOR GetPosition() const;
 	DirectX::XMVECTOR GetUpVector() const;
 	DirectX::XMVECTOR GetLookVector() const;
-	LOOKMODE GetLookMode() const;
+	LOOK_MODE GetLookMode() const;
 
 	DirectX::XMMATRIX GetViewMatrix() const;
 	DirectX::XMMATRIX GetTransposedViewMatrix() const;
 
 	DirectX::XMMATRIX GetProjectionMatrix() const;
 	DirectX::XMMATRIX GetTransposedProjectionMatrix() const;
-	PROJECTIONMODE GetProjectionMode() const;
+	PROJECTION_MODE GetProjectionMode() const;
 
 	bool SetViewWidth(const float new_view_width); // Not used in PERSPECTIVE mode
 	bool SetViewHeight(const float new_view_height); // Not used in PERSPECTIVE mode
@@ -115,7 +115,7 @@ public:
 	bool SetNearZ(const float new_near_z);
 	bool SetFarZ(const float new_far_z);
 
-	void SetProjectionMode(const PROJECTIONMODE new_projection_mode);
+	void SetProjectionMode(const PROJECTION_MODE new_projection_mode);
 	
 
 private:
@@ -129,8 +129,8 @@ private:
 	float mAspectRatio; // Not used in ORTHOGRAPHIC mode
 	float mNearZ;
 	float mFarZ;
-	LOOKMODE mLookMode;
-	PROJECTIONMODE mProjectionMode;
+	LOOK_MODE mLookMode;
+	PROJECTION_MODE mProjectionMode;
 	DirectX::XMMATRIX mViewMatrix;
 	DirectX::XMMATRIX mProjMatrix;
 
@@ -142,8 +142,8 @@ private:
 		const float view_height_or_aspect_ratio,
 		const float near_z,
 		const float far_z,
-		const LOOKMODE camera_mode,
-		const PROJECTIONMODE projection_mode);
+		const LOOK_MODE camera_mode,
+		const PROJECTION_MODE projection_mode);
 	void mUpdateViewMatrix();
 	void mUpdateProjMatrix();
 	void mRotateViewMatrix(const DirectX::XMMATRIX &camRotationMatrix); 

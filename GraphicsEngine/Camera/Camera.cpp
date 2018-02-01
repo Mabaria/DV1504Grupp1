@@ -7,8 +7,8 @@ Camera::Camera(const DirectX::XMVECTOR &r_position,
 	const float view_height_or_aspect_ratio,
 	const float near_z,
 	const float far_z,
-	const LOOKMODE camera_mode,
-	const PROJECTIONMODE projection_mode)
+	const LOOK_MODE camera_mode,
+	const PROJECTION_MODE projection_mode)
 {
 	this->mInit(r_position,
 		r_up_vector,
@@ -28,8 +28,8 @@ Camera::Camera(const DirectX::XMFLOAT3 &r_position,
 	const float view_height_or_aspect_ratio,
 	const float near_z,
 	const float far_z,
-	const LOOKMODE camera_mode,
-	const PROJECTIONMODE projection_mode)
+	const LOOK_MODE camera_mode,
+	const PROJECTION_MODE projection_mode)
 {
 	this->mInit(DirectX::XMLoadFloat3(&r_position),
 		DirectX::XMLoadFloat3(&r_up_vector),
@@ -55,8 +55,8 @@ Camera::Camera(const float pos_x,
 	const float view_height_or_aspect_ratio,
 	const float near_z,
 	const float far_z,
-	const LOOKMODE camera_mode,
-	const PROJECTIONMODE projection_mode)
+	const LOOK_MODE camera_mode,
+	const PROJECTION_MODE projection_mode)
 {
 	this->mInit(DirectX::XMVectorSet(pos_x, pos_y, pos_z, 0.0f),
 		DirectX::XMVectorSet(up_x, up_y, up_z, 0.0f),
@@ -81,8 +81,8 @@ void Camera::mInit(const DirectX::XMVECTOR &r_position,
 	const float view_height_or_aspect_ratio,
 	const float near_z,
 	const float far_z,
-	const LOOKMODE camera_mode,
-	const PROJECTIONMODE projection_mode)
+	const LOOK_MODE camera_mode,
+	const PROJECTION_MODE projection_mode)
 {
 	this->mCameraPosition = r_position;
 	this->mUpVector = r_up_vector;
@@ -243,7 +243,7 @@ void Camera::SetLookVector(const float new_x, const float new_y, const float new
 	this->mUpdateViewMatrix();
 }
 
-void Camera::SetLookMode(const LOOKMODE new_look_mode)
+void Camera::SetLookMode(const LOOK_MODE new_look_mode)
 {
 	this->mLookMode = new_look_mode;
 }
@@ -285,7 +285,7 @@ DirectX::XMVECTOR Camera::GetLookVector() const
 	return this->mLookVector;
 }
 
-LOOKMODE Camera::GetLookMode() const
+LOOK_MODE Camera::GetLookMode() const
 {
 	return this->mLookMode;
 }
@@ -310,7 +310,7 @@ DirectX::XMMATRIX Camera::GetTransposedProjectionMatrix() const
 	return DirectX::XMMatrixTranspose(this->mProjMatrix);
 }
 
-PROJECTIONMODE Camera::GetProjectionMode() const
+PROJECTION_MODE Camera::GetProjectionMode() const
 {
 	return this->mProjectionMode;
 }
@@ -399,7 +399,7 @@ bool Camera::SetFarZ(const float new_far_z)
 	}
 }
 
-void Camera::SetProjectionMode(const PROJECTIONMODE new_projection_mode)
+void Camera::SetProjectionMode(const PROJECTION_MODE new_projection_mode)
 {
 	this->mProjectionMode = new_projection_mode;
 	this->mUpdateProjMatrix();
