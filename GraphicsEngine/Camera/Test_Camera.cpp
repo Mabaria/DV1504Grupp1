@@ -10,7 +10,7 @@ void TestCamera()
 		900,
 		10.0f,
 		1000.0f,
-		LOOKAT,
+		LOOK_AT,
 		ORTHOGRAPHIC);
 	Camera test2(DirectX::XMVectorSet(0.4f, 12.0f, 0.0f, 0.0f),
 		DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f),

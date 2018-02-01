@@ -101,7 +101,7 @@ void Camera::mInit(const DirectX::XMVECTOR &r_position,
 
 void Camera::mUpdateViewMatrix()
 {
-	if (this->mLookMode == LOOKAT)
+	if (this->mLookMode == LOOK_AT)
 	{
 		this->mViewMatrix = DirectX::XMMatrixLookAtLH(this->mCameraPosition,
 			this->mLookVector,

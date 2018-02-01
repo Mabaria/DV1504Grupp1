@@ -4,8 +4,8 @@
 #include <DirectXMath.h>
 
 enum LOOK_MODE {
-	LOOKAT = 0,
-	LOOKTO = 1
+	LOOK_AT = 0,
+	LOOK_TO = 1
 };
 
 enum PROJECTION_MODE {
@@ -29,7 +29,7 @@ public:
 		const float view_height_or_aspect_ratio,
 		const float near_z,
 		const float far_z,
-		const LOOK_MODE camera_mode = LOOKAT,
+		const LOOK_MODE camera_mode = LOOK_AT,
 		const PROJECTION_MODE projection_mode = PERSPECTIVE);
 
 	Camera(const DirectX::XMFLOAT3 &r_position,
@@ -39,7 +39,7 @@ public:
 		const float view_height_or_aspect_ratio,
 		const float near_z,
 		const float far_z,
-		const LOOK_MODE camera_mode = LOOKAT,
+		const LOOK_MODE camera_mode = LOOK_AT,
 		const PROJECTION_MODE projection_mode = PERSPECTIVE);
 
 	Camera(const float pos_x,
@@ -55,7 +55,7 @@ public:
 		const float view_height_or_aspect_ratio,
 		const float near_z,
 		const float far_z,
-		const LOOK_MODE camera_mode = LOOKAT,
+		const LOOK_MODE camera_mode = LOOK_AT,
 		const PROJECTION_MODE projection_mode = PERSPECTIVE);
 
 	~Camera();
