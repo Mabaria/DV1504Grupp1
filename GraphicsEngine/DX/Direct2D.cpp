@@ -2,12 +2,12 @@
 
 Direct2D::Direct2D()
 {
-	this->pFactory = nullptr;
-	this->pRenderTarget = nullptr;
-	this->pWicFactory = nullptr;
-	this->pConverter = nullptr;
-	this->pDecoder = nullptr;
-	this->pBitmapSrc = nullptr;
+	this->mpFactory = nullptr;
+	this->mpRenderTarget = nullptr;
+	this->mpWicFactory = nullptr;
+	this->mpConverter = nullptr;
+	this->mpDecoder = nullptr;
+	this->mpBitmapSrc = nullptr;
 
 	this->Init();
 }
@@ -19,7 +19,7 @@ Direct2D::~Direct2D()
 void Direct2D::CreateFactory()
 {
 	D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED,
-		&this->pFactory);
+		&this->mpFactory);
 }
 
 void Direct2D::Init()
@@ -33,62 +33,62 @@ void Direct2D::CreateRenderTarget(
 	unsigned int width,
 	unsigned int height)
 {
-	this->pFactory->CreateHwndRenderTarget(
+	this->mpFactory->CreateHwndRenderTarget(
 		D2D1::RenderTargetProperties(),
 		D2D1::HwndRenderTargetProperties(
 			window,
 			D2D1::SizeU(width, height)),
-		&this->pRenderTarget);
+		&this->mpRenderTarget);
 }
 
 IWICFormatConverter *Direct2D::GetpFormatConverter()
 {
-	return this->pConverter;
+	return this->mpConverter;
 }
 
 IWICImagingFactory *Direct2D::GetpImagingFactory()
 {
-	return this->pWicFactory;
+	return this->mpWicFactory;
 }
 
 IWICBitmapDecoder *Direct2D::GetpBitmapDecoder()
 {
-	return this->pDecoder;
+	return this->mpDecoder;
 }
 
 IWICBitmapFrameDecode *Direct2D::GetpBitmapSrc()
 {
-	return this->pBitmapSrc;
+	return this->mpBitmapSrc;
 }
 
 ID2D1Factory *Direct2D::GetpFactory()
 {
-	return this->pFactory;
+	return this->mpFactory;
 }
 
 ID2D1HwndRenderTarget *Direct2D::GetpRenderTarget()
 {
-	return this->pRenderTarget;
+	return this->mpRenderTarget;
 }
 
 void Direct2D::SetpFormatConverter(IWICFormatConverter* pConverter)
 {
-	this->pConverter = pConverter;
+	this->mpConverter = pConverter;
 }
 
 void Direct2D::SetpImagingFactory(IWICImagingFactory *pWicFactory)
 {
-	this->pWicFactory = pWicFactory;
+	this->mpWicFactory = pWicFactory;
 }
 
 void Direct2D::SetpBitmapDecoder(IWICBitmapDecoder * pDecoder)
 {
-	this->pDecoder = pDecoder;
+	this->mpDecoder = pDecoder;
 }
 
 void Direct2D::SetpBitmapSrc(IWICBitmapFrameDecode * pBitmapSrc)
 {
-	this->pBitmapSrc = pBitmapSrc;
+	this->mpBitmapSrc = pBitmapSrc;
 }
 
 void Direct2D::CreateWicFactory()
@@ -97,5 +97,5 @@ void Direct2D::CreateWicFactory()
 	CoCreateInstance(CLSID_WICImagingFactory,
 		nullptr,
 		CLSCTX_INPROC_SERVER,
-		IID_PPV_ARGS(&this->pWicFactory));
+		IID_PPV_ARGS(&this->mpWicFactory));
 }

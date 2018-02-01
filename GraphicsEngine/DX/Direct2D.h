@@ -25,12 +25,12 @@ public:
 	void SetpBitmapSrc(IWICBitmapFrameDecode *pBitmapSrc);
 private:
 
-	IWICFormatConverter *pConverter;
-	IWICImagingFactory *pWicFactory;
-	IWICBitmapDecoder *pDecoder;
-	IWICBitmapFrameDecode *pBitmapSrc;
-	ID2D1HwndRenderTarget *pRenderTarget;
-	ID2D1Factory *pFactory;
+	IWICFormatConverter *mpConverter;
+	IWICImagingFactory *mpWicFactory;
+	IWICBitmapDecoder *mpDecoder;
+	IWICBitmapFrameDecode *mpBitmapSrc;
+	ID2D1HwndRenderTarget *mpRenderTarget;
+	ID2D1Factory *mpFactory;
 
 	void CreateFactory();
 	void CreateWicFactory();
