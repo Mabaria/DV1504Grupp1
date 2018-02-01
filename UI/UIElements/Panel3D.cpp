@@ -122,6 +122,8 @@ const bool Panel3D::AddMeshObject(
 		this->mMeshObjects.back().rGetModelMatrix(), 
 		this->mMeshObjects.back().rGetConstantBuffer());
 
+	this->mMeshObjects.back().rGetConstantBuffer();
+
 	return result;
 }
 
@@ -202,7 +204,9 @@ const void Panel3D::CreateIndexBuffer(std::vector<unsigned int> indices)
 	this->mMeshObjects.back().AddIndexBuffer(&index_buffer);
 }
 
-const void Panel3D::CreateConstantBuffer(XMMATRIX *matrix, ID3D11Buffer **constantBuffer)
+const void Panel3D::CreateConstantBuffer(
+	XMMATRIX *matrix, 
+	ID3D11Buffer **constantBuffer)
 {
 	D3D11_BUFFER_DESC buffer_desc{};
 	buffer_desc.BindFlags		= D3D11_BIND_CONSTANT_BUFFER;
