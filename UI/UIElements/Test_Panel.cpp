@@ -151,7 +151,7 @@ void Test_BoatOnScreen()
 		floor1.GetIndexVectors(),
 		floor1.GetVertexVectors());*/
 
-	Panel3D top_view(2 * 1280 / 3, 720, 1280 / 3, 0, window.GetWindow(), window_name.c_str());
+	Panel3D top_view(1280, 2 * 720 / 3, 720 / 3, 0, window.GetWindow(), window_name.c_str());
 
 	top_view.AddMeshObject(
 		"floor01",
