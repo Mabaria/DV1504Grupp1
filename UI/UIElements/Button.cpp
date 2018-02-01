@@ -1,6 +1,12 @@
 #include "Button.h"
 
-Button::Button()
+Button::Button(
+	Direct2D& D2D1Panel,
+	std::string imageFilePath,
+	int left,
+	int top,
+	int right,
+	int bottom)
 {
 	this->mpBitMap = nullptr;
 	this->mFilePath = "";
@@ -12,6 +18,15 @@ Button::Button()
 	this->mOpacity = 1.0f;
 	this->mBmpLoaded = false;
 	this->mpFailBrush = nullptr;
+	this->D2D1Panel = &D2D1Panel;
+	
+	this->CreateButton(
+		*this->D2D1Panel, 
+		imageFilePath, 
+		left, 
+		top, 
+		right, 
+		bottom);
 
 }
 
@@ -62,11 +77,11 @@ void Button::CreateButton(
 	}
 }
 
-void Button::DrawButton(Direct2D D2D1Panel)
+void Button::DrawButton()
 {
 	if (this->mBmpLoaded)
 	{
-		D2D1Panel.GetpRenderTarget()->DrawBitmap(
+		this->D2D1Panel->GetpRenderTarget()->DrawBitmap(
 			this->mpBitMap,
 			this->mButtonSize,
 			this->mOpacity,
@@ -75,7 +90,7 @@ void Button::DrawButton(Direct2D D2D1Panel)
 	}
 	else
 	{
-		D2D1Panel.GetpRenderTarget()->FillRectangle(
+		this->D2D1Panel->GetpRenderTarget()->FillRectangle(
 			this->mButtonSize,
 			mpFailBrush
 		);
@@ -114,16 +129,20 @@ void Button::SetBitmapRendersize(int left, int top, int right, int bottom)
 
 void Button::SetButtonStatus(BUTTON_STATE buttState)
 {
-	if (this->mBmpLoaded)
+	if (!(this->mCurrState == buttState))
 	{
-		this->mBitmapRenderSize = D2D1::RectF(
-			this->mWidth * buttState,
-			0,
-			this->mWidth* (buttState + 1),
-			this->mpBitMap->GetSize().height);
-		if (buttState == 2)
+		this->mCurrState = buttState;
+		if (this->mBmpLoaded)
 		{
-			this->NotifyObservers(this);
+			this->mBitmapRenderSize = D2D1::RectF(
+				this->mWidth * buttState,
+				0,
+				this->mWidth* (buttState + 1),
+				this->mpBitMap->GetSize().height);
+			if (buttState == 2)
+			{
+				this->NotifyObservers(this);
+			}
 		}
 	}
 }
@@ -171,5 +190,10 @@ void Button::LoadImageToBitmap(
 			this->mpBitMap->GetSize().height);
 		this->mBmpLoaded = true;
 	}
+}
+
+BUTTON_STATE Button::GetButtState() const
+{
+	return this->mCurrState;
 }
 

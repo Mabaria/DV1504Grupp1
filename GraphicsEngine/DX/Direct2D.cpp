@@ -1,6 +1,8 @@
 #include "Direct2D.h"
 
-Direct2D::Direct2D()
+Direct2D::Direct2D(HWND window,
+	unsigned int width,
+	unsigned int height)
 {
 	this->mpFactory = nullptr;
 	this->mpRenderTarget = nullptr;
@@ -9,23 +11,28 @@ Direct2D::Direct2D()
 	this->mpDecoder = nullptr;
 	this->mpBitmapSrc = nullptr;
 
-	this->Init();
+	this->mCreateFactory();
+	this->mCreateWicFactory();
+	this->CreateRenderTarget(window, width, height);
+	
+	//this->mInit();
+	
 }
 
 Direct2D::~Direct2D()
 {
 }
 
-void Direct2D::CreateFactory()
+void Direct2D::mCreateFactory()
 {
-	D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED,
+	HRESULT hr = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED,
 		&this->mpFactory);
 }
 
-void Direct2D::Init()
+void Direct2D::mInit()
 {
-	this->CreateFactory();
-	this->CreateWicFactory();
+	this->mCreateFactory();
+	this->mCreateWicFactory();
 }
 
 void Direct2D::CreateRenderTarget(
@@ -33,7 +40,7 @@ void Direct2D::CreateRenderTarget(
 	unsigned int width,
 	unsigned int height)
 {
-	this->mpFactory->CreateHwndRenderTarget(
+	HRESULT hr = this->mpFactory->CreateHwndRenderTarget(
 		D2D1::RenderTargetProperties(),
 		D2D1::HwndRenderTargetProperties(
 			window,
@@ -91,7 +98,7 @@ void Direct2D::SetpBitmapSrc(IWICBitmapFrameDecode * pBitmapSrc)
 	this->mpBitmapSrc = pBitmapSrc;
 }
 
-void Direct2D::CreateWicFactory()
+void Direct2D::mCreateWicFactory()
 {
 	CoInitialize(nullptr);
 	CoCreateInstance(CLSID_WICImagingFactory,

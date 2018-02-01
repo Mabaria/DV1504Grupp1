@@ -3,17 +3,14 @@
 void Test_Button()
 {
 	Window window(L"Button_Test", 1280, 720);
-	Direct2D D2Test;
-	Button button, button2;
-	Mouse mouse;
-	D2Test.CreateRenderTarget(
+	Direct2D D2Test(
 		window.GetWindow(),
 		window.GetClientSize().width,
 		window.GetClientSize().height);
-	button.CreateButton(D2Test, "../../Models/testFile.bmp", 100, 100, 200, 200);
-	button2.CreateButton(D2Test, "../../Models/pepehands.jp", 400, 100, 600, 300);
+	Button button(D2Test, "../../Models/testFile.bmp", 100, 100, 200, 200), 
+		button2(D2Test, "../../Models/pepehands.jpg", 205, 100, 305, 200);
+	Mouse mouse;
 	window.Open();
-	
 	
 	while (window.IsOpen())
 	{
@@ -30,6 +27,7 @@ void Test_Button()
 			mouse.IsButtonDown(Buttons::Left))
 		{
 			button.SetButtonStatus(BUTTON_STATE::CLICKED);
+			
 		}
 		else if (mouse.GetMousePositionPercentage().x <
 			button.GetBoundingBoxPercentage().right &&
@@ -48,8 +46,8 @@ void Test_Button()
 		}
 		D2Test.GetpRenderTarget()->BeginDraw();
 		D2Test.GetpRenderTarget()->Clear(D2D1::ColorF(D2D1::ColorF::CornflowerBlue));
-		button.DrawButton(D2Test);
-		button2.DrawButton(D2Test);
+		button.DrawButton();
+		button2.DrawButton();
 		D2Test.GetpRenderTarget()->EndDraw();	
 	}
 }

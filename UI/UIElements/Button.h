@@ -12,7 +12,13 @@ enum BUTTON_STATE
 class Button : public Observable<Button*>
 {
 public:
-	Button();
+	Button(
+		Direct2D& D2D1Panel,
+		std::string imageFilePath,
+		int left,
+		int top,
+		int right,
+		int bottom);
 	~Button();
 
 	const std::wstring StrToWstr(std::string str);
@@ -23,7 +29,7 @@ public:
 		int top,
 		int right,
 		int bottom);
-	void DrawButton(Direct2D D2D1Panel);
+	void DrawButton();
 
 	ID2D1Bitmap* getBitmapPointer();
 	const D2D1_RECT_F GetButtonsize() const;
@@ -35,9 +41,10 @@ public:
 	void LoadImageToBitmap(
 		Direct2D D2D1Panel,
 		std::string imageFilePath);
-
+	BUTTON_STATE GetButtState() const;
 private:
 	
+	Direct2D *D2D1Panel;
 	ID2D1Bitmap *mpBitMap;
 	std::string mFilePath;
 	D2D1_RECT_F mButtonSize; // left, top, right, bottom
@@ -48,5 +55,5 @@ private:
 	float mOpacity;
 	bool mBmpLoaded;
 	ID2D1SolidColorBrush* mpFailBrush;
-	
+	BUTTON_STATE mCurrState;
 };

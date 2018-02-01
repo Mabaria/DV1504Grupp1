@@ -9,7 +9,9 @@
 class Direct2D
 {
 public:
-	Direct2D();
+	Direct2D(HWND window,
+		unsigned int width,
+		unsigned int height);
 	~Direct2D();
 	void CreateRenderTarget(HWND window, unsigned int width, unsigned int height);
 	 IWICFormatConverter *GetpFormatConverter();
@@ -32,7 +34,7 @@ private:
 	ID2D1HwndRenderTarget *mpRenderTarget;
 	ID2D1Factory *mpFactory;
 
-	void CreateFactory();
-	void CreateWicFactory();
-	void Init();
+	void mCreateFactory();
+	void mCreateWicFactory();
+	void mInit();
 };
