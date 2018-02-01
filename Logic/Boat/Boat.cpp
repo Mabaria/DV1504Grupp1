@@ -46,8 +46,7 @@ void Boat::AddDeck(std::string name)
 
 void Boat::AddRoom(std::string roomName,
 	std::string deckName,
-	int inputs[],
-	int nrOfInputs)
+	std::vector<Event::Type> inputs)
 {
 	// Check early exit
 	if (this->GetRoomIndex(roomName, deckName) != -1)
@@ -55,7 +54,7 @@ void Boat::AddRoom(std::string roomName,
 
 	bool deckFound = false;
 
-	for (int i = 0; i < this->mDecks.size() && !deckFound; i++)
+	for (int i = 0; i < (int)this->mDecks.size() && !deckFound; i++)
 	{
 		if (this->mDecks[i].GetName() == deckName)
 		{
@@ -65,9 +64,9 @@ void Boat::AddRoom(std::string roomName,
 			newRoom.SetName(roomName);
 			newRoom.SetDeckName(deckName);
 			
-			for (int j = 0; j < nrOfInputs; j++)
+			for (int j = 0; j < (int)inputs.size(); j++)
 			{
-				newRoom.AddInputType((Event::Type)inputs[j]);
+				newRoom.AddInputType(inputs[j]);
 			}
 
 			int offset = this->mDecks[i].GetRoomOffset() +
@@ -75,14 +74,14 @@ void Boat::AddRoom(std::string roomName,
 
 			if (this->mpEventLog != nullptr)
 			{
-				this->mRooms.SetEventLog(this->mpEventLog);
+				newRoom.SetEventLog(this->mpEventLog);
 			}
 
 			this->mRooms.insert(this->mRooms.begin() + offset, newRoom);
 			this->mDecks[i].AddRoom();
 
 			// Add +1 to remaining decks offset after this deck, if any
-			for (int j = i+1; j < this->mDecks.size(); j++)
+			for (int j = i+1; j < (int)this->mDecks.size(); j++)
 			{
 				this->mDecks[j].PushRoomOffset(); // Push 1 step to the right
 			}
@@ -104,13 +103,11 @@ void Boat::SetEventLog(EventLog *pEventLog)
 {
 	this->mpEventLog = pEventLog;
 
-	for (int i = 0; i < this->mRooms.size(); i++)
+	for (int i = 0; i < (int)this->mRooms.size(); i++)
 	{
 		this->mRooms[i].SetEventLog(pEventLog);
 	}
 }
-
-// TODO: SetActiveEventIndex
 
 /**
 *	Event specific
@@ -128,9 +125,16 @@ void Boat::CreatePlotEvent(Event::Type type, std::string roomName, std::string d
 	this->mRooms[index].AddPlotEvent(type);
 }
 
+void Boat::ClearEvent(Event::Type type, std::string roomName, std::string deckName)
+{
+	int roomIndex = this->GetRoomIndex(roomName, deckName);
+	this->mpEventLog->ClearEvent(type, roomIndex);
+}
+
 std::vector<Event::Type> Boat::GetEventsInRoom(std::string roomName, std::string deckName)
 {
-	
+	int roomIndex = this->GetRoomIndex(roomName, deckName);
+	return this->mpEventLog->GetEvents(roomIndex);
 }
 
 
@@ -152,14 +156,14 @@ void Boat::WriteFile(std::string filePath)
 	file << "// d#index <<deck name>> <<offset>> <<count>>" << "\n";
 	file << "deckcount " << this->mDecks.size() << "\n";
 
-	for (int i = 0; i < this->mDecks.size(); i++)
+	for (int i = 0; i < (int)this->mDecks.size(); i++)
 		file << this->mDecks[i].GetString() << "\n";
 
 	file << "\n"; // Space
 
 	file << "// r#index <<deck name>> / <<room name>> / sensor <<room event index>>" << "\n";
 	file << "roomcount " << this->mRooms.size() << "\n";
-	for (int i = 0; i < this->mRooms.size(); i++)
+	for (int i = 0; i < (int)this->mRooms.size(); i++)
 	{
 		file << this->mRooms[i].WriteString() << "\n";
 	}
@@ -216,7 +220,7 @@ bool Boat::ReadFile(std::string filePath)
 						*	Get index
 						*/
 						std::stringstream intParse;
-						for (int i = 2; i < word.size(); i++)
+						for (int i = 2; i < (int)word.size(); i++)
 						{
 							intParse << word[i];
 						}
@@ -270,7 +274,7 @@ bool Boat::ReadFile(std::string filePath)
 						*	Get index
 						*/
 						std::stringstream intParse;
-						for (int i = 2; i < word.size(); i++)
+						for (int i = 2; i < (int)word.size(); i++)
 						{
 							intParse << word[i];
 						}
@@ -286,6 +290,7 @@ bool Boat::ReadFile(std::string filePath)
 						
 						int deckIndex = this->GetDeckIndex(word);
 
+						// (Reads in automaticaly from file)
 						//this->mDecks[deckIndex].AddRoom();
 						//for (int i = deckIndex; i < this->mDecks.size(); i++)
 						//{
@@ -332,9 +337,15 @@ bool Boat::ReadFile(std::string filePath)
 								break;
 						}
 
-							/**
-							*	Insert room into list
-							*/
+						/**
+						*	Give the room an eventlog pointer, if possible
+						*/
+						if (this->mpEventLog != nullptr)
+							newRoom.SetEventLog(this->mpEventLog);
+
+						/**
+						*	Insert room into list
+						*/
 						this->mRooms.push_back(newRoom);
 					}
 
@@ -373,17 +384,6 @@ bool Boat::ReadFile(std::string filePath)
 *	Private functions to Boat
 */
 
-int Boat::GetRoomIndex(std::string roomName)
-{
-	for (int i = 0; i < this->mRooms.size(); i++)
-	{
-		if (this->mRooms[i].GetName() == roomName)
-			 return i;
-	}
-
-	return -1;
-}
-
 int Boat::GetRoomIndex(std::string roomName, std::string deckName)
 {
 	int deckIndex = this->GetDeckIndex(deckName);
@@ -406,7 +406,7 @@ int Boat::GetRoomIndex(std::string roomName, std::string deckName)
 
 int Boat::GetDeckIndex(std::string deckName)
 {
-	for (int i = 0; i < this->mDecks.size(); i++)
+	for (int i = 0; i < (int)this->mDecks.size(); i++)
 	{
 		if (this->mDecks[i].GetName() == deckName)
 			return i;
@@ -420,7 +420,7 @@ std::string Boat::GetDeckNameByRoomIndex(int index)
 	int count;
 	int offset;
 
-	for (int i = 0; i < this->mDecks.size(); i++)
+	for (int i = 0; i < (int)this->mDecks.size(); i++)
 	{
 		count = this->mDecks[i].GetRoomCount();
 		offset = this->mDecks[i].GetRoomOffset();

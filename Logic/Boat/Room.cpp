@@ -2,11 +2,6 @@
 
 Room::Room()
 {
-	// TODO: delete these three lines, only for testing
-	//this->mSensor.AddInputType(Event::Fire);
-	//this->mSensor.AddInputType(Event::Water);
-	//this->mSensor.AddInputType(Event::Gas);
-
 	this->mIndex = -1;
 }
 

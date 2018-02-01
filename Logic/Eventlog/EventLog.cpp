@@ -14,10 +14,10 @@ EventLog::~EventLog()
 *	Log specific
 */
 
-void EventLog::SetActiveLog(ActiveLog *pActiveLog)
-{
-	this->mpActiveLog = pActiveLog;
-}
+//void EventLog::SetActiveLog(ActiveLog *pActiveLog)
+//{
+//	this->mpActiveLog = pActiveLog;
+//}
 
 
 
@@ -25,26 +25,112 @@ void EventLog::SetActiveLog(ActiveLog *pActiveLog)
 *	Event specific
 */
 
-// Returns index in active log
-int EventLog::AddLogEvent(Event::Type type, int roomIndex)
+int EventLog::AddEvent(Event::Type type, int roomIndex)
 {
-	// Create an event to fill and push into the list
-	LogEvent newEvent;
+	int logIndex;
+	int activeIndex;
 
-	int eventIndex = (int)this->mLogEvents.size();
+	// Check if the room already has an active event.
+	// In that case, update it's activeEvent
+	activeIndex = GetRoomActiveEventIndex(roomIndex);
+	if (activeIndex == -1)
+	{
+		ActiveEvent newActiveEvent;
 
-	newEvent.SetActiveEventIndex(this->mpActiveLog->AddEvent(eventIndex, roomIndex));
-	newEvent.SetType(type);
+		newActiveEvent.SetRoomIndex(roomIndex);
 
-	this->mLogEvents.insert(this->mLogEvents.begin() + eventIndex, newEvent);
-	this->SaveToFile("eventlog.txt");
+		activeIndex = (int)this->mActiveEvents.size();
+		this->mActiveEvents.insert(
+			this->mActiveEvents.begin() + activeIndex,
+			newActiveEvent);
+	}
 
-	return newEvent.GetActiveEventIndex();
+	LogEvent newLogEvent;
+
+	newLogEvent.SetActiveEventIndex(activeIndex);
+	newLogEvent.SetType(type);
+
+	logIndex = (int)this->mLogEvents.size();
+
+	this->mLogEvents.insert(this->mLogEvents.begin() + logIndex, newLogEvent);
+	this->mActiveEvents[activeIndex].AddEvent(logIndex);
+
+	return activeIndex;
 }
 
-std::vector<Event::Type> EventLog::GetEvents(int activeEventIndex)
+bool EventLog::ClearEvent(Event::Type type, int roomIndex)
 {
+	int activeIndex = -1;
+
+	// Check if room is active
+	for (int i = 0; i < (int)this->mActiveEvents.size(); i++)
+	{
+		if (this->mActiveEvents[i].GetRoomIndex() == roomIndex)
+			activeIndex = i;
+	}
+
+	if (activeIndex == -1)
+		return false; // Nothing to clear
+
+	int size = this->mActiveEvents[activeIndex].GetEventCount();
+	int index;
+
+	for (int i = 0; i < size; i++)
+	{
+		index = (this->mActiveEvents[activeIndex])[i];
+		if (this->mLogEvents[index].GetType() == type) // Found
+		{
+			if (!this->mActiveEvents[activeIndex].ClearEvent(index))
+				return false; // Could not clear event
+
+			// Check if room is not active anymore.
+			// In that case, delete the active event
+			if (this->mActiveEvents[activeIndex].GetEventCount() == 0)
+			{
+				this->mActiveEvents.erase(this->mActiveEvents.begin() + activeIndex);
+			}
+
+			return true;
+		}
+	}
+
+	// The type of event wasn't active
+	return false;
+
+}
+
+std::vector<Event::Type> EventLog::GetEvents(int roomIndex) const
+{
+	std::vector<Event::Type> returnEvents;
+
+	int size;
+	int activeIndex = this->GetRoomActiveEventIndex(roomIndex);
 	
+	if (activeIndex != -1)
+		size = this->mActiveEvents[activeIndex].GetEventCount();
+	else
+		size = 0;
+	
+	returnEvents.reserve(size);
+	int index;
+
+	for (int i = 0; i < size; i++)
+	{
+		index = (this->mActiveEvents[activeIndex])[i];
+		returnEvents.push_back(this->mLogEvents[index].GetType());
+	}
+
+	return returnEvents;
+}
+
+int EventLog::GetEventCount() const
+{
+	return this->mLogEvents.size();
+}
+
+int EventLog::GetActiveEventCount() const
+{
+	return this->mActiveEvents.size();
 }
 
 
@@ -58,7 +144,7 @@ void EventLog::SaveToFile(std::string filePath)
 	std::ofstream file;
 	file.open(filePath);
 
-	for (int i = 0; i < this->mLogEvents.size(); i++)
+	for (int i = 0; i < (int)this->mLogEvents.size(); i++)
 	{
 		file << "EVENT TEXT" << "\n";
 	}
@@ -68,4 +154,21 @@ void EventLog::SaveToFile(std::string filePath)
 
 void EventLog::LoadFromFile(std::string filePath)
 {
+}
+
+
+/**
+*	Private
+*/
+
+int EventLog::GetRoomActiveEventIndex(int roomIndex) const
+{
+	for (int i = 0; i < (int)this->mActiveEvents.size(); i++)
+	{
+		if (this->mActiveEvents[i].GetRoomIndex() == roomIndex)
+			return i;
+	}
+
+	// Return -1 if room doesn't have any active events
+	return -1;
 }

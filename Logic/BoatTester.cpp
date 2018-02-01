@@ -2,83 +2,184 @@
 
 void BoatTester::TestBoat()
 {
-	ActiveLog *mActiveLog;
-	EventLog *mEventLog;
-	Boat *mBoat;
+	EventLog *pEventLog;
+	Boat *pBoat;
 
-	mActiveLog = new ActiveLog;
-	mEventLog = CreateEventLog(mActiveLog);
+	pEventLog = new EventLog;
 
 	/**
 	*	Create boat
 	*/
-	mBoat = CreateBoat(mEventLog);
+	pBoat = CreateBoat(pEventLog);
+
+
+
+	/**
+	*	Create auto event
+	*/
+	PrintHeader("Creating events to sensors");
+
+	std::cout << "Adding Fire to 'Maskinrum' in 'Huvuddäck'" << std::endl;
+	pBoat->CreateAutoEvent(Event::Fire, "Maskinrum", "Huvuddäck");
+
+	// Sensor is set not to register water
+	std::cout << "Adding Fire to 'Maskinrum' in 'Huvuddäck'" << std::endl;
+	pBoat->CreateAutoEvent(Event::Water, "Maskinrum", "Huvuddäck");
+
+	std::cout << "Adding Fire to 'Maskinrum' in 'Huvuddäck'" << std::endl;
+	pBoat->CreateAutoEvent(Event::Gas, "Maskinrum", "Huvuddäck");
+
+
+
+	/**
+	*	Check auto event
+	*/
+	std::vector<Event::Type> events;
+
+	events = pBoat->GetEventsInRoom("Maskinrum", "Huvuddäck");
+	std::cout << "\nChecking events in 'Maskinrum' in 'Huvuddäck':" << std::endl;
+	std::cout << "(Should be Fire and Gas only)" << std::endl;
+
+	std::cout << "* Fire...";
+	if (events[0] != Event::Fire)
+		throw ("Error expected Fire");
+	std::cout << "ok!" << std::endl;
+
+	std::cout << "* Gas...";
+	if (events[1] != Event::Gas)
+		throw ("Error expected Gas");
+	std::cout << "ok!" << std::endl;
+
+	if (events.size() != 2) // Should not register Event::Water
+		throw ("Error: sensor detecting types it shouldn't");
+	if (!(events[0] == Event::Fire && events[1] == Event::Gas))
+		throw ("Error wrong auto events");
+
+
+
+	/**
+	*	Create plot event
+	*/
+	PrintHeader("Creating events from plotter");
+
+	std::cout << "Adding Fire to 'Skyddsrum' in 'Trossdäck'" << std::endl;
+	pBoat->CreatePlotEvent(Event::Fire, "Skyddsrum", "Trossdäck");
+	
+	std::cout << "Adding Water to 'Skyddsrum' in 'Trossdäck'" << std::endl;
+	pBoat->CreatePlotEvent(Event::Water, "Skyddsrum", "Trossdäck");
+
+	std::cout << "Adding Gas to 'Skyddsrum' in 'Trossdäck'" << std::endl;
+	pBoat->CreatePlotEvent(Event::Gas, "Skyddsrum", "Trossdäck");
+
+
+
+	/**
+	*	Check plot event
+	*/
+	events = pBoat->GetEventsInRoom("Skyddsrum", "Trossdäck");
+	std::cout << "\nChecking events in 'Skyddsrum' in 'Trossdäck':" << std::endl;
+
+	if (events.size() != 3)
+		throw ("Error unexpected number of plot events handled");
+
+	std::string type;
+	for (int i = 0; i < 3; i++)
+	{
+		type = Event::GetString((Event::Type)i);
+		std::cout << "* " << type << "...";
+
+		if (events[i] != (Event::Type)i)
+			throw ("Error expected " + type);
+
+		std::cout << "ok!" << std::endl;
+	}
+
+
 
 	/**
 	*	Write boat to file
 	*/
-	WriteFile(mBoat, "../../SaveFiles/Testboat1.boat");
+	WriteFile(pBoat, "../../SaveFiles/Testboat1.boat");
+	std::cout << "Writing boat to 'SaveFiles/Testboat1.boat'." << std::endl;
+
+
 
 	/**
 	*	Read boat from file
 	*/
-	delete mBoat;
-	mBoat = new Boat;
-	mBoat->SetEventLog(mEventLog);
-	if (!ReadFile(mBoat, "../../SaveFiles/Testboat1.boat"))
+	delete pBoat;
+	pBoat = new Boat;
+	pBoat->SetEventLog(pEventLog);
+	if (!ReadFile(pBoat, "../../SaveFiles/Testboat1.boat"))
 	{
 		throw ("Error reading file");
 	}
+	std::cout << "Reading in boatfile from 'SaveFiles/Testboat1.boat'." << std::endl;
+
+
 
 	/**
 	*	Write boat to a new file
 	*/
-	WriteFile(mBoat, "../../SaveFiles/Testboat2.boat");
+	WriteFile(pBoat, "../../SaveFiles/Testboat2.boat");
+	std::cout << "Writing boat to 'SaveFiles/Testboat2.boat'." << std::endl;
+
+
 
 	/**
 	*	Compare the two files
 	*/
 	if (!CompareFiles("../../SaveFiles/Testboat1.boat", "../../SaveFiles/Testboat2.boat"))
-	{
 		throw ("Error missmatching files from Write and Read");
-	}
+
+
 
 	/**
-	*	Create auto event
+	*	Clear event
 	*/
-	this->mBoat->CreateAutoEvent(Event::Fire, "Maskingrum", "Huvuddäck");
+	pBoat->ClearEvent(Event::Fire, "Skyddsrum", "Trossdäck");
+	pBoat->ClearEvent(Event::Gas, "Skyddsrum", "Trossdäck");
+	pBoat->ClearEvent(Event::Water, "Skyddsrum", "Trossdäck");
+	
+
 
 	/**
-	*	Check auto event
+	*	Check cleared events
 	*/
+	events = pBoat->GetEventsInRoom("Skyddsrum", "Trossdäck");
 
-	/**
-	*	Create plot event
-	*/
-	this->mBoat->CreatePlotEvent(Event::Water, "Skyddsrum", "Trossdäck");
+	if (events.size() != 0)
+		throw ("Error unexpected amount of events after clearing");
 
-	/**
-	*	Check plot event
-	*/
+
 
 	/**
 	*	Check eventlog
 	*/
+	int eventCount;			// Should be 5 (6 events -1 that didn't register)
+	int activeEventCount;	// Should be 1 (one room is cleared)
+
+	eventCount = pEventLog->GetEventCount();
+	activeEventCount = pEventLog->GetActiveEventCount();
+
+	if (eventCount != 5)
+		throw ("Error unexpected amount of events in total");
+	if (activeEventCount != 1)
+		throw ("Error unexpected amount of active events");
 
 
-	delete mBoat;
-	delete mEventLog;
-	delete mActiveLog;
+	PrintHeader("Testing completed!");
+	delete pBoat;
+	delete pEventLog;
 }
 
 Boat* BoatTester::CreateBoat(EventLog *pEventLog) {
-	printHeader("Building boat 'Testskepp'");
+	PrintHeader("Building boat 'Testskepp'");
 
 	Boat *newBoat = new Boat;
 	newBoat->SetModelName("Testskepp");
 
-	const int nrOfInputs = 2;
-	int inputs[nrOfInputs] = {0, 2};
+	std::vector<Event::Type> inputs = {Event::Fire, Event::Gas};
 
 	std::cout << "Adding deck 'Bryggdäck'...";
 	newBoat->AddDeck("Bryggdäck");
@@ -88,72 +189,72 @@ Boat* BoatTester::CreateBoat(EventLog *pEventLog) {
 	newBoat->AddDeck("Trossdäck");
 	std::cout << "done!" << std::endl;
 
-	std::cout << "Adding rooms to deck 'Bryggdäck'..." << std::endl;
+	std::cout << "\nAdding rooms to deck 'Bryggdäck'..." << std::endl;
 	std::cout << "* slC...";
-	newBoat->AddRoom("slC", "Bryggdäck", inputs, nrOfInputs);
+	newBoat->AddRoom("slC", "Bryggdäck", inputs);
 	std::cout << "ok" << std::endl;
 	std::cout << "* SkyC...";
-	newBoat->AddRoom("SkyC", "Bryggdäck", inputs, nrOfInputs);
+	newBoat->AddRoom("SkyC", "Bryggdäck", inputs);
 	std::cout << "ok" << std::endl;
 	std::cout << "* Brygga...";
-	newBoat->AddRoom("Brygga", "Bryggdäck", inputs, nrOfInputs);
+	newBoat->AddRoom("Brygga", "Bryggdäck", inputs);
 	std::cout << "ok" << std::endl;
 	std::cout << "done!" << std::endl;
 
-	std::cout << "Adding rooms to deck 'Huvuddäck'..." << std::endl;
+	std::cout << "\nAdding rooms to deck 'Huvuddäck'..." << std::endl;
 	std::cout << "* Skyddäck...";
-	newBoat->AddRoom("Skyddäck", "Huvuddäck", inputs, nrOfInputs);
+	newBoat->AddRoom("Skyddäck", "Huvuddäck", inputs);
 	std::cout << "ok" << std::endl;
 	std::cout << "* Maskinrum...";
-	newBoat->AddRoom("Maskinrum", "Huvuddäck", inputs, nrOfInputs);
+	newBoat->AddRoom("Maskinrum", "Huvuddäck", inputs);
 	std::cout << "ok" << std::endl;
 	std::cout << "* Gång3...";
-	newBoat->AddRoom("Gång3", "Huvuddäck", inputs, nrOfInputs);
+	newBoat->AddRoom("Gång3", "Huvuddäck", inputs);
 	std::cout << "ok" << std::endl;
 	std::cout << "* Tambur...";
-	newBoat->AddRoom("Tambur", "Huvuddäck", inputs, nrOfInputs);
+	newBoat->AddRoom("Tambur", "Huvuddäck", inputs);
 	std::cout << "ok" << std::endl;
 	std::cout << "* Omformarrum...";
-	newBoat->AddRoom("Omformarrum", "Huvuddäck", inputs, nrOfInputs);
+	newBoat->AddRoom("Omformarrum", "Huvuddäck", inputs);
 	std::cout << "ok" << std::endl;
 	std::cout << "* CBRN...";
-	newBoat->AddRoom("CBRN", "Huvuddäck", inputs, nrOfInputs);
+	newBoat->AddRoom("CBRN", "Huvuddäck", inputs);
 	std::cout << "ok" << std::endl;
 	std::cout << "done!" << std::endl;
 
-	std::cout << "Adding rooms to deck 'Trossdäck'..." << std::endl;
+	std::cout << "\nAdding rooms to deck 'Trossdäck'..." << std::endl;
 	std::cout << "* Ammdurk...";
-	newBoat->AddRoom("Ammdurk", "Trossdäck", inputs, nrOfInputs);
+	newBoat->AddRoom("Ammdurk", "Trossdäck", inputs);
 	std::cout << "ok" << std::endl;
 	std::cout << "* Lastrum...";
-	newBoat->AddRoom("Lastrum", "Trossdäck", inputs, nrOfInputs);
+	newBoat->AddRoom("Lastrum", "Trossdäck", inputs);
 	std::cout << "ok" << std::endl;
 	std::cout << "* Maskinrum...";
-	newBoat->AddRoom("Maskinrum", "Trossdäck", inputs, nrOfInputs);
+	newBoat->AddRoom("Maskinrum", "Trossdäck", inputs);
 	std::cout << "ok" << std::endl;
 	std::cout << "* MC...";
-	newBoat->AddRoom("MC", "Trossdäck", inputs, nrOfInputs);
+	newBoat->AddRoom("MC", "Trossdäck", inputs);
 	std::cout << "ok" << std::endl;
 	std::cout << "* Gång1...";
-	newBoat->AddRoom("Gång1", "Trossdäck", inputs, nrOfInputs);
+	newBoat->AddRoom("Gång1", "Trossdäck", inputs);
 	std::cout << "ok" << std::endl;
 	std::cout << "* Apparatrum...";
-	newBoat->AddRoom("Apparatrum", "Trossdäck", inputs, nrOfInputs);
+	newBoat->AddRoom("Apparatrum", "Trossdäck", inputs);
 	std::cout << "ok" << std::endl;
 	std::cout << "* Gång2...";
-	newBoat->AddRoom("Gång2", "Trossdäck", inputs, nrOfInputs);
+	newBoat->AddRoom("Gång2", "Trossdäck", inputs);
 	std::cout << "ok" << std::endl;
 	std::cout << "* Hjälpmaskinrum...";
-	newBoat->AddRoom("Hjälpmaskinrum", "Trossdäck", inputs, nrOfInputs);
+	newBoat->AddRoom("Hjälpmaskinrum", "Trossdäck", inputs);
 	std::cout << "ok" << std::endl;
 	std::cout << "* Byssa...";
-	newBoat->AddRoom("Byssa", "Trossdäck", inputs, nrOfInputs);
+	newBoat->AddRoom("Byssa", "Trossdäck", inputs);
 	std::cout << "ok" << std::endl;
 	std::cout << "* SB Mäss...";
-	newBoat->AddRoom("SB Mäss", "Trossdäck", inputs, nrOfInputs);
+	newBoat->AddRoom("SB Mäss", "Trossdäck", inputs);
 	std::cout << "ok" << std::endl;
 	std::cout << "* Skyddsrum...";
-	newBoat->AddRoom("Skyddsrum", "Trossdäck", inputs, nrOfInputs);
+	newBoat->AddRoom("Skyddsrum", "Trossdäck", inputs);
 	std::cout << "ok" << std::endl;
 	std::cout << "done!" << std::endl;
 
@@ -162,29 +263,16 @@ Boat* BoatTester::CreateBoat(EventLog *pEventLog) {
 	*/
 	std::cout << std::endl;
 
-	std::cout << "Adding pointer from EventLog to Boat...";
+	std::cout << "\nAdding pointer from EventLog to Boat...";
 	newBoat->SetEventLog(pEventLog);
 	std::cout << "done!" << std::endl;
 
 	return newBoat;
 }
 
-EventLog* BoatTester::CreateEventLog(ActiveLog *pActiveLog)
-{
-	printHeader("Creating Event log");
-
-	EventLog *newEventLog = new EventLog;
-	std::cout << "Adding pointer from ActiveLog to EventLog...";
-	newEventLog->SetActiveLog(pActiveLog);
-	std::cout << "done!" << std::endl;
-
-	return newEventLog;
-
-}
-
 bool BoatTester::ReadFile(Boat *pBoat, std::string filePath)
 {
-	printHeader("Read boat from file");
+	PrintHeader("Read boat from file");
 
 	if (!pBoat->ReadFile(filePath))
 		return false;
@@ -194,14 +282,14 @@ bool BoatTester::ReadFile(Boat *pBoat, std::string filePath)
 
 void BoatTester::WriteFile(Boat *pBoat, std::string filePath)
 {
-	printHeader("Write boat to file");
+	PrintHeader("Write boat to file");
 
 	pBoat->WriteFile(filePath);
 }
 
 bool BoatTester::CompareFiles(std::string filePath1, std::string filePath2)
 {
-	printHeader("Comparing files");
+	PrintHeader("Comparing files");
 
 	std::cout << "Comparing '" << filePath1 << "' and '" << filePath2 << "'...";
 
@@ -245,7 +333,7 @@ bool BoatTester::CompareFiles(std::string filePath1, std::string filePath2)
 	return true;
 }
 
-void BoatTester::printHeader(std::string title)
+void BoatTester::PrintHeader(std::string title)
 {
 	std::cout << std::endl;
 

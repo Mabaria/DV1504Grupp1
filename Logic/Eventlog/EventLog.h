@@ -4,8 +4,7 @@
 #include <fstream>
 
 #include "LogEvent.h"
-#include "../Activelog/ActiveLog.h"
-
+#include "ActiveEvent.h"
 
 /**
 *	The log will be able to store/load content to/from a file
@@ -23,7 +22,7 @@
 *	EventLog need an ActiveLog to report active events to!
 */
 
-// TODO: Set filepath
+// TODO: Read/Write events
 
 class EventLog
 {
@@ -32,23 +31,25 @@ public:
 	EventLog();
 	~EventLog();
 
-	// Log specific
-	void SetActiveLog(ActiveLog *pActiveLog);
-
 	// Event Specific
-	int AddLogEvent(Event::Type type, int roomIndex); /* Pushing an event at the
-																											 end of the list, returns
-																											 index of event in the
-																											 active log */
-	std::vector<Event::Type> GetEvents(int activeEventIndex);
+	int AddEvent(Event::Type type, int roomIndex);	/* Pushing an event at the
+																										 end of the list, returns
+																										 index of event in the
+																										 active log */
+	bool ClearEvent(Event::Type type, int roomIndex);
+	std::vector<Event::Type> GetEvents(int roomIndex) const;
+	std::vector<Event::Type> GetEvents(std::string roomName) const;
+	int GetEventCount() const;
+	int GetActiveEventCount() const;
 	
 	// Disk specific
 	void SaveToFile(std::string filePath);
 	void LoadFromFile(std::string filePath);
 
-
 private:
 
+	int GetRoomActiveEventIndex(int roomIndex) const;
+
 	std::vector<LogEvent> mLogEvents;	// Containing all events in the system
-	ActiveLog *mpActiveLog;
+	std::vector<ActiveEvent> mActiveEvents;
 };

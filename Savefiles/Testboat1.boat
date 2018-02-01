@@ -12,7 +12,7 @@ r#0 Bryggdäck / slC / sensor -1 { 0 2 }
 r#1 Bryggdäck / SkyC / sensor -1 { 0 2 }
 r#2 Bryggdäck / Brygga / sensor -1 { 0 2 }
 r#3 Huvuddäck / Skyddäck / sensor -1 { 0 2 }
-r#4 Huvuddäck / Maskinrum / sensor -1 { 0 2 }
+r#4 Huvuddäck / Maskinrum / sensor 0 { 0 2 }
 r#5 Huvuddäck / Gång3 / sensor -1 { 0 2 }
 r#6 Huvuddäck / Tambur / sensor -1 { 0 2 }
 r#7 Huvuddäck / Omformarrum / sensor -1 { 0 2 }
@@ -27,4 +27,4 @@ r#15 Trossdäck / Gång2 / sensor -1 { 0 2 }
 r#16 Trossdäck / Hjälpmaskinrum / sensor -1 { 0 2 }
 r#17 Trossdäck / Byssa / sensor -1 { 0 2 }
 r#18 Trossdäck / SB Mäss / sensor -1 { 0 2 }
-r#19 Trossdäck / Skyddsrum / sensor -1 { 0 2 }
+r#19 Trossdäck / Skyddsrum / sensor 1 { 0 2 }

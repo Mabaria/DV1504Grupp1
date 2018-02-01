@@ -9,9 +9,6 @@
 #include "../Eventlog/EventLog.h"
 #include "../Event/Event.h"
 
-// TODO: Delete GetRoomIndex that only finds the room by name
-// (Two rooms can share the same name)
-
 class Boat
 {
 public:
@@ -30,8 +27,7 @@ public:
 	//void AddRoom(std::string roomName, std::string deckName);
 	void AddRoom(std::string roomName,
 		std::string deckName,
-		int inputs[],
-		int nrOfInputs);
+		std::vector<Event::Type> inputs);
 
 	// Log specific
 	void SetEventLog(EventLog *pEventLog);
@@ -40,6 +36,7 @@ public:
 	// Event specific
 	void CreateAutoEvent(Event::Type type, std::string roomName, std::string deckName);
 	void CreatePlotEvent(Event::Type type, std::string roomName, std::string deckName);
+	void ClearEvent(Event::Type type, std::string roomName, std::string deckName);
 	std::vector<Event::Type> GetEventsInRoom(std::string roomName, std::string deckName);
 
 	// Disk specific
@@ -52,7 +49,6 @@ public:
 private:
 	
 	// Returns -1 if item is not found
-	int GetRoomIndex(std::string roomName);
 	int GetRoomIndex(std::string roomName, std::string deckName);
 	int GetDeckIndex(std::string deckName);
 

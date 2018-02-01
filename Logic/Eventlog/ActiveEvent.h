@@ -10,12 +10,15 @@ public:
 	~ActiveEvent();
 	
 	// Event specific
-	void AddEvent(int index);
-	void RemoveEvent(int index);
+	bool AddEvent(int index);
+	bool ClearEvent(int index);
+	int GetEventCount() const;
+	int operator[](int index) const;
 
 	// Room specific
 	void SetRoomIndex(int index);
 	int GetRoomIndex() const;
+
 
 private:
 	
