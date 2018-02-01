@@ -1,20 +1,28 @@
 #pragma once
 
 #include <Windows.h>
+#include <vector>
 #include "Panel.h"
 #include "../../GraphicsEngine/DX/Direct3D.h"
 #include "MeshObject.h"
-#include <vector>
+#include "../../GraphicsEngine/Camera/Camera.h"
 
 class Panel3D : public Panel
 {
 public:
-	Panel3D(int width, int height, int top, int left, HWND handle, LPCTSTR title);
+	Panel3D(
+		int width, 
+		int height, 
+		int top, 
+		int left, 
+		HWND handle, 
+		LPCTSTR title);
 	~Panel3D();
 	
 	D3D11& rGetDirect3D();
 
-	// Creates buffers for and adds mesh objects into the vector of mesh objects.
+	// Creates buffers for and adds mesh 
+	// objects into the vector of mesh objects.
 	const bool AddMeshObject(
 		std::string name,
 		std::vector<std::vector<unsigned int>> indices, 
@@ -40,6 +48,7 @@ public:
 	// Updates the constant buffer of the mesh object with the given name.
 	const void UpdateConstantBuffer(std::string name);
 
+
 private:
 	D3D11 mDirect3D;
 	std::vector<MeshObject> mMeshObjects;
@@ -52,12 +61,14 @@ private:
 	
 	D3D11_INPUT_ELEMENT_DESC mInputDesc[3];
 
+	Camera mCamera;
+
 	// Buffer creators make a buffer to set to the last slot of the vector
 	// of buffers in the last mesh object of the vector of mesh objects.
 	const void CreateVertexBuffer(std::vector<Vertex> vertices);
 	const void CreateIndexBuffer(std::vector<unsigned int> indices);
 
 	// Creates the constant buffer for the last added mesh object.
-	const void CreateConstantBuffer();
+	const void CreateConstantBuffer(XMMATRIX *matrix, ID3D11Buffer **constantBuffer);
 
 };

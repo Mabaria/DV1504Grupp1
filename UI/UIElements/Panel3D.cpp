@@ -104,7 +104,9 @@ const bool Panel3D::AddMeshObject(
 		this->CreateIndexBuffer(indices[i]);
 		this->CreateVertexBuffer(vertices[i]);
 	}
-	this->CreateConstantBuffer();
+	this->CreateConstantBuffer(
+		this->mMeshObjects.back().rGetModelMatrix(), 
+		this->mMeshObjects.back().rGetConstantBuffer());
 
 	return result;
 }
@@ -186,16 +188,8 @@ const void Panel3D::CreateIndexBuffer(std::vector<unsigned int> indices)
 	this->mMeshObjects.back().AddIndexBuffer(&index_buffer);
 }
 
-const void Panel3D::CreateConstantBuffer()
+const void Panel3D::CreateConstantBuffer(XMMATRIX *matrix, ID3D11Buffer **constantBuffer)
 {
-	// Takes the mesh object with the parameter name.
-	MeshObject* p_mesh_object = &this->mMeshObjects.back();
-
-	// Takes the constant buffer and matrix from that mesh object.
-	ID3D11Buffer **constant_buffer = p_mesh_object->rGetConstantBuffer();
-	const XMMATRIX* model_matrix = p_mesh_object->rGetModelMatrix();
-
-
 	D3D11_BUFFER_DESC buffer_desc{};
 	buffer_desc.BindFlags		= D3D11_BIND_CONSTANT_BUFFER;
 	buffer_desc.Usage			= D3D11_USAGE_DYNAMIC;
@@ -203,13 +197,13 @@ const void Panel3D::CreateConstantBuffer()
 	buffer_desc.ByteWidth		= sizeof(XMMATRIX);
 
 	D3D11_SUBRESOURCE_DATA buffer_data{};
-	buffer_data.pSysMem = model_matrix;
+	buffer_data.pSysMem = matrix;
 
 	// Creates the buffer with the things.
 	if (FAILED(this->mDirect3D.GetDevice()->CreateBuffer(
 		&buffer_desc, 
 		&buffer_data, 
-		constant_buffer)))
+		constantBuffer)))
 	{
 		MessageBoxA(NULL, "Error creating constant buffer.", NULL, MB_OK);
 		exit(-1);
@@ -264,11 +258,18 @@ const void Panel3D::Draw()
 	// and draws them one by one.
 	for (int i = 0; i < (int)this->mMeshObjects.size(); i++)
 	{
+		constant_buffer = *this->mMeshObjects[i].rGetConstantBuffer();
+
+		// Setting the constant buffer to the vertex shader.
+		this->mDirect3D.GetContext()->VSSetConstantBuffers(
+			0,					// Start slot.
+			1,					// Number of buffers
+			&constant_buffer);	// Constant buffer.
+
 		for (int j = 0; j < this->mMeshObjects[i].GetNumberOfBuffers(); j++)
 		{
 			index_buffer	= *this->mMeshObjects[i].pGetIndexBuffer(j);
 			vertex_buffer	= *this->mMeshObjects[i].pGetVertexBuffer(j);
-			constant_buffer = *this->mMeshObjects[i].rGetConstantBuffer();
 
 			// Setting the index buffer to the input assembler.
 			this->mDirect3D.GetContext()->IASetVertexBuffers(
@@ -283,12 +284,6 @@ const void Panel3D::Draw()
 				index_buffer,			// Index buffer.
 				DXGI_FORMAT_R32_UINT,	// Format.
 				offset);				// Offset.
-
-			// Setting the constant buffer to the vertex shader.
-			this->mDirect3D.GetContext()->VSSetConstantBuffers(
-				0,					// Start slot.
-				1,					// Number of buffers
-				&constant_buffer);	// Constant buffer.
 
 			numIndices = (UINT)this->mMeshObjects[i].GetIndices()[j].size();
 			this->mDirect3D.GetContext()->DrawIndexed(
