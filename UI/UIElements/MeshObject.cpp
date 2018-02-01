@@ -8,7 +8,8 @@ MeshObject::MeshObject(std::string name,
 	this->mIndices	= indices;
 	this->mVertices	= vertices;
 
-	// Doesn't matter which one determines the size as they are (should be) equal.
+	// Doesn't matter which one determines the 
+	// size as they are (should be) equal.
 	this->mNumberOfBuffers = (int)indices.size();
 
 	this->mModelMatrix = XMMatrixIdentity();

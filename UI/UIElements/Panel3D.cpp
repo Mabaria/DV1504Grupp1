@@ -56,6 +56,10 @@ Panel3D::Panel3D(int width, int height, int top, int left, HWND handle, LPCTSTR 
 		D3D11_INPUT_PER_VERTEX_DATA, 
 		0 
 	};
+
+	this->mpCamera		= nullptr;
+	this->mpViewBuffer	= nullptr;
+	this->mpProjBuffer	= nullptr;
 }
 
 Panel3D::~Panel3D()
@@ -79,6 +83,16 @@ Panel3D::~Panel3D()
 	{			
 		this->mpInputLayout->Release();
 		this->mpInputLayout = nullptr;
+	}
+	if (this->mpViewBuffer)
+	{			
+		this->mpViewBuffer->Release();
+		this->mpViewBuffer = nullptr;
+	}
+	if (this->mpProjBuffer)
+	{			
+		this->mpProjBuffer->Release();
+		this->mpProjBuffer = nullptr;
 	}
 }
 
@@ -214,29 +228,104 @@ const void Panel3D::UpdateConstantBuffer(std::string name)
 {
 	// Getting the mesh object of the given name.
 	MeshObject *mesh_object = this->rGetMeshObject(name);
-
-	// Getting the constant buffer and model matrix from that mesh object.
-	ID3D11Buffer *constant_buffer = *mesh_object->rGetConstantBuffer();
-	const XMMATRIX *model_matrix = mesh_object->rGetModelMatrix();
-
-	// Mapping the buffer data to the CPU in order to change it,
-	// then unmapping it again, which updates the buffer contents.
-	D3D11_MAPPED_SUBRESOURCE data_ptr;
-	this->mDirect3D.GetContext()->Map(
-		constant_buffer, 
-		0, 
-		D3D11_MAP_WRITE_DISCARD, 
-		0, 
-		&data_ptr);
 	
-	memcpy(data_ptr.pData, model_matrix, sizeof(XMMATRIX));
-	this->mDirect3D.GetContext()->Unmap(constant_buffer, 0);
+	if (mesh_object)
+	{
+		// Getting the constant buffer and model matrix from that mesh object.
+		ID3D11Buffer *constant_buffer = *mesh_object->rGetConstantBuffer();
+		const XMMATRIX *model_matrix = mesh_object->rGetModelMatrix();
 
+		// Mapping the buffer data to the CPU in order to change it,
+		// then unmapping it again, which updates the buffer contents.
+		D3D11_MAPPED_SUBRESOURCE data_ptr;
+		this->mDirect3D.GetContext()->Map(
+			constant_buffer,
+			0,
+			D3D11_MAP_WRITE_DISCARD,
+			0,
+			&data_ptr);
+
+		memcpy(data_ptr.pData, model_matrix, sizeof(XMMATRIX));
+		this->mDirect3D.GetContext()->Unmap(constant_buffer, 0);
+	}
+}
+
+const void Panel3D::UpdateConstantBuffer(
+	XMMATRIX * matrix, 
+	ID3D11Buffer ** buffer)
+{
+	if (matrix && *buffer)
+	{
+		// Mapping the buffer data to the CPU in order to change it,
+		// then unmapping it again, which updates the buffer contents.
+		D3D11_MAPPED_SUBRESOURCE data_ptr;
+		this->mDirect3D.GetContext()->Map(
+			*buffer,
+			0,
+			D3D11_MAP_WRITE_DISCARD,
+			0,
+			&data_ptr);
+
+		memcpy(data_ptr.pData, matrix, sizeof(XMMATRIX));
+		this->mDirect3D.GetContext()->Unmap(*buffer, 0);
+	}
+}
+
+const void Panel3D::UpdateConstantBuffer(int index)
+{
+	if (index > -1 && index < (int)this->mMeshObjects.size())
+	{
+		// Getting the mesh object of the given name.
+		MeshObject *mesh_object = &this->mMeshObjects[index];
+
+		// Getting the constant buffer and model matrix from that mesh object.
+		ID3D11Buffer *constant_buffer = *mesh_object->rGetConstantBuffer();
+		const XMMATRIX *model_matrix = mesh_object->rGetModelMatrix();
+
+		// Mapping the buffer data to the CPU in order to change it,
+		// then unmapping it again, which updates the buffer contents.
+		D3D11_MAPPED_SUBRESOURCE data_ptr{};
+		this->mDirect3D.GetContext()->Map(
+			constant_buffer,
+			0,
+			D3D11_MAP_WRITE_DISCARD,
+			0,
+			&data_ptr);
+
+		memcpy(data_ptr.pData, model_matrix, sizeof(XMMATRIX));
+		this->mDirect3D.GetContext()->Unmap(constant_buffer, 0);
+	}
+}
+
+const void Panel3D::SetCamera(Camera * camera)
+{
+	this->mpCamera = camera;
+
+	this->CreateConstantBuffer(
+		&this->mpCamera->GetViewMatrix(), 
+		&this->mpViewBuffer);
+	this->CreateConstantBuffer(
+		&this->mpCamera->GetProjectionMatrix(), 
+		&this->mpProjBuffer);
 }
 
 const void Panel3D::Update()
 {
-	// TODO: Update the panel?
+	// Updating the constant buffers of the mesh objects.
+	for (int i = 0; i < (int)this->mMeshObjects.size(); i++)
+	{
+		UpdateConstantBuffer(i);
+	}
+	if (this->mpCamera)
+	{
+		// Updating the camera buffers.
+		UpdateConstantBuffer(
+			&this->mpCamera->GetViewMatrix(),
+			&this->mpViewBuffer);
+		UpdateConstantBuffer(
+			&this->mpCamera->GetProjectionMatrix(),
+			&this->mpProjBuffer);
+	}
 }
 
 const void Panel3D::Draw()
@@ -253,6 +342,18 @@ const void Panel3D::Draw()
 	ID3D11Buffer* index_buffer		= nullptr;
 	ID3D11Buffer* constant_buffer	= nullptr;
 	UINT numIndices = 0;
+
+	this->mDirect3D.GetContext()->VSSetConstantBuffers(
+		1,
+		1,
+		&this->mpViewBuffer
+	);
+
+	this->mDirect3D.GetContext()->VSSetConstantBuffers(
+		2,
+		1,
+		&this->mpProjBuffer
+	);
 
 	// Takes every set of buffers from every mesh object in the panel
 	// and draws them one by one.

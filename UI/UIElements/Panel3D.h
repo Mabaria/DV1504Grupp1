@@ -45,9 +45,12 @@ public:
 	// of the parameter name.
 	MeshObject* rGetMeshObject(std::string name);
 
-	// Updates the constant buffer of the mesh object with the given name.
+	// Updates constant buffers with matrices.
 	const void UpdateConstantBuffer(std::string name);
+	const void UpdateConstantBuffer(XMMATRIX *matrix, ID3D11Buffer **buffer);
+	const void UpdateConstantBuffer(int index);
 
+	const void SetCamera(Camera *camera);
 
 private:
 	D3D11 mDirect3D;
@@ -61,7 +64,9 @@ private:
 	
 	D3D11_INPUT_ELEMENT_DESC mInputDesc[3];
 
-	Camera mCamera;
+	Camera *mpCamera;
+	ID3D11Buffer *mpViewBuffer;
+	ID3D11Buffer *mpProjBuffer;
 
 	// Buffer creators make a buffer to set to the last slot of the vector
 	// of buffers in the last mesh object of the vector of mesh objects.
@@ -69,6 +74,8 @@ private:
 	const void CreateIndexBuffer(std::vector<unsigned int> indices);
 
 	// Creates the constant buffer for the last added mesh object.
-	const void CreateConstantBuffer(XMMATRIX *matrix, ID3D11Buffer **constantBuffer);
+	const void CreateConstantBuffer(
+		XMMATRIX *matrix, 
+		ID3D11Buffer **constantBuffer);
 
 };

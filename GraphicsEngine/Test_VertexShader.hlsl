@@ -5,12 +5,36 @@ struct VS_IN
 	float2 tex : TEXCOORD;
 };
 
-cbuffer matrix_buffer : register (b0)
+struct VS_OUT
 {
-	matrix model_matrix;
+	float4 pos : SV_POSITION;
+	float3 worldPos : POSITION;
+	float3 nor : NORMAL;
+	float2 tex : TEXCOORD;
+};
+
+cbuffer model_buffer : register (b0)
+{
+	matrix model;
 }
 
-float4 main( VS_IN input ) : SV_POSITION
+cbuffer view_buffer : register (b1)
 {
-	return mul(model_matrix, float4(input.pos, 1.0f));
+	matrix view;
+}
+
+cbuffer proj_buffer : register (b2)
+{
+	matrix proj;
+}
+
+VS_OUT main( VS_IN input )
+{
+	VS_OUT output;
+	matrix mvp		= mul(model, mul(proj, view));
+	output.worldPos = mul(model, input.pos);
+	output.pos		= mul(mvp, float4(input.pos, 1.0f));
+	output.nor		= input.nor;
+	output.tex		= input.tex;
+	return output;
 }
