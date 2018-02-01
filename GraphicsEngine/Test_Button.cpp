@@ -16,26 +16,26 @@ void Test_Button()
 	{
 		window.Update();
 		
-		if (mouse.GetMousePositionPercentage().x <
+		if (Mouse::GetPositionPercentage().x <
 			button.GetBoundingBoxPercentage().right &&
-			mouse.GetMousePositionPercentage().x >
+			mouse.GetPositionPercentage().x >
 			button.GetBoundingBoxPercentage().left &&
-			mouse.GetMousePositionPercentage().y <
+			mouse.GetPositionPercentage().y <
 			button.GetBoundingBoxPercentage().bottom &&
-			mouse.GetMousePositionPercentage().y >
+			mouse.GetPositionPercentage().y >
 			button.GetBoundingBoxPercentage().top &&
 			mouse.IsButtonDown(Buttons::Left))
 		{
 			button.SetButtonStatus(BUTTON_STATE::CLICKED);
 			
 		}
-		else if (mouse.GetMousePositionPercentage().x <
+		else if (mouse.GetPositionPercentage().x <
 			button.GetBoundingBoxPercentage().right &&
-			mouse.GetMousePositionPercentage().x >
+			mouse.GetPositionPercentage().x >
 			button.GetBoundingBoxPercentage().left &&
-			mouse.GetMousePositionPercentage().y <
+			mouse.GetPositionPercentage().y <
 			button.GetBoundingBoxPercentage().bottom &&
-			mouse.GetMousePositionPercentage().y >
+			Mouse::GetPositionPercentage().y >
 			button.GetBoundingBoxPercentage().top)
 		{
 			button.SetButtonStatus(BUTTON_STATE::HOVER);
