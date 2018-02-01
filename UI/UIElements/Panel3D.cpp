@@ -18,11 +18,17 @@ Panel3D::Panel3D(int width, int height, int top, int left, HWND handle, LPCTSTR 
 		GetModuleHandle(0),
 		0);	
 	this->mDirect3D.Init(this->mPanelWindow);
+	
 	ShowWindow(this->mPanelWindow, SW_NORMAL);
+
+	// TEMP
+	this->mpSamplerState = nullptr;
+	this->mSamplerDesc = {};
 }
 
 Panel3D::~Panel3D()
 {
+	//this->mpSamplerState->Release();
 }
 
 D3D11 & Panel3D::rGetDirect3D()
@@ -78,12 +84,23 @@ bool Panel3D::CreateShadersAndSetup(
 	// Setting shaders to the pipeline.
 	this->mDirect3D.GetContext()->VSSetShader(*pVertexshader, nullptr, 0);
 	this->mDirect3D.GetContext()->GSSetShader(*pGeometryShader, nullptr, 0);
-	this->mDirect3D.GetContext()->PSSetShader(*pPixelShader, nullptr, 0);
+	this->mDirect3D.GetContext()->PSSetShader(*pPixelShader, nullptr, 0); 
 
 	// Setting up input assembler.
 	this->mDirect3D.GetContext()->IASetPrimitiveTopology
 	(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	this->mDirect3D.GetContext()->IASetInputLayout(*pInputLayout);
+
+	// Create sampler
+	this->mSamplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+	this->mSamplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+	this->mSamplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+
+	HRESULT hr = this->mDirect3D.GetDevice()->CreateSamplerState(
+		&this->mSamplerDesc, 
+		&this->mpSamplerState
+	);
+	this->mDirect3D.GetContext()->PSGetSamplers(0, 1, &this->mpSamplerState);
 
 	return result;
 }
@@ -155,10 +172,14 @@ const void Panel3D::Draw()
 	ID3D11Buffer* index_buffer	= nullptr;
 	UINT numIndices = 0;
 
+
 	// Takes every set of buffers from every mesh object in the panel
 	// and draws them one by one.
 	for (int i = 0; i < (int)this->mMeshObjects.size(); i++)
 	{
+		ID3D11ShaderResourceView* srv = this->mMeshObjects[0].GetResource();
+		this->mDirect3D.GetContext()->PSSetShaderResources(0, 1, &srv);
+
 		for (int j = 0; j < this->mMeshObjects[i].GetNumberOfBuffers(); j++)
 		{
 			index_buffer	= *this->mMeshObjects[i].pGetIndexBuffer(j);

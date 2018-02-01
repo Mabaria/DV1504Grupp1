@@ -23,9 +23,11 @@ class D3D11
 public:
 	D3D11();
 	D3D11(
-		/*const HWND& window,*/
 		const int width, 
 		const int height);
+	D3D11(
+		const Size size
+	);
 	~D3D11();
 
 	void Init(HWND window);

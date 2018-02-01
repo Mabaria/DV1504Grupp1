@@ -1,12 +1,12 @@
-Texture2D font3D : register(t0);
-sampler ss : register(s0);
+Texture2D font3D	: register(t0);
+sampler ss			: register(s0);
 
-struct FragmentData {
+struct PixelData {
 	float4 pos		: SV_POSITION;
 	float2 texCoord : TEXCOORD0;
 };
 
-float4 main(FragmentData input) : SV_TARGET0
+float4 main(PixelData input) : SV_TARGET0
 {
 
 	float3 rgb = font3D.Sample(ss, input.texCoord.xy);

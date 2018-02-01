@@ -11,12 +11,43 @@ D3D11::D3D11()
 }
 
 D3D11::D3D11(
-	/*const HWND& window,*/ 
 	const int width, 
 	const int height)
 {
 	this->mSize.width = width;
 	this->mSize.height = height;
+
+	this->mDevice = nullptr;
+	this->mContext = nullptr;
+	this->mSwapChain = nullptr;
+	this->mBackBuffer = nullptr;
+	this->mDepthBuffer = nullptr;
+
+	this->mModeDesc = { 0 };
+
+	// -- Sample --
+	this->mSampleDesc = { 0 };
+	this->mSampleDesc.Count = 1;
+	this->mSampleDesc.Quality = 0;
+
+	// -- Viewport --
+	this->mViewport.TopLeftX = 0.0f;
+	this->mViewport.TopLeftY = 0.0f;
+	this->mViewport.Width = (float)this->mSize.width;
+	this->mViewport.Height = (float)this->mSize.height;
+	this->mViewport.MinDepth = 0.1f;
+	this->mViewport.MaxDepth = 1.0f;
+
+	this->mClearColor[0] = 0.0f;
+	this->mClearColor[1] = 0.0f;
+	this->mClearColor[2] = 0.0f;
+	this->mClearColor[3] = 1.0f;
+}
+
+D3D11::D3D11(const Size size)
+{
+	this->mSize.width = size.width;
+	this->mSize.height = size.height;
 
 	this->mDevice = nullptr;
 	this->mContext = nullptr;
@@ -61,6 +92,24 @@ void D3D11::Init(HWND window)
 
 	this->mContext->RSSetViewports(1, &this->mViewport);
 	this->ChangeSize(this->mSize);
+	
+	// Create Blending
+	ID3D11BlendState* bs = nullptr;
+	D3D11_BLEND_DESC blend_desc = { 0 };
+	blend_desc.RenderTarget[0].BlendEnable = TRUE;
+	blend_desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+	blend_desc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+	blend_desc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+	blend_desc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	blend_desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ZERO;
+	blend_desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+	blend_desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	this->mDevice->CreateBlendState(&blend_desc, &bs);
+
+	float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+	UINT sampleMask = 0xffffffff;
+	this->mContext->OMSetBlendState(bs, blendFactor, sampleMask);
+	bs->Release();
 }
 
 void D3D11::ChangeClearColor(

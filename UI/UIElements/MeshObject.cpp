@@ -11,6 +11,8 @@ MeshObject::MeshObject(std::string name,
 	// Doesn't matter which one determines the size as they are (should be) equal.
 	this->mNumberOfBuffers = (int)indices.size();
 	this->mWorld		   = XMMatrixIdentity();
+
+	this->mpSrv = nullptr;
 }
 
 MeshObject::~MeshObject()
@@ -27,6 +29,12 @@ MeshObject::~MeshObject()
 			this->mpVertexBuffers[i]->Release();
 			this->mpVertexBuffers[i] = nullptr;
 		}
+	}
+
+	if (this->mpSrv)
+	{
+		this->mpSrv->Release();
+		this->mpSrv = nullptr;
 	}
 }
 
@@ -83,4 +91,32 @@ const void MeshObject::AddVertexBuffer(ID3D11Buffer **vertexBuffer)
 const void MeshObject::AddIndexBuffer(ID3D11Buffer **indexBuffer)
 {
 	this->mpIndexBuffers.push_back(*indexBuffer);
+}
+
+
+
+void MeshObject::Draw(ID3D11DeviceContext& context)
+{
+	context.PSSetShaderResources(0, 1, &this->mpSrv);
+}
+
+const bool MeshObject::SetTexture(ID3D11Device * device, const wchar_t* path)
+{
+	bool result = true;
+	HRESULT hr = DirectX::CreateDDSTextureFromFile(
+		device,
+		path,
+		nullptr,
+		&this->mpSrv
+	);
+
+	if (FAILED(hr))
+		result = false;
+
+	return result;
+}
+
+ID3D11ShaderResourceView * MeshObject::GetResource()
+{
+	return this->mpSrv;
 }

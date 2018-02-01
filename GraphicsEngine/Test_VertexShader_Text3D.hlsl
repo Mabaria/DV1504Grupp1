@@ -3,14 +3,14 @@ struct VertexData {
 	float2 texCoord : TEXCOORD0;
 };
 
-struct FragmentData {
+struct PixelData {
 	float4 pos		: SV_POSITION;
 	float2 texCoord : TEXCOORD0;
 };
 
-FragmentData main(VertexData input)
+PixelData main(VertexData input)
 {
-	FragmentData output = (FragmentData)0;
+	PixelData output = (PixelData)0;
 
 	output.pos = input.pos;
 	output.texCoord = input.texCoord;

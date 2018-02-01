@@ -52,4 +52,9 @@ private:
 	// in the vector of mesh objects and create a buffer from the data provided.
 	const void CreateVertexBuffer(std::vector<Vertex> vertices);
 	const void CreateIndexBuffer(std::vector<unsigned int> indices);
+
+	// TEMP
+
+	ID3D11SamplerState *mpSamplerState;
+	D3D11_SAMPLER_DESC mSamplerDesc;
 };

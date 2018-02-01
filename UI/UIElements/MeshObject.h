@@ -4,6 +4,7 @@
 #include <DirectXMath.h>
 #include <d3d11.h>
 #include "../../GraphicsEngine/Parsing/Mesh.h"
+#include <DDSTextureLoader.h>
 
 using namespace DirectX;
 
@@ -37,6 +38,11 @@ public:
 	const void AddVertexBuffer(ID3D11Buffer **vertexBuffer);
 	const void AddIndexBuffer(ID3D11Buffer **indexBuffer);
 
+	// TEMP
+	virtual void Draw(ID3D11DeviceContext& context);
+	const bool SetTexture(ID3D11Device* device, const wchar_t* path);
+	ID3D11ShaderResourceView* GetResource();
+
 private:
 	std::string mName;
 	std::vector<std::vector<unsigned int>> mIndices;
@@ -48,4 +54,7 @@ private:
 	int mNumberOfBuffers;
 
 	XMMATRIX mWorld;
+
+	// TEMP
+	ID3D11ShaderResourceView *mpSrv;
 };

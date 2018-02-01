@@ -154,6 +154,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\GraphicsEngine\Text3D.h" />
     <ClInclude Include="..\..\UI\UIElements\MeshObject.h" />
     <ClInclude Include="..\..\UI\UIElements\Test_Panel.h" />
     <ClInclude Include="Direct3D.h" />
@@ -187,6 +188,7 @@
     <ClCompile Include="..\..\GraphicsEngine\Parsing\Test_Boat.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\Parsing\Test_Mesh.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\Test_Graphics.cpp" />
+    <ClCompile Include="..\..\GraphicsEngine\Text3D.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\Window.cpp" />
     <ClCompile Include="..\..\IO\InputDevice.cpp" />
     <ClCompile Include="..\..\IO\Keyboard.cpp" />

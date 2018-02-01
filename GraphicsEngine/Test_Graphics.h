@@ -8,3 +8,4 @@
 void Test_Window();
 void Test_D3D11();
 void Test_Text3D();
+void Test_PanelAndText();

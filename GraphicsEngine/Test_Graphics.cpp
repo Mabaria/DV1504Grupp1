@@ -1,6 +1,8 @@
 #include "../GraphicsEngine/Test_Graphics.h"
 
 #include <DDSTextureLoader.h>
+#include "../UI/UIElements/Panel3D.h"
+#include "Text3D.h"
 
 void Test_Window()
 {
@@ -146,20 +148,24 @@ void Test_Text3D()	// !!! NOTE: Render transparent object last !!!
 	Window window(L"Test_Text3D", 1280, 720);
 
 	D3D11 direct3D(
-		window.GetWindow(),
 		window.GetClientSize().width,
 		window.GetClientSize().height
 	);
 
+	direct3D.Init(
+		window.GetWindow());
 
-	ID3D11SamplerState *ss = nullptr;
+
+
 	ID3D11ShaderResourceView *srv = nullptr;
 	HRESULT hr = DirectX::CreateDDSTextureFromFile(
 		direct3D.GetDevice(),
 		L"Font3D.DDS",
 		nullptr,
 		&srv
-	);
+	);	
+	
+	ID3D11SamplerState *ss = nullptr;
 	D3D11_SAMPLER_DESC sampler_desc{};
 	sampler_desc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
 	sampler_desc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
@@ -281,4 +287,115 @@ void Test_Text3D()	// !!! NOTE: Render transparent object last !!!
 	srv2->Release();
 	ss->Release();
 	vertex_buffer2->Release();
+}
+
+void Test_PanelAndText()
+{
+	std::vector<std::vector<Vertex>> vertices;
+
+	Vertex leftD = {
+		-0.5f, -0.5f, 0.5f,
+		 0.0f,  0.0f, 0.0f,
+		 0.0f,  1.0f,
+	};
+
+	Vertex leftT = {
+		-0.5f, 0.5f, 0.5f,
+		 0.0f, 0.0f, 0.0f,
+		 0.0f, 1.0f,
+	};
+
+	Vertex rightD = {
+		0.5f, -0.5f, 0.5f,
+		0.0f,  0.0f, 0.0f,
+		0.0f,  1.0f,
+	};
+	
+	Vertex rightT = {
+		0.5f, 0.5f, 0.5f,
+		0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f,
+	};
+
+	std::vector<Vertex> vert1;
+	vert1.push_back(leftD);
+	vert1.push_back(leftT);
+	vert1.push_back(rightD);
+	vert1.push_back(rightT);
+
+	vertices.push_back(vert1);
+
+	std::vector<std::vector<unsigned int>> indices;
+
+	std::vector<unsigned int> i1;
+	i1.push_back(0);
+	i1.push_back(1);
+	i1.push_back(2);
+
+	i1.push_back(1);
+	i1.push_back(3);
+	i1.push_back(2);
+
+	indices.push_back(i1);
+
+	Window win(L"Test", 1280, 720);
+
+	D3D11 d3d(win.GetClientSize());
+	d3d.Init(win.GetWindow());
+
+	MeshObject t3d(
+		"text",
+		indices,
+		vertices
+	);
+
+	std::wstring s = L"Font3D.DDS";
+	const wchar_t* path = std::wstring(L"Font3D.DDS").c_str();
+	
+	if (t3d.SetTexture(d3d.GetDevice(), path))
+		std::cout << "Failed!" << std::endl;
+
+	Panel3D p3d(
+		win.GetClientSize().width,
+		win.GetClientSize().height,
+		0,
+		0,
+		win.GetWindow(),
+		L"Test"
+	);
+
+	ID3D11InputLayout *pInputLayout = nullptr;
+	ID3D11VertexShader *pVS = nullptr;
+	ID3D11GeometryShader *pGS = nullptr;
+	ID3D11PixelShader *pPS = nullptr;
+	D3D11_INPUT_ELEMENT_DESC input_desc[] = {
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+	};
+
+	p3d.CreateShadersAndSetup(
+		L"../../GraphicsEngine/Test_VertexShader.hlsl",
+		L"",
+		L"../../GraphicsEngine/Test_PixelShader.hlsl",
+		&pVS,
+		&pGS,
+		&pPS,
+		input_desc,
+		3,
+		&pInputLayout
+	);
+
+	p3d.AddMeshObject(t3d.GetName(), t3d.GetIndices(), t3d.GetVertices());
+
+	win.Open();
+	while (win.IsOpen())
+	{
+		win.Update();
+		p3d.Draw();
+	}
+
+	pInputLayout->Release();
+	pVS->Release();
+	pPS->Release();
 }
