@@ -19,10 +19,67 @@ Panel3D::Panel3D(int width, int height, int top, int left, HWND handle, LPCTSTR 
 		0);	
 	this->mDirect3D.Init(this->mPanelWindow);
 	ShowWindow(this->mPanelWindow, SW_NORMAL);
+
+	this->mpVertexShader	= nullptr;
+	this->mpGeometryShader	= nullptr;
+	this->mpPixelShader		= nullptr;
+	this->mpInputLayout		= nullptr;	
+
+	// Input element description did not want to be initialized any other way.
+	this->mInputDesc[0] = 
+	{ 
+		"POSITION", 
+		0, 
+		DXGI_FORMAT_R32G32B32_FLOAT, 
+		0, 
+		0, 
+		D3D11_INPUT_PER_VERTEX_DATA, 
+		0
+	};
+	this->mInputDesc[1] = 
+	{ 
+		"NORMAL", 
+		0, 
+		DXGI_FORMAT_R32G32B32_FLOAT, 
+		0, 
+		12, 
+		D3D11_INPUT_PER_VERTEX_DATA, 
+		0 
+	};
+	this->mInputDesc[2] = 
+	{ 
+		"TEXCOORD", 
+		0, 
+		DXGI_FORMAT_R32G32_FLOAT, 
+		0, 
+		24, 
+		D3D11_INPUT_PER_VERTEX_DATA, 
+		0 
+	};
 }
 
 Panel3D::~Panel3D()
 {
+	if (this->mpVertexShader)
+	{
+		this->mpVertexShader->Release();
+		this->mpVertexShader = nullptr;
+	}
+	if (this->mpGeometryShader)
+	{		  
+		this->mpGeometryShader->Release();
+		this->mpGeometryShader = nullptr;
+	}
+	if (this->mpPixelShader)
+	{
+		this->mpPixelShader->Release();
+		this->mpPixelShader = nullptr;
+	}
+	if (this->mpInputLayout)
+	{			
+		this->mpInputLayout->Release();
+		this->mpInputLayout = nullptr;
+	}
 }
 
 D3D11 & Panel3D::rGetDirect3D()
@@ -44,46 +101,39 @@ const bool Panel3D::AddMeshObject(
 	this->mMeshObjects.push_back(MeshObject(name, indices, vertices));
 	for (int i = 0; i < this->mMeshObjects.back().GetNumberOfBuffers(); i++)
 	{
-		/*this->mMeshObjects.back().AddIndexBuffer();
-		this->mMeshObjects.back().AddVertexBuffer();*/
 		this->CreateIndexBuffer(indices[i]);
 		this->CreateVertexBuffer(vertices[i]);
 	}
+	this->CreateConstantBuffer();
 
 	return result;
 }
 
 bool Panel3D::CreateShadersAndSetup(
-	LPCWSTR					 vertexShaderPath, 
-	LPCWSTR					 geometryShaderPath, 
-	LPCWSTR					 pixelShaderPath, 
-	ID3D11VertexShader **	 pVertexshader, 
-	ID3D11GeometryShader **  pGeometryShader, 
-	ID3D11PixelShader **	 pPixelShader, 
-	D3D11_INPUT_ELEMENT_DESC inputElementDesc[], 
-	UINT					 nrOfElements, 
-	ID3D11InputLayout **	 pInputLayout)
+	LPCWSTR	vertexShaderPath, 
+	LPCWSTR	geometryShaderPath, 
+	LPCWSTR	pixelShaderPath)
 {
 	bool result = this->mDirect3D.CreateShaders(
 		vertexShaderPath,
 		geometryShaderPath,
 		pixelShaderPath,
-		pVertexshader,
-		pGeometryShader,
-		pPixelShader,
-		inputElementDesc,
-		nrOfElements,
-		pInputLayout);
+		&this->mpVertexShader,
+		&this->mpGeometryShader,
+		&this->mpPixelShader,
+		this->mInputDesc,
+		sizeof(mInputDesc)/sizeof(D3D11_INPUT_ELEMENT_DESC),
+		&this->mpInputLayout);
 
 	// Setting shaders to the pipeline.
-	this->mDirect3D.GetContext()->VSSetShader(*pVertexshader, nullptr, 0);
-	this->mDirect3D.GetContext()->GSSetShader(*pGeometryShader, nullptr, 0);
-	this->mDirect3D.GetContext()->PSSetShader(*pPixelShader, nullptr, 0);
+	this->mDirect3D.GetContext()->VSSetShader(this->mpVertexShader, nullptr, 0);
+	this->mDirect3D.GetContext()->GSSetShader(this->mpGeometryShader, nullptr, 0);
+	this->mDirect3D.GetContext()->PSSetShader(this->mpPixelShader, nullptr, 0);
 
 	// Setting up input assembler.
 	this->mDirect3D.GetContext()->IASetPrimitiveTopology
 	(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	this->mDirect3D.GetContext()->IASetInputLayout(*pInputLayout);
+	this->mDirect3D.GetContext()->IASetInputLayout(this->mpInputLayout);
 
 	return result;
 }
@@ -136,6 +186,60 @@ const void Panel3D::CreateIndexBuffer(std::vector<unsigned int> indices)
 	this->mMeshObjects.back().AddIndexBuffer(&index_buffer);
 }
 
+const void Panel3D::CreateConstantBuffer()
+{
+	// Takes the mesh object with the parameter name.
+	MeshObject* p_mesh_object = &this->mMeshObjects.back();
+
+	// Takes the constant buffer and matrix from that mesh object.
+	ID3D11Buffer **constant_buffer = p_mesh_object->rGetConstantBuffer();
+	const XMMATRIX* model_matrix = p_mesh_object->rGetModelMatrix();
+
+
+	D3D11_BUFFER_DESC buffer_desc{};
+	buffer_desc.BindFlags		= D3D11_BIND_CONSTANT_BUFFER;
+	buffer_desc.Usage			= D3D11_USAGE_DYNAMIC;
+	buffer_desc.CPUAccessFlags	= D3D11_CPU_ACCESS_WRITE;
+	buffer_desc.ByteWidth		= sizeof(XMMATRIX);
+
+	D3D11_SUBRESOURCE_DATA buffer_data{};
+	buffer_data.pSysMem = model_matrix;
+
+	// Creates the buffer with the things.
+	if (FAILED(this->mDirect3D.GetDevice()->CreateBuffer(
+		&buffer_desc, 
+		&buffer_data, 
+		constant_buffer)))
+	{
+		MessageBoxA(NULL, "Error creating constant buffer.", NULL, MB_OK);
+		exit(-1);
+	}
+}
+
+const void Panel3D::UpdateConstantBuffer(std::string name)
+{
+	// Getting the mesh object of the given name.
+	MeshObject *mesh_object = this->rGetMeshObject(name);
+
+	// Getting the constant buffer and model matrix from that mesh object.
+	ID3D11Buffer *constant_buffer = *mesh_object->rGetConstantBuffer();
+	const XMMATRIX *model_matrix = mesh_object->rGetModelMatrix();
+
+	// Mapping the buffer data to the CPU in order to change it,
+	// then unmapping it again, which updates the buffer contents.
+	D3D11_MAPPED_SUBRESOURCE data_ptr;
+	this->mDirect3D.GetContext()->Map(
+		constant_buffer, 
+		0, 
+		D3D11_MAP_WRITE_DISCARD, 
+		0, 
+		&data_ptr);
+	
+	memcpy(data_ptr.pData, model_matrix, sizeof(XMMATRIX));
+	this->mDirect3D.GetContext()->Unmap(constant_buffer, 0);
+
+}
+
 const void Panel3D::Update()
 {
 	// TODO: Update the panel?
@@ -151,8 +255,9 @@ const void Panel3D::Draw()
 	UINT offset = 0;
 
 	// For readability.
-	ID3D11Buffer* vertex_buffer = nullptr;
-	ID3D11Buffer* index_buffer	= nullptr;
+	ID3D11Buffer* vertex_buffer		= nullptr;
+	ID3D11Buffer* index_buffer		= nullptr;
+	ID3D11Buffer* constant_buffer	= nullptr;
 	UINT numIndices = 0;
 
 	// Takes every set of buffers from every mesh object in the panel
@@ -163,7 +268,9 @@ const void Panel3D::Draw()
 		{
 			index_buffer	= *this->mMeshObjects[i].pGetIndexBuffer(j);
 			vertex_buffer	= *this->mMeshObjects[i].pGetVertexBuffer(j);
+			constant_buffer = *this->mMeshObjects[i].rGetConstantBuffer();
 
+			// Setting the index buffer to the input assembler.
 			this->mDirect3D.GetContext()->IASetVertexBuffers(
 				0,				// Start slot.
 				1,				// Number of buffers.
@@ -171,13 +278,19 @@ const void Panel3D::Draw()
 				&stride,		// Vertex size.
 				&offset);		// Offset.	
 
+			// Setting the index buffer to the input assembler.
 			this->mDirect3D.GetContext()->IASetIndexBuffer(
 				index_buffer,			// Index buffer.
 				DXGI_FORMAT_R32_UINT,	// Format.
 				offset);				// Offset.
 
-			numIndices = (UINT)this->mMeshObjects[i].GetIndices()[j].size();
+			// Setting the constant buffer to the vertex shader.
+			this->mDirect3D.GetContext()->VSSetConstantBuffers(
+				0,					// Start slot.
+				1,					// Number of buffers
+				&constant_buffer);	// Constant buffer.
 
+			numIndices = (UINT)this->mMeshObjects[i].GetIndices()[j].size();
 			this->mDirect3D.GetContext()->DrawIndexed(
 				numIndices,	// Number of indices.
 				0,			// Start index location.
@@ -187,7 +300,7 @@ const void Panel3D::Draw()
 	this->mDirect3D.GetSwapChain()->Present(1, 0);
 }
 
-MeshObject* Panel3D::GetMeshObject(std::string name)
+MeshObject* Panel3D::rGetMeshObject(std::string name)
 {
 	
 	for (int i = 0; i < (int)this->mMeshObjects.size(); i++)

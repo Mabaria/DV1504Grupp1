@@ -25,13 +25,7 @@ public:
 	bool CreateShadersAndSetup(
 		LPCWSTR vertexShaderPath,
 		LPCWSTR geometryShaderPath,
-		LPCWSTR pixelShaderPath,
-		ID3D11VertexShader **pVertexshader,
-		ID3D11GeometryShader **pGeometryShader,
-		ID3D11PixelShader **pPixelShader,
-		D3D11_INPUT_ELEMENT_DESC inputElementDesc[],
-		UINT nrOfElements,
-		ID3D11InputLayout **pInputLayout);
+		LPCWSTR pixelShaderPath);
 
 	const void Update();
 
@@ -41,15 +35,29 @@ public:
 
 	// Returns nullptr if there is no mesh object
 	// of the parameter name.
-	MeshObject* GetMeshObject(std::string name);
+	MeshObject* rGetMeshObject(std::string name);
+
+	// Updates the constant buffer of the mesh object with the given name.
+	const void UpdateConstantBuffer(std::string name);
 
 private:
 	D3D11 mDirect3D;
 	std::vector<MeshObject> mMeshObjects;
 	HWND mPanelWindow;
 
-	// Buffer creators take the buffer in slot [index] of the last mesh object
-	// in the vector of mesh objects and create a buffer from the data provided.
+	ID3D11VertexShader *mpVertexShader;
+	ID3D11GeometryShader *mpGeometryShader;
+	ID3D11PixelShader *mpPixelShader;
+	ID3D11InputLayout *mpInputLayout;
+	
+	D3D11_INPUT_ELEMENT_DESC mInputDesc[3];
+
+	// Buffer creators make a buffer to set to the last slot of the vector
+	// of buffers in the last mesh object of the vector of mesh objects.
 	const void CreateVertexBuffer(std::vector<Vertex> vertices);
 	const void CreateIndexBuffer(std::vector<unsigned int> indices);
+
+	// Creates the constant buffer for the last added mesh object.
+	const void CreateConstantBuffer();
+
 };

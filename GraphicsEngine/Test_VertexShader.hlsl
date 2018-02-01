@@ -5,7 +5,12 @@ struct VS_IN
 	float2 tex : TEXCOORD;
 };
 
+cbuffer matrix_buffer : register (b0)
+{
+	matrix model_matrix;
+}
+
 float4 main( VS_IN input ) : SV_POSITION
 {
-	return float4(input.pos.x, input.pos.y, input.pos.z, 1.0f);
+	return mul(model_matrix, float4(input.pos, 1.0f));
 }

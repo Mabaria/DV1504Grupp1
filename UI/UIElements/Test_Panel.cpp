@@ -52,23 +52,7 @@ void Test_Panel3D()
 
 	
 	// Testing shader creation and setting as well as setting up the IA and drawing.
-	ID3D11InputLayout *pInputLayout = nullptr;
-	ID3D11VertexShader *pVS			= nullptr;
-	ID3D11GeometryShader *pGS		= nullptr;
-	ID3D11PixelShader *pPS			= nullptr;
-	ID3D11InputLayout *pInputLayout2 = nullptr;
-	ID3D11VertexShader *pVS2 = nullptr;
-	ID3D11GeometryShader *pGS2 = nullptr;
-	ID3D11PixelShader *pPS2 = nullptr;
 
-	const UINT n_inputs = 3;
-
-	D3D11_INPUT_ELEMENT_DESC input_desc[n_inputs] = {
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 }
-	};
-	
 	// Triangle vertices for drawing and mesh object test.
 	std::vector<std::vector<Vertex>> vertices;
 	
@@ -107,43 +91,30 @@ void Test_Panel3D()
 
 	panel1.AddMeshObject("tri", indices, vertices);
 	panel2.AddMeshObject("tri", indices, vertices);
+	MeshObject *panel1_tri = panel1.rGetMeshObject("tri");
+	MeshObject *panel2_tri = panel2.rGetMeshObject("tri");
 
 	panel1.CreateShadersAndSetup(
 		L"../../GraphicsEngine/Test_VertexShader.hlsl",
 		L"",
-		L"../../GraphicsEngine/Test_PixelShader.hlsl",
-		&pVS,
-		&pGS,
-		&pPS,
-		input_desc,
-		n_inputs,
-		&pInputLayout);
+		L"../../GraphicsEngine/Test_PixelShader.hlsl");
 
 	panel2.CreateShadersAndSetup(
 		L"../../GraphicsEngine/Test_VertexShader.hlsl",
 		L"",
-		L"../../GraphicsEngine/Test_PixelShader.hlsl",
-		&pVS2,
-		&pGS2,
-		&pPS2,
-		input_desc,
-		n_inputs,
-		&pInputLayout2);
+		L"../../GraphicsEngine/Test_PixelShader.hlsl");
 
-	int i = 0;
+	float i = 0.1f;
 	while (window.IsOpen())
 	{
 		window.Update();
 		panel1.Draw();
 		panel2.Draw();
+		panel1_tri->Rotate(0, 0, i);
+		panel1.UpdateConstantBuffer("tri");
+		panel2_tri->Rotate(i, 0, 0);
+		panel2.UpdateConstantBuffer("tri");
 	}	
-	pVS->Release();		
-	pPS->Release();	
-	pInputLayout->Release();
-
-	pInputLayout2->Release();
-	pVS2->Release();	
-	pPS2->Release();
 }
 
 void Test_Panel2D()

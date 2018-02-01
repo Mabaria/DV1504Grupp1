@@ -37,6 +37,11 @@ public:
 	const void AddVertexBuffer(ID3D11Buffer **vertexBuffer);
 	const void AddIndexBuffer(ID3D11Buffer **indexBuffer);
 
+	// For passing the model matrix to the shader.
+	ID3D11Buffer **rGetConstantBuffer();
+	const void SetConstantBuffer(ID3D11Buffer **constantBuffer);
+	XMMATRIX *rGetModelMatrix();
+
 private:
 	std::string mName;
 	std::vector<std::vector<unsigned int>> mIndices;
@@ -44,8 +49,9 @@ private:
 
 	std::vector<ID3D11Buffer*> mpIndexBuffers;
 	std::vector<ID3D11Buffer*> mpVertexBuffers;
+	ID3D11Buffer *mpConstantBuffer;
 
 	int mNumberOfBuffers;
 
-	XMMATRIX mWorld;
+	XMMATRIX mModelMatrix;
 };
