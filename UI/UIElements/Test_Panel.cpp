@@ -136,23 +136,34 @@ void Test_BoatOnScreen()
 	std::wstring window_name = L"Demo_BIS";
 
 	Window window(window_name, 1280, 720);
-	Panel3D side_view(1280/3, 720/3, 0, 0, window.GetWindow(), window_name.c_str());
+	Panel3D side_view(1280 / 3, 720 / 3, 0, 0, window.GetWindow(), window_name.c_str());
 
 	side_view.AddMeshObject(
 		"floor2",
 		floor2.GetIndexVectors(),
 		floor2.GetVertexVectors());
-	side_view.AddMeshObject(
+	/*side_view.AddMeshObject(
 		"floor01",
 		floor01.GetIndexVectors(),
-		floor01.GetVertexVectors());
+		floor01.GetVertexVectors());*/
 	/*side_view.AddMeshObject(
 		"floor1",
 		floor1.GetIndexVectors(),
 		floor1.GetVertexVectors());*/
-	
+
+	Panel3D top_view(2 * 1280 / 3, 720, 1280 / 3, 0, window.GetWindow(), window_name.c_str());
+
+	top_view.AddMeshObject(
+		"floor01",
+		floor01.GetIndexVectors(),
+		floor01.GetVertexVectors());
 
 	side_view.CreateShadersAndSetup(
+		L"../../GraphicsEngine/Test_VertexShader.hlsl",
+		L"",
+		L"../../GraphicsEngine/Test_PixelShader.hlsl");
+
+	top_view.CreateShadersAndSetup(
 		L"../../GraphicsEngine/Test_VertexShader.hlsl",
 		L"",
 		L"../../GraphicsEngine/Test_PixelShader.hlsl");
@@ -165,8 +176,10 @@ void Test_BoatOnScreen()
 		0.1f, 100.0f, LOOK_AT, ORTHOGRAPHIC);
 
 	side_view.SetCamera(&camera);
+	top_view.SetCamera(&camera);
 
-	//side_view.rGetMeshObject("floor1")->Scale(0.1f, 0.1f, 0.1f);
+	side_view.rGetMeshObject("floor2")->Scale(0.1f, 0.1f, 0.1f);
+	top_view.rGetMeshObject("floor01")->Scale(0.1f, 0.1f, 0.1f);
 
 	float speed = 0.1f;
 
@@ -205,6 +218,9 @@ void Test_BoatOnScreen()
 			window.Close();
 		}
 		side_view.Update();
+		top_view.Update();
+
 		side_view.Draw();
+		top_view.Draw();
 	}	
 }
