@@ -3,21 +3,45 @@
 #include <d3dcompiler.h>
 #include <DirectXMath.h>
 
-enum CAMERAMODE {
-	LOOKAT = 0,
-	LOOKTO = 1
+enum LOOK_MODE {
+	LOOK_AT = 0,
+	LOOK_TO = 1
 };
+
+enum PROJECTION_MODE {
+	PERSPECTIVE = 0,
+	ORTHOGRAPHIC = 1
+};
+/*
+Camera contains everything you (should) need regarding view and projection matrices.
+LOOK_MODE determines if you want the look vector to represent look AT or look TO.
+PROJECTION_MODE sets if you want to use perspective of orthographic. Keep in mind that
+after swapping you have to set the related variables for the type you are swapping to,
+or else you are gonna have a bad time.
+*/
 
 class Camera {
 public:
 	Camera(const DirectX::XMVECTOR &r_position,
 		const DirectX::XMVECTOR &r_up_vector,
-		const DirectX::XMVECTOR &r_look,
-		const CAMERAMODE camera_mode = LOOKAT);
+		const DirectX::XMVECTOR &r_look_vector,
+		const float view_width_or_fov_angle,
+		const float view_height_or_aspect_ratio,
+		const float near_z,
+		const float far_z,
+		const LOOK_MODE camera_mode = LOOK_AT,
+		const PROJECTION_MODE projection_mode = PERSPECTIVE);
+
 	Camera(const DirectX::XMFLOAT3 &r_position,
 		const DirectX::XMFLOAT3 &r_up_vector,
 		const DirectX::XMFLOAT3 &r_look_vector,
-		const CAMERAMODE camera_mode = LOOKAT);
+		const float view_width_or_fov_angle,
+		const float view_height_or_aspect_ratio,
+		const float near_z,
+		const float far_z,
+		const LOOK_MODE camera_mode = LOOK_AT,
+		const PROJECTION_MODE projection_mode = PERSPECTIVE);
+
 	Camera(const float pos_x,
 		const float pos_y,
 		const float pos_z,
@@ -27,7 +51,12 @@ public:
 		const float look_x,
 		const float look_y,
 		const float look_z,
-		const CAMERAMODE camera_mode = LOOKAT);
+		const float view_width_or_fov_angle,
+		const float view_height_or_aspect_ratio,
+		const float near_z,
+		const float far_z,
+		const LOOK_MODE camera_mode = LOOK_AT,
+		const PROJECTION_MODE projection_mode = PERSPECTIVE);
 
 	~Camera();
 
@@ -37,8 +66,12 @@ public:
 		const float new_y,
 		const float new_z);
 
+	// MoveCamera takes a direction vector and a magnitude to move along that vector.
+	// The function does not normalize the vector, so if the vector is wonky that's
+	// on you.
+
 	void MoveCamera(const DirectX::XMFLOAT3 &r_direction,
-		const float distance);
+		const float distance); 
 	void MoveCamera(const DirectX::XMVECTOR &r_direction,
 		const float distance);
 	void MoveCamera(const float direction_x,
@@ -54,7 +87,7 @@ public:
 	void SetLookVector(const DirectX::XMVECTOR &r_new_look_vector);
 	void SetLookVector(const float new_x, const float new_y, const float new_z);
 
-	void SetCameraMode(CAMERAMODE new_cameramode);
+	void SetLookMode(const LOOK_MODE new_look_mode);
 
 	void RotateCameraPitchYawRoll(
 		const float pitch,
@@ -66,22 +99,53 @@ public:
 	DirectX::XMVECTOR GetPosition() const;
 	DirectX::XMVECTOR GetUpVector() const;
 	DirectX::XMVECTOR GetLookVector() const;
-	CAMERAMODE GetCameraMode() const;
+	LOOK_MODE GetLookMode() const;
 
 	DirectX::XMMATRIX GetViewMatrix() const;
 	DirectX::XMMATRIX GetTransposedViewMatrix() const;
+
+	DirectX::XMMATRIX GetProjectionMatrix() const;
+	DirectX::XMMATRIX GetTransposedProjectionMatrix() const;
+	PROJECTION_MODE GetProjectionMode() const;
+
+	bool SetViewWidth(const float new_view_width); // Not used in PERSPECTIVE mode
+	bool SetViewHeight(const float new_view_height); // Not used in PERSPECTIVE mode
+	bool SetFovAngle(const float new_fov_angle); // Not used in ORTHOGRAPHIC mode
+	bool SetAspectRatio(const float new_aspect_ratio); // Not used in ORTHOGRAPHIC mode
+	bool SetNearZ(const float new_near_z);
+	bool SetFarZ(const float new_far_z);
+
+	void SetProjectionMode(const PROJECTION_MODE new_projection_mode);
+	
 
 private:
 	DirectX::XMVECTOR mCameraPosition;
 	DirectX::XMVECTOR mUpVector;
 	DirectX::XMVECTOR mLookVector;
-	CAMERAMODE mCameraMode;
+
+	float mViewWidth; // Not used in PERSPECTIVE mode
+	float mViewHeight; // Not used in PERSPECTIVE mode
+	float mFovAngle; // Not used in ORTHOGRAPHIC mode
+	float mAspectRatio; // Not used in ORTHOGRAPHIC mode
+	float mNearZ;
+	float mFarZ;
+	LOOK_MODE mLookMode;
+	PROJECTION_MODE mProjectionMode;
 	DirectX::XMMATRIX mViewMatrix;
-	void mInit(const DirectX::XMVECTOR & r_position,
-		const DirectX::XMVECTOR & r_up_vector,
-		const DirectX::XMVECTOR & r_look_vector,
-		const CAMERAMODE camera_mode);
+	DirectX::XMMATRIX mProjMatrix;
+
+
+	void mInit(const DirectX::XMVECTOR &r_position,
+		const DirectX::XMVECTOR &r_up_vector,
+		const DirectX::XMVECTOR &r_look_vector,
+		const float view_width_or_fov_angle,
+		const float view_height_or_aspect_ratio,
+		const float near_z,
+		const float far_z,
+		const LOOK_MODE camera_mode,
+		const PROJECTION_MODE projection_mode);
 	void mUpdateViewMatrix();
+	void mUpdateProjMatrix();
 	void mRotateViewMatrix(const DirectX::XMMATRIX &camRotationMatrix); 
 	 //! IF SOMETHING IS BROKEN WITH CAMERA ROTATION
 	 //! mRotateViewMatrix IS PROBABLY THE ROOT CAUSE
