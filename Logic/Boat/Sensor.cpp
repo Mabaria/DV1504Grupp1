@@ -51,12 +51,18 @@ bool Sensor::CanDetect(Event::Type type) const
 	return false;
 }
 
-int Sensor::Trigger(Event::Type type)
+int Sensor::AutoTrigger(Event::Type type)
 {
 	// Check early exit
 	if (!this->CanDetect(type))
 		return -1;
 
+	this->mActiveEventIndex = this->mpEventLog->AddLogEvent(type, this->mRoomIndex);
+	return this->mActiveEventIndex;
+}
+
+int Sensor::PlotTrigger(Event::Type type)
+{
 	this->mActiveEventIndex = this->mpEventLog->AddLogEvent(type, this->mRoomIndex);
 	return this->mActiveEventIndex;
 }

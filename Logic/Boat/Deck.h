@@ -29,6 +29,9 @@ public:
 	int GetRoomCount() const;
 	int GetRoomOffset() const;
 
+	// Disk specific
+	std::string GetString() const;
+
 private:
 
 	// Deck specific

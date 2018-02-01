@@ -42,6 +42,11 @@ int EventLog::AddLogEvent(Event::Type type, int roomIndex)
 	return newEvent.GetActiveEventIndex();
 }
 
+std::vector<Event::Type> EventLog::GetEvents(int activeEventIndex)
+{
+	
+}
+
 
 
 /**

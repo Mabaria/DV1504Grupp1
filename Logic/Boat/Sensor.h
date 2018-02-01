@@ -17,7 +17,10 @@ public:
 	void AddInputType(Event::Type type);
 	void RemoveInputType(Event::Type type);
 	bool CanDetect(Event::Type type) const;
-	int Trigger(Event::Type type); // Will return a ActiveEvent index
+	
+	int AutoTrigger(Event::Type type); // Will return a ActiveEvent index
+	int PlotTrigger(Event::Type type);
+
 
 	// Log specific
 	void SetEventLog(EventLog *pEventLog);

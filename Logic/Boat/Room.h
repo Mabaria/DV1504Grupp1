@@ -25,7 +25,8 @@ public:
 	void SetEventLog(EventLog *pEventLog);
 
 	// Event specific
-	void AddEvent(Event::Type type);
+	void AddAutoEvent(Event::Type type);
+	void AddPlotEvent(Event::Type type);
 	void AddInputType(Event::Type type);
 	int GetActiveEventIndex() const;
 

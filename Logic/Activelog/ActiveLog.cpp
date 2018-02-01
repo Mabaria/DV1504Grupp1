@@ -43,3 +43,8 @@ void ActiveLog::RemoveEvent(int index)
 {
 	this->mActiveEvents.erase(this->mActiveEvents.begin() + index);
 }
+
+std::vector<Event::Type> GetEvents(int index)
+{
+// THIS	
+}

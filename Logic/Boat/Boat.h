@@ -28,18 +28,23 @@ public:
 
 	// Room specific
 	//void AddRoom(std::string roomName, std::string deckName);
-	void AddRoom(std::string roomName, std::string deckName, int inputs[NR_OF_EVENT_TYPES]);
+	void AddRoom(std::string roomName,
+		std::string deckName,
+		int inputs[],
+		int nrOfInputs);
 
 	// Log specific
 	void SetEventLog(EventLog *pEventLog);
 	//void SetActiveEventIndex(std::string roomName, std::string deckName, int index);
 
 	// Event specific
-	void CreateEvent(Event::Type type, std::string roomName, std::string deckName);
+	void CreateAutoEvent(Event::Type type, std::string roomName, std::string deckName);
+	void CreatePlotEvent(Event::Type type, std::string roomName, std::string deckName);
+	std::vector<Event::Type> GetEventsInRoom(std::string roomName, std::string deckName);
 
 	// Disk specific
 	void WriteFile(std::string filePath);
-	void ReadFile(std::string filePath);
+	bool ReadFile(std::string filePath);
 
 	// Bounding volumes
 	//void StoreBoundings(std::vector<AABB> boundings);
@@ -57,6 +62,8 @@ private:
 
 	std::vector<Deck> mDecks;
 	std::vector<Room> mRooms;
+
+	EventLog *mpEventLog;
 
 	//std::vector<AABB> mBoundings;
 };

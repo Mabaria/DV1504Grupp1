@@ -40,10 +40,12 @@ public:
 																											 end of the list, returns
 																											 index of event in the
 																											 active log */
+	std::vector<Event::Type> GetEvents(int activeEventIndex);
 	
 	// Disk specific
 	void SaveToFile(std::string filePath);
 	void LoadFromFile(std::string filePath);
+
 
 private:
 

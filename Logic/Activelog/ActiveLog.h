@@ -15,6 +15,7 @@ public:
 																									added event in the active
 																									list */
 	void RemoveEvent(int index);
+	std::vector<Event::Type> GetEvents(int index);
 
 private:
 	

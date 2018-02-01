@@ -2,6 +2,7 @@
 
 Boat::Boat()
 {
+	this->mpEventLog = nullptr;
 }
 
 Boat::~Boat()
@@ -35,6 +36,7 @@ void Boat::AddDeck(std::string name)
 	Deck newDeck;
 
 	newDeck.SetName(name);
+	newDeck.SetIndex(this->mDecks.size());
 
 	// Offset will be assigned end of list
 	newDeck.SetRoomOffset((int)this->mRooms.size());
@@ -42,7 +44,10 @@ void Boat::AddDeck(std::string name)
 	this->mDecks.push_back(newDeck);
 }
 
-void Boat::AddRoom(std::string roomName, std::string deckName, int inputs[NR_OF_EVENT_TYPES])
+void Boat::AddRoom(std::string roomName,
+	std::string deckName,
+	int inputs[],
+	int nrOfInputs)
 {
 	// Check early exit
 	if (this->GetRoomIndex(roomName, deckName) != -1)
@@ -60,13 +65,18 @@ void Boat::AddRoom(std::string roomName, std::string deckName, int inputs[NR_OF_
 			newRoom.SetName(roomName);
 			newRoom.SetDeckName(deckName);
 			
-			for (int j = 0; j < (sizeof(inputs)/sizeof(int)); j++)
+			for (int j = 0; j < nrOfInputs; j++)
 			{
 				newRoom.AddInputType((Event::Type)inputs[j]);
 			}
 
 			int offset = this->mDecks[i].GetRoomOffset() +
 						 this->mDecks[i].GetRoomCount();
+
+			if (this->mpEventLog != nullptr)
+			{
+				this->mRooms.SetEventLog(this->mpEventLog);
+			}
 
 			this->mRooms.insert(this->mRooms.begin() + offset, newRoom);
 			this->mDecks[i].AddRoom();
@@ -92,6 +102,8 @@ void Boat::AddRoom(std::string roomName, std::string deckName, int inputs[NR_OF_
 
 void Boat::SetEventLog(EventLog *pEventLog)
 {
+	this->mpEventLog = pEventLog;
+
 	for (int i = 0; i < this->mRooms.size(); i++)
 	{
 		this->mRooms[i].SetEventLog(pEventLog);
@@ -104,10 +116,21 @@ void Boat::SetEventLog(EventLog *pEventLog)
 *	Event specific
 */
 
-void Boat::CreateEvent(Event::Type type, std::string roomName, std::string deckName)
+void Boat::CreateAutoEvent(Event::Type type, std::string roomName, std::string deckName)
 {
 	int index = this->GetRoomIndex(roomName, deckName);
-	this->mRooms[index].AddEvent(type);
+	this->mRooms[index].AddAutoEvent(type);
+}
+
+void Boat::CreatePlotEvent(Event::Type type, std::string roomName, std::string deckName)
+{
+	int index = this->GetRoomIndex(roomName, deckName);
+	this->mRooms[index].AddPlotEvent(type);
+}
+
+std::vector<Event::Type> Boat::GetEventsInRoom(std::string roomName, std::string deckName)
+{
+	
 }
 
 
@@ -119,16 +142,18 @@ void Boat::CreateEvent(Event::Type type, std::string roomName, std::string deckN
 void Boat::WriteFile(std::string filePath)
 {
 	std::ofstream file;
+
 	file.open(filePath);
-	
+
 	file << "boatmodel " << this->mModelName << "\n";
 
 	file << "\n"; // Space
 	
-	file << "// index deck name" << "\n";
+	file << "// d#index <<deck name>> <<offset>> <<count>>" << "\n";
 	file << "deckcount " << this->mDecks.size() << "\n";
+
 	for (int i = 0; i < this->mDecks.size(); i++)
-		file << "d#" << i << " " << this->mDecks[i].GetName() << "\n";
+		file << this->mDecks[i].GetString() << "\n";
 
 	file << "\n"; // Space
 
@@ -142,7 +167,7 @@ void Boat::WriteFile(std::string filePath)
 	file.close();
 }
 
-void Boat::ReadFile(std::string filePath)
+bool Boat::ReadFile(std::string filePath)
 {
 	// Clear current lists
 	this->mDecks.clear();
@@ -175,7 +200,9 @@ void Boat::ReadFile(std::string filePath)
 						else // No following word
 							throw ("Boatmodel missing after 'boatmodel'.");
 					}
-					break;
+					break; // End case 'b'
+
+
 
 				case 'd': // Deck specific line
 					buffer.str(line);	// Fill buffer with line
@@ -201,6 +228,18 @@ void Boat::ReadFile(std::string filePath)
 						*/
 						buffer >> word;
 						newDeck.SetName(word);
+
+						/**
+						*	Get room offset
+						*/
+						buffer >> number;
+						newDeck.SetRoomOffset(number);
+
+						/**
+						*	Get room count
+						*/
+						buffer >> number;
+						newDeck.SetRoomCount(number);
 						
 						/**
 						*	Insert deck into list
@@ -215,7 +254,9 @@ void Boat::ReadFile(std::string filePath)
 						else // No following number
 							throw ("Number missing after 'deckcount'.");
 					}
-					break;
+					break; // End case 'd'
+
+
 
 				case 'r': // Room specific line
 					buffer.str(line);	// Fill buffer with line
@@ -242,6 +283,14 @@ void Boat::ReadFile(std::string filePath)
 						*/
 						buffer >> word; // Deck name
 						newRoom.SetDeckName(word);
+						
+						int deckIndex = this->GetDeckIndex(word);
+
+						//this->mDecks[deckIndex].AddRoom();
+						//for (int i = deckIndex; i < this->mDecks.size(); i++)
+						//{
+						//	this->mDecks[i].PushRoomOffset();
+						//}
 
 						/**
 						*	Get room name
@@ -297,7 +346,9 @@ void Boat::ReadFile(std::string filePath)
 							throw ("Number missing after 'roomcount'.");
 
 					}
-					break;
+					break; // End case 'r'
+
+
 
 				default: // Comments
 					break;
@@ -306,11 +357,14 @@ void Boat::ReadFile(std::string filePath)
 
 		// When end of file appears, close file and return from function
 		file.close();
-		return;
+	}
+	else
+	{
+		return false;
 	}
 
-	// If file could not be opened
-	throw("Can't open file '" + filePath + "', file not found");
+	// Everything is successful
+	return true;
 }
 
 

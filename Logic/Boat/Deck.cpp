@@ -66,3 +66,21 @@ int Deck::GetRoomOffset() const
 {
 	return this->mRoomOffset;
 }
+
+
+
+/**
+*	Disk specific
+*/
+
+std::string Deck::GetString() const
+{
+	std::string print = "";
+
+	print += "d#" + std::to_string(this->mIndex) + " ";
+	print += this->mName + " ";
+	print += std::to_string(this->mRoomOffset) + " ";
+	print += std::to_string(this->mRoomCount);
+
+	return print;
+}

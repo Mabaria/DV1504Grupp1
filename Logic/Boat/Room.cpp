@@ -3,9 +3,9 @@
 Room::Room()
 {
 	// TODO: delete these three lines, only for testing
-	this->mSensor.AddInputType(Event::Fire);
-	this->mSensor.AddInputType(Event::Water);
-	this->mSensor.AddInputType(Event::Gas);
+	//this->mSensor.AddInputType(Event::Fire);
+	//this->mSensor.AddInputType(Event::Water);
+	//this->mSensor.AddInputType(Event::Gas);
 
 	this->mIndex = -1;
 }
@@ -71,9 +71,14 @@ void Room::SetEventLog(EventLog *pEventLog)
 *	Event specific
 */
 
-void Room::AddEvent(Event::Type type)
+void Room::AddAutoEvent(Event::Type type)
 {
-	this->mSensor.Trigger(type);
+	this->mSensor.AutoTrigger(type);
+}
+
+void Room::AddPlotEvent(Event::Type type)
+{
+	this->mSensor.PlotTrigger(type);
 }
 
 void Room::AddInputType(Event::Type type)
