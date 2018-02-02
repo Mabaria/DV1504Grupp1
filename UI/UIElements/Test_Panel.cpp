@@ -139,10 +139,6 @@ void Test_BoatOnScreen()
 
 	Panel3D side_view(1280 / 3, 720 / 3, 0, 0, window.GetWindow(), window_name.c_str());
 
-	side_view.AddMeshObject(
-		"floor2",
-		floor2.GetIndexVectors(),
-		floor2.GetVertexVectors());
 	/*side_view.AddMeshObject(
 		"floor01",
 		floor01.GetIndexVectors(),
@@ -152,12 +148,19 @@ void Test_BoatOnScreen()
 		floor1.GetIndexVectors(),
 		floor1.GetVertexVectors());*/
 
-	Panel3D top_view(1280, 2 * 720 / 3, 720 / 3, 0, window.GetWindow(), window_name.c_str());
+	Panel3D top_view(2 * 1280 / 3, 2 * 720 / 3, 720 / 3, 0, window.GetWindow(), window_name.c_str());
 
+	side_view.AddMeshObject(
+		"floor1",
+		floor1.GetIndexVectors(),
+		floor1.GetVertexVectors());
 	top_view.AddMeshObject(
-		"floor01",
-		floor01.GetIndexVectors(),
-		floor01.GetVertexVectors());
+		"floor2",
+		floor2.GetIndexVectors(),
+		floor2.GetVertexVectors());
+
+	side_view.rGetMeshObject("floor1")->Scale(0.1f, 0.1f, 0.1f);
+	top_view.rGetMeshObject("floor2")->Scale(0.3f, 0.3f, 0.3f);
 
 	side_view.CreateShadersAndSetup(
 		L"../../GraphicsEngine/Test_VertexShader.hlsl",
@@ -169,18 +172,22 @@ void Test_BoatOnScreen()
 		L"",
 		L"../../GraphicsEngine/Test_PixelShader.hlsl");
 
-	Camera camera(
-		{ 2.0f, 5.0f, 0.0f, 0.0f }, 
+	Camera camera2(
+		{ 0.0f, 5.0f, 3.5f, 0.0f }, 
 		{ 0.0f, 1.0f, 0.0f, 0.0f }, 
 		{ 0.0f, 0.0f, 0.0f, 0.0f },
 		2.0f, 2.0f,
 		0.1f, 100.0f, LOOK_AT, ORTHOGRAPHIC);
 
-	side_view.SetCamera(&camera);
-	top_view.SetCamera(&camera);
+	Camera camera(
+		{ 0.0f, 5.0f, 3.5f, 0.0f },
+		{ 0.0f, 1.0f, 0.0f, 0.0f },
+		{ 0.0f, 0.0f, 0.0f, 0.0f },
+		XM_PI / 8.0f, 16.0f / 9.0f,
+		0.1f, 1000.0f, LOOK_AT, PERSPECTIVE);
 
-	side_view.rGetMeshObject("floor2")->Scale(0.1f, 0.1f, 0.1f);
-	top_view.rGetMeshObject("floor01")->Scale(0.1f, 0.1f, 0.1f);
+	side_view.SetCamera(&camera2);
+	top_view.SetCamera(&camera);
 
 	float speed = 0.1f;
 
@@ -204,6 +211,7 @@ void Test_BoatOnScreen()
 		else if (Keyboard::IsKeyDown(Keys::A))
 		{
 			camera.MoveCamera(-1.0f, 0.0f, 0.0f, speed);
+			//top_view.rGetMeshObject("floor2")->Rotate(0.0f, 0.01f, 0.0f);
 		}
 		else if (Keyboard::IsKeyDown(Keys::Space))
 		{
