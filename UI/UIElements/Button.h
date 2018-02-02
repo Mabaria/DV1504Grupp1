@@ -6,7 +6,8 @@ enum BUTTON_STATE
 {
 	IDLE,
 	HOVER,
-	CLICKED
+	CLICKED,
+	RESET
 };
 
 class Button : public Observable<Button*>

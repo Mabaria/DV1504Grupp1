@@ -7,8 +7,8 @@ void Test_Button()
 		window.GetWindow(),
 		window.GetClientSize().width,
 		window.GetClientSize().height);
-	Button button(D2Test, "../../Models/testFile.bmp", 100, 100, 200, 200), 
-		button2(D2Test, "../../Models/pepehands.jpg", 205, 100, 305, 200);
+	Button button(D2Test, "../../Models/FireButton.png", 100, 100, 200, 200);
+		//button2(D2Test, "../../Models/testFile.bmp", 300, 100, 400, 200);
 	Mouse mouse;
 	window.Open();
 	
@@ -27,7 +27,7 @@ void Test_Button()
 			mouse.IsButtonDown(Buttons::Left))
 		{
 			button.SetButtonStatus(BUTTON_STATE::CLICKED);
-			
+			//window.Close();
 		}
 		else if (mouse.GetPositionPercentage().x <
 			button.GetBoundingBoxPercentage().right &&
@@ -47,7 +47,7 @@ void Test_Button()
 		D2Test.GetpRenderTarget()->BeginDraw();
 		D2Test.GetpRenderTarget()->Clear(D2D1::ColorF(D2D1::ColorF::CornflowerBlue));
 		button.DrawButton();
-		button2.DrawButton();
+		//button2.DrawButton();
 		D2Test.GetpRenderTarget()->EndDraw();	
 	}
 }

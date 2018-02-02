@@ -136,6 +136,7 @@ void Test_BoatOnScreen()
 	std::wstring window_name = L"Demo_BIS";
 
 	Window window(window_name, 1280, 720);
+
 	Panel3D side_view(1280 / 3, 720 / 3, 0, 0, window.GetWindow(), window_name.c_str());
 
 	side_view.AddMeshObject(
@@ -187,7 +188,7 @@ void Test_BoatOnScreen()
 	while (window.IsOpen())
 	{
 		window.Update();
-
+		
 		if (Keyboard::IsKeyDown(Keys::W))
 		{
 			camera.MoveCamera(0.0f, 0.0f, 1.0f, speed);
