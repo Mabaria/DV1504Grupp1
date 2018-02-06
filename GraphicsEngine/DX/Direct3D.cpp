@@ -76,6 +76,8 @@ void D3D11::Init(HWND window)
 		exit(-1);
 	}
 
+	this->mContext->PSSetSamplers(0, 1, &this->mSamplerState);
+
 	ID3D11BlendState *blend_state = nullptr;
 	D3D11_BLEND_DESC blend_desc{};
 	blend_desc.RenderTarget[0].BlendEnable = TRUE;

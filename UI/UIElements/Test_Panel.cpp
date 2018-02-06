@@ -1,5 +1,6 @@
 #include "Test_Panel.h"
 #include "../../IO/Keyboard.h"
+#include "../../GraphicsEngine/Quad.h"
 /*
 	FÖR DEN SOM REVIEWAR DETTA
 
@@ -195,6 +196,20 @@ void Test_BoatOnScreen()
 
 	side_view.SetCamera(&camera2);
 	top_view.SetCamera(&camera);
+
+	// Text On Screen
+
+	Quad txt(true);
+
+	top_view.AddMeshObject("Däck01", txt.GetIndices(), txt.GetVertices(), 
+		L"../../Models/Däck01.DDS"
+	);
+
+	top_view.rGetMeshObject("Däck01")->Scale	(0.6f, 0.2f, 0.2f);
+	top_view.rGetMeshObject("Däck01")->Rotate	(XM_PI / 2.0f, XM_PI / 2.0f, 0.0f);
+	top_view.rGetMeshObject("Däck01")->Translate(0.2f, 0.0f, 0.2f);
+
+	// ---
 
 	float speed = 0.1f;
 

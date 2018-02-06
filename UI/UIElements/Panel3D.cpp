@@ -401,6 +401,10 @@ const void Panel3D::Draw()
 	// and draws them one by one.
 	for (int i = 0; i < (int)this->mpMeshObjects.size(); i++)
 	{
+		this->mDirect3D.GetContext()->PSSetShaderResources(
+			0, 1, this->mpMeshObjects[i]->rGetTextureView()
+		);
+
 		constant_buffer = *this->mpMeshObjects[i]->rGetConstantBuffer();
 
 		// Setting the constant buffer to the vertex shader.
