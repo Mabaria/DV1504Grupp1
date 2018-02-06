@@ -23,9 +23,7 @@ public:
 	~Button();
 
 	const std::wstring StrToWstr(std::string str);
-	void CreateButton(
-		Direct2D D2D1Panel,
-		std::string imageFilePath,
+	void CreateButton(std::string imageFilePath,
 		int left,
 		int top,
 		int right,
@@ -39,9 +37,7 @@ public:
 	void SetButtonsize(int left, int top, int right, int bottom);
 	void SetBitmapRendersize(int left, int top, int right, int bottom);
 	void SetButtonStatus(BUTTON_STATE buttState);
-	void LoadImageToBitmap(
-		Direct2D D2D1Panel,
-		std::string imageFilePath);
+	void LoadImageToBitmap(std::string imageFilePath);
 	BUTTON_STATE GetButtState() const;
 private:
 	
@@ -57,4 +53,5 @@ private:
 	bool mBmpLoaded;
 	ID2D1SolidColorBrush* mpFailBrush;
 	BUTTON_STATE mCurrState;
+	void mUpdateBoundingBox();
 };

@@ -7,15 +7,32 @@ void Test_Button()
 		window.GetWindow(),
 		window.GetClientSize().width,
 		window.GetClientSize().height);
-	Button button(D2Test, "../../Models/FireButton.png", 100, 100, 200, 200);
-		//button2(D2Test, "../../Models/testFile.bmp", 300, 100, 400, 200);
+	Button button(D2Test, "../../Models/FireButton.png", 100, 100, 200, 200),
+		button2(
+			D2Test, 
+			"../../Models/testFile.bmp", 
+			button.GetButtonsize().left / 1, 
+			button.GetButtonsize().top / 1,
+			button.GetButtonsize().right/1.33, 
+			button.GetButtonsize().bottom/1.33);
 	Mouse mouse;
+	float speed = 1.0f;
 	window.Open();
-	
 	while (window.IsOpen())
 	{
 		window.Update();
-		
+		button.SetButtonsize(
+			button.GetButtonsize().left + speed, 
+			button.GetButtonsize().top + speed, 
+			button.GetButtonsize().right + speed, 
+			button.GetButtonsize().bottom + speed);
+
+		button2.SetButtonsize(
+			button2.GetButtonsize().left + speed, 
+			button2.GetButtonsize().top + speed, 
+			button2.GetButtonsize().right + speed, 
+			button2.GetButtonsize().bottom + speed);
+
 		if (Mouse::GetPositionPercentage().x <
 			button.GetBoundingBoxPercentage().right &&
 			mouse.GetPositionPercentage().x >
@@ -27,6 +44,8 @@ void Test_Button()
 			mouse.IsButtonDown(Buttons::Left))
 		{
 			button.SetButtonStatus(BUTTON_STATE::CLICKED);
+			//button.getBitmapPointer()->Release();
+			//button.LoadImageToBitmap("../../Models/pepehands.jpg");
 			//window.Close();
 		}
 		else if (mouse.GetPositionPercentage().x <
@@ -47,7 +66,7 @@ void Test_Button()
 		D2Test.GetpRenderTarget()->BeginDraw();
 		D2Test.GetpRenderTarget()->Clear(D2D1::ColorF(D2D1::ColorF::CornflowerBlue));
 		button.DrawButton();
-		//button2.DrawButton();
+		button2.DrawButton();
 		D2Test.GetpRenderTarget()->EndDraw();	
 	}
 }
