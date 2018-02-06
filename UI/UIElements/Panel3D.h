@@ -23,7 +23,7 @@ public:
 
 	// Creates buffers for and adds mesh 
 	// objects into the vector of mesh objects.
-	const bool AddMeshObject(
+	const void AddMeshObject(
 		std::string name,
 		std::vector<std::vector<unsigned int>> indices, 
 		std::vector<std::vector<Vertex>> vertices);
@@ -54,7 +54,7 @@ public:
 
 private:
 	D3D11 mDirect3D;
-	std::vector<MeshObject> mMeshObjects;
+	std::vector<MeshObject*> mMeshObjects;
 	HWND mPanelWindow;
 
 	ID3D11VertexShader *mpVertexShader;
