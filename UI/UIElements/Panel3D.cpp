@@ -94,9 +94,9 @@ Panel3D::~Panel3D()
 		this->mpProjBuffer->Release();
 		this->mpProjBuffer = nullptr;
 	}
-	for (int i = 0; i < this->mMeshObjects.size(); i++)
+	for (int i = 0; i < (int)this->mpMeshObjects.size(); i++)
 	{
-		delete this->mMeshObjects[i];
+		delete this->mpMeshObjects[i];
 	}
 }
 
@@ -111,16 +111,16 @@ const void Panel3D::AddMeshObject(
 	std::vector<std::vector<Vertex>> vertices)
 {
 	MeshObject *mesh_object = new MeshObject(name, indices, vertices);
-	this->mMeshObjects.push_back(mesh_object);
+	this->mpMeshObjects.push_back(mesh_object);
 
-	for (int i = 0; i < this->mMeshObjects.back()->GetNumberOfBuffers(); i++)
+	for (int i = 0; i < this->mpMeshObjects.back()->GetNumberOfBuffers(); i++)
 	{
 		this->CreateIndexBuffer(indices[i]);
 		this->CreateVertexBuffer(vertices[i]);
 	}
 	this->CreateConstantBuffer(
-		this->mMeshObjects.back()->rGetModelMatrix(), 
-		this->mMeshObjects.back()->rGetConstantBuffer());
+		this->mpMeshObjects.back()->rGetModelMatrix(), 
+		this->mpMeshObjects.back()->rGetConstantBuffer());
 }
 
 bool Panel3D::CreateShadersAndSetup(
@@ -173,7 +173,7 @@ const void Panel3D::CreateVertexBuffer(std::vector<Vertex> vertices)
 		MessageBoxA(NULL, "Vertex buffer creation failed.", NULL, MB_OK);
 		exit(-1);
 	}
-	this->mMeshObjects.back()->AddVertexBuffer(&vertex_buffer);
+	this->mpMeshObjects.back()->AddVertexBuffer(&vertex_buffer);
 }
 
 const void Panel3D::CreateIndexBuffer(std::vector<unsigned int> indices)
@@ -197,7 +197,7 @@ const void Panel3D::CreateIndexBuffer(std::vector<unsigned int> indices)
 		MessageBoxA(NULL, "Index buffer creation failed.", NULL, MB_OK);
 		exit(-1);
 	}
-	this->mMeshObjects.back()->AddIndexBuffer(&index_buffer);
+	this->mpMeshObjects.back()->AddIndexBuffer(&index_buffer);
 }
 
 const void Panel3D::CreateConstantBuffer(
@@ -273,10 +273,10 @@ const void Panel3D::UpdateConstantBuffer(
 
 const void Panel3D::UpdateConstantBuffer(int index)
 {
-	if (index > -1 && index < (int)this->mMeshObjects.size())
+	if (index > -1 && index < (int)this->mpMeshObjects.size())
 	{
 		// Getting the mesh object of the given name.
-		MeshObject *mesh_object = this->mMeshObjects[index];
+		MeshObject *mesh_object = this->mpMeshObjects[index];
 
 		// Getting the constant buffer and model matrix from that mesh object.
 		ID3D11Buffer *constant_buffer = *mesh_object->rGetConstantBuffer();
@@ -312,7 +312,7 @@ const void Panel3D::SetCamera(Camera * camera)
 const void Panel3D::Update()
 {
 	// Updating the constant buffers of the mesh objects.
-	for (int i = 0; i < (int)this->mMeshObjects.size(); i++)
+	for (int i = 0; i < (int)this->mpMeshObjects.size(); i++)
 	{
 		UpdateConstantBuffer(i);
 	}
@@ -357,9 +357,9 @@ const void Panel3D::Draw()
 
 	// Takes every set of buffers from every mesh object in the panel
 	// and draws them one by one.
-	for (int i = 0; i < (int)this->mMeshObjects.size(); i++)
+	for (int i = 0; i < (int)this->mpMeshObjects.size(); i++)
 	{
-		constant_buffer = *this->mMeshObjects[i]->rGetConstantBuffer();
+		constant_buffer = *this->mpMeshObjects[i]->rGetConstantBuffer();
 
 		// Setting the constant buffer to the vertex shader.
 		this->mDirect3D.GetContext()->VSSetConstantBuffers(
@@ -367,10 +367,10 @@ const void Panel3D::Draw()
 			1,					// Number of buffers
 			&constant_buffer);	// Constant buffer.
 
-		for (int j = 0; j < this->mMeshObjects[i]->GetNumberOfBuffers(); j++)
+		for (int j = 0; j < this->mpMeshObjects[i]->GetNumberOfBuffers(); j++)
 		{
-			index_buffer	= *this->mMeshObjects[i]->pGetIndexBuffer(j);
-			vertex_buffer	= *this->mMeshObjects[i]->pGetVertexBuffer(j);
+			index_buffer	= *this->mpMeshObjects[i]->pGetIndexBuffer(j);
+			vertex_buffer	= *this->mpMeshObjects[i]->pGetVertexBuffer(j);
 
 			// Setting the index buffer to the input assembler.
 			this->mDirect3D.GetContext()->IASetVertexBuffers(
@@ -386,7 +386,7 @@ const void Panel3D::Draw()
 				DXGI_FORMAT_R32_UINT,	// Format.
 				offset);				// Offset.
 
-			numIndices = (UINT)this->mMeshObjects[i]->GetIndices()[j].size();
+			numIndices = (UINT)this->mpMeshObjects[i]->GetIndices()[j].size();
 			this->mDirect3D.GetContext()->DrawIndexed(
 				numIndices,	// Number of indices.
 				0,			// Start index location.
@@ -399,11 +399,11 @@ const void Panel3D::Draw()
 MeshObject* Panel3D::rGetMeshObject(std::string name)
 {
 	
-	for (int i = 0; i < (int)this->mMeshObjects.size(); i++)
+	for (int i = 0; i < (int)this->mpMeshObjects.size(); i++)
 	{
-		if (name == this->mMeshObjects[i]->GetName())
+		if (name == this->mpMeshObjects[i]->GetName())
 		{
-			return this->mMeshObjects[i];
+			return this->mpMeshObjects[i];
 		}
 	}
 	return nullptr;

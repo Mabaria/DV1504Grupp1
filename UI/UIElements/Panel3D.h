@@ -54,7 +54,7 @@ public:
 
 private:
 	D3D11 mDirect3D;
-	std::vector<MeshObject*> mMeshObjects;
+	std::vector<MeshObject*> mpMeshObjects;
 	HWND mPanelWindow;
 
 	ID3D11VertexShader *mpVertexShader;
