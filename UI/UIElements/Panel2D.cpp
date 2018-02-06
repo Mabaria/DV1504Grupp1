@@ -50,46 +50,72 @@ void Panel2D::AddTextbox(int width, int height, int top, int left, LPCTSTR name)
 
 void Panel2D::Update()
 {
-	for (std::vector<Button>::iterator it = this->mButtonVector.begin();
-		it != this->mButtonVector.end();
-		it++)
+	if (this->mIsMouseInsidePanel()) /* Check if mouse is inside panel,
+									 if not there is no chance of any buttons
+									 being pressed. */
 	{
-		if (Mouse::IsButtonDown(Buttons::Left))
-			int i = 0;
-
-		if (Mouse::GetPositionPercentage().x <
-			it->GetBoundingBoxPercentage().right &&
-			Mouse::GetPositionPercentage().x >
-			it->GetBoundingBoxPercentage().left &&
-			Mouse::GetPositionPercentage().y <
-			it->GetBoundingBoxPercentage().bottom &&
-			Mouse::GetPositionPercentage().y >
-			it->GetBoundingBoxPercentage().top)
+		for (std::vector<Button>::iterator it = this->mButtonVector.begin();
+			it != this->mButtonVector.end();
+			it++)
 		{
 			if (Mouse::IsButtonDown(Buttons::Left))
+				int i = 0;
+
+			if (Mouse::GetPositionPercentage().x <
+				it->GetBoundingBoxPercentage().right &&
+				Mouse::GetPositionPercentage().x >
+				it->GetBoundingBoxPercentage().left &&
+				Mouse::GetPositionPercentage().y <
+				it->GetBoundingBoxPercentage().bottom &&
+				Mouse::GetPositionPercentage().y >
+				it->GetBoundingBoxPercentage().top)
 			{
-				it->SetButtonStatus(BUTTON_STATE::CLICKED);
-				Mouse::GetPosition();
+				if (Mouse::IsButtonDown(Buttons::Left))
+				{
+					it->SetButtonStatus(BUTTON_STATE::CLICKED);
+					Mouse::GetPosition();
+				}
+				else
+					it->SetButtonStatus(BUTTON_STATE::HOVER);
 			}
 			else
-				it->SetButtonStatus(BUTTON_STATE::HOVER);
+			{
+				it->SetButtonStatus(BUTTON_STATE::IDLE);
+			}
+
 		}
-		else
+	}
+	else // Mouse outside panel, make sure buttons are idle
+	{
+		for (std::vector<Button>::iterator it = this->mButtonVector.begin();
+			it != this->mButtonVector.end();
+			it++)
 		{
 			it->SetButtonStatus(BUTTON_STATE::IDLE);
 		}
-
 	}
 }
 
 void Panel2D::Draw()
 {
 	this->mDirect2D->GetpRenderTarget()->BeginDraw();
-	this->mDirect2D->GetpRenderTarget()->Clear(D2D1::ColorF(D2D1::ColorF::HotPink));
+	this->mDirect2D->GetpRenderTarget()->Clear(D2D1::ColorF(D2D1::ColorF::CornflowerBlue));
 	// Draw all the buttons in the panel
 	for (std::vector<Button>::iterator it = this->mButtonVector.begin(); it != this->mButtonVector.end(); it++)
 	{
 		it->DrawButton();
 	}
 	this->mDirect2D->GetpRenderTarget()->EndDraw();
+}
+
+bool Panel2D::mIsMouseInsidePanel()
+{
+	if (Mouse::IsButtonDown(Buttons::Left))
+		int i = 0;
+	RECT window_rect;
+	GetWindowRect(this->mPanelWindow, &window_rect);
+	POINT mouse_pos;
+	GetCursorPos(&mouse_pos);
+	return PtInRect(&window_rect, mouse_pos);
+
 }

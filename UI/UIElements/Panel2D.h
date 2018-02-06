@@ -27,7 +27,7 @@ public:
 private:
 	Direct2D *mDirect2D;
 	HWND mPanelWindow;
-
+	bool mIsMouseInsidePanel();
 	std::vector<Button> mButtonVector;
 	std::vector<std::string> mButtonNames;
 };

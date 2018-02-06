@@ -16,15 +16,15 @@ namespace Testing
 {
 	bool testAll()
 	{
-		TestAssimp();
-		TestBoat();
-		Test_Button();
-		TestCamera();
-		Test_Window();
-		Test_D3D11();
-		TestMesh();
-		Test_Input();
-		Test_Observer();
+		//TestAssimp();
+		//TestBoat();
+		//Test_Button();
+		//TestCamera();
+		//Test_Window();
+		//Test_D3D11();
+		//TestMesh();
+		//Test_Input();
+		//Test_Observer();*/
 		//Todo This test is blank
 		Test_Panel2D();
 		//Todo This test crashes

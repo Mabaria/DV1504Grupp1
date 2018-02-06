@@ -124,7 +124,30 @@ void Test_Panel3D()
 
 void Test_Panel2D()
 {
-	// TODO: Test 2D panel when finished.
+	Window window(L"Button_Test", 1280, 720);
+	Panel2D testPanel(400, 1080, 0, 1520, window.GetWindow(), L"Button_Test");
+	Panel2D testHeadPanel(1120, 200, 0, 400, window.GetWindow(), L"Button_Test");
+	Panel3D testHead3DPanel(399, 200, 0, 0, window.GetWindow(), L"Button_Test");
+	Panel3D test3DPanel(1520, 880, 200, 0, window.GetWindow(), L"Button_Test");
+	testPanel.AddButton(100, 100, 20, 20, "../../Models/FireButton.png", "FireButton");
+	testPanel.AddButton(100, 100, 120, 20, "../../Models/FireButton.png", "FireButton2");
+	testPanel.AddButton(100, 100, 220, 20, "../../Models/FireButton.png", "FireButton3");
+	testHeadPanel.AddButton(100, 100, 20, 20, "../../Models/Fern.jpg", "FernButton");
+	testHeadPanel.AddButton(200, 200, 20, 400, "../../Models/pepehands.jpg", "FernButton");
+	testHeadPanel.AddButton(200, 200, 20, 700, "../../Models/feelsrain.gif", "FernButton");
+	window.Open();
+	while (window.IsOpen())
+	{
+		window.Update();
+		testPanel.Update();
+		testHeadPanel.Update();
+		testHead3DPanel.Update();
+		testPanel.Draw();
+		testHeadPanel.Draw();
+		test3DPanel.Draw();
+		testHead3DPanel.Draw();
+
+	}
 }
 
 void Test_BoatOnScreen()
