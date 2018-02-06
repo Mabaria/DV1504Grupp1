@@ -1,18 +1,25 @@
 #include "Test_Button.h"
 #include "../UI/UIElements/Panel2D.h"
+#include "../UI/UIElements/Panel3D.h"
 
 void Test_Button()
 {
 	Window window(L"Button_Test", 1280, 720);
-	Panel2D testPanel(500, 500, 0, 0, window.GetWindow(), L"Button_Test");
+	Panel2D testPanel(400, 1080, 0, 1520, window.GetWindow(), L"Button_Test");
+	Panel2D testHeadPanel(1520, 200, 0, 0, window.GetWindow(), L"Button_Test");
+	Panel3D test3DPanel(1520, 880, 200, 0, window.GetWindow(), L"Button_Test");
 	testPanel.AddButton(100, 100, 0, 0, "../../Models/FireButton.png", "FireButton");
 	testPanel.AddButton(100, 100, 100, 0, "../../Models/FireButton.png", "FireButton2");
 	testPanel.AddButton(100, 100, 200, 0, "../../Models/FireButton.png", "FireButton3");
+	testHeadPanel.AddButton(100, 100, 0, 0, "../../Models/Fern.jpg", "FernButton");
 	window.Open();
 	while (window.IsOpen())
 	{
 		window.Update();
+		testPanel.Update();
 		testPanel.Draw();
+		testHeadPanel.Draw();
+		test3DPanel.Draw();
 
 	}
 	//Direct2D D2Test(

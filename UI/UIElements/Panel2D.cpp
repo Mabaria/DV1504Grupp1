@@ -1,5 +1,5 @@
 #include "Panel2D.h"
-
+#include "../../IO/Mouse.h"
 
 Panel2D::Panel2D(int width, int height, int top, int left, HWND handle, LPCTSTR title)
 	:Panel(width, height, top, left, handle)
@@ -50,7 +50,36 @@ void Panel2D::AddTextbox(int width, int height, int top, int left, LPCTSTR name)
 
 void Panel2D::Update()
 {
-	
+	for (std::vector<Button>::iterator it = this->mButtonVector.begin();
+		it != this->mButtonVector.end();
+		it++)
+	{
+		if (Mouse::IsButtonDown(Buttons::Left))
+			int i = 0;
+
+		if (Mouse::GetPositionPercentage().x <
+			it->GetBoundingBoxPercentage().right &&
+			Mouse::GetPositionPercentage().x >
+			it->GetBoundingBoxPercentage().left &&
+			Mouse::GetPositionPercentage().y <
+			it->GetBoundingBoxPercentage().bottom &&
+			Mouse::GetPositionPercentage().y >
+			it->GetBoundingBoxPercentage().top)
+		{
+			if (Mouse::IsButtonDown(Buttons::Left))
+			{
+				it->SetButtonStatus(BUTTON_STATE::CLICKED);
+				Mouse::GetPosition();
+			}
+			else
+				it->SetButtonStatus(BUTTON_STATE::HOVER);
+		}
+		else
+		{
+			it->SetButtonStatus(BUTTON_STATE::IDLE);
+		}
+
+	}
 }
 
 void Panel2D::Draw()
