@@ -8,9 +8,13 @@ MeshObject::MeshObject(std::string name,
 	this->mIndices	= indices;
 	this->mVertices	= vertices;
 
-	// Doesn't matter which one determines the size as they are (should be) equal.
+	// Doesn't matter which one determines the 
+	// size as they are (should be) equal.
 	this->mNumberOfBuffers = (int)indices.size();
-	this->mWorld		   = XMMatrixIdentity();
+
+	this->mModelMatrix = XMMatrixIdentity();
+	this->mpConstantBuffer	= nullptr;
+	this->mpTextureView		= nullptr;
 }
 
 MeshObject::~MeshObject()
@@ -28,21 +32,31 @@ MeshObject::~MeshObject()
 			this->mpVertexBuffers[i] = nullptr;
 		}
 	}
+	if (this->mpConstantBuffer)
+	{
+		this->mpConstantBuffer->Release();
+		this->mpConstantBuffer = nullptr;
+	}
+	if (this->mpTextureView)
+	{
+		this->mpTextureView->Release();
+		this->mpTextureView = nullptr;
+	}
 }
 
 const void MeshObject::Translate(float x, float y, float z)
 {
-	this->mWorld *= XMMatrixTranslation(x, y, z);
+	this->mModelMatrix *= XMMatrixTranslation(x, y, z);
 }
 
 const void MeshObject::Rotate(float pitch, float yaw, float roll)
 {
-	this->mWorld *= XMMatrixRotationRollPitchYaw(pitch, yaw, roll);
+	this->mModelMatrix *= XMMatrixRotationRollPitchYaw(pitch, yaw, roll);
 }
 
 const void MeshObject::Scale(float x, float y, float z)
 {
-	this->mWorld *= XMMatrixScaling(x, y, z);
+	this->mModelMatrix *= XMMatrixScaling(x, y, z);
 }
 
 const std::vector<std::vector<unsigned int>> MeshObject::GetIndices() const
@@ -83,4 +97,24 @@ const void MeshObject::AddVertexBuffer(ID3D11Buffer **vertexBuffer)
 const void MeshObject::AddIndexBuffer(ID3D11Buffer **indexBuffer)
 {
 	this->mpIndexBuffers.push_back(*indexBuffer);
+}
+
+ID3D11Buffer ** MeshObject::rGetConstantBuffer()
+{
+	return &this->mpConstantBuffer;
+}
+
+ID3D11ShaderResourceView ** MeshObject::rGetTextureView()
+{
+	return &this->mpTextureView;
+}
+
+const void MeshObject::SetConstantBuffer(ID3D11Buffer ** constantBuffer)
+{
+	this->mpConstantBuffer = *constantBuffer;
+}
+
+XMMATRIX* MeshObject::rGetModelMatrix()
+{
+	return &this->mModelMatrix;
 }
