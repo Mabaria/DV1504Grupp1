@@ -47,6 +47,10 @@ protected:
 	int mTop;
 	int mLeft;
 
+	int mParentWidth;
+	int mParentHeight;
+	int mParentTop;
+	int mParentLeft;
 	// Normalized size relative to the parent window.
 	float mWidthFraction;
 	float mHeightFraction;
