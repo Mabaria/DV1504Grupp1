@@ -13,7 +13,8 @@ MeshObject::MeshObject(std::string name,
 	this->mNumberOfBuffers = (int)indices.size();
 
 	this->mModelMatrix = XMMatrixIdentity();
-	this->mpConstantBuffer = nullptr;
+	this->mpConstantBuffer	= nullptr;
+	this->mpTextureView		= nullptr;
 }
 
 MeshObject::~MeshObject()
@@ -35,6 +36,11 @@ MeshObject::~MeshObject()
 	{
 		this->mpConstantBuffer->Release();
 		this->mpConstantBuffer = nullptr;
+	}
+	if (this->mpTextureView)
+	{
+		this->mpTextureView->Release();
+		this->mpTextureView = nullptr;
 	}
 }
 
@@ -96,6 +102,11 @@ const void MeshObject::AddIndexBuffer(ID3D11Buffer **indexBuffer)
 ID3D11Buffer ** MeshObject::rGetConstantBuffer()
 {
 	return &this->mpConstantBuffer;
+}
+
+ID3D11ShaderResourceView ** MeshObject::rGetTextureView()
+{
+	return &this->mpTextureView;
 }
 
 const void MeshObject::SetConstantBuffer(ID3D11Buffer ** constantBuffer)

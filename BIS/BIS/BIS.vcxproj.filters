@@ -78,6 +78,9 @@
     <ClCompile Include="..\..\GraphicsEngine\Window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\GraphicsEngine\Test_Button.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\GraphicsEngine\Camera\Camera.h">
@@ -132,7 +135,10 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\GraphicsEngine\Test_Button.h">
-      <Filter>Test</Filter>
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\IO\Mouse.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -180,9 +186,6 @@
     </ClCompile>
     <ClCompile Include="..\..\GraphicsEngine\DX\Direct2D.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\GraphicsEngine\Test_Button.cpp">
-      <Filter>Test</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -238,5 +241,8 @@
     <FxCompile Include="..\..\GraphicsEngine\Test_VertexShader.hlsl">
       <Filter>Source Files</Filter>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

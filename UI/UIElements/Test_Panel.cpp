@@ -89,10 +89,10 @@ void Test_Panel3D()
 
 	indices.push_back(i1);
 
-	panel1.AddMeshObject("tri", indices, vertices);
-	panel2.AddMeshObject("tri", indices, vertices);
-	MeshObject *panel1_tri = panel1.rGetMeshObject("tri");
-	MeshObject *panel2_tri = panel2.rGetMeshObject("tri");
+	//panel1.AddMeshObject("tri", indices, vertices);
+	//panel2.AddMeshObject("tri", indices, vertices);
+	//MeshObject *panel1_tri = panel1.rGetMeshObject("tri");
+	//MeshObject *panel2_tri = panel2.rGetMeshObject("tri");
 
 	Camera camera({ 0.0f, 0.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 1.0f, 0.0f }, 1.0f, 1.0f, 0.1f, 10000.0f, LOOK_AT, PERSPECTIVE);
 
@@ -115,9 +115,9 @@ void Test_Panel3D()
 		window.Update();
 		panel1.Draw();
 		panel2.Draw();
-		panel1_tri->Rotate(0, 0, i);
+		//panel1_tri->Rotate(0, 0, i);
 		panel1.Update();
-		panel2_tri->Rotate(i, 0, 0);
+		//panel2_tri->Rotate(i, 0, 0);
 		panel2.Update();
 	}	
 }
@@ -145,29 +145,29 @@ void Test_BoatOnScreen()
 	Panel3D top_view(2 * 1280 / 3, 2 * 720 / 3, 720 / 3, 0, window.GetWindow(), window_name.c_str());
 
 	// Hela båten tjoff in i panelerna och sen mixtras matriserna med.
-	side_view.AddMeshObject("floor2", floor2.GetIndexVectors(), floor2.GetVertexVectors());
-	side_view.AddMeshObject("floor1", floor1.GetIndexVectors(), floor1.GetVertexVectors());
-	side_view.AddMeshObject("floor01", floor01.GetIndexVectors(), floor01.GetVertexVectors());
+	side_view.AddMeshObject("floor2", floor2.GetIndexVectors(), floor2.GetVertexVectors(), L"");
+	side_view.AddMeshObject("floor1", floor1.GetIndexVectors(), floor1.GetVertexVectors(), L"");
+	side_view.AddMeshObject("floor01", floor01.GetIndexVectors(), floor01.GetVertexVectors(), L"");
 
-	top_view.AddMeshObject("floor2", floor2.GetIndexVectors(), floor2.GetVertexVectors());
-	top_view.AddMeshObject("floor1", floor1.GetIndexVectors(), floor1.GetVertexVectors());
-	top_view.AddMeshObject("floor01", floor01.GetIndexVectors(), floor01.GetVertexVectors());
+	top_view.AddMeshObject("floor2", floor2.GetIndexVectors(), floor2.GetVertexVectors(), L"");
+	top_view.AddMeshObject("floor1", floor1.GetIndexVectors(), floor1.GetVertexVectors(), L"");
+	top_view.AddMeshObject("floor01", floor01.GetIndexVectors(), floor01.GetVertexVectors(), L"");
 
-	top_view.rGetMeshObject("floor2")->Scale(0.3f, 0.3f, 0.3f);
-	top_view.rGetMeshObject("floor01")->Scale(0.3f, 0.3f, 0.3f);
-	top_view.rGetMeshObject("floor1")->Scale(0.3f, 0.3f, 0.3f);
+	top_view.rGetMeshObject("floor2")->Scale	(0.1f, 0.1f, 0.1f);
+	top_view.rGetMeshObject("floor1")->Scale	(0.1f, 0.1f, 0.1f);
+	top_view.rGetMeshObject("floor01")->Scale	(0.1f, 0.1f, 0.1f);
 
-	top_view.rGetMeshObject("floor2")->Translate	(-0.5f, 0.0f, 0.0f);
-	top_view.rGetMeshObject("floor01")->Translate	(0.0f, 0.0f, 0.0f);
-	top_view.rGetMeshObject("floor1")->Translate	(0.5f, 0.0f, 0.0f);
+	top_view.rGetMeshObject("floor2")->Translate	(0.0f, 0.0f, 0.5f);
+	top_view.rGetMeshObject("floor1")->Translate	(0.0f, 0.0f, 0.0f);
+	top_view.rGetMeshObject("floor01")->Translate	(0.0f, 0.0f, -0.5f);
 	
-	side_view.rGetMeshObject("floor2")->Scale	(0.1f, 0.1f, 0.1f);
-	side_view.rGetMeshObject("floor01")->Scale	(0.1f, 0.1f, 0.1f);
-	side_view.rGetMeshObject("floor1")->Scale	(0.1f, 0.1f, 0.1f);
+	side_view.rGetMeshObject("floor2")->Scale	(0.15f, 0.4f, 0.1f);
+	side_view.rGetMeshObject("floor1")->Scale	(0.15f, 0.4f, 0.1f);
+	side_view.rGetMeshObject("floor01")->Scale	(0.15f, 0.4f, 0.1f);
 	
-	side_view.rGetMeshObject("floor2")->Translate(-0.5f, 0.0f, 0.0f);
-	side_view.rGetMeshObject("floor01")->Translate(0.0f, 0.0f, 0.0f);
-	side_view.rGetMeshObject("floor1")->Translate(0.5f, 0.0f, 0.0f);
+	side_view.rGetMeshObject("floor2")->Translate	(0.05f, -0.2f, 0.0f);
+	side_view.rGetMeshObject("floor1")->Translate	(0.05f, 0.0f, 0.0f);
+	side_view.rGetMeshObject("floor01")->Translate	(0.05f, 0.2f, 0.0f);
 
 	side_view.CreateShadersAndSetup(
 		L"../../GraphicsEngine/Test_VertexShader.hlsl",
@@ -180,7 +180,7 @@ void Test_BoatOnScreen()
 		L"../../GraphicsEngine/Test_PixelShader.hlsl");
 
 	Camera camera2(
-		{ 0.0f, 5.0f, 3.5f, 0.0f }, 
+		{ 0.0f, 0.0f, -0.2f, 0.0f }, 
 		{ 0.0f, 1.0f, 0.0f, 0.0f }, 
 		{ 0.0f, 0.0f, 0.0f, 0.0f },
 		2.0f, 2.0f,

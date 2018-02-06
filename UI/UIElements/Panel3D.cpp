@@ -3,7 +3,8 @@
 Panel3D::Panel3D(int width, int height, int top, int left, HWND handle, LPCTSTR title)
 	:Panel(width, height, top, left, handle), mDirect3D(width, height)
 {
-	// Creating a child window that will be the canvas to draw on for the panel.
+	// Creating a child window that will be 
+	// the canvas to draw on for the panel.
 	this->mPanelWindow = CreateWindowEx(
 		0,
 		title, 
@@ -108,7 +109,8 @@ D3D11 & Panel3D::rGetDirect3D()
 const void Panel3D::AddMeshObject(
 	std::string name,
 	std::vector<std::vector<unsigned int>> indices, 
-	std::vector<std::vector<Vertex>> vertices)
+	std::vector<std::vector<Vertex>> vertices,
+	std::wstring texturePath)
 {
 	MeshObject *mesh_object = new MeshObject(name, indices, vertices);
 	this->mpMeshObjects.push_back(mesh_object);
@@ -120,6 +122,24 @@ const void Panel3D::AddMeshObject(
 	}
 	this->CreateConstantBuffer(
 		this->mpMeshObjects.back()->rGetModelMatrix(), 
+		this->mpMeshObjects.back()->rGetConstantBuffer());
+	if (texturePath != L"")
+	{
+		this->CreateTexture(texturePath);
+	}
+}
+
+const void Panel3D::AddMeshObject(MeshObject * meshObject)
+{
+	this->mpMeshObjects.push_back(meshObject);
+
+	for (int i = 0; i < this->mpMeshObjects.back()->GetNumberOfBuffers(); i++)
+	{
+		this->CreateIndexBuffer(meshObject->GetIndices()[i]);
+		this->CreateVertexBuffer(meshObject->GetVertices()[i]);
+	}
+	this->CreateConstantBuffer(
+		this->mpMeshObjects.back()->rGetModelMatrix(),
 		this->mpMeshObjects.back()->rGetConstantBuffer());
 }
 
@@ -140,9 +160,18 @@ bool Panel3D::CreateShadersAndSetup(
 		&this->mpInputLayout);
 
 	// Setting shaders to the pipeline.
-	this->mDirect3D.GetContext()->VSSetShader(this->mpVertexShader, nullptr, 0);
-	this->mDirect3D.GetContext()->GSSetShader(this->mpGeometryShader, nullptr, 0);
-	this->mDirect3D.GetContext()->PSSetShader(this->mpPixelShader, nullptr, 0);
+	this->mDirect3D.GetContext()->VSSetShader(
+		this->mpVertexShader, 
+		nullptr, 
+		0);
+	this->mDirect3D.GetContext()->GSSetShader(
+		this->mpGeometryShader, 
+		nullptr, 
+		0);
+	this->mDirect3D.GetContext()->PSSetShader(
+		this->mpPixelShader, 
+		nullptr, 
+		0);
 
 	// Setting up input assembler.
 	this->mDirect3D.GetContext()->IASetPrimitiveTopology
@@ -220,6 +249,19 @@ const void Panel3D::CreateConstantBuffer(
 		constantBuffer)))
 	{
 		MessageBoxA(NULL, "Error creating constant buffer.", NULL, MB_OK);
+		exit(-1);
+	}
+}
+
+const void Panel3D::CreateTexture(std::wstring texturePath)
+{
+	if (FAILED(CreateDDSTextureFromFile(
+		this->mDirect3D.GetDevice(), 
+		texturePath.c_str(), 
+		nullptr, 
+		this->mpMeshObjects.back()->rGetTextureView())))
+	{
+		MessageBoxA(NULL, "Error loading texture.", NULL, MB_OK);
 		exit(-1);
 	}
 }
