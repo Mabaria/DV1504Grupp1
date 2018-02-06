@@ -11,7 +11,7 @@ struct Fraction
 class Panel
 {
 public:
-	Panel(int width, int height, int top, int left, HWND handle);
+	Panel(int width, int height, int top, int left, HWND handle, LPCTSTR title);
 	~Panel();
 
 	const void SetWidth(int width);
@@ -39,12 +39,23 @@ public:
 	// to the panel's borders in range [0;1].
 	const Fraction IntersectionFraction(int x, int y);
 
+	const void UpdateWindowSize();
+
 protected:
 	int mWidth;
 	int mHeight;
 	int mTop;
 	int mLeft;
-	HWND mHandle;
+
+	// Normalized size relative to the parent window.
+	float mWidthFraction;
+	float mHeightFraction;
+	float mTopFraction;
+	float mLeftFraction;
+
+	// To compare sizes.
+	HWND mParentWindow;
+	HWND mPanelWindow;
 
 private:
 };

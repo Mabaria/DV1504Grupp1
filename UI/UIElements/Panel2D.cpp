@@ -1,7 +1,7 @@
 #include "Panel2D.h"
 
-Panel2D::Panel2D(int width, int height, int top, int left, HWND handle)
-	:Panel(width, height, top, left, handle)
+Panel2D::Panel2D(int width, int height, int top, int left, HWND handle, LPCTSTR title)
+	:Panel(width, height, top, left, handle, title)
 {
 	// Setup list of UI elements.
 }

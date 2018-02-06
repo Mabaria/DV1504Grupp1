@@ -1,12 +1,37 @@
 #include "Panel.h"
 
-Panel::Panel(int width, int height, int top, int left, HWND handle)
+Panel::Panel(int width, int height, int top, int left, HWND handle, LPCTSTR title)
 {
-	this->mWidth  = width;
-	this->mHeight = height;
-	this->mTop	  = top;
-	this->mLeft	  = left;
-	this->mHandle = handle;
+	this->mWidth		= width;
+	this->mHeight		= height;
+	this->mTop			= top;
+	this->mLeft			= left;
+	this->mParentWindow	= handle;
+
+	// Creating a child window that will be the canvas to draw on for the panel.
+	this->mPanelWindow = CreateWindowEx(
+		0,
+		title,
+		title,
+		WS_CHILD | WS_BORDER,
+		this->mLeft,
+		this->mTop,
+		this->mWidth,
+		this->mHeight,
+		this->mParentWindow,
+		0,
+		GetModuleHandle(0),
+		0);
+	ShowWindow(this->mPanelWindow, SW_NORMAL);
+
+	RECT parent_size;
+	GetClientRect(this->mParentWindow, &parent_size);
+	
+	this->mHeightFraction = (float)this->mHeight 
+		/ (float)(parent_size.bottom - parent_size.top);
+	this->mWidthFraction = (float)this->mWidth 
+		/ (float)(parent_size.right - parent_size.left);
+	
 }
 
 Panel::~Panel()
@@ -95,4 +120,10 @@ const Fraction Panel::IntersectionFraction(int x, int y)
 		fraction.y = ((float)y - (float)this->mTop) / (float)this->mHeight;
 	}
 	return fraction;
+}
+
+const void Panel::UpdateWindowSize()
+{
+	RECT client_size;
+	GetClientRect(this->mParentWindow, &client_size);
 }
