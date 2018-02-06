@@ -165,14 +165,11 @@
     <ClInclude Include="..\..\IO\ObserverPattern\Observer.h">
       <Filter>Header Files\IO</Filter>
     </ClInclude>
+	<ClInclude Include="..\..\IO\ObserverPattern\Test_Obs.h">
+      <Filter>Header Files\IO</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\IO\ObserverPattern\Test_Obs.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\GraphicsEngine\Test_Graphics.cpp">
-      <Filter>Test</Filter>
-    </ClCompile>
     <ClCompile Include="BIS.cpp">
       <Filter>Source Files\BIS</Filter>
     </ClCompile>
@@ -208,6 +205,9 @@
     </ClCompile>
     <ClCompile Include="..\..\GraphicsEngine\Camera\Test_Camera.cpp">
       <Filter>Source Files\GraphicsEngine\Test</Filter>
+	</ClCompile>
+	<ClCompile Include="..\..\GraphicsEngine\Test_Graphics.cpp">
+      <Filter>Source Files\GraphicsEngine\Test</Filter>
     </ClCompile>
     <ClCompile Include="..\..\IO\Mouse.cpp">
       <Filter>Source Files\IO</Filter>
@@ -216,6 +216,9 @@
       <Filter>Source Files\IO</Filter>
     </ClCompile>
     <ClCompile Include="..\..\IO\Keyboard.cpp">
+      <Filter>Source Files\IO</Filter>
+    </ClCompile>
+	<ClCompile Include="..\..\IO\ObserverPattern\Test_Obs.cpp">
       <Filter>Source Files\IO</Filter>
     </ClCompile>
     <ClCompile Include="..\..\IO\Test_Input.cpp">
@@ -275,11 +278,6 @@
     <ClCompile Include="..\..\GraphicsEngine\DX\Direct3D.cpp">
       <Filter>Source Files\GraphicsEngine</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\IO\ObserverPattern\Test_Obs.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
