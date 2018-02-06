@@ -165,8 +165,35 @@
     <ClInclude Include="..\..\IO\ObserverPattern\Observer.h">
       <Filter>Header Files\IO</Filter>
     </ClInclude>
-	<ClInclude Include="..\..\IO\ObserverPattern\Test_Obs.h">
+    <ClInclude Include="..\..\IO\ObserverPattern\Test_Obs.h">
       <Filter>Header Files\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Logic\Eventlog\LogEvent.h">
+      <Filter>Header Files\Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Logic\Eventlog\EventLog.h">
+      <Filter>Header Files\Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Logic\Eventlog\ActiveEvent.h">
+      <Filter>Header Files\Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Logic\Event\Event.h">
+      <Filter>Header Files\Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Logic\Boat\Sensor.h">
+      <Filter>Header Files\Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Logic\Boat\Room.h">
+      <Filter>Header Files\Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Logic\Boat\Deck.h">
+      <Filter>Header Files\Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Logic\Boat\Boat.h">
+      <Filter>Header Files\Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Logic\BoatTester.h">
+      <Filter>Header Files\Logic\Test</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -205,8 +232,8 @@
     </ClCompile>
     <ClCompile Include="..\..\GraphicsEngine\Camera\Test_Camera.cpp">
       <Filter>Source Files\GraphicsEngine\Test</Filter>
-	</ClCompile>
-	<ClCompile Include="..\..\GraphicsEngine\Test_Graphics.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\GraphicsEngine\Test_Graphics.cpp">
       <Filter>Source Files\GraphicsEngine\Test</Filter>
     </ClCompile>
     <ClCompile Include="..\..\IO\Mouse.cpp">
@@ -218,7 +245,7 @@
     <ClCompile Include="..\..\IO\Keyboard.cpp">
       <Filter>Source Files\IO</Filter>
     </ClCompile>
-	<ClCompile Include="..\..\IO\ObserverPattern\Test_Obs.cpp">
+    <ClCompile Include="..\..\IO\ObserverPattern\Test_Obs.cpp">
       <Filter>Source Files\IO</Filter>
     </ClCompile>
     <ClCompile Include="..\..\IO\Test_Input.cpp">
@@ -277,6 +304,33 @@
     </ClCompile>
     <ClCompile Include="..\..\GraphicsEngine\DX\Direct3D.cpp">
       <Filter>Source Files\GraphicsEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Logic\Eventlog\LogEvent.cpp">
+      <Filter>Source Files\Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Logic\Eventlog\EventLog.cpp">
+      <Filter>Source Files\Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Logic\Eventlog\ActiveEvent.cpp">
+      <Filter>Source Files\Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Logic\Event\Event.cpp">
+      <Filter>Source Files\Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Logic\Boat\Sensor.cpp">
+      <Filter>Source Files\Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Logic\Boat\Room.cpp">
+      <Filter>Source Files\Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Logic\Boat\Deck.cpp">
+      <Filter>Source Files\Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Logic\Boat\Boat.cpp">
+      <Filter>Source Files\Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Logic\BoatTester.cpp">
+      <Filter>Source Files\Logic\Test</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
