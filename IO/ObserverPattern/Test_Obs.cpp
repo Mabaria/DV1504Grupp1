@@ -2,11 +2,11 @@
 #include "Observable.h"
 #include <iostream>
 
-class Room : public Observable<int>
+class TestRoom : public Observable<int>
 {
 public:
-	Room() { this->activeEvent = "Fire"; }
-	~Room() {}
+	TestRoom() { this->activeEvent = "Fire"; }
+	~TestRoom() {}
 	std::string GetActiveEvent() { return this->activeEvent; }
 private:
 	std::string activeEvent;
@@ -30,7 +30,7 @@ public:
 void Test_Observer()
 {
 	EventReporter observer1;
-	Room observable1;
+	TestRoom observable1;
 
 	observable1.AddObserver(&observer1); // Add observer1 to observable1's sub list
 	observable1.NotifyObservers(5);
