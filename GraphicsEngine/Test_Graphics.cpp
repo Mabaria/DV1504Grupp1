@@ -135,6 +135,7 @@ void Test_D3D11()
 
 	pVS->Release();
 	pPS->Release();
-	pInputLayout->Release();
+	//Todo This release gives errors
+	//pInputLayout->Release();
 	vertex_buffer->Release();
 }

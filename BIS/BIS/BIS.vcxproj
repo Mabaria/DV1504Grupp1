@@ -18,6 +18,70 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\GraphicsEngine\Camera\Camera.cpp" />
+    <ClCompile Include="..\..\GraphicsEngine\Camera\Test_Camera.cpp" />
+    <ClCompile Include="..\..\GraphicsEngine\DX\Direct2D.cpp" />
+    <ClCompile Include="..\..\GraphicsEngine\DX\Direct3D.cpp" />
+    <ClCompile Include="..\..\GraphicsEngine\Parsing\Mesh.cpp" />
+    <ClCompile Include="..\..\GraphicsEngine\Parsing\Test_AssImp.cpp" />
+    <ClCompile Include="..\..\GraphicsEngine\Parsing\Test_Boat.cpp" />
+    <ClCompile Include="..\..\GraphicsEngine\Parsing\Test_Mesh.cpp" />
+    <ClCompile Include="..\..\GraphicsEngine\Test_Button.cpp" />
+    <ClCompile Include="..\..\GraphicsEngine\Test_Graphics.cpp" />
+    <ClCompile Include="..\..\GraphicsEngine\Window.cpp" />
+    <ClCompile Include="..\..\IO\InputDevice.cpp" />
+    <ClCompile Include="..\..\IO\Keyboard.cpp" />
+    <ClCompile Include="..\..\IO\Mouse.cpp" />
+    <ClCompile Include="..\..\IO\ObserverPattern\Test_Obs.cpp" />
+    <ClCompile Include="..\..\IO\Test_Input.cpp" />
+    <ClCompile Include="..\..\Logic\Timer.cpp" />
+    <ClCompile Include="..\..\UI\UIElements\Button.cpp" />
+    <ClCompile Include="..\..\UI\UIElements\MeshObject.cpp" />
+    <ClCompile Include="..\..\UI\UIElements\Panel.cpp" />
+    <ClCompile Include="..\..\UI\UIElements\Panel2D.cpp" />
+    <ClCompile Include="..\..\UI\UIElements\Panel3D.cpp" />
+    <ClCompile Include="..\..\UI\UIElements\Test_Panel.cpp" />
+    <ClCompile Include="BIS.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\GraphicsEngine\Camera\Camera.h" />
+    <ClInclude Include="..\..\GraphicsEngine\Camera\Test_Camera.h" />
+    <ClInclude Include="..\..\GraphicsEngine\DX\Direct2D.h" />
+    <ClInclude Include="..\..\GraphicsEngine\DX\Direct3D.h" />
+    <ClInclude Include="..\..\GraphicsEngine\Parsing\Mesh.h" />
+    <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_AssImp.h" />
+    <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_Boat.h" />
+    <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_Mesh.h" />
+    <ClInclude Include="..\..\GraphicsEngine\Test_Button.h" />
+    <ClInclude Include="..\..\GraphicsEngine\Test_Graphics.h" />
+    <ClInclude Include="..\..\GraphicsEngine\Window.h" />
+    <ClInclude Include="..\..\IO\InputDevice.h" />
+    <ClInclude Include="..\..\IO\Keyboard.h" />
+    <ClInclude Include="..\..\IO\Mouse.h" />
+    <ClInclude Include="..\..\IO\ObserverPattern\Observable.h" />
+    <ClInclude Include="..\..\IO\ObserverPattern\Observer.h" />
+    <ClInclude Include="..\..\IO\ObserverPattern\Test_Obs.h" />
+    <ClInclude Include="..\..\IO\Test_Input.h" />
+    <ClInclude Include="..\..\Logic\Timer.h" />
+    <ClInclude Include="..\..\Test\Testing.h" />
+    <ClInclude Include="..\..\UI\UIElements\Button.h" />
+    <ClInclude Include="..\..\UI\UIElements\MeshObject.h" />
+    <ClInclude Include="..\..\UI\UIElements\Panel.h" />
+    <ClInclude Include="..\..\UI\UIElements\Panel2D.h" />
+    <ClInclude Include="..\..\UI\UIElements\Panel3D.h" />
+    <ClInclude Include="..\..\UI\UIElements\Test_Panel.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\..\GraphicsEngine\Test_PixelShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="..\..\GraphicsEngine\Test_VertexShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+    </FxCompile>
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{E7787C46-11A6-401C-BF80-AA62ACC08957}</ProjectGuid>
@@ -153,84 +217,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\GraphicsEngine\DX\Direct2D.h" />
-    <ClInclude Include="..\..\UI\UIElements\MeshObject.h" />
-    <ClInclude Include="..\..\UI\UIElements\Test_Panel.h" />
-    <ClInclude Include="Direct3D.h" />
-    <ClInclude Include="..\..\GraphicsEngine\Camera\Camera.h" />
-    <ClInclude Include="..\..\GraphicsEngine\Camera\Test_Camera.h" />
-    <ClInclude Include="..\..\GraphicsEngine\DX\Direct3D.h" />
-    <ClInclude Include="..\..\GraphicsEngine\Test_Button.h" />
-    <ClInclude Include="..\..\GraphicsEngine\Test_Graphics.h" />
-    <ClInclude Include="..\..\GraphicsEngine\Window.h" />
-    <ClInclude Include="..\..\IO\InputDevice.h" />
-    <ClInclude Include="..\..\IO\Keyboard.h" />
-    <ClInclude Include="..\..\IO\Mouse.h" />
-    <ClInclude Include="..\..\IO\Test_Input.h" />
-    <ClInclude Include="..\..\IO\ObserverPattern\Observable.h" />
-    <ClInclude Include="..\..\IO\ObserverPattern\Observer.h" />
-    <ClInclude Include="..\..\IO\ObserverPattern\Test_Obs.h" />
-    <ClInclude Include="..\..\GraphicsEngine\Parsing\Mesh.h" />
-    <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_AssImp.h" />
-    <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_Boat.h" />
-    <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_Mesh.h" />
-    <ClInclude Include="..\..\UI\UIElements\Button.h" />
-    <ClInclude Include="..\..\UI\UIElements\Panel.h" />
-    <ClInclude Include="..\..\UI\UIElements\Panel2D.h" />
-    <ClInclude Include="..\..\UI\UIElements\Panel3D.h" />
-    <ClInclude Include="stdafx.h" />
-    <ClInclude Include="targetver.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\GraphicsEngine\DX\Direct2D.cpp" />
-    <ClCompile Include="..\..\GraphicsEngine\Camera\Camera.cpp" />
-    <ClCompile Include="..\..\GraphicsEngine\Camera\Test_Camera.cpp" />
-    <ClCompile Include="..\..\GraphicsEngine\DX\Direct3D.cpp" />
-    <ClCompile Include="..\..\GraphicsEngine\Test_Button.cpp" />
-    <ClCompile Include="..\..\GraphicsEngine\Parsing\Mesh.cpp" />
-    <ClCompile Include="..\..\GraphicsEngine\Parsing\Test_Boat.cpp" />
-    <ClCompile Include="..\..\GraphicsEngine\Parsing\Test_Mesh.cpp" />
-    <ClCompile Include="..\..\GraphicsEngine\Test_Graphics.cpp" />
-    <ClCompile Include="..\..\GraphicsEngine\Window.cpp" />
-    <ClCompile Include="..\..\IO\InputDevice.cpp" />
-    <ClCompile Include="..\..\IO\Keyboard.cpp" />
-    <ClCompile Include="..\..\IO\Mouse.cpp" />
-    <ClCompile Include="..\..\IO\Test_Input.cpp" />
-    <ClCompile Include="..\..\Logic\Timer.cpp" />
-    <ClCompile Include="..\..\IO\ObserverPattern\Test_Obs.cpp" />
-    <ClCompile Include="..\..\UI\UIElements\Button.cpp" />
-    <ClCompile Include="..\..\UI\UIElements\MeshObject.cpp" />
-    <ClCompile Include="..\..\UI\UIElements\Panel.cpp" />
-    <ClCompile Include="..\..\UI\UIElements\Panel2D.cpp" />
-    <ClCompile Include="..\..\UI\UIElements\Panel3D.cpp" />
-    <ClCompile Include="..\..\UI\UIElements\Test_Panel.cpp" />
-    <ClCompile Include="BIS.cpp" />
-    <ClCompile Include="stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="..\..\GraphicsEngine\Test_PixelShader.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
-    </FxCompile>
-    <FxCompile Include="..\..\GraphicsEngine\Test_VertexShader.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
-    </FxCompile>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

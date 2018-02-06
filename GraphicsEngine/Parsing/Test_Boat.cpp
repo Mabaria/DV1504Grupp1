@@ -16,13 +16,14 @@ bool TestBoat() {
 	system("pause");
 
 	std::vector<std::vector<Vertex>> vertVector = shipObj->GetVertexVectors();
-	for (unsigned int i = 19; i < 25; i++)
+	//Todo This gives errors
+	/*for (unsigned int i = 19; i < 25; i++)
 	{
 		std::cout << vertVector[0][i].x << ", "
 			<< vertVector[0][i].y << ", "
 			<< vertVector[0][i].z << std::endl;
 		
-	}
+	}*/
 
 	system("pause");
 	delete shipObj;
