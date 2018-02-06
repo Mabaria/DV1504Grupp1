@@ -148,8 +148,8 @@ void Mesh::PopulateVectors()
 				}
 				else
 				{
-					temp_tex_u = 0.0f;
-					temp_tex_v = 0.0f;
+					temp_tex_u = -1.0f;
+					temp_tex_v = -1.0f;
 				}
 				Vertex new_vert =
 				{

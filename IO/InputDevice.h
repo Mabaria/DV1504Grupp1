@@ -43,15 +43,18 @@ public:
 	static void SetKey(const Keys key, const bool is_pressed);
 
 	// Mouse input
+	static bool buttonsActive[2];
+	static bool buttonsPressed[2];
+
 	static Position mousePosition;
 	static Position mousePositionPercentage;
-	static bool buttonsPressed[2];
-	static bool buttonsActive[2];
+	static float scrollDirection;
 
 	static void SetMouseButton(const Buttons button, const bool is_pressed);
 	static void SetMousePositionPercentage(const float x, const float y);
 	static void SetMousePosition(const float x, const float y);
 
+	static void SetMouseScroll(const float scroll);
 private:
 
 };

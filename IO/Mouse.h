@@ -8,14 +8,15 @@ public:
 	static const bool IsButtonPressed(const Buttons button);
 	static const bool IsButtonDown(const Buttons button);
 	
-	static const float GetMouseX();
-	static const float GetMouseY();
-	static const Position GetMousePosition();
+	static const float GetX();
+	static const float GetY();
+	static const Position GetPosition();
 	
-	static const float GetMouseXPercentage();
-	static const float GetMouseYPercentage();
-	static const Position GetMousePositionPercentage();
+	static const float GetXPercentage();
+	static const float GetYPercentage();
+	static const Position GetPositionPercentage();
 	
+	static const float GetScroll();
 
 private:
 
