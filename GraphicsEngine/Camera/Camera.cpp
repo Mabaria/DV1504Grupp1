@@ -1,22 +1,45 @@
 #include "Camera.h"
 
-Camera::Camera(const DirectX::XMVECTOR & r_position,
-	const DirectX::XMVECTOR & r_up_vector,
-	const DirectX::XMVECTOR & r_look_vector,
-	const CAMERAMODE camera_mode)
+Camera::Camera(const DirectX::XMVECTOR &r_position,
+	const DirectX::XMVECTOR &r_up_vector,
+	const DirectX::XMVECTOR &r_look_vector,
+	const float view_width_or_fov_angle,
+	const float view_height_or_aspect_ratio,
+	const float near_z,
+	const float far_z,
+	const LOOK_MODE camera_mode,
+	const PROJECTION_MODE projection_mode)
 {
-	this->mInit(r_position, r_up_vector, r_look_vector, camera_mode);
+	this->mInit(r_position,
+		r_up_vector,
+		r_look_vector,
+		view_width_or_fov_angle,
+		view_height_or_aspect_ratio,
+		near_z,
+		far_z,
+		camera_mode,
+		projection_mode);
 }
 
-Camera::Camera(const DirectX::XMFLOAT3 & r_position,
-	const DirectX::XMFLOAT3 & r_up_vector,
-	const DirectX::XMFLOAT3 & r_look_vector,
-	const CAMERAMODE camera_mode)
+Camera::Camera(const DirectX::XMFLOAT3 &r_position,
+	const DirectX::XMFLOAT3 &r_up_vector,
+	const DirectX::XMFLOAT3 &r_look_vector,
+	const float view_width_or_fov_angle,
+	const float view_height_or_aspect_ratio,
+	const float near_z,
+	const float far_z,
+	const LOOK_MODE camera_mode,
+	const PROJECTION_MODE projection_mode)
 {
 	this->mInit(DirectX::XMLoadFloat3(&r_position),
 		DirectX::XMLoadFloat3(&r_up_vector),
 		DirectX::XMLoadFloat3(&r_look_vector),
-		camera_mode);
+		view_width_or_fov_angle,
+		view_height_or_aspect_ratio,
+		near_z,
+		far_z,
+		camera_mode,
+		projection_mode);
 }
 
 Camera::Camera(const float pos_x,
@@ -28,12 +51,22 @@ Camera::Camera(const float pos_x,
 	const float look_x,
 	const float look_y,
 	const float look_z,
-	const CAMERAMODE camera_mode)
+	const float view_width_or_fov_angle,
+	const float view_height_or_aspect_ratio,
+	const float near_z,
+	const float far_z,
+	const LOOK_MODE camera_mode,
+	const PROJECTION_MODE projection_mode)
 {
 	this->mInit(DirectX::XMVectorSet(pos_x, pos_y, pos_z, 0.0f),
 		DirectX::XMVectorSet(up_x, up_y, up_z, 0.0f),
 		DirectX::XMVectorSet(look_x, look_y, look_z, 0.0f),
-		camera_mode);
+		view_width_or_fov_angle,
+		view_height_or_aspect_ratio,
+		near_z,
+		far_z,
+		camera_mode,
+		projection_mode);
 }
 
 Camera::~Camera()
@@ -41,21 +74,34 @@ Camera::~Camera()
 
 }
 
-void Camera::mInit(const DirectX::XMVECTOR & r_position,
-	const DirectX::XMVECTOR & r_up_vector,
-	const DirectX::XMVECTOR & r_look_vector,
-	const CAMERAMODE camera_mode)
+void Camera::mInit(const DirectX::XMVECTOR &r_position,
+	const DirectX::XMVECTOR &r_up_vector,
+	const DirectX::XMVECTOR &r_look_vector,
+	const float view_width_or_fov_angle,
+	const float view_height_or_aspect_ratio,
+	const float near_z,
+	const float far_z,
+	const LOOK_MODE camera_mode,
+	const PROJECTION_MODE projection_mode)
 {
 	this->mCameraPosition = r_position;
 	this->mUpVector = r_up_vector;
 	this->mLookVector = r_look_vector;
-	this->mCameraMode = camera_mode;
+	this->mViewWidth = view_width_or_fov_angle;
+	this->mFovAngle = view_width_or_fov_angle;
+	this->mViewHeight = view_height_or_aspect_ratio;
+	this->mAspectRatio = view_height_or_aspect_ratio;
+	this->mNearZ = near_z;
+	this->mFarZ = far_z;
+	this->mLookMode = camera_mode;
+	this->mProjectionMode = projection_mode;
 	this->mUpdateViewMatrix();
+	this->mUpdateProjMatrix();
 }
 
 void Camera::mUpdateViewMatrix()
 {
-	if (this->mCameraMode == LOOKAT)
+	if (this->mLookMode == LOOK_AT)
 	{
 		this->mViewMatrix = DirectX::XMMatrixLookAtLH(this->mCameraPosition,
 			this->mLookVector,
@@ -67,6 +113,29 @@ void Camera::mUpdateViewMatrix()
 			this->mLookVector,
 			this->mUpVector);
 	}
+}
+
+void Camera::mUpdateProjMatrix()
+{
+	if (this->mProjectionMode == PERSPECTIVE)
+	{
+		this->mProjMatrix = DirectX::XMMatrixPerspectiveFovLH(
+			this->mFovAngle,
+			this->mAspectRatio,
+			this->mNearZ,
+			this->mFarZ
+		);
+	}
+	else
+	{
+		this->mProjMatrix = DirectX::XMMatrixOrthographicLH(
+			this->mViewWidth,
+			this->mViewHeight,
+			this->mNearZ,
+			this->mFarZ
+		);
+	}
+
 }
 
 void Camera::mRotateViewMatrix(const DirectX::XMMATRIX & camRotationMatrix) 
@@ -174,9 +243,9 @@ void Camera::SetLookVector(const float new_x, const float new_y, const float new
 	this->mUpdateViewMatrix();
 }
 
-void Camera::SetCameraMode(CAMERAMODE new_cameramode)
+void Camera::SetLookMode(const LOOK_MODE new_look_mode)
 {
-	this->mCameraMode = new_cameramode;
+	this->mLookMode = new_look_mode;
 }
 
 void Camera::RotateCameraPitchYawRoll(const float pitch,
@@ -216,9 +285,9 @@ DirectX::XMVECTOR Camera::GetLookVector() const
 	return this->mLookVector;
 }
 
-CAMERAMODE Camera::GetCameraMode() const
+LOOK_MODE Camera::GetLookMode() const
 {
-	return this->mCameraMode;
+	return this->mLookMode;
 }
 
 DirectX::XMMATRIX Camera::GetViewMatrix() const
@@ -229,4 +298,109 @@ DirectX::XMMATRIX Camera::GetViewMatrix() const
 DirectX::XMMATRIX Camera::GetTransposedViewMatrix() const
 {
 	return XMMatrixTranspose(this->mViewMatrix);
+}
+
+DirectX::XMMATRIX Camera::GetProjectionMatrix() const
+{
+	return this->mProjMatrix;
+}
+
+DirectX::XMMATRIX Camera::GetTransposedProjectionMatrix() const
+{
+	return DirectX::XMMatrixTranspose(this->mProjMatrix);
+}
+
+PROJECTION_MODE Camera::GetProjectionMode() const
+{
+	return this->mProjectionMode;
+}
+
+bool Camera::SetViewWidth(const float new_view_width)
+{
+	if (new_view_width >= 0)
+	{
+		this->mViewWidth = new_view_width;
+		this->mUpdateProjMatrix();
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool Camera::SetViewHeight(const float new_view_height)
+{
+	if (new_view_height >= 0)
+	{
+		this->mViewHeight = new_view_height;
+		this->mUpdateProjMatrix();
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool Camera::SetFovAngle(const float new_fov_angle)
+{
+	if (new_fov_angle >= 0)
+	{
+		this->mFovAngle = new_fov_angle;
+		this->mUpdateProjMatrix();
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool Camera::SetAspectRatio(const float new_aspect_ratio)
+{
+	if (new_aspect_ratio >= 0)
+	{
+		this->mAspectRatio = new_aspect_ratio;
+		this->mUpdateProjMatrix();
+		return true;
+	}
+	else 
+	{
+		return false;
+	}
+}
+
+bool Camera::SetNearZ(const float new_near_z)
+{
+	if (new_near_z != this->mFarZ) // Near and far cannot be equal
+	{
+		this->mNearZ = new_near_z;
+		this->mUpdateProjMatrix();
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool Camera::SetFarZ(const float new_far_z)
+{
+	if (new_far_z != this->mNearZ)
+	{
+		this->mFarZ = new_far_z;
+		this->mUpdateProjMatrix();
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+void Camera::SetProjectionMode(const PROJECTION_MODE new_projection_mode)
+{
+	this->mProjectionMode = new_projection_mode;
+	this->mUpdateProjMatrix();
 }

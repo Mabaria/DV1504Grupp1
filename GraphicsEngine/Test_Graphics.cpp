@@ -1,5 +1,6 @@
 #include "../GraphicsEngine/Test_Graphics.h"
 
+
 void Test_Window()
 {
 	Window window(L"Test_Window", 1280, 720);
@@ -52,10 +53,11 @@ void Test_D3D11()
 	);
 
 	D3D11 direct3D(
-		child_window,
+		/*child_window,*/
 		window.GetClientSize().width * width,
 		window.GetClientSize().height * height
 	);
+	direct3D.Init(child_window);
 
 	ID3D11InputLayout *pInputLayout = nullptr;
 	ID3D11VertexShader *pVS = nullptr;
@@ -133,6 +135,7 @@ void Test_D3D11()
 
 	pVS->Release();
 	pPS->Release();
-	pInputLayout->Release();
+	//Todo This release gives errors
+	//pInputLayout->Release();
 	vertex_buffer->Release();
 }

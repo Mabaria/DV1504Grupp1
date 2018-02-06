@@ -9,173 +9,296 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
+    <Filter Include="Source Files\BIS">
+      <UniqueIdentifier>{f82dc426-d349-4a0d-a48d-1f43c290c1d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\BIS">
+      <UniqueIdentifier>{cea4e531-7a8e-468d-ad59-a7ae57f04f13}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GraphicsEngine">
+      <UniqueIdentifier>{4e5ddd4e-7da0-410b-b3e6-3d7e8fafe7a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GraphicsEngine\Test">
+      <UniqueIdentifier>{e7285f4e-de9b-4ec3-b7cc-93af7551cadb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\IO">
+      <UniqueIdentifier>{c998f927-09ad-4abf-bf70-dab31c8dff4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\IO\Test">
+      <UniqueIdentifier>{53738f6a-6ef1-4c78-bc0f-66ff1f0d3ae2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Logic">
+      <UniqueIdentifier>{db508542-9033-43a9-9630-c1432fef18bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Logic\Test">
+      <UniqueIdentifier>{6f3ef57c-8b27-42c3-a16b-6c8a2490c9c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Sound">
+      <UniqueIdentifier>{f0d74867-f132-4851-811c-13c2ec2246a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\UI">
+      <UniqueIdentifier>{b2d5f2d4-0f9f-4325-8c30-fdd661fa7436}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\UI\Test">
+      <UniqueIdentifier>{dbe58373-f52f-4126-9f2b-71b100cd0920}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Sound\Test">
+      <UniqueIdentifier>{50a7a9de-56c3-44a8-bc52-ad0c48994a57}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\GraphicsEngine">
+      <UniqueIdentifier>{1e13f0e0-df15-4f5a-a43d-cd9514254223}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\GraphicsEngine\Test">
+      <UniqueIdentifier>{9a8b13b9-1461-4be1-bbd8-0bf0f5c562a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\IO">
+      <UniqueIdentifier>{1a3c96c4-e7ad-486b-bd0f-e011279fdc2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\IO\Test">
+      <UniqueIdentifier>{6f55e4b2-dcd0-43af-9cea-6658c33357fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Logic">
+      <UniqueIdentifier>{9b97f2bf-1b9f-41ec-a182-c1ecae1f50a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Logic\Test">
+      <UniqueIdentifier>{9b3d3e7d-9a3f-4734-b980-9646955c735b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\UI">
+      <UniqueIdentifier>{ec6d1e52-f779-4802-97ca-6fa6a9ce0c35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\UI\Test">
+      <UniqueIdentifier>{f0f59171-d158-4765-bada-cd99ac6f4ede}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Sound">
+      <UniqueIdentifier>{82bb9b60-5128-451b-99f0-f40665fb20c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Sound\Test">
+      <UniqueIdentifier>{0f21cc72-3791-4313-ac74-edef43d1170d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Test">
+      <UniqueIdentifier>{312fae1c-3c3f-4f75-b92d-b0e9c42a9738}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stdafx.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\GraphicsEngine\Window.h">
+      <Filter>Header Files\GraphicsEngine</Filter>
     </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\GraphicsEngine\Camera\Camera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\GraphicsEngine\Camera\Test_Camera.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\GraphicsEngine\DX\Direct2D.h">
+      <Filter>Header Files\GraphicsEngine</Filter>
     </ClInclude>
     <ClInclude Include="..\..\GraphicsEngine\DX\Direct3D.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\GraphicsEngine\Test_Graphics.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\GraphicsEngine\Window.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\IO\InputDevice.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\IO\Keyboard.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\IO\Mouse.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\IO\Test_Input.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\IO\ObserverPattern\Observable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\IO\ObserverPattern\Observer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\IO\ObserverPattern\Test_Obs.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\GraphicsEngine</Filter>
     </ClInclude>
     <ClInclude Include="..\..\GraphicsEngine\Parsing\Mesh.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\GraphicsEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\GraphicsEngine\Camera\Camera.h">
+      <Filter>Header Files\GraphicsEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\GraphicsEngine\Test_Button.h">
+      <Filter>Header Files\GraphicsEngine\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\GraphicsEngine\Test_Graphics.h">
+      <Filter>Header Files\GraphicsEngine\Test</Filter>
     </ClInclude>
     <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_AssImp.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\GraphicsEngine\Test</Filter>
     </ClInclude>
     <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_Boat.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\GraphicsEngine\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\GraphicsEngine\Camera\Test_Camera.h">
+      <Filter>Header Files\GraphicsEngine\Test</Filter>
     </ClInclude>
     <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_Mesh.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\GraphicsEngine\Test</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Logic\Boat\Boat.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\IO\Mouse.h">
+      <Filter>Header Files\IO</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Logic\Boat\Deck.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\IO\ObserverPattern\Observable.h">
+      <Filter>Header Files\IO</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Logic\Boat\Room.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\IO\ObserverPattern\Observer.h">
+      <Filter>Header Files\IO</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Logic\Boat\Sensor.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\IO\InputDevice.h">
+      <Filter>Header Files\IO</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Logic\Event\Event.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\IO\Keyboard.h">
+      <Filter>Header Files\IO</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Logic\Eventlog\EventLog.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\IO\Test_Input.h">
+      <Filter>Header Files\IO\Test</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Logic\Eventlog\LogEvent.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\IO\ObserverPattern\Test_Obs.h">
+      <Filter>Header Files\IO\Test</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Logic\BoatTester.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\Logic\Timer.h">
+      <Filter>Header Files\Logic</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Logic\Eventlog\ActiveEvent.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\..\UI\UIElements\Button.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UI\UIElements\MeshObject.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UI\UIElements\Panel.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UI\UIElements\Panel2D.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UI\UIElements\Panel3D.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UI\UIElements\Test_Panel.h">
+      <Filter>Header Files\UI\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Test\Testing.h">
+      <Filter>Header Files\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\IO\ObserverPattern\Observer.h">
+      <Filter>Header Files\IO</Filter>
+    </ClInclude>
+	<ClInclude Include="..\..\IO\ObserverPattern\Test_Obs.h">
+      <Filter>Header Files\IO</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="BIS.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\GraphicsEngine\Camera\Camera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\GraphicsEngine\Camera\Test_Camera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\GraphicsEngine\DX\Direct3D.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\GraphicsEngine\Parsing\Mesh.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\GraphicsEngine\Parsing\Test_Boat.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\GraphicsEngine\Parsing\Test_Mesh.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\GraphicsEngine\Test_Graphics.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\BIS</Filter>
     </ClCompile>
     <ClCompile Include="..\..\GraphicsEngine\Window.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\GraphicsEngine</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\IO\InputDevice.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\..\GraphicsEngine\DX\Direct2D.cpp">
+      <Filter>Source Files\GraphicsEngine</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\IO\Keyboard.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\..\GraphicsEngine\DX\Direct3D.cpp">
+      <Filter>Source Files\GraphicsEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\GraphicsEngine\Parsing\Mesh.cpp">
+      <Filter>Source Files\GraphicsEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\GraphicsEngine\Camera\Camera.cpp">
+      <Filter>Source Files\GraphicsEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\GraphicsEngine\Test_Button.cpp">
+      <Filter>Source Files\GraphicsEngine\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\GraphicsEngine\Test_Graphics.cpp">
+      <Filter>Source Files\GraphicsEngine\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\GraphicsEngine\Parsing\Test_AssImp.cpp">
+      <Filter>Source Files\GraphicsEngine\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\GraphicsEngine\Parsing\Test_Boat.cpp">
+      <Filter>Source Files\GraphicsEngine\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\GraphicsEngine\Parsing\Test_Mesh.cpp">
+      <Filter>Source Files\GraphicsEngine\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\GraphicsEngine\Camera\Test_Camera.cpp">
+      <Filter>Source Files\GraphicsEngine\Test</Filter>
+	</ClCompile>
+	<ClCompile Include="..\..\GraphicsEngine\Test_Graphics.cpp">
+      <Filter>Source Files\GraphicsEngine\Test</Filter>
     </ClCompile>
     <ClCompile Include="..\..\IO\Mouse.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\IO\InputDevice.cpp">
+      <Filter>Source Files\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\IO\Keyboard.cpp">
+      <Filter>Source Files\IO</Filter>
+    </ClCompile>
+	<ClCompile Include="..\..\IO\ObserverPattern\Test_Obs.cpp">
+      <Filter>Source Files\IO</Filter>
     </ClCompile>
     <ClCompile Include="..\..\IO\Test_Input.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Logic\Timer.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\IO\Test</Filter>
     </ClCompile>
     <ClCompile Include="..\..\IO\ObserverPattern\Test_Obs.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\IO\Test</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Logic\Boat\Boat.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\..\Logic\Timer.cpp">
+      <Filter>Source Files\Logic</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Logic\Boat\Deck.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\..\UI\UIElements\Button.cpp">
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Logic\Boat\Room.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\..\UI\UIElements\MeshObject.cpp">
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Logic\Boat\Sensor.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\..\UI\UIElements\Panel.cpp">
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Logic\Event\Event.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\..\UI\UIElements\Panel2D.cpp">
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Logic\Eventlog\EventLog.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\..\UI\UIElements\Panel3D.cpp">
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Logic\Eventlog\LogEvent.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\..\UI\UIElements\Test_Panel.cpp">
+      <Filter>Source Files\UI\Test</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Logic\BoatTester.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\..\GraphicsEngine\Test_Graphics.cpp">
+      <Filter>Source Files\GraphicsEngine\Test</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Logic\Eventlog\ActiveEvent.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="BIS.cpp">
+      <Filter>Source Files\BIS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\GraphicsEngine\Window.cpp">
+      <Filter>Source Files\GraphicsEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Logic\Timer.cpp">
+      <Filter>Source Files\Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\IO\ObserverPattern\Test_Obs.cpp">
+      <Filter>Source Files\IO\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\IO\Test_Input.cpp">
+      <Filter>Source Files\IO\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\IO\Mouse.cpp">
+      <Filter>Source Files\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\IO\Keyboard.cpp">
+      <Filter>Source Files\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\IO\InputDevice.cpp">
+      <Filter>Source Files\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\GraphicsEngine\DX\Direct3D.cpp">
+      <Filter>Source Files\GraphicsEngine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="..\..\GraphicsEngine\Test_PixelShader.hlsl" />
-    <FxCompile Include="..\..\GraphicsEngine\Test_VertexShader.hlsl" />
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{e4fdd6bb-133b-4ecc-a69f-88b3c0892322}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{8b696da5-9e97-469b-98ce-897bc5171cbf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{f1204bf7-d3ab-401f-be35-45feda458635}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{73513f71-66b5-4ecb-92d0-6641bd81030d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\..\GraphicsEngine\Test_PixelShader.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\GraphicsEngine\Test_VertexShader.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
