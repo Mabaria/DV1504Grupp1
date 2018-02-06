@@ -299,7 +299,7 @@ void Window::Close()
 	if (this->mHwnd && this->mIsOpen)
 	{
 		this->mIsOpen = false;
-		DestroyWindow(this->mHwnd);
+		//DestroyWindow(this->mHwnd);
 	}
 }
 

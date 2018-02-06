@@ -165,7 +165,7 @@
     <ClInclude Include="..\..\IO\ObserverPattern\Observer.h">
       <Filter>Header Files\IO</Filter>
     </ClInclude>
-	<ClInclude Include="..\..\IO\ObserverPattern\Test_Obs.h">
+    <ClInclude Include="..\..\IO\ObserverPattern\Test_Obs.h">
       <Filter>Header Files\IO</Filter>
     </ClInclude>
   </ItemGroup>
@@ -205,8 +205,8 @@
     </ClCompile>
     <ClCompile Include="..\..\GraphicsEngine\Camera\Test_Camera.cpp">
       <Filter>Source Files\GraphicsEngine\Test</Filter>
-	</ClCompile>
-	<ClCompile Include="..\..\GraphicsEngine\Test_Graphics.cpp">
+    </ClCompile>
+    <ClCompile Include="..\..\GraphicsEngine\Test_Graphics.cpp">
       <Filter>Source Files\GraphicsEngine\Test</Filter>
     </ClCompile>
     <ClCompile Include="..\..\IO\Mouse.cpp">
@@ -218,7 +218,7 @@
     <ClCompile Include="..\..\IO\Keyboard.cpp">
       <Filter>Source Files\IO</Filter>
     </ClCompile>
-	<ClCompile Include="..\..\IO\ObserverPattern\Test_Obs.cpp">
+    <ClCompile Include="..\..\IO\ObserverPattern\Test_Obs.cpp">
       <Filter>Source Files\IO</Filter>
     </ClCompile>
     <ClCompile Include="..\..\IO\Test_Input.cpp">
@@ -300,5 +300,8 @@
     <FxCompile Include="..\..\GraphicsEngine\Test_VertexShader.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>
