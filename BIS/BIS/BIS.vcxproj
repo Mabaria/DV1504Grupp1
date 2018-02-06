@@ -71,6 +71,7 @@
     <ClInclude Include="..\..\UI\UIElements\Panel2D.h" />
     <ClInclude Include="..\..\UI\UIElements\Panel3D.h" />
     <ClInclude Include="..\..\UI\UIElements\Test_Panel.h" />
+    <ClInclude Include="..\..\UI\UIElements\Test_TextBox.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\..\GraphicsEngine\Test_PixelShader.hlsl">
