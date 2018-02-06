@@ -20,7 +20,7 @@ public:
 		std::string buttonName);
 	void AddTextbox(int width, int height, int top, int left, LPCTSTR name);
 	Button* GetButtonByName(std::string name);
-	Button* GetButtonByIndex(int index);
+	Button* GetButtonByIndex(unsigned int index);
 	void Update();
 	void Draw();
 

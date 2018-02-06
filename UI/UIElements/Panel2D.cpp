@@ -1,5 +1,6 @@
 #include "Panel2D.h"
 #include "../../IO/Mouse.h"
+#include <string>
 
 Panel2D::Panel2D(int width, int height, int top, int left, HWND handle, LPCTSTR title)
 	:Panel(width, height, top, left, handle)
@@ -48,6 +49,33 @@ void Panel2D::AddTextbox(int width, int height, int top, int left, LPCTSTR name)
 	// Push textbox into list of UI elements.
 }
 
+Button * Panel2D::GetButtonByName(std::string name)
+{
+	Button *to_return = nullptr; // Default return in nullptr
+	unsigned int count = 0;
+	for (std::vector<std::string>::iterator it = this->mButtonNames.begin();
+		it != this->mButtonNames.end();
+		it++, count++)
+	{
+		if (name.compare(*it)) // Button with correct name found
+		{
+			to_return = &this->mButtonVector[count]; // Return pointer to button
+			it = this->mButtonNames.end(); // Set iterator to end
+		}
+	}
+	return to_return;
+}
+
+Button * Panel2D::GetButtonByIndex(unsigned int index)
+{
+	Button *to_return = nullptr;
+	if (index <= this->mButtonVector.size()) // Bounds check
+	{
+		to_return = &this->mButtonVector[index];
+	}
+	return to_return;
+}
+
 void Panel2D::Update()
 {
 	if (this->mIsMouseInsidePanel()) /* Check if mouse is inside panel,
@@ -68,12 +96,11 @@ void Panel2D::Update()
 				Mouse::GetPositionPercentage().y <
 				it->GetBoundingBoxPercentage().bottom &&
 				Mouse::GetPositionPercentage().y >
-				it->GetBoundingBoxPercentage().top)
+				it->GetBoundingBoxPercentage().top) /* Classic bounds check */
 			{
 				if (Mouse::IsButtonDown(Buttons::Left))
 				{
 					it->SetButtonStatus(BUTTON_STATE::CLICKED);
-					Mouse::GetPosition();
 				}
 				else
 					it->SetButtonStatus(BUTTON_STATE::HOVER);
