@@ -9,6 +9,7 @@
 
 #include "../../IO/Test_Input.h"
 #include "../../IO/ObserverPattern/Test_Obs.h"
+#include "../../IO/Test_Picking.h"
 
 #include "../../UI/UIElements/Test_Panel.h"
 
@@ -36,6 +37,7 @@ namespace Testing
 	bool testOne()
 	{
 		//! ADD YOUR OWN TESTS HERE
+		Test_Picking();
 		return true;
 	}
 }

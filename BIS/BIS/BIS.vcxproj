@@ -34,7 +34,9 @@
     <ClCompile Include="..\..\IO\Keyboard.cpp" />
     <ClCompile Include="..\..\IO\Mouse.cpp" />
     <ClCompile Include="..\..\IO\ObserverPattern\Test_Obs.cpp" />
+    <ClCompile Include="..\..\IO\Picking.cpp" />
     <ClCompile Include="..\..\IO\Test_Input.cpp" />
+    <ClCompile Include="..\..\IO\Test_Picking.cpp" />
     <ClCompile Include="..\..\Logic\Timer.cpp" />
     <ClCompile Include="..\..\UI\UIElements\Button.cpp" />
     <ClCompile Include="..\..\UI\UIElements\MeshObject.cpp" />
@@ -62,7 +64,9 @@
     <ClInclude Include="..\..\IO\ObserverPattern\Observable.h" />
     <ClInclude Include="..\..\IO\ObserverPattern\Observer.h" />
     <ClInclude Include="..\..\IO\ObserverPattern\Test_Obs.h" />
+    <ClInclude Include="..\..\IO\Picking.h" />
     <ClInclude Include="..\..\IO\Test_Input.h" />
+    <ClInclude Include="..\..\IO\Test_Picking.h" />
     <ClInclude Include="..\..\Logic\Timer.h" />
     <ClInclude Include="..\..\Test\Testing.h" />
     <ClInclude Include="..\..\UI\UIElements\Button.h" />
