@@ -12,6 +12,8 @@
 
 #include "../../UI/UIElements/Test_Panel.h"
 
+#include "../Logic/BoatTester.h"
+
 namespace Testing
 {
 	bool testAll()
@@ -37,6 +39,16 @@ namespace Testing
 	{
 		Test_BoatOnScreen();
 		//! ADD YOUR OWN TESTS HERE
+		try
+		{
+			BoatTester::TestBoat();
+		}
+		catch (const char* e)
+		{
+			std::cout << e << std::endl;
+		}
+
+		std::cin.ignore();
 		return true;
 	}
 }
