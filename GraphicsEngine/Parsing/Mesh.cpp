@@ -45,6 +45,11 @@ unsigned int Mesh::GetNumMaterials() const
 	return this->mScene->mNumMaterials;
 }
 
+const aiScene * Mesh::GetScenePointer()
+{
+	return this->mScene;
+}
+
 aiMaterial* Mesh::GetMaterialPtr(unsigned int materialIndex)
 {
 	if (materialIndex < this->mScene->mNumMaterials)

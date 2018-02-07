@@ -4,6 +4,7 @@
 #include <DirectXMath.h>
 #include <d3d11.h>
 #include "../../GraphicsEngine/Parsing/Mesh.h"
+#include "../../GraphicsEngine/Parsing/MaterialHandler.h"
 
 using namespace DirectX;
 
@@ -12,8 +13,9 @@ class MeshObject
 public:
 	MeshObject(
 		std::string name,
-		std::vector<std::vector<unsigned int>> indices, 
-		std::vector<std::vector<Vertex>> vertices);
+		Mesh* mesh);
+	MeshObject(
+		const MeshObject &other);
 	~MeshObject();
 
 	const void Translate(float x, float y, float z);
@@ -43,8 +45,20 @@ public:
 	const void SetConstantBuffer(ID3D11Buffer **constantBuffer);
 	XMMATRIX *rGetModelMatrix();
 
+	void * operator new(size_t i)
+	{
+		return _mm_malloc(i, 16);
+	}
+
+	void operator delete(void *p)
+	{
+		_mm_free(p);
+	}
+
 private:
 	std::string mName;
+	Mesh* mMesh;
+	MaterialHandler mMaterialHandler;
 	std::vector<std::vector<unsigned int>> mIndices;
 	std::vector<std::vector<Vertex>> mVertices;
 

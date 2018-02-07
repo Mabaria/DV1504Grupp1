@@ -1,25 +1,40 @@
 #include "MeshObject.h"
 
 MeshObject::MeshObject(std::string name,
-	std::vector<std::vector<unsigned int>> indices, 
-	std::vector<std::vector<Vertex>> vertices)
+	Mesh* mesh) : mMaterialHandler{ mesh->GetScenePointer() }
 {
+	this->mMesh = mesh;
 	this->mName		= name;
-	this->mIndices	= indices;
-	this->mVertices	= vertices;
+	this->mIndices	= mesh->GetIndexVectors();
+	this->mVertices	= mesh->GetVertexVectors();
 
 	// Doesn't matter which one determines the 
 	// size as they are (should be) equal.
-	this->mNumberOfBuffers = (int)indices.size();
+	this->mNumberOfBuffers = (int)this->mIndices.size();
 
 	this->mModelMatrix = XMMatrixIdentity();
 	this->mpConstantBuffer	= nullptr;
 	this->mpTextureView		= nullptr;
 }
 
+MeshObject::MeshObject(const MeshObject & other) 
+	: mMaterialHandler{ other.mMesh->GetScenePointer() }
+{
+	this->mMesh = other.mMesh;
+	this->mName = other.mName;
+	this->mIndices = other.mIndices;
+	this->mVertices = other.mVertices;
+
+	this->mNumberOfBuffers = other.mNumberOfBuffers;
+
+	this->mModelMatrix = other.mModelMatrix;
+	this->mpConstantBuffer = other.mpConstantBuffer;
+	this->mpTextureView = other.mpTextureView;
+}
+
 MeshObject::~MeshObject()
 {
-	for (int i = 0; i < this->mpIndexBuffers.size(); i++)
+	for (unsigned int i = 0; i < this->mpIndexBuffers.size(); i++)
 	{
 		if (this->mpIndexBuffers[i])
 		{

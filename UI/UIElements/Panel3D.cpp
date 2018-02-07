@@ -97,7 +97,11 @@ Panel3D::~Panel3D()
 	}
 	for (int i = 0; i < (int)this->mpMeshObjects.size(); i++)
 	{
-		delete this->mpMeshObjects[i];
+		if (this->mpMeshObjects[i] != nullptr)
+		{
+			delete this->mpMeshObjects[i];
+			this->mpMeshObjects[i] = nullptr;
+		}
 	}
 }
 
@@ -106,32 +110,33 @@ D3D11 & Panel3D::rGetDirect3D()
 	return this->mDirect3D;
 }
 
-const void Panel3D::AddMeshObject(
-	std::string name,
-	std::vector<std::vector<unsigned int>> indices, 
-	std::vector<std::vector<Vertex>> vertices,
-	std::wstring texturePath)
-{
-	MeshObject *mesh_object = new MeshObject(name, indices, vertices);
-	this->mpMeshObjects.push_back(mesh_object);
-
-	for (int i = 0; i < this->mpMeshObjects.back()->GetNumberOfBuffers(); i++)
-	{
-		this->CreateIndexBuffer(indices[i]);
-		this->CreateVertexBuffer(vertices[i]);
-	}
-	this->CreateConstantBuffer(
-		this->mpMeshObjects.back()->rGetModelMatrix(), 
-		this->mpMeshObjects.back()->rGetConstantBuffer());
-	if (texturePath != L"")
-	{
-		this->CreateTexture(texturePath);
-	}
-}
+//const void Panel3D::AddMeshObject(
+//	std::string name,
+//	std::vector<std::vector<unsigned int>> indices, 
+//	std::vector<std::vector<Vertex>> vertices,
+//	std::wstring texturePath)
+//{
+//	MeshObject *mesh_object = new MeshObject(name, indices, vertices);
+//	this->mpMeshObjects.push_back(mesh_object);
+//
+//	for (int i = 0; i < this->mpMeshObjects.back()->GetNumberOfBuffers(); i++)
+//	{
+//		this->CreateIndexBuffer(indices[i]);
+//		this->CreateVertexBuffer(vertices[i]);
+//	}
+//	this->CreateConstantBuffer(
+//		this->mpMeshObjects.back()->rGetModelMatrix(), 
+//		this->mpMeshObjects.back()->rGetConstantBuffer());
+//	if (texturePath != L"")
+//	{
+//		this->CreateTexture(texturePath);
+//	}
+//}
 
 const void Panel3D::AddMeshObject(MeshObject * meshObject)
 {
-	this->mpMeshObjects.push_back(meshObject);
+	MeshObject *mesh_object = new MeshObject(*meshObject);
+	this->mpMeshObjects.push_back(mesh_object);
 
 	for (int i = 0; i < this->mpMeshObjects.back()->GetNumberOfBuffers(); i++)
 	{

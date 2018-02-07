@@ -48,6 +48,8 @@ public:
 	unsigned int GetNumMeshes() const; // Returns number of submeshes
 	unsigned int GetNumMaterials() const; // Returns number of materials
 
+	const aiScene *GetScenePointer();
+
 
 
 private:
