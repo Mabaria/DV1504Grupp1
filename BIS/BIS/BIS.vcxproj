@@ -23,6 +23,7 @@
     <ClCompile Include="..\..\GraphicsEngine\Camera\Test_Camera.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\DX\Direct2D.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\DX\Direct3D.cpp" />
+    <ClCompile Include="..\..\GraphicsEngine\Parsing\MaterialHandler.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\Parsing\Mesh.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\Parsing\Test_AssImp.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\Parsing\Test_Boat.cpp" />
@@ -58,6 +59,7 @@
     <ClInclude Include="..\..\GraphicsEngine\Camera\Test_Camera.h" />
     <ClInclude Include="..\..\GraphicsEngine\DX\Direct2D.h" />
     <ClInclude Include="..\..\GraphicsEngine\DX\Direct3D.h" />
+    <ClInclude Include="..\..\GraphicsEngine\Parsing\MaterialHandler.h" />
     <ClInclude Include="..\..\GraphicsEngine\Parsing\Mesh.h" />
     <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_AssImp.h" />
     <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_Boat.h" />

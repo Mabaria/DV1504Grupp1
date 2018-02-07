@@ -195,6 +195,9 @@
     <ClInclude Include="..\..\Logic\BoatTester.h">
       <Filter>Header Files\Logic\Test</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\GraphicsEngine\Parsing\MaterialHandler.h">
+      <Filter>Header Files\GraphicsEngine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BIS.cpp">
@@ -331,6 +334,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Logic\BoatTester.cpp">
       <Filter>Source Files\Logic\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\GraphicsEngine\Parsing\MaterialHandler.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
