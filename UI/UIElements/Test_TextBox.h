@@ -6,6 +6,7 @@
 #include "Button.h"
 #include "../../IO/Mouse.h"
 #include <iostream>
+#include "TextBox.h"
 
 //#include <wincodec.h>
 #pragma comment(lib, "Dwrite")

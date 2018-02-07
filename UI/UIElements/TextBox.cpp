@@ -1,0 +1,67 @@
+#include "TextBox.h"
+
+TextBox::TextBox(
+	Direct2D& D2D1Panel,
+	int left,
+	int top,
+	int right,
+	int bottom)
+{
+	this->D2D1Panel = &D2D1Panel;
+	this->SetTextBoxSize(left, top, right, bottom);
+	this->mTextString = "";
+	this->mTextWString = L"";
+	this->mpTextWchar = nullptr;
+	std::wstring mTextWString;
+	std::string mTextString;
+	const wchar_t *mpTestWchar;
+	this->mCreateColor();
+	this->SetColor(D2D1::ColorF::Black);
+}
+
+TextBox::~TextBox()
+{
+}
+
+D2D1_RECT_F TextBox::GetTextBoxSize() const
+{
+	return this->mLayoutRect;
+}
+
+void TextBox::SetTextBoxSize(int left, int top, int right, int bottom)
+{
+	this->mLayoutRect = D2D1::RectF(left, top, right, bottom);
+}
+
+void TextBox::SetText(std::string text)
+{
+	this->mTextString = text;
+	this->mTextWString = this->mStrConverter.from_bytes(text);
+	this->mpTextWchar = this->mTextWString.c_str();
+	//this->mpTextWchar = new wchar_t(*this->mStrConverter.from_bytes(text).c_str());
+}
+
+void TextBox::DrawTextBox()
+{
+	this->D2D1Panel->GetpRenderTarget()->DrawTextW(
+		this->mpTextWchar,
+		wcslen(this->mpTextWchar),
+		this->D2D1Panel->GetpTextFormat(),
+		this->mLayoutRect,
+		this->mpColor,
+		D2D1_DRAW_TEXT_OPTIONS_CLIP
+	);
+}
+
+void TextBox::SetColor(D2D1::ColorF color)
+{
+	this->mpColor->SetColor(&color);
+}
+
+void TextBox::mCreateColor()
+{
+	this->D2D1Panel->GetpRenderTarget()->CreateSolidColorBrush(
+		D2D1::ColorF(D2D1::ColorF::Black),
+		&this->mpColor
+	);
+}
