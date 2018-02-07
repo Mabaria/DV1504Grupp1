@@ -166,15 +166,10 @@ const bool Panel::UpdateWindowSize()
 		this->mParentTop	= client_size.top;
 		this->mParentLeft	= client_size.left;
 
-
-		RECT panel_size = { 
-			this->mLeft,
-			this->mTop,
-			this->mLeft + this->mWidth,
-			this->mTop + this->mHeight };
+		// Setting the new position and size to the panel window.
 		SetWindowPos(
 			this->mPanelWindow, 
-			HWND_TOP, 
+			HWND_TOP, // Z order, ignored by SWP_NOZORDER. 
 			this->mLeft, 
 			this->mTop, 
 			this->mWidth, 
