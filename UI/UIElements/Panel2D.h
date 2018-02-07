@@ -6,6 +6,14 @@
 #include "../../GraphicsEngine/DX/Direct2D.h"
 #include <vector>
 
+class TextBox
+{
+public:
+	TextBox() {};
+private:
+};
+
+
 class Panel2D : public Panel
 {
 public:
@@ -18,16 +26,27 @@ public:
 		int left,
 		std::string imageFilePath,
 		std::string buttonName);
+
 	void AddTextbox(int width, int height, int top, int left, LPCTSTR name);
+
 	Button* GetButtonByName(std::string name);
 	Button* GetButtonByIndex(unsigned int index);
+	
+	TextBox* GetTextBoxByName(std::string name);
+	TextBox* GetTextBoxByIndex(unsigned int index);
+
 	void Update();
 	void Draw();
 
 private:
 	Direct2D *mDirect2D;
-	void mUpdateButtons();
 	bool mIsMouseInsidePanel();
+	
+	void mUpdateButtons();
 	std::vector<Button> mButtonVector;
 	std::vector<std::string> mButtonNames;
+
+	void mUpdateTextBoxes();
+	std::vector<TextBox> mTextBoxVector;
+	std::vector<std::string> mTextBoxNames;
 };

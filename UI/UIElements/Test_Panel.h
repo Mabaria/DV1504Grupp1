@@ -12,3 +12,4 @@
 void Test_Panel3D();
 void Test_Panel2D();
 void Test_BoatOnScreen();
+void Test_Panel2DTextBoxes();

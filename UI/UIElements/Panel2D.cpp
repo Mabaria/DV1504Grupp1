@@ -13,7 +13,8 @@ Panel2D::~Panel2D()
 	delete this->mDirect2D;
 }
 
-void Panel2D::AddButton(int width,
+void Panel2D::AddButton(
+	int width,
 	int height,
 	int top,
 	int left,
@@ -30,7 +31,12 @@ void Panel2D::AddButton(int width,
 	this->mButtonVector.push_back(newButton); // Add button
 }
 
-void Panel2D::AddTextbox(int width, int height, int top, int left, LPCTSTR name)
+void Panel2D::AddTextbox(
+	int width, 
+	int height, 
+	int top, 
+	int left, 
+	LPCTSTR name)
 {
 	// Push textbox into list of UI elements.
 }
@@ -66,10 +72,42 @@ Button * Panel2D::GetButtonByIndex(unsigned int index)
 	return to_return;
 }
 
+TextBox * Panel2D::GetTextBoxByName(std::string name)
+{
+	TextBox *to_return = nullptr; // Default return is nullptr
+	unsigned int count = 0;
+	std::vector<std::string>::iterator it;
+
+	for (it = this->mTextBoxNames.begin();
+		it != this->mTextBoxNames.end();
+		++it, count++)
+	{
+		if (name.compare(*it) == 0) // Button with correct name found
+		{
+			to_return = &this->mTextBoxVector[count]; // Return pointer to button
+			it = this->mTextBoxNames.end() - 1; // Set iterator to end
+											   // -1 because incrementation is performed after this.
+											   // Incrementing on .end() is a baaad idea.
+		}
+	}
+	return to_return;
+}
+
+TextBox * Panel2D::GetTextBoxByIndex(unsigned int index)
+{
+	TextBox *to_return = nullptr;
+	if (index <= this->mTextBoxVector.size()) // Bounds check
+	{
+		to_return = &this->mTextBoxVector[index];
+	}
+	return to_return;
+}
+
 void Panel2D::Update()
 {
 	this->UpdateWindowSize();
 	this->mUpdateButtons();
+	this->mUpdateTextBoxes();
 }
 
 void Panel2D::Draw()
@@ -140,5 +178,10 @@ bool Panel2D::mIsMouseInsidePanel()
 	POINT mouse_pos;
 	GetCursorPos(&mouse_pos);
 	return PtInRect(&window_rect, mouse_pos); // if mouse is inside panel
+
+}
+
+void Panel2D::mUpdateTextBoxes()
+{
 
 }

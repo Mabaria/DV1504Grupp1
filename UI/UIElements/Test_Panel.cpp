@@ -315,3 +315,155 @@ void Test_BoatOnScreen()
 		top_view.Draw();
 	}	
 }
+
+void Test_Panel2DTextBoxes()
+{
+	Mesh floor2("../../Models/Floor2.obj");
+	Mesh floor1("../../Models/Floor1.obj");
+	Mesh floor01("../../Models/Floor01.obj");
+
+	MeshObject floor2_object("floor2", floor2.GetIndexVectors(), floor2.GetVertexVectors());
+	MeshObject floor1_object("floor1", floor1.GetIndexVectors(), floor1.GetVertexVectors());
+	MeshObject floor01_object("floor01", floor01.GetIndexVectors(), floor01.GetVertexVectors());
+
+	std::wstring window_name = L"Testboi";
+	int window_height = 720;
+	int window_width = 1280;
+
+	Window window(L"Button_Test", window_width, window_height);
+
+	Panel3D side_view(
+		window_width / 3,
+		window_height / 6,
+		0,
+		0,
+		window.GetWindow(),
+		L"Button_Test");
+	Panel3D top_view(
+		5 * window_width / 6,
+		5 * window_height / 6,
+		window_height / 6,
+		0,
+		window.GetWindow(), L"Button_Test");
+
+	// Hela båten tjoff in i panelerna och sen mixtras matriserna med.
+	side_view.AddMeshObject("floor2", floor2.GetIndexVectors(), floor2.GetVertexVectors(), L"");
+	side_view.AddMeshObject("floor1", floor1.GetIndexVectors(), floor1.GetVertexVectors(), L"");
+	side_view.AddMeshObject("floor01", floor01.GetIndexVectors(), floor01.GetVertexVectors(), L"");
+
+	top_view.AddMeshObject("floor2", floor2.GetIndexVectors(), floor2.GetVertexVectors(), L"");
+	top_view.AddMeshObject("floor1", floor1.GetIndexVectors(), floor1.GetVertexVectors(), L"");
+	top_view.AddMeshObject("floor01", floor01.GetIndexVectors(), floor01.GetVertexVectors(), L"");
+
+	top_view.rGetMeshObject("floor2")->Scale(0.1f, 0.1f, 0.1f);
+	top_view.rGetMeshObject("floor1")->Scale(0.1f, 0.1f, 0.1f);
+	top_view.rGetMeshObject("floor01")->Scale(0.1f, 0.1f, 0.1f);
+
+	top_view.rGetMeshObject("floor2")->Translate(0.0f, 0.0f, 0.5f);
+	top_view.rGetMeshObject("floor1")->Translate(0.0f, 0.0f, 0.0f);
+	top_view.rGetMeshObject("floor01")->Translate(0.0f, 0.0f, -0.5f);
+
+	side_view.rGetMeshObject("floor2")->Scale(0.15f, 0.4f, 0.1f);
+	side_view.rGetMeshObject("floor1")->Scale(0.15f, 0.4f, 0.1f);
+	side_view.rGetMeshObject("floor01")->Scale(0.15f, 0.4f, 0.1f);
+
+	side_view.rGetMeshObject("floor2")->Translate(0.05f, -0.2f, 0.0f);
+	side_view.rGetMeshObject("floor1")->Translate(0.05f, 0.0f, 0.0f);
+	side_view.rGetMeshObject("floor01")->Translate(0.05f, 0.2f, 0.0f);
+
+	side_view.CreateShadersAndSetup(
+		L"../../GraphicsEngine/Test_VertexShader.hlsl",
+		L"",
+		L"../../GraphicsEngine/Test_PixelShader.hlsl");
+
+	top_view.CreateShadersAndSetup(
+		L"../../GraphicsEngine/Test_VertexShader.hlsl",
+		L"",
+		L"../../GraphicsEngine/Test_PixelShader.hlsl");
+
+	Camera camera2(
+		{ 0.0f, 0.0f, -0.2f, 0.0f },
+		{ 0.0f, 1.0f, 0.0f, 0.0f },
+		{ 0.0f, 0.0f, 0.0f, 0.0f },
+		2.0f, 2.0f,
+		0.1f, 100.0f, LOOK_AT, ORTHOGRAPHIC);
+
+	Camera camera(
+		{ 0.0f, 5.0f, 3.5f, 0.0f },
+		{ 0.0f, 1.0f, 0.0f, 0.0f },
+		{ 0.0f, 0.0f, 0.0f, 0.0f },
+		XM_PI / 8.0f, 16.0f / 9.0f,
+		0.1f, 1000.0f, LOOK_AT, PERSPECTIVE);
+
+	side_view.SetCamera(&camera2);
+	top_view.SetCamera(&camera);
+
+	Panel2D log_panel(
+		window_width / 6,		// Width
+		window_height,			// Height
+		0,						// Top
+		5 * window_width / 6,	// Left
+		window.GetWindow(),
+		L"Button_Test");
+	Panel2D control_panel(
+		window_width / 2,
+		window_height / 6,
+		0,
+		window_width / 3,
+		window.GetWindow(),
+		L"Button_Test");
+
+	log_panel.AddButton(100, 100, 20, 20, "../../Models/FireButton.png", "FireButton");
+	log_panel.AddButton(100, 100, 120, 20, "../../Models/FireButton.png", "FireButton2");
+	log_panel.AddButton(100, 100, 220, 20, "../../Models/FireButton.png", "FireButton3");
+	control_panel.AddButton(100, 100, 20, 20, "../../Models/Fern.jpg", "FernButton");
+	control_panel.AddButton(200, 200, 20, 400, "../../Models/pepehands.jpg", "FernButton");
+	control_panel.AddButton(200, 200, 20, 700, "../../Models/feelsrain.gif", "FernButton");
+
+	float speed = 0.1f;
+
+	window.Open();
+	while (window.IsOpen())
+	{
+		window.Update();
+
+		if (Keyboard::IsKeyDown(Keys::W))
+		{
+			camera.MoveCamera(0.0f, 0.0f, 1.0f, speed);
+		}
+		else if (Keyboard::IsKeyDown(Keys::S))
+		{
+			camera.MoveCamera(0.0f, 0.0f, -1.0f, speed);
+		}
+		else if (Keyboard::IsKeyDown(Keys::D))
+		{
+			camera.MoveCamera(1.0f, 0.0f, 0.0f, speed);
+		}
+		else if (Keyboard::IsKeyDown(Keys::A))
+		{
+			camera.MoveCamera(-1.0f, 0.0f, 0.0f, speed);
+		}
+		else if (Keyboard::IsKeyDown(Keys::Space))
+		{
+			camera.MoveCamera(0.0f, 1.0f, 0.0f, speed);
+		}
+		else if (Keyboard::IsKeyDown(Keys::Shift))
+		{
+			camera.MoveCamera(0.0f, -1.0f, 0.0f, speed);
+		}
+
+		if (Keyboard::IsKeyPressed(Keys::Esc))
+		{
+			window.Close();
+		}
+		side_view.Update();
+		top_view.Update();
+		control_panel.Update();
+		log_panel.Update();
+
+		side_view.Draw();
+		top_view.Draw();
+		control_panel.Draw();
+		log_panel.Draw();
+	}
+}
