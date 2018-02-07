@@ -42,6 +42,7 @@
     <ClCompile Include="..\..\UI\UIElements\Panel2D.cpp" />
     <ClCompile Include="..\..\UI\UIElements\Panel3D.cpp" />
     <ClCompile Include="..\..\UI\UIElements\Test_Panel.cpp" />
+    <ClCompile Include="..\..\UI\UIElements\Test_TextBox.cpp" />
     <ClCompile Include="BIS.cpp" />
   </ItemGroup>
   <ItemGroup>

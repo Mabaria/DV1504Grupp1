@@ -281,6 +281,9 @@
     <ClCompile Include="..\..\GraphicsEngine\DX\Direct3D.cpp">
       <Filter>Source Files\GraphicsEngine</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\UI\UIElements\Test_TextBox.cpp">
+      <Filter>Source Files\UI\Test</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">

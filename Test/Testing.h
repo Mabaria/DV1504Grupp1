@@ -1,16 +1,17 @@
 #pragma once
 
-#include "../../GraphicsEngine/Parsing/Test_AssImp.h"
-#include "../../GraphicsEngine/Parsing/Test_Boat.h"
-#include "../../GraphicsEngine/Test_Button.h"
-#include "../../GraphicsEngine/Camera/Test_Camera.h"
-#include "../../GraphicsEngine/Test_Graphics.h"
-#include "../../GraphicsEngine/Parsing/Test_Mesh.h"
+#include "../GraphicsEngine/Parsing/Test_AssImp.h"
+#include "../GraphicsEngine/Parsing/Test_Boat.h"
+#include "../GraphicsEngine/Test_Button.h"
+#include "../GraphicsEngine/Camera/Test_Camera.h"
+#include "../GraphicsEngine/Test_Graphics.h"
+#include "../GraphicsEngine/Parsing/Test_Mesh.h"
 
-#include "../../IO/Test_Input.h"
-#include "../../IO/ObserverPattern/Test_Obs.h"
+#include "../IO/Test_Input.h"
+#include "../IO/ObserverPattern/Test_Obs.h"
 
-#include "../../UI/UIElements/Test_Panel.h"
+#include "../UI/UIElements/Test_Panel.h"
+#include "../UI/UIElements/Test_TextBox.h"
 
 namespace Testing
 {
@@ -36,6 +37,7 @@ namespace Testing
 	bool testOne()
 	{
 		//! ADD YOUR OWN TESTS HERE
+		Test_Text();
 		return true;
 	}
 }
