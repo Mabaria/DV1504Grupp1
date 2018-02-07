@@ -129,6 +129,7 @@ void Test_Panel2D()
 	Panel2D testHeadPanel(1120, 200, 0, 400, window.GetWindow(), L"Button_Test");
 	Panel3D testHead3DPanel(399, 200, 0, 0, window.GetWindow(), L"Button_Test");
 	Panel3D test3DPanel(1520, 880, 200, 0, window.GetWindow(), L"Button_Test");
+
 	testPanel.AddButton(100, 100, 20, 20, "../../Models/FireButton.png", "FireButton");
 	testPanel.AddButton(100, 100, 120, 20, "../../Models/FireButton.png", "FireButton2");
 	testPanel.AddButton(100, 100, 220, 20, "../../Models/FireButton.png", "FireButton3");
@@ -136,6 +137,17 @@ void Test_Panel2D()
 	testHeadPanel.AddButton(200, 200, 20, 400, "../../Models/pepehands.jpg", "FernButton");
 	testHeadPanel.AddButton(200, 200, 20, 700, "../../Models/feelsrain.gif", "FernButton");
 	window.Open();
+	testPanel.GetButtonByIndex(1); // Expected: FireButton2
+	testPanel.GetButtonByName("FireButton3")->SetButtonsize(-220, 320, 140, 420);
+	/* Expected: Button 3 is displaced and stretches a bit*/
+	testPanel.GetButtonByIndex(-1); // Expected: nullptr
+	testPanel.GetButtonByIndex(3285); // Expected: nullptr
+	testHeadPanel.GetButtonByName("Wesseboii"); // Expected: nullptr
+
+	// testHeadPanel.GetButtonByName("FernButton")->AddObserver(&window);
+	// Doesnt work because there's no class that inherits observer yet
+	// But shows how you would do to add functionality to a button
+
 	while (window.IsOpen())
 	{
 		window.Update();
