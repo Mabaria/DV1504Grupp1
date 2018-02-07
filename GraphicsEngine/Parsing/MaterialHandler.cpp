@@ -2,6 +2,7 @@
 
 MaterialHandler::MaterialHandler(const aiScene * scene)
 {
+	this->mpScene = scene;
 }
 
 MaterialHandler::~MaterialHandler()
@@ -11,7 +12,7 @@ MaterialHandler::~MaterialHandler()
 std::string MaterialHandler::GetMaterialName(const unsigned int materialIndex) const
 {
 	aiString name;
-	if (this->mScene->mMaterials[materialIndex]->Get(AI_MATKEY_NAME, name)
+	if (this->mpScene->mMaterials[materialIndex]->Get(AI_MATKEY_NAME, name)
 		!= AI_SUCCESS)
 	{
 		throw "Failed to get name component of material.";
@@ -22,7 +23,7 @@ std::string MaterialHandler::GetMaterialName(const unsigned int materialIndex) c
 aiColor3D MaterialHandler::GetDiffuseColor(const unsigned int materialIndex) const
 {
 	aiColor3D color(0.f, 0.f, 0.f);
-	if (this->mScene->mMaterials[materialIndex]->Get(AI_MATKEY_COLOR_DIFFUSE, color)
+	if (this->mpScene->mMaterials[materialIndex]->Get(AI_MATKEY_COLOR_DIFFUSE, color)
 		!= AI_SUCCESS)
 	{
 		throw "Failed to get diffuse component of material.";
@@ -33,7 +34,7 @@ aiColor3D MaterialHandler::GetDiffuseColor(const unsigned int materialIndex) con
 aiColor3D MaterialHandler::GetAmbientColor(const unsigned int materialIndex) const
 {
 	aiColor3D color(0.f, 0.f, 0.f);
-	if (this->mScene->mMaterials[materialIndex]->Get(AI_MATKEY_COLOR_AMBIENT, color)
+	if (this->mpScene->mMaterials[materialIndex]->Get(AI_MATKEY_COLOR_AMBIENT, color)
 		!= AI_SUCCESS)
 	{
 		throw "Failed to get ambient component of material.";
@@ -44,7 +45,7 @@ aiColor3D MaterialHandler::GetAmbientColor(const unsigned int materialIndex) con
 aiColor3D MaterialHandler::GetSpecularColor(const unsigned int materialIndex) const
 {
 	aiColor3D color(0.f, 0.f, 0.f);
-	if (this->mScene->mMaterials[materialIndex]->Get(AI_MATKEY_COLOR_SPECULAR, color)
+	if (this->mpScene->mMaterials[materialIndex]->Get(AI_MATKEY_COLOR_SPECULAR, color)
 		!= AI_SUCCESS)
 	{
 		throw "Failed to get specular component of material.";
@@ -55,7 +56,7 @@ aiColor3D MaterialHandler::GetSpecularColor(const unsigned int materialIndex) co
 aiColor3D MaterialHandler::GetTransparentColor(const unsigned int materialIndex) const
 {
 	aiColor3D color(0.f, 0.f, 0.f);
-	if (this->mScene->mMaterials[materialIndex]->Get(AI_MATKEY_COLOR_TRANSPARENT, color)
+	if (this->mpScene->mMaterials[materialIndex]->Get(AI_MATKEY_COLOR_TRANSPARENT, color)
 		!= AI_SUCCESS)
 	{
 		throw "Failed to get transparent component of material.";
@@ -66,7 +67,7 @@ aiColor3D MaterialHandler::GetTransparentColor(const unsigned int materialIndex)
 aiBlendMode MaterialHandler::GetBlendMode(const unsigned int materialIndex) const
 {
 	aiBlendMode blend_mode = aiBlendMode_Default;
-	if (this->mScene->mMaterials[materialIndex]->Get(AI_MATKEY_COLOR_TRANSPARENT, blend_mode)
+	if (this->mpScene->mMaterials[materialIndex]->Get(AI_MATKEY_COLOR_TRANSPARENT, blend_mode)
 		!= AI_SUCCESS)
 	{
 		throw "Failed to get blend mode component of material.";
@@ -77,7 +78,7 @@ aiBlendMode MaterialHandler::GetBlendMode(const unsigned int materialIndex) cons
 float MaterialHandler::GetShininess(const unsigned int materialIndex) const
 {
 	float shininess = 0.f;
-	if (this->mScene->mMaterials[materialIndex]->Get(AI_MATKEY_SHININESS, shininess)
+	if (this->mpScene->mMaterials[materialIndex]->Get(AI_MATKEY_SHININESS, shininess)
 		!= AI_SUCCESS)
 	{
 		throw "Failed to get shininess component of material.";
@@ -88,7 +89,7 @@ float MaterialHandler::GetShininess(const unsigned int materialIndex) const
 float MaterialHandler::GetShininessStrength(const unsigned int materialIndex) const
 {
 	float strength = 1.0f;
-	if (this->mScene->mMaterials[materialIndex]->Get(AI_MATKEY_SHININESS, strength)
+	if (this->mpScene->mMaterials[materialIndex]->Get(AI_MATKEY_SHININESS, strength)
 		!= AI_SUCCESS)
 	{
 		throw "Failed to get shininess strength component of material.";
@@ -99,7 +100,7 @@ float MaterialHandler::GetShininessStrength(const unsigned int materialIndex) co
 std::string MaterialHandler::GetDiffuseTexturePath(const unsigned int materialIndex) const
 {
 	aiString texture_path;
-	if (this->mScene->mMaterials[materialIndex]->Get(
+	if (this->mpScene->mMaterials[materialIndex]->Get(
 		AI_MATKEY_TEXTURE(aiTextureType_DIFFUSE, 0), texture_path)
 		!= AI_SUCCESS)
 	{
@@ -111,7 +112,7 @@ std::string MaterialHandler::GetDiffuseTexturePath(const unsigned int materialIn
 aiTextureMapMode MaterialHandler::GetMappingModeU(const unsigned int materialIndex) const
 {
 	aiTextureMapMode mapping_mode = aiTextureMapMode_Wrap;
-	if (this->mScene->mMaterials[materialIndex]->Get(
+	if (this->mpScene->mMaterials[materialIndex]->Get(
 		AI_MATKEY_MAPPINGMODE_U(aiTextureType_DIFFUSE, 0), mapping_mode)
 		!= AI_SUCCESS)
 	{
@@ -123,7 +124,7 @@ aiTextureMapMode MaterialHandler::GetMappingModeU(const unsigned int materialInd
 aiTextureMapMode MaterialHandler::GetMappingModeV(const unsigned int materialIndex) const
 {
 	aiTextureMapMode mapping_mode = aiTextureMapMode_Wrap;
-	if (this->mScene->mMaterials[materialIndex]->Get(
+	if (this->mpScene->mMaterials[materialIndex]->Get(
 		AI_MATKEY_MAPPINGMODE_V(aiTextureType_DIFFUSE, 0), mapping_mode)
 		!= AI_SUCCESS)
 	{
@@ -135,7 +136,7 @@ aiTextureMapMode MaterialHandler::GetMappingModeV(const unsigned int materialInd
 float MaterialHandler::GetOpacity(const unsigned int materialIndex) const
 {
 	float opacity = 1.0f;
-	if (this->mScene->mMaterials[materialIndex]->Get(AI_MATKEY_OPACITY, opacity)
+	if (this->mpScene->mMaterials[materialIndex]->Get(AI_MATKEY_OPACITY, opacity)
 		!= AI_SUCCESS)
 	{
 		throw "Failed to get opacity component of material.";

@@ -17,6 +17,8 @@ void Test_Material_Handler()
 	MeshObject floor1_object("floor1", &floor1);
 	MeshObject floor01_object("floor01", &floor01);
 
+
+
 	std::wstring window_name = L"Demo_BIS";
 
 	Window window(window_name, 1280, 720);

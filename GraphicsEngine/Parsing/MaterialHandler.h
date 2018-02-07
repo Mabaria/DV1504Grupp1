@@ -44,6 +44,6 @@ public:
 
 
 private:
-	const aiScene* mScene;
+	const aiScene* mpScene;
 
 };
