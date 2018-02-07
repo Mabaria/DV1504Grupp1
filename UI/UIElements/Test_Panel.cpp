@@ -197,19 +197,46 @@ void Test_BoatOnScreen()
 	side_view.SetCamera(&camera2);
 	top_view.SetCamera(&camera);
 
-	// Text On Screen
+
+	// --- Text On Screen ---
 
 	Quad txt(true);
 
-	top_view.AddMeshObject("Däck01", txt.GetIndices(), txt.GetVertices(), 
-		L"../../Models/Däck01.DDS"
+	top_view.AddMeshObject("Däck1", txt.GetIndices(), txt.GetVertices(), 
+		L"../../Models/Däck1.DDS"
 	);
 
-	top_view.rGetMeshObject("Däck01")->Scale	(0.6f, 0.2f, 0.2f);
-	top_view.rGetMeshObject("Däck01")->Rotate	(XM_PI / 2.0f, XM_PI / 2.0f, 0.0f);
-	top_view.rGetMeshObject("Däck01")->Translate(0.2f, 0.0f, 0.2f);
+	top_view.rGetMeshObject("Däck1")->Scale		(0.6f, 0.2f, 0.2f);
+	top_view.rGetMeshObject("Däck1")->Rotate	(XM_PI / 2.0f, XM_PI / 2.0f, 0.0f);
+	top_view.rGetMeshObject("Däck1")->Translate	(0.2f, 0.0f, 0.2f);
 
-	// ---
+	// --- END ---
+	
+
+	// --- Transperent Boxes ---
+
+	Mesh bb2("../../Models/Bound2UV.obj");
+
+	std::vector<std::vector<Vertex>> tv;
+	std::vector<std::vector<unsigned int>> ti;
+	ti.push_back(bb2.GetIndexVectors()[1]);
+	tv.push_back(bb2.GetVertexVectors()[1]);
+
+	top_view.AddMeshObject("Bound2UV", ti, tv,
+		L"../../Models/BlendColor.DDS"
+	);
+	top_view.rGetMeshObject("Bound2UV")->Scale		(0.1f, 0.1f, 0.1f);
+	top_view.rGetMeshObject("Bound2UV")->Rotate		(0.0f, XM_PI, 0.0f);
+	top_view.rGetMeshObject("Bound2UV")->Translate	(0.0f, 0.0f, 0.5f);
+
+	side_view.AddMeshObject("Bound2UV", ti, tv,
+		L"../../Models/BlendColor.DDS"
+	);
+	side_view.rGetMeshObject("Bound2UV")->Scale(0.15f, 0.4f, 0.1f);
+	//side_view.rGetMeshObject("Bound2UV")->Rotate(0.0f, XM_PI, 0.0f);
+	side_view.rGetMeshObject("Bound2UV")->Translate(0.00f, -0.2f, -0.1f);
+
+	// --- END ---
 
 	float speed = 0.1f;
 
