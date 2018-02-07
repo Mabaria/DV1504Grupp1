@@ -52,7 +52,7 @@ float4 main(PS_IN input) : SV_TARGET
 		lights[2].illu = 1.0f;
 
 		lights[3].dir = float3(0.0f, 0.0f, -1.0f);
-		lights[3].color = float3(0.12f, 0.10f, 0.05f);
+		lights[3].color = float3(0.10f, 0.05f, 0.08f);
 		lights[3].illu = 1.0f;
 
 		for (int i = 0; i < 4; i++)
