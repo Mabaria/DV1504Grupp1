@@ -5,21 +5,7 @@
 Panel2D::Panel2D(int width, int height, int top, int left, HWND handle, LPCTSTR title)
 	:Panel(width, height, top, left, handle, title)
 {
-	this->mPanelWindow = CreateWindowEx(
-		0,
-		title,
-		title,
-		WS_CHILD | WS_BORDER,
-		left,
-		top,
-		width,
-		height,
-		handle,
-		0,
-		GetModuleHandle(0),
-		0);
 	this->mDirect2D = new Direct2D(mPanelWindow, width, height);
-	ShowWindow(this->mPanelWindow, SW_NORMAL);
 }
 
 Panel2D::~Panel2D()
@@ -82,6 +68,7 @@ Button * Panel2D::GetButtonByIndex(unsigned int index)
 
 void Panel2D::Update()
 {
+	this->UpdateWindowSize();
 	this->mUpdateButtons();
 }
 
