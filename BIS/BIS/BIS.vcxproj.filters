@@ -198,6 +198,9 @@
     <ClInclude Include="..\..\GraphicsEngine\Parsing\MaterialHandler.h">
       <Filter>Header Files\GraphicsEngine</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_MaterialHandler.h">
+      <Filter>Header Files\GraphicsEngine\Test</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BIS.cpp">
@@ -337,6 +340,9 @@
     </ClCompile>
     <ClCompile Include="..\..\GraphicsEngine\Parsing\MaterialHandler.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\GraphicsEngine\Parsing\Test_MaterialHandler.cpp">
+      <Filter>Source Files\UI\Test</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

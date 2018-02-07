@@ -6,6 +6,7 @@
 #include "../../GraphicsEngine/Camera/Test_Camera.h"
 #include "../../GraphicsEngine/Test_Graphics.h"
 #include "../../GraphicsEngine/Parsing/Test_Mesh.h"
+#include "../../GraphicsEngine/Parsing/Test_MaterialHandler.h"
 
 #include "../../IO/Test_Input.h"
 #include "../../IO/ObserverPattern/Test_Obs.h"
@@ -37,18 +38,7 @@ namespace Testing
 
 	bool testOne()
 	{
-		Test_BoatOnScreen();
-		//! ADD YOUR OWN TESTS HERE
-		try
-		{
-			BoatTester::TestBoat();
-		}
-		catch (const char* e)
-		{
-			std::cout << e << std::endl;
-		}
-
-		std::cin.ignore();
+		Test_Material_Handler();
 		return true;
 	}
 }
