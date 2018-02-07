@@ -51,7 +51,7 @@ void Panel2D::AddTextbox(int width, int height, int top, int left, LPCTSTR name)
 
 Button * Panel2D::GetButtonByName(std::string name)
 {
-	Button *to_return = nullptr; // Default return in nullptr
+	Button *to_return = nullptr; // Default return is nullptr
 	unsigned int count = 0;
 	std::vector<std::string>::iterator it;
 
@@ -63,8 +63,8 @@ Button * Panel2D::GetButtonByName(std::string name)
 		{
 			to_return = &this->mButtonVector[count]; // Return pointer to button
 			it = this->mButtonNames.end() - 1; // Set iterator to end
-			// -1 because incrementation is performed after this
-			// incrementing on .end() is a baaad idea
+			// -1 because incrementation is performed after this.
+			// Incrementing on .end() is a baaad idea.
 		}
 	}
 	return to_return;
@@ -152,6 +152,6 @@ bool Panel2D::mIsMouseInsidePanel()
 	GetWindowRect(this->mPanelWindow, &window_rect);
 	POINT mouse_pos;
 	GetCursorPos(&mouse_pos);
-	return PtInRect(&window_rect, mouse_pos);
+	return PtInRect(&window_rect, mouse_pos); // if mouse is inside panel
 
 }
