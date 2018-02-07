@@ -124,11 +124,37 @@ void Test_Panel3D()
 
 void Test_Panel2D()
 {
-	Window window(L"Button_Test", 1280, 720);
-	Panel2D testPanel(400, 1080, 0, 1520, window.GetWindow(), L"Button_Test");
-	Panel2D testHeadPanel(1120, 200, 0, 400, window.GetWindow(), L"Button_Test");
-	Panel3D testHead3DPanel(399, 200, 0, 0, window.GetWindow(), L"Button_Test");
-	Panel3D test3DPanel(1520, 880, 200, 0, window.GetWindow(), L"Button_Test");
+	int window_height = 720;
+	int window_width = 1280;
+
+	Window window(L"Button_Test", window_width, window_height);
+	Panel2D testPanel(
+		window_width / 6,		// Width
+		window_height,			// Height
+		0,						// Top
+		5 * window_width / 6,	// Left
+		window.GetWindow(), 
+		L"Button_Test");
+	Panel2D testHeadPanel(
+		window_width / 2, 
+		window_height / 6, 
+		0, 
+		window_width / 3, 
+		window.GetWindow(), 
+		L"Button_Test");
+	Panel3D testHead3DPanel(
+		window_width / 3, 
+		window_height / 6, 
+		0, 
+		0, 
+		window.GetWindow(), 
+		L"Button_Test");
+	Panel3D test3DPanel(
+		5 * window_width / 6, 
+		5 * window_height / 6, 
+		window_height / 6, 
+		0, 
+		window.GetWindow(), L"Button_Test");
 
 	testPanel.AddButton(100, 100, 20, 20, "../../Models/FireButton.png", "FireButton");
 	testPanel.AddButton(100, 100, 120, 20, "../../Models/FireButton.png", "FireButton2");

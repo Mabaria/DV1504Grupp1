@@ -9,7 +9,6 @@ Panel::Panel(int width, int height, int top, int left, HWND handle, LPCTSTR titl
 	this->mParentWindow	= handle;
 	this->mTitle		= title;
 
-
 	// Creating a child window that will be the canvas to draw on for the panel.
 	this->mPanelWindow = CreateWindowEx(
 		0,
@@ -33,14 +32,6 @@ Panel::Panel(int width, int height, int top, int left, HWND handle, LPCTSTR titl
 	this->mParentWidth	= parent_size.right - parent_size.left;
 	this->mParentTop	= parent_size.top;
 	this->mParentLeft	= parent_size.left;
-		
-	int parent_height = parent_size.bottom - parent_size.top;
-	int parent_width = parent_size.right - parent_size.left;
-
-	this->mHeightFraction = (float)this->mHeight / (float)parent_height;
-	this->mWidthFraction = (float)this->mWidth / (float)parent_width;
-	this->mTopFraction = (float)this->mTop / (float)parent_height;
-	this->mLeftFraction = (float)this->mLeft / (float)parent_width;	
 }
 
 Panel::~Panel()
@@ -155,10 +146,10 @@ const bool Panel::UpdateWindowSize()
 			(float)client_width / (float)this->mParentWidth;
 
 		// Applying these fractions to the member sizes and positions.
-		this->mHeight	*= height_difference_factor;
-		this->mTop		*= height_difference_factor;
-		this->mWidth	*= width_difference_factor;
-		this->mLeft		*= width_difference_factor;
+		this->mHeight	= (int)round(this->mHeight * height_difference_factor);
+		this->mTop		= (int)round(this->mTop	* height_difference_factor);
+		this->mWidth	= (int)round(this->mWidth * width_difference_factor);
+		this->mLeft		= (int)round(this->mLeft * width_difference_factor);
 
 		// Updating the parent size members.
 		this->mParentHeight = client_height;

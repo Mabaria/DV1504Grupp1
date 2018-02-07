@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Windows.h>
+#include <math.h>
 
 struct Fraction
 {
@@ -51,11 +52,6 @@ protected:
 	int mParentHeight;
 	int mParentTop;
 	int mParentLeft;
-	// Normalized size relative to the parent window.
-	float mWidthFraction;
-	float mHeightFraction;
-	float mTopFraction;
-	float mLeftFraction;
 
 	// To compare sizes.
 	HWND mParentWindow;
