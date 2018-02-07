@@ -19,13 +19,13 @@ struct Light
 float4 main(PS_IN input) : SV_TARGET
 {
 	float alpha			= 1.0f;
-	float ambient		= 0.35f;
+	float ambient		= 0.40f;
 
 	bool use_texture	= input.tex.xy != -1.0f ? 
 		true : false;
 
 	float3 diffuse	= use_texture ?
-		texture2d.Sample(ss, input.tex.xy) : float3(0.2f, 0.2f, 0.2f);
+		texture2d.Sample(ss, input.tex.xy) : 0.1f;
 	
 
 	if (use_texture) // When writing fonts
@@ -40,7 +40,7 @@ float4 main(PS_IN input) : SV_TARGET
 	{
 		Light lights[4];
 		lights[0].dir = float3(0.0f, 1.0f, 0.0f);
-		lights[0].color = float3(0.31f, 0.31f, 0.30f);
+		lights[0].color = float3(0.31f, 0.31f, 0.31f);
 		lights[0].illu = 1.0f;
 
 		lights[1].dir = float3(1.0f, 0.0f, 0.0f);

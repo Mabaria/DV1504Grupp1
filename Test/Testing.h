@@ -36,18 +36,8 @@ namespace Testing
 
 	bool testOne()
 	{
-		Test_BoatOnScreen();
 		//! ADD YOUR OWN TESTS HERE
-		try
-		{
-			BoatTester::TestBoat();
-		}
-		catch (const char* e)
-		{
-			std::cout << e << std::endl;
-		}
-
-		std::cin.ignore();
+		Test_BoatOnScreen();
 		return true;
 	}
 }
