@@ -31,8 +31,9 @@ cbuffer proj_buffer : register (b2)
 VS_OUT main( VS_IN input )
 {
 	VS_OUT output;
-	matrix mvp		= mul(model, mul(proj, view));
-	output.worldPos = mul(model, input.pos);
+	matrix vm		= mul(view, model);
+	matrix mvp		= mul(proj, vm);
+	output.worldPos = mul(model, float4(input.pos, 1.0f));
 	output.pos		= mul(mvp, float4(input.pos, 1.0f));
 	output.nor		= input.nor;
 	output.tex		= input.tex;

@@ -3,7 +3,7 @@
 #include <string>
 
 Panel2D::Panel2D(int width, int height, int top, int left, HWND handle, LPCTSTR title)
-	:Panel(width, height, top, left, handle)
+	:Panel(width, height, top, left, handle, title)
 {
 	this->mPanelWindow = CreateWindowEx(
 		0,

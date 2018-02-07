@@ -2,6 +2,7 @@
 
 #include <Windows.h>
 #include <vector>
+#include <DDSTextureLoader.h>
 #include "Panel.h"
 #include "../../GraphicsEngine/DX/Direct3D.h"
 #include "MeshObject.h"
@@ -23,10 +24,12 @@ public:
 
 	// Creates buffers for and adds mesh 
 	// objects into the vector of mesh objects.
-	const bool AddMeshObject(
+	const void AddMeshObject(
 		std::string name,
 		std::vector<std::vector<unsigned int>> indices, 
-		std::vector<std::vector<Vertex>> vertices);
+		std::vector<std::vector<Vertex>> vertices,
+		std::wstring texturePath);
+	const void AddMeshObject(MeshObject *meshObject);
 
 	// Pass through for the create shader function in D3D11,
 	// setting shaders and setting up the input assembler.
@@ -54,8 +57,8 @@ public:
 
 private:
 	D3D11 mDirect3D;
-	std::vector<MeshObject> mMeshObjects;
-	HWND mPanelWindow;
+	std::vector<MeshObject*> mpMeshObjects;
+	//HWND mPanelWindow;
 
 	ID3D11VertexShader *mpVertexShader;
 	ID3D11GeometryShader *mpGeometryShader;
@@ -77,5 +80,7 @@ private:
 	const void CreateConstantBuffer(
 		XMMATRIX *matrix, 
 		ID3D11Buffer **constantBuffer);
+
+	const void CreateTexture(std::wstring texturePath);
 
 };

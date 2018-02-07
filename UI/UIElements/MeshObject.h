@@ -39,6 +39,7 @@ public:
 
 	// For passing the model matrix to the shader.
 	ID3D11Buffer **rGetConstantBuffer();
+	ID3D11ShaderResourceView **rGetTextureView();
 	const void SetConstantBuffer(ID3D11Buffer **constantBuffer);
 	XMMATRIX *rGetModelMatrix();
 
@@ -50,6 +51,8 @@ private:
 	std::vector<ID3D11Buffer*> mpIndexBuffers;
 	std::vector<ID3D11Buffer*> mpVertexBuffers;
 	ID3D11Buffer *mpConstantBuffer;
+	ID3D11ShaderResourceView *mpTextureView;
+
 
 	int mNumberOfBuffers;
 

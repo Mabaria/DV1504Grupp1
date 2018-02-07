@@ -64,6 +64,7 @@ private:
 	IDXGISwapChain *mSwapChain;
 	ID3D11RenderTargetView *mBackBuffer;
 	ID3D11DepthStencilView *mDepthBuffer;
+	ID3D11SamplerState *mSamplerState;
 
 	DXGI_MODE_DESC mModeDesc;
 	DXGI_SAMPLE_DESC mSampleDesc;

@@ -13,5 +13,5 @@ float4 main(PS_IN input) : SV_TARGET
 
 	illuminate = saturate(illuminate);
 
-	return illuminate + 0.2f;
+	return float4(illuminate.xxx + 0.2f, 1.0f);
 }
