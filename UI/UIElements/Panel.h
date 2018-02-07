@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Windows.h>
+#include <math.h>
 
 struct Fraction
 {
@@ -39,7 +40,7 @@ public:
 	// to the panel's borders in range [0;1].
 	const Fraction IntersectionFraction(int x, int y);
 
-	const void UpdateWindowSize();
+	const bool UpdateWindowSize();
 
 protected:
 	int mWidth;
@@ -51,15 +52,11 @@ protected:
 	int mParentHeight;
 	int mParentTop;
 	int mParentLeft;
-	// Normalized size relative to the parent window.
-	float mWidthFraction;
-	float mHeightFraction;
-	float mTopFraction;
-	float mLeftFraction;
 
 	// To compare sizes.
 	HWND mParentWindow;
 	HWND mPanelWindow;
+	LPCTSTR mTitle;
 
 private:
 };

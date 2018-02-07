@@ -7,12 +7,13 @@ Panel::Panel(int width, int height, int top, int left, HWND handle, LPCTSTR titl
 	this->mTop			= top;
 	this->mLeft			= left;
 	this->mParentWindow	= handle;
+	this->mTitle		= title;
 
 	// Creating a child window that will be the canvas to draw on for the panel.
 	this->mPanelWindow = CreateWindowEx(
 		0,
-		title,
-		title,
+		this->mTitle,
+		this->mTitle,
 		WS_CHILD | WS_BORDER,
 		this->mLeft,
 		this->mTop,
@@ -31,14 +32,6 @@ Panel::Panel(int width, int height, int top, int left, HWND handle, LPCTSTR titl
 	this->mParentWidth	= parent_size.right - parent_size.left;
 	this->mParentTop	= parent_size.top;
 	this->mParentLeft	= parent_size.left;
-		
-	int parent_height = parent_size.bottom - parent_size.top;
-	int parent_width = parent_size.right - parent_size.left;
-
-	this->mHeightFraction = (float)this->mHeight / (float)parent_height;
-	this->mWidthFraction = (float)this->mWidth / (float)parent_width;
-	this->mTopFraction = (float)this->mTop / (float)parent_height;
-	this->mLeftFraction = (float)this->mLeft / (float)parent_width;	
 }
 
 Panel::~Panel()
@@ -129,35 +122,50 @@ const Fraction Panel::IntersectionFraction(int x, int y)
 	return fraction;
 }
 
-const void Panel::UpdateWindowSize()
+const bool Panel::UpdateWindowSize()
 {
+	bool updated = false;
+
+	// Getting the client (parent) size.
 	RECT client_size;
 	GetClientRect(this->mParentWindow, &client_size);
 	int client_height	= client_size.bottom - client_size.top;
 	int client_width	= client_size.right - client_size.left;
+
+	// Change the panel size if the parent has changed.
 	if ((this->mParentWidth != client_width || 
 		this->mParentHeight != client_height) 
 		&& client_height != 0 
 		&& client_width != 0)
 	{
-		float height_difference_factor = client_height / this->mParentHeight;
-		float width_difference_factor = client_width / this->mParentWidth;
+		updated = true;
+		// Getting how much the client changed in width and height.
+		float height_difference_factor = 
+			(float)client_height / (float)this->mParentHeight;		
+		float width_difference_factor = 
+			(float)client_width / (float)this->mParentWidth;
 
-		this->mHeight *= height_difference_factor;
-		this->mTop *= height_difference_factor;
-		this->mWidth *= width_difference_factor;
-		this->mLeft *= width_difference_factor;
+		// Applying these fractions to the member sizes and positions.
+		this->mHeight	= (int)round(this->mHeight * height_difference_factor);
+		this->mTop		= (int)round(this->mTop	* height_difference_factor);
+		this->mWidth	= (int)round(this->mWidth * width_difference_factor);
+		this->mLeft		= (int)round(this->mLeft * width_difference_factor);
 
+		// Updating the parent size members.
 		this->mParentHeight = client_height;
-		this->mParentWidth = client_width;
-		this->mParentTop = client_size.top;
-		this->mParentLeft = client_size.left;
+		this->mParentWidth	= client_width;
+		this->mParentTop	= client_size.top;
+		this->mParentLeft	= client_size.left;
 
-		RECT panel_size = { this->mLeft,
-			this->mTop,
-			this->mLeft + this->mWidth,
-			this->mTop + this->mHeight };
-
-		AdjustWindowRectEx(&panel_size, WS_CHILD | WS_BORDER, false, 0);
+		// Setting the new position and size to the panel window.
+		SetWindowPos(
+			this->mPanelWindow, 
+			HWND_TOP, // Z order, ignored by SWP_NOZORDER. 
+			this->mLeft, 
+			this->mTop, 
+			this->mWidth, 
+			this->mHeight,
+			SWP_NOZORDER);
 	}
+	return updated;
 }
