@@ -37,7 +37,17 @@ namespace Testing
 	bool testOne()
 	{
 		//! ADD YOUR OWN TESTS HERE
-		Test_Picking();
+		try
+		{
+			Test_Picking();
+		}
+		catch (const char *e)
+		{
+			std::cout << e << std::endl;
+		}
+
+		getchar();
+		
 		return true;
 	}
 }

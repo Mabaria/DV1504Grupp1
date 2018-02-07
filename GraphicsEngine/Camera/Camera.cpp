@@ -270,6 +270,26 @@ void Camera::RotateCameraPitchYawRoll(const DirectX::XMVECTOR & pitch_yaw_roll)
 		DirectX::XMMatrixRotationRollPitchYawFromVector(pitch_yaw_roll));
 }
 
+float Camera::GetViewWidth() const
+{
+	return 2 * this->mNearZ * tan( (this->mFovAngle * PI) / (2 * 180));
+}
+
+float Camera::GetViewHeight() const
+{
+	return this->GetViewWidth() / this->mAspectRatio;
+}
+
+float Camera::GetNearZ() const
+{
+	return this->mNearZ;
+}
+
+float Camera::GetFarZ() const
+{
+	return this->mFarZ;
+}
+
 DirectX::XMVECTOR Camera::GetPosition() const
 {
 	return this->mCameraPosition;

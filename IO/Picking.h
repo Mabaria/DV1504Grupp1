@@ -1,6 +1,7 @@
 #pragma once
 #include <DirectXMath.h>
 #include "../GraphicsEngine/Parsing/Mesh.h"
+#include "../GraphicsEngine/Camera/Camera.h"
 
 struct Ray {
 	DirectX::XMVECTOR origin;
@@ -25,6 +26,12 @@ namespace Picking
 	void GetWorldRay (
 		const DirectX::XMMATRIX &projectionMatrix,
 		const DirectX::XMMATRIX &viewMatrix,
+		float nScreenX,
+		float nScreenY,
+		Ray &rRay);
+
+	void GetWorldRay (
+		const Camera *pCamera,
 		float nScreenX,
 		float nScreenY,
 		Ray &rRay);

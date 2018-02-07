@@ -16,48 +16,201 @@ void Test_Picking()
 	//		std::cout << "HIT at " << i << std::endl;
 	//	}
 	//}
-
 	//std::cin.ignore();
-
 	// Create camera for testing
 
-	
+	std::cout << "--------- Test picking ---------" << std::endl;
+	std::cout << "Compute world ray:" << std::endl;
+	Test_Picking_ClickToRay();
+}
+
+void Test_Picking_ClickToRay()
+{
+	std::string printPrefix = "  * ";
+
+	float width, height, nearZ, farZ, fov, aspect;
+
+	width = 100;
+	height = 100;
+	nearZ = 50;
+	farZ = 500;
+	fov = 2 * std::atan(width / (2 * nearZ)) * 180 / PI;
+	aspect = width / height;
+
+	std::cout << printPrefix << "Build camera...";
 
 	Camera *pCam = new Camera(
 		2.f, 2.f, 2.f,	// pos
 		0.f, 1.f, 0.f,	// Up
-		1.f, 0.f, 0.f,	// Look
-		800,						// Width
-		500,						// Height
-		50,							// Near
-		200,						// Far
+		0.f, 0.f, 1.f,	// Look
+		fov,
+		aspect,
+		nearZ,
+		farZ,
 		LOOK_TO,
 		PERSPECTIVE
 	);
+
+	std::cout << "done!" << std::endl;
 
 	/**
 	*	Test ray to world
 	*/
 
-	Ray ray;
+	Ray ray;					// Ray to send into function
 	float posX, posY; // Pick coord on window, normalized [0;1]
+	DirectX::XMVECTOR controlPos;
+	DirectX::XMVECTOR controlDir;
 
-	// Center of screen
+	float dotP;
+
+
+	/**
+	*	Test 1: Pick centerpoint
+	*/
+
+	std::cout << printPrefix << "Pick center...";
+
 	posX = 0.5f;
 	posY = 0.5f;
 
 	// Get ray
 	Picking::GetWorldRay(
-		pCam->GetProjectionMatrix(),
-		pCam->GetViewMatrix(),
+		pCam,
 		posX,
 		posY,
 		ray);
 
+	dotP = DotProduct(ray.direction, pCam->GetLookVector());
 	
-		
+	// Ray direction should be the same as the cameras look direction
+	if (dotP != 1.0)
+		throw ("Error wrong ray direction from picking (0.5, 0.5)");
+
+	std::cout << "done!" << std::endl;
+
+
+
+	/**
+	*	Test 2: Pick up left corner
+	*/
+
+	std::cout << printPrefix << "Pick up left corner...";
+
+	DirectX::XMVECTOR compare;
+
+	posX = 0.f;
+	posY = 0.f;
+
+	// Get ray
+	Picking::GetWorldRay(
+		pCam,
+		posX,
+		posY,
+		ray);
+
+	// Compute compare vector
+	compare = DirectX::XMVector3Normalize({ -1.0f, 1.0f, 1.0f });
+
+	dotP = DotProduct(ray.direction, compare);
+	if (dotP < 0.99)
+		throw ("Error wrong ray direction from picking (0.0, 0.0)");
+
+	std::cout << "done!" << std::endl;
+
+
+
+	/**
+	*	Test 3: Pick up right corner
+	*/
+
+	std::cout << printPrefix << "Pick up right corner...";
+
+	posX = 1.f;
+	posY = 0.f;
+
+	// Get ray
+	Picking::GetWorldRay(
+		pCam,
+		posX,
+		posY,
+		ray);
+
+	// Compute compare vector
+	compare = DirectX::XMVector3Normalize({ 1.0f, 1.0f, 1.0f });
+
+	dotP = DotProduct(ray.direction, compare);
+	if (dotP < 0.99)
+		throw ("Error wrong ray direction from picking (1.0, 0.0)");
+
+	std::cout << "done!" << std::endl;
+
+
+
+	/**
+	*	Test 4: Pick down left corner
+	*/
+
+	std::cout << printPrefix << "Pick down left corner...";
+
+	posX = 0.f;
+	posY = 1.f;
+
+	// Get ray
+	Picking::GetWorldRay(
+		pCam,
+		posX,
+		posY,
+		ray);
+
+	// Compute compare vector
+	compare = DirectX::XMVector3Normalize({ -1.0f, -1.0f, 1.0f });
+
+	dotP = DotProduct(ray.direction, compare);
+	if (dotP < 0.99)
+		throw ("Error wrong ray direction from picking (0.0, 1.0)");
+
+	std::cout << "done!" << std::endl;
+
+
+
+	/**
+	*	Test 5: Pick down right corner
+	*/
+
+	std::cout << printPrefix << "Pick down right corner...";
+
+	posX = 1.f;
+	posY = 1.f;
+
+	// Get ray
+	Picking::GetWorldRay(
+		pCam,
+		posX,
+		posY,
+		ray);
+
+	// Compute compare vector
+	compare = DirectX::XMVector3Normalize({ 1.0f, -1.0f, 1.0f });
+
+	dotP = DotProduct(ray.direction, compare);
+	if (dotP < 0.99)
+		throw ("Error wrong ray direction from picking (1.0, 1.0)");
+
+	std::cout << "done!" << std::endl;
 
 
 	delete pCam;
+	
+}
 
+float DotProduct(DirectX::XMVECTOR vec1, DirectX::XMVECTOR vec2) 
+{
+	DirectX::XMFLOAT4 result;
+
+	// Result stored in each component of projection
+	vec1 = DirectX::XMVector3Dot(vec1, vec2);
+	DirectX::XMStoreFloat4(&result, vec1);
+
+	return result.x;
 }
