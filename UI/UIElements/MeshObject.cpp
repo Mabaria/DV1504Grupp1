@@ -14,6 +14,7 @@ MeshObject::MeshObject(std::string name,
 
 	this->mModelMatrix = XMMatrixIdentity();
 	this->mpMatrixBuffer	= nullptr;
+	this->mpMaterialBuffer  = nullptr;
 	this->mpTextureView		= nullptr;
 }
 
@@ -29,6 +30,7 @@ MeshObject::MeshObject(const MeshObject & other)
 
 	this->mModelMatrix = other.mModelMatrix;
 	this->mpMatrixBuffer = other.mpMatrixBuffer;
+	this->mpMaterialBuffer = other.mpMaterialBuffer;
 	this->mpTextureView = other.mpTextureView;
 }
 
@@ -55,6 +57,11 @@ MeshObject::~MeshObject()
 	if (this->mpTextureView)
 	{
 		this->mpTextureView->Release();
+		this->mpTextureView = nullptr;
+	}
+	if (this->mpMaterialBuffer)
+	{
+		this->mpMaterialBuffer->Release();
 		this->mpTextureView = nullptr;
 	}
 }
@@ -119,6 +126,11 @@ ID3D11Buffer ** MeshObject::rGetMatrixBuffer()
 	return &this->mpMatrixBuffer;
 }
 
+ID3D11Buffer ** MeshObject::rGetMaterialBuffer()
+{
+	return &this->mpMaterialBuffer;
+}
+
 ID3D11ShaderResourceView ** MeshObject::rGetTextureView()
 {
 	return &this->mpTextureView;
@@ -127,6 +139,11 @@ ID3D11ShaderResourceView ** MeshObject::rGetTextureView()
 const void MeshObject::SetMatrixBuffer(ID3D11Buffer ** matrixBuffer)
 {
 	this->mpMatrixBuffer = *matrixBuffer;
+}
+
+const void MeshObject::SetMaterialBuffer(ID3D11Buffer ** materialBuffer)
+{
+	this->mpMaterialBuffer = *materialBuffer;
 }
 
 XMMATRIX* MeshObject::rGetModelMatrix()

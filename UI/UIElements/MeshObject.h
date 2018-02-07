@@ -41,11 +41,17 @@ public:
 
 	// For passing the model matrix to the shader.
 	ID3D11Buffer **rGetMatrixBuffer();
+	// For passing the material struct to the shader
+	ID3D11Buffer **rGetMaterialBuffer();
+
 	ID3D11ShaderResourceView **rGetTextureView();
+
 	const void SetMatrixBuffer(ID3D11Buffer **matrixBuffer);
+	const void SetMaterialBuffer(ID3D11Buffer **materialBuffer);
+
 	XMMATRIX *rGetModelMatrix();
 
-	void * operator new(size_t i)
+	void * operator new(size_t i) // To make sure it is 16 bit aligned
 	{
 		return _aligned_malloc(i, 16);
 	}
@@ -65,6 +71,8 @@ private:
 	std::vector<ID3D11Buffer*> mpIndexBuffers;
 	std::vector<ID3D11Buffer*> mpVertexBuffers;
 	ID3D11Buffer *mpMatrixBuffer;
+	ID3D11Buffer *mpMaterialBuffer;
+
 	ID3D11ShaderResourceView *mpTextureView;
 
 
