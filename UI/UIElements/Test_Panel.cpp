@@ -290,7 +290,7 @@ void Test_BoatOnScreen()
 	// --- END ---
 	
 
-	// --- Transperent Boxes ---
+	// --- Transparent Boxes ---
 
 	Mesh bb2("../../Models/Bound2UV.obj");
 
