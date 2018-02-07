@@ -19,7 +19,7 @@ struct Light
 float4 main(PS_IN input) : SV_TARGET
 {
 	float alpha			= 1.0f;
-	float ambient		= 0.4f;
+	float ambient		= 0.35f;
 
 	bool use_texture	= input.tex.xy != -1.0f ? 
 		true : false;
