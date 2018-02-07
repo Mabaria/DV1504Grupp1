@@ -230,9 +230,10 @@ void Test_BoatOnScreen()
 	top_view.AddMeshObject("floor1", floor1.GetIndexVectors(), floor1.GetVertexVectors(), L"");
 	top_view.AddMeshObject("floor01", floor01.GetIndexVectors(), floor01.GetVertexVectors(), L"");
 
-	top_view.rGetMeshObject("floor2")->Scale	(0.1f, 0.1f, 0.1f);
-	top_view.rGetMeshObject("floor1")->Scale	(0.1f, 0.1f, 0.1f);
-	top_view.rGetMeshObject("floor01")->Scale	(0.1f, 0.1f, 0.1f);
+	float scale = 0.1f;
+	top_view.rGetMeshObject("floor2")->Scale	(scale, scale, scale);
+	top_view.rGetMeshObject("floor1")->Scale	(scale, scale, scale);
+	top_view.rGetMeshObject("floor01")->Scale	(scale, scale, scale);
 
 	top_view.rGetMeshObject("floor2")->Translate	(0.0f, 0.0f, 0.5f);
 	top_view.rGetMeshObject("floor1")->Translate	(0.0f, 0.0f, 0.0f);
@@ -268,7 +269,7 @@ void Test_BoatOnScreen()
 		{ 0.0f, 1.0f, 0.0f, 0.0f },
 		{ 0.0f, 0.0f, 0.0f, 0.0f },
 		XM_PI / 8.0f, 16.0f / 9.0f,
-		0.1f, 1000.0f, LOOK_AT, PERSPECTIVE);
+		0.1f, 25.0f, LOOK_AT, PERSPECTIVE);
 
 	side_view.SetCamera(&camera2);
 	top_view.SetCamera(&camera);
