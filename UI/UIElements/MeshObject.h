@@ -40,9 +40,9 @@ public:
 	const void AddIndexBuffer(ID3D11Buffer **indexBuffer);
 
 	// For passing the model matrix to the shader.
-	ID3D11Buffer **rGetConstantBuffer();
+	ID3D11Buffer **rGetMatrixBuffer();
 	ID3D11ShaderResourceView **rGetTextureView();
-	const void SetConstantBuffer(ID3D11Buffer **constantBuffer);
+	const void SetMatrixBuffer(ID3D11Buffer **matrixBuffer);
 	XMMATRIX *rGetModelMatrix();
 
 	void * operator new(size_t i)
@@ -64,7 +64,7 @@ private:
 
 	std::vector<ID3D11Buffer*> mpIndexBuffers;
 	std::vector<ID3D11Buffer*> mpVertexBuffers;
-	ID3D11Buffer *mpConstantBuffer;
+	ID3D11Buffer *mpMatrixBuffer;
 	ID3D11ShaderResourceView *mpTextureView;
 
 

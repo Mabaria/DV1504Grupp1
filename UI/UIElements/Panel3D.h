@@ -49,9 +49,9 @@ public:
 	MeshObject* rGetMeshObject(std::string name);
 
 	// Updates constant buffers with matrices.
-	const void UpdateConstantBuffer(std::string name);
-	const void UpdateConstantBuffer(XMMATRIX *matrix, ID3D11Buffer **buffer);
-	const void UpdateConstantBuffer(int index);
+	const void UpdateMatrixBuffer(std::string name);
+	const void UpdateMatrixBuffer(XMMATRIX *matrix, ID3D11Buffer **buffer);
+	const void UpdateMatrixBuffer(int index);
 
 	const void SetCamera(Camera *camera);
 
@@ -77,7 +77,7 @@ private:
 	const void CreateIndexBuffer(std::vector<unsigned int> indices);
 
 	// Creates the constant buffer for the last added mesh object.
-	const void CreateConstantBuffer(
+	const void CreateMatrixBuffer(
 		XMMATRIX *matrix, 
 		ID3D11Buffer **constantBuffer);
 

@@ -143,9 +143,9 @@ const void Panel3D::AddMeshObject(MeshObject * meshObject)
 		this->CreateIndexBuffer(meshObject->GetIndices()[i]);
 		this->CreateVertexBuffer(meshObject->GetVertices()[i]);
 	}
-	this->CreateConstantBuffer(
+	this->CreateMatrixBuffer(
 		this->mpMeshObjects.back()->rGetModelMatrix(),
-		this->mpMeshObjects.back()->rGetConstantBuffer());
+		this->mpMeshObjects.back()->rGetMatrixBuffer());
 }
 
 bool Panel3D::CreateShadersAndSetup(
@@ -234,7 +234,7 @@ const void Panel3D::CreateIndexBuffer(std::vector<unsigned int> indices)
 	this->mpMeshObjects.back()->AddIndexBuffer(&index_buffer);
 }
 
-const void Panel3D::CreateConstantBuffer(
+const void Panel3D::CreateMatrixBuffer(
 	XMMATRIX *matrix, 
 	ID3D11Buffer **constantBuffer)
 {
@@ -271,7 +271,7 @@ const void Panel3D::CreateTexture(std::wstring texturePath)
 	}
 }
 
-const void Panel3D::UpdateConstantBuffer(std::string name)
+const void Panel3D::UpdateMatrixBuffer(std::string name)
 {
 	// Getting the mesh object of the given name.
 	MeshObject *mesh_object = this->rGetMeshObject(name);
@@ -279,7 +279,7 @@ const void Panel3D::UpdateConstantBuffer(std::string name)
 	if (mesh_object)
 	{
 		// Getting the constant buffer and model matrix from that mesh object.
-		ID3D11Buffer *constant_buffer = *mesh_object->rGetConstantBuffer();
+		ID3D11Buffer *constant_buffer = *mesh_object->rGetMatrixBuffer();
 		const XMMATRIX *model_matrix = mesh_object->rGetModelMatrix();
 
 		// Mapping the buffer data to the CPU in order to change it,
@@ -297,7 +297,7 @@ const void Panel3D::UpdateConstantBuffer(std::string name)
 	}
 }
 
-const void Panel3D::UpdateConstantBuffer(
+const void Panel3D::UpdateMatrixBuffer(
 	XMMATRIX * matrix, 
 	ID3D11Buffer ** buffer)
 {
@@ -318,7 +318,7 @@ const void Panel3D::UpdateConstantBuffer(
 	}
 }
 
-const void Panel3D::UpdateConstantBuffer(int index)
+const void Panel3D::UpdateMatrixBuffer(int index)
 {
 	if (index > -1 && index < (int)this->mpMeshObjects.size())
 	{
@@ -326,7 +326,7 @@ const void Panel3D::UpdateConstantBuffer(int index)
 		MeshObject *mesh_object = this->mpMeshObjects[index];
 
 		// Getting the constant buffer and model matrix from that mesh object.
-		ID3D11Buffer *constant_buffer = *mesh_object->rGetConstantBuffer();
+		ID3D11Buffer *constant_buffer = *mesh_object->rGetMatrixBuffer();
 		const XMMATRIX *model_matrix = mesh_object->rGetModelMatrix();
 
 		// Mapping the buffer data to the CPU in order to change it,
@@ -348,10 +348,10 @@ const void Panel3D::SetCamera(Camera * camera)
 {
 	this->mpCamera = camera;
 
-	this->CreateConstantBuffer(
+	this->CreateMatrixBuffer(
 		&this->mpCamera->GetViewMatrix(), 
 		&this->mpViewBuffer);
-	this->CreateConstantBuffer(
+	this->CreateMatrixBuffer(
 		&this->mpCamera->GetProjectionMatrix(), 
 		&this->mpProjBuffer);
 }
@@ -361,15 +361,15 @@ const void Panel3D::Update()
 	// Updating the constant buffers of the mesh objects.
 	for (int i = 0; i < (int)this->mpMeshObjects.size(); i++)
 	{
-		UpdateConstantBuffer(i);
+		UpdateMatrixBuffer(i);
 	}
 	if (this->mpCamera)
 	{
 		// Updating the camera buffers.
-		UpdateConstantBuffer(
+		UpdateMatrixBuffer(
 			&this->mpCamera->GetViewMatrix(),
 			&this->mpViewBuffer);
-		UpdateConstantBuffer(
+		UpdateMatrixBuffer(
 			&this->mpCamera->GetProjectionMatrix(),
 			&this->mpProjBuffer);
 	}
@@ -406,7 +406,7 @@ const void Panel3D::Draw()
 	// and draws them one by one.
 	for (int i = 0; i < (int)this->mpMeshObjects.size(); i++)
 	{
-		constant_buffer = *this->mpMeshObjects[i]->rGetConstantBuffer();
+		constant_buffer = *this->mpMeshObjects[i]->rGetMatrixBuffer();
 
 		// Setting the constant buffer to the vertex shader.
 		this->mDirect3D.GetContext()->VSSetConstantBuffers(
