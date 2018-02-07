@@ -144,6 +144,19 @@ void Test_Panel2D()
 	testPanel.GetButtonByIndex(3285); // Expected: nullptr
 	testHeadPanel.GetButtonByName("Wesseboii"); // Expected: nullptr
 
+
+	Mesh testMesh("../../Models/OBJTEST2.obj");
+	test3DPanel.CreateShadersAndSetup(L"../../GraphicsEngine/Test_VertexShader.hlsl", L"", L"../../GraphicsEngine/Test_PixelShader.hlsl");
+	test3DPanel.AddMeshObject("Test", testMesh.GetIndexVectors(), testMesh.GetVertexVectors(), L"");
+	test3DPanel.rGetMeshObject("Test")->Scale(1.0f, 1.0f, 1.0f);
+	Camera testCamera(0.0f, 50.0f, -50.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 90.0f, 1920.0f / 1080.0f, 0.1f, 1000.0f);
+	test3DPanel.SetCamera(&testCamera);
+
+	Mesh testMesh2("../../Models/OBJTEST2.obj");
+	testHead3DPanel.CreateShadersAndSetup(L"../../GraphicsEngine/Test_VertexShader.hlsl", L"", L"../../GraphicsEngine/Test_PixelShader.hlsl");
+	testHead3DPanel.AddMeshObject("Test2", testMesh2.GetIndexVectors(), testMesh2.GetVertexVectors(), L"");
+	Camera testCamera2(0.0f, 50.0f, -50.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 90.0f, 1920.0f / 1080.0f, 0.1f, 1000.0f);
+	testHead3DPanel.SetCamera(&testCamera2);
 	// testHeadPanel.GetButtonByName("FernButton")->AddObserver(&window);
 	// Doesnt work because there's no class that inherits observer yet
 	// But shows how you would do to add functionality to a button
@@ -153,6 +166,7 @@ void Test_Panel2D()
 		window.Update();
 		testPanel.Update();
 		testHeadPanel.Update();
+		test3DPanel.Update();
 		testHead3DPanel.Update();
 		testPanel.Draw();
 		testHeadPanel.Draw();
