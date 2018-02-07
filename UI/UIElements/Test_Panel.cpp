@@ -125,7 +125,57 @@ void Test_Panel3D()
 
 void Test_Panel2D()
 {
-	// TODO: Test 2D panel when finished.
+	Window window(L"Button_Test", 1280, 720);
+	Panel2D testPanel(400, 1080, 0, 1520, window.GetWindow(), L"Button_Test");
+	Panel2D testHeadPanel(1120, 200, 0, 400, window.GetWindow(), L"Button_Test");
+	Panel3D testHead3DPanel(399, 200, 0, 0, window.GetWindow(), L"Button_Test");
+	Panel3D test3DPanel(1520, 880, 200, 0, window.GetWindow(), L"Button_Test");
+
+	testPanel.AddButton(100, 100, 20, 20, "../../Models/FireButton.png", "FireButton");
+	testPanel.AddButton(100, 100, 120, 20, "../../Models/FireButton.png", "FireButton2");
+	testPanel.AddButton(100, 100, 220, 20, "../../Models/FireButton.png", "FireButton3");
+	testHeadPanel.AddButton(100, 100, 20, 20, "../../Models/Fern.jpg", "FernButton");
+	testHeadPanel.AddButton(200, 200, 20, 400, "../../Models/pepehands.jpg", "FernButton");
+	testHeadPanel.AddButton(200, 200, 20, 700, "../../Models/feelsrain.gif", "FernButton");
+	window.Open();
+	testPanel.GetButtonByIndex(1); // Expected: FireButton2
+	testPanel.GetButtonByName("FireButton3")->SetButtonsize(-220, 320, 140, 420);
+	/* Expected: Button 3 is displaced and stretches a bit*/
+	testPanel.GetButtonByIndex(-1); // Expected: nullptr
+	testPanel.GetButtonByIndex(3285); // Expected: nullptr
+	testHeadPanel.GetButtonByName("Wesseboii"); // Expected: nullptr
+
+
+
+	Mesh testMesh("../../Models/OBJTEST2.obj");
+	test3DPanel.CreateShadersAndSetup(L"../../GraphicsEngine/Test_VertexShader.hlsl", L"", L"../../GraphicsEngine/Test_PixelShader.hlsl");
+	test3DPanel.AddMeshObject("Test", testMesh.GetIndexVectors(), testMesh.GetVertexVectors(), L"");
+	test3DPanel.rGetMeshObject("Test")->Scale(1.0f, 1.0f, 1.0f);
+	Camera testCamera(0.0f, 50.0f, -50.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 90.0f, 1920.0f / 1080.0f, 0.1f, 1000.0f);
+	test3DPanel.SetCamera(&testCamera);
+
+	Mesh testMesh2("../../Models/OBJTEST2.obj");
+	testHead3DPanel.CreateShadersAndSetup(L"../../GraphicsEngine/Test_VertexShader.hlsl", L"", L"../../GraphicsEngine/Test_PixelShader.hlsl");
+	testHead3DPanel.AddMeshObject("Test2", testMesh2.GetIndexVectors(), testMesh2.GetVertexVectors(), L"");
+	Camera testCamera2(0.0f, 50.0f, -50.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 90.0f, 1920.0f / 1080.0f, 0.1f, 1000.0f);
+	testHead3DPanel.SetCamera(&testCamera2);
+	// testHeadPanel.GetButtonByName("FernButton")->AddObserver(&window);
+	// Doesnt work because there's no class that inherits observer yet
+	// But shows how you would do to add functionality to a button
+
+	while (window.IsOpen())
+	{
+		window.Update();
+		testPanel.Update();
+		testHeadPanel.Update();
+		test3DPanel.Update();
+		testHead3DPanel.Update();
+		testPanel.Draw();
+		testHeadPanel.Draw();
+		test3DPanel.Draw();
+		testHead3DPanel.Draw();
+
+	}
 }
 
 void Test_BoatOnScreen()

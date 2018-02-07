@@ -12,20 +12,21 @@
 
 #include "../../UI/UIElements/Test_Panel.h"
 
+#include "../Logic/BoatTester.h"
+
 namespace Testing
 {
 	bool testAll()
 	{
-		TestAssimp();
-		TestBoat();
-		Test_Button();
-		TestCamera();
-		Test_Window();
-		Test_D3D11();
-		TestMesh();
-		Test_Input();
-		Test_Observer();
-		//Todo This test is blank
+		//TestAssimp();
+		//TestBoat();
+		//Test_Button();
+		//TestCamera();
+		//Test_Window();
+		//Test_D3D11();
+		//TestMesh();
+		//Test_Input();
+		//Test_Observer();*/
 		Test_Panel2D();
 		//Todo This test crashes
 		//Test_Panel3D();
@@ -37,6 +38,16 @@ namespace Testing
 	{
 		Test_BoatOnScreen();
 		//! ADD YOUR OWN TESTS HERE
+		try
+		{
+			BoatTester::TestBoat();
+		}
+		catch (const char* e)
+		{
+			std::cout << e << std::endl;
+		}
+
+		std::cin.ignore();
 		return true;
 	}
 }
