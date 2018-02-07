@@ -76,8 +76,8 @@ float4 main(PS_IN input) : SV_TARGET
 		ambient = float3(1.0f, 0.0f, 0.0f);
 	}
 
-
-	float depthValue = pow(input.pos.z, 35.0f);
+	// FOG
+	float depthValue = pow(input.pos.z + 0.01f, 35.0f);
 
 	float limit = 0.3f;	 // Limit brightness
 	if (depthValue > limit)
