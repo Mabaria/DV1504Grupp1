@@ -206,7 +206,7 @@ void Test_BoatOnScreen()
 		L"../../Models/Däck1.DDS"
 	);
 
-	top_view.rGetMeshObject("Däck1")->Scale		(0.6f, 0.2f, 0.2f);
+	top_view.rGetMeshObject("Däck1")->Scale		(0.4f, 0.15f, 0.15f);
 	top_view.rGetMeshObject("Däck1")->Rotate	(XM_PI / 2.0f, XM_PI / 2.0f, 0.0f);
 	top_view.rGetMeshObject("Däck1")->Translate	(0.2f, 0.0f, 0.2f);
 
@@ -222,6 +222,7 @@ void Test_BoatOnScreen()
 	ti.push_back(bb2.GetIndexVectors()[1]);
 	tv.push_back(bb2.GetVertexVectors()[1]);
 
+
 	top_view.AddMeshObject("Bound2UV", ti, tv,
 		L"../../Models/BlendColor.DDS"
 	);
@@ -229,12 +230,13 @@ void Test_BoatOnScreen()
 	top_view.rGetMeshObject("Bound2UV")->Rotate		(0.0f, XM_PI, 0.0f);
 	top_view.rGetMeshObject("Bound2UV")->Translate	(0.0f, 0.0f, 0.5f);
 
+
 	side_view.AddMeshObject("Bound2UV", ti, tv,
 		L"../../Models/BlendColor.DDS"
 	);
 	side_view.rGetMeshObject("Bound2UV")->Scale(0.15f, 0.4f, 0.1f);
-	//side_view.rGetMeshObject("Bound2UV")->Rotate(0.0f, XM_PI, 0.0f);
-	side_view.rGetMeshObject("Bound2UV")->Translate(0.00f, -0.2f, -0.1f);
+	side_view.rGetMeshObject("Bound2UV")->Rotate(0.0f, XM_PI, 0.0f);
+	side_view.rGetMeshObject("Bound2UV")->Translate(0.0f, -0.2f, 0.07f);
 
 	// --- END ---
 
