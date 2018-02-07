@@ -39,7 +39,7 @@ public:
 	// to the panel's borders in range [0;1].
 	const Fraction IntersectionFraction(int x, int y);
 
-	const void UpdateWindowSize();
+	const bool UpdateWindowSize();
 
 protected:
 	int mWidth;
@@ -60,6 +60,7 @@ protected:
 	// To compare sizes.
 	HWND mParentWindow;
 	HWND mPanelWindow;
+	LPCTSTR mTitle;
 
 private:
 };
