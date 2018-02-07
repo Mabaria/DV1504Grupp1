@@ -179,8 +179,8 @@ LRESULT CALLBACK WindowProcedure(
 		GetClientRect(hWnd, &client_rect);
 
 		// Set a relative position from the client area
-		cursor_pos.x -= window_rect.left + 8;
-		cursor_pos.y -= window_rect.top + 31;
+		cursor_pos.x -= window_rect.left;
+		cursor_pos.y -= window_rect.top;
 		InputDevice::SetMousePosition(
 			(float)cursor_pos.x,
 			(float)cursor_pos.y
