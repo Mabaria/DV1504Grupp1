@@ -39,4 +39,6 @@ namespace Picking
 	bool IsRayIntersectingAABB(
 		const Ray &ray,
 		const AABB &box);
+
+	AABB FromMeshToAABB(const std::vector<Vertex> &vertex);
 }

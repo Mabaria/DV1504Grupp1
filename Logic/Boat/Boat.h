@@ -8,6 +8,7 @@
 #include "Room.h"
 #include "../Eventlog/EventLog.h"
 #include "../Event/Event.h"
+#include "../../IO/Picking.h"
 
 class Boat
 {
@@ -43,6 +44,8 @@ public:
 	void WriteFile(std::string filePath);
 	bool ReadFile(std::string filePath);
 
+	// Room data specific
+	bool LoadBoundingBoxes();
 	// Bounding volumes
 	//void StoreBoundings(std::vector<AABB> boundings);
 
@@ -58,6 +61,10 @@ private:
 
 	std::vector<Deck> mDecks;
 	std::vector<Room> mRooms;
+
+	std::vector<Mesh> mDeckMesh;
+	std::vector<Mesh> mBoundingMeshes;
+	std::vector<AABB> mBoundingAABB;
 
 	EventLog *mpEventLog;
 

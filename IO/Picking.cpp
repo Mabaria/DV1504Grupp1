@@ -126,6 +126,33 @@ bool Picking::IsRayIntersectingAABB(
 	return true;
 }
 
+AABB Picking::FromMeshToAABB(const std::vector<Vertex> &vertex)
+{
+	AABB retAABB;
+	retAABB.x.max = retAABB.x.min = vertex[0].x;
+	retAABB.y.max = retAABB.y.min = vertex[0].x;
+	retAABB.z.max = retAABB.z.min = vertex[0].x;
+
+	for (unsigned int i = 1; i < vertex.size(); i++)
+	{
+		if (retAABB.x.max < vertex[i].x)
+			retAABB.x.max = vertex[i].x;
+		else if (retAABB.x.min > vertex[i].x)
+			retAABB.x.min = vertex[i].x;
+
+		if (retAABB.y.max < vertex[i].y)
+			retAABB.y.max = vertex[i].y;
+		else if (retAABB.y.min > vertex[i].y)
+			retAABB.y.min = vertex[i].y;
+
+		if (retAABB.z.max < vertex[i].z)
+			retAABB.z.max = vertex[i].z;
+		else if (retAABB.z.min > vertex[i].z)
+			retAABB.z.min = vertex[i].z;
+	}
+	return retAABB;
+}
+
 bool FillAABBVectorFromFile(const std::string &path, std::vector<AABB> &rList)
 {
 	AABB *pList;

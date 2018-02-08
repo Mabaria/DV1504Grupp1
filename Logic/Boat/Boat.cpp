@@ -378,6 +378,31 @@ bool Boat::ReadFile(std::string filePath)
 	return true;
 }
 
+bool Boat::LoadBoundingBoxes()
+{
+	//? Is there any point in not hardcode the files?
+	//Todo Need to try-catch this
+	this->mBoundingMeshes.push_back(
+		Mesh("../../Models/Bounding/Bound01UV.obj"));
+	this->mBoundingMeshes.push_back(
+		Mesh("../../Models/Bounding/Bound1UV.obj"));
+	this->mBoundingMeshes.push_back(
+		Mesh("../../Models/Bounding/Bound2UV.obj"));
+
+	for (int i = 0; i < this->mBoundingMeshes.size(); i++)
+	{
+		std::vector<std::vector<Vertex>> &submeshList =
+			this->mBoundingMeshes[i].GetVertexVectors();
+		for (int j = 0; j < submeshList.size(); j++)
+		{
+			this->mBoundingAABB.push_back(
+				Picking::FromMeshToAABB(submeshList[j]));
+			
+		}
+	}
+	return true;
+}
+
 
 
 /**
