@@ -40,15 +40,14 @@ void Panel2D::AddTextbox(
 	std::string name)
 {
 	this->mTextBoxNames.push_back(name); // Add name.
-	
-	TextBox newTextBox(
-	this->mDirect2D,
-	left,
-	top,
-	left + width,
-	top + height);
 
-	this->mTextBoxVector.push_back(newTextBox); // Add text box.
+	this->mTextBoxVector.push_back(TextBox(
+		this->mDirect2D,
+		left,
+		top,
+		left + width,
+		top + height)); // Add text box.
+
 	this->mTextBoxVector.back().SetText(text); // Set text.
 }
 

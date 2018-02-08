@@ -5,21 +5,7 @@
 #include "Button.h"
 #include "../../GraphicsEngine/DX/Direct2D.h"
 #include <vector>
-
-class TextBox
-{
-public:
-	TextBox(
-	Direct2D *D2D1Panel,
-		int left,
-		int top,
-		int right, 
-		int bottom) {};
-	void SetText(std::string text) {};
-	void DrawTextBox() {};
-private:
-};
-
+#include "../../UI/UIElements/TextBox.h"
 
 class Panel2D : public Panel
 {
