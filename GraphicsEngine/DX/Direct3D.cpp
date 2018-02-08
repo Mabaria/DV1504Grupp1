@@ -8,10 +8,10 @@ D3D11::D3D11()
 	this->mSwapChain = nullptr;
 	this->mBackBuffer = nullptr;
 	this->mDepthBuffer = nullptr;
+	this->mSamplerState = nullptr;
 }
 
 D3D11::D3D11(
-	/*const HWND& window,*/ 
 	const int width, 
 	const int height)
 {
@@ -28,7 +28,7 @@ D3D11::D3D11(
 
 	// -- Sample --
 	this->mSampleDesc = { 0 };
-	this->mSampleDesc.Count = 1;
+	this->mSampleDesc.Count = 2;
 	this->mSampleDesc.Quality = 0;
 
 	// -- Viewport --
@@ -39,9 +39,9 @@ D3D11::D3D11(
 	this->mViewport.MinDepth = 0.1f;
 	this->mViewport.MaxDepth = 1.0f;
 
-	this->mClearColor[0] = 0.0f;
-	this->mClearColor[1] = 0.0f;
-	this->mClearColor[2] = 0.0f;
+	this->mClearColor[0] = 0.88f;
+	this->mClearColor[1] = 0.87f;
+	this->mClearColor[2] = 0.85f;
 	this->mClearColor[3] = 1.0f;
 }
 
@@ -52,6 +52,7 @@ D3D11::~D3D11()
 	this->ReleaseCOM(this->mSwapChain);
 	this->ReleaseCOM(this->mBackBuffer);
 	this->ReleaseCOM(this->mDepthBuffer);
+	this->ReleaseCOM(this->mSamplerState);
 }
 
 void D3D11::Init(HWND window)
@@ -61,6 +62,42 @@ void D3D11::Init(HWND window)
 
 	this->mContext->RSSetViewports(1, &this->mViewport);
 	this->ChangeSize(this->mSize);
+
+	D3D11_SAMPLER_DESC sampler_desc{};
+	sampler_desc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+	sampler_desc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+	sampler_desc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+
+	if (FAILED(this->mDevice->CreateSamplerState(
+		&sampler_desc, 
+		&this->mSamplerState)))
+	{
+		MessageBoxA(NULL, "Error creating sampler state.", NULL, MB_OK);
+		exit(-1);
+	}
+
+	this->mContext->PSSetSamplers(0, 1, &this->mSamplerState);
+
+	ID3D11BlendState *blend_state = nullptr;
+	D3D11_BLEND_DESC blend_desc{};
+	blend_desc.RenderTarget[0].BlendEnable = TRUE;
+	blend_desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+	blend_desc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+	blend_desc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+	blend_desc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	blend_desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ZERO;
+	blend_desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+	blend_desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+
+	if (FAILED(this->mDevice->CreateBlendState(&blend_desc, &blend_state)))
+	{
+		MessageBoxA(NULL, "Error creating blend state.", NULL, MB_OK);
+		exit(-1);
+	}
+	float blend_factor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+	UINT sample_mask = 0xffffffff;
+	this->mContext->OMSetBlendState(blend_state, blend_factor, sample_mask);
+	blend_state->Release();
 }
 
 void D3D11::ChangeClearColor(

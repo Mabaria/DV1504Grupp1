@@ -23,7 +23,6 @@ class D3D11
 public:
 	D3D11();
 	D3D11(
-		/*const HWND& window,*/
 		const int width, 
 		const int height);
 	~D3D11();
@@ -64,6 +63,7 @@ private:
 	IDXGISwapChain *mSwapChain;
 	ID3D11RenderTargetView *mBackBuffer;
 	ID3D11DepthStencilView *mDepthBuffer;
+	ID3D11SamplerState *mSamplerState;
 
 	DXGI_MODE_DESC mModeDesc;
 	DXGI_SAMPLE_DESC mSampleDesc;
