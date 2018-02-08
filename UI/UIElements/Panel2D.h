@@ -49,10 +49,10 @@ private:
 	bool mIsMouseInsidePanel();
 	
 	void mUpdateButtons();
-	std::vector<Button> mButtonVector;
+	std::vector<Button*> mButtonVector;
 	std::vector<std::string> mButtonNames;
 
 	void mUpdateTextBoxes();
-	std::vector<TextBox> mTextBoxVector;
+	std::vector<TextBox*> mTextBoxVector;
 	std::vector<std::string> mTextBoxNames;
 };

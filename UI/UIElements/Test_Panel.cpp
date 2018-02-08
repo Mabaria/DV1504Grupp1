@@ -463,6 +463,8 @@ void Test_Panel2DTextBoxes()
 	log_panel.AddButton(100, 100, 220, 20, "../../Models/Button03.png", "Water");
 	log_panel.AddButton(100, 100, 320, 20, "../../Models/Button04.png", "Fire");
 
+
+
 	float speed = 0.1f;
 
 	window.Open();

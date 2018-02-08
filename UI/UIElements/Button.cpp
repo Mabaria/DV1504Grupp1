@@ -185,18 +185,13 @@ void Button::LoadImageToBitmap(
 			this->D2D1Panel->GetpFormatConverter(),
 			NULL,
 			&this->mpBitMap);
-		this->D2D1Panel->GetpFormatConverter()->Release();
-		
 		this->mBitmapRenderSize = D2D1::RectF(
 			0,
 			0,
 			this->mpBitMap->GetSize().width,
 			this->mpBitMap->GetSize().height);
 		this->mBmpLoaded = true;
-		this->D2D1Panel->GetpBitmapSrc()->Release();
-		this->D2D1Panel->GetpBitmapDecoder()->Release();
-	}
-	
+	}	
 }
 
 BUTTON_STATE Button::GetButtState() const
