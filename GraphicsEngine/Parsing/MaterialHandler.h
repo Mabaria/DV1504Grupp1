@@ -6,6 +6,7 @@ struct MaterialStruct
 	float ambientR, ambientG, ambientB;
 	float specularR, specularG, specularB;
 	float specExponent;
+	float pad0, pad1, pad2, pad3, pad4, pad5;
 };
 
 class MaterialHandler

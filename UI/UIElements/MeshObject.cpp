@@ -27,6 +27,7 @@ MeshObject::MeshObject(const MeshObject & other)
 	this->mVertices = other.mVertices;
 
 	this->mNumberOfIndexBuffers = other.mNumberOfIndexBuffers;
+	this->mNumberOfMaterialBuffers = other.mNumberOfMaterialBuffers;
 
 	this->mModelMatrix = other.mModelMatrix;
 	this->mpMatrixBuffer = other.mpMatrixBuffer;
@@ -111,6 +112,11 @@ const int MeshObject::GetNumberOfIndexBuffers() const
 	return this->mNumberOfIndexBuffers;
 }
 
+const int MeshObject::GetNumberOfMaterialBuffers() const
+{
+	return this->mNumberOfMaterialBuffers;
+}
+
 const std::string MeshObject::GetName() const
 {
 	return this->mName;
@@ -124,6 +130,11 @@ const void MeshObject::AddVertexBuffer(ID3D11Buffer **vertexBuffer)
 const void MeshObject::AddIndexBuffer(ID3D11Buffer **indexBuffer)
 {
 	this->mpIndexBuffers.push_back(*indexBuffer);
+}
+
+const void MeshObject::AddMaterialBuffer(ID3D11Buffer ** materialBuffer)
+{
+	this->mpMaterialBuffers.push_back(*materialBuffer);
 }
 
 ID3D11Buffer ** MeshObject::rGetMatrixBuffer()

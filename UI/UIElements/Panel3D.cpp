@@ -146,6 +146,12 @@ const void Panel3D::AddMeshObject(MeshObject * meshObject)
 	this->mCreateMatrixBuffer(
 		this->mpMeshObjects.back()->rGetModelMatrix(),
 		this->mpMeshObjects.back()->rGetMatrixBuffer());
+
+	for (int i = 0; i < this->mpMeshObjects.back()->GetNumberOfMaterialBuffers(); i++)
+	{
+		this->mCreateMaterialBuffer(
+			&meshObject->pGetMaterialHandler()->GetMaterialStruct(i));
+	}
 }
 
 bool Panel3D::CreateShadersAndSetup(
@@ -259,9 +265,9 @@ const void Panel3D::mCreateMatrixBuffer(
 }
 
 const void Panel3D::mCreateMaterialBuffer(
-	MaterialStruct * matStruct,
-	ID3D11Buffer ** constantBuffer)
+	MaterialStruct * matStruct)
 {
+	ID3D11Buffer *material_buffer = nullptr;
 	D3D11_BUFFER_DESC buffer_desc{};
 	buffer_desc.BindFlags		= D3D11_BIND_CONSTANT_BUFFER;
 	buffer_desc.Usage			= D3D11_USAGE_DYNAMIC;
@@ -275,11 +281,12 @@ const void Panel3D::mCreateMaterialBuffer(
 	if (FAILED(this->mDirect3D.GetDevice()->CreateBuffer(
 		&buffer_desc,
 		&buffer_data,
-		constantBuffer)))
+		&material_buffer)))
 	{
 		MessageBoxA(NULL, "Error creating material buffer.", NULL, MB_OK);
 		exit(-1);
 	}
+	this->mpMeshObjects.back()->AddMaterialBuffer(&material_buffer);
 }
 
 const void Panel3D::CreateTexture(std::wstring texturePath)

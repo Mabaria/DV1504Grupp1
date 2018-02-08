@@ -32,12 +32,14 @@ public:
 
 	// What could it possibly do?
 	const int GetNumberOfIndexBuffers() const;
+	const int GetNumberOfMaterialBuffers() const;
 	const std::string GetName() const;
 
 	// Buffer adders add the parameter buffer to the end of the 
 	// vector of buffers.
 	const void AddVertexBuffer(ID3D11Buffer **vertexBuffer);
 	const void AddIndexBuffer(ID3D11Buffer **indexBuffer);
+	const void AddMaterialBuffer(ID3D11Buffer **materialBuffer);
 
 	// For passing the model matrix to the shader.
 	ID3D11Buffer **rGetMatrixBuffer();

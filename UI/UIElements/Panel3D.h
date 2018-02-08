@@ -82,8 +82,7 @@ private:
 		ID3D11Buffer **constantBuffer);
 
 	const void mCreateMaterialBuffer(
-		MaterialStruct *matStruct,
-		ID3D11Buffer **constantBuffer);
+		MaterialStruct *matStruct);
 
 
 	const void CreateTexture(std::wstring texturePath);
