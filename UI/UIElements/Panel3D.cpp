@@ -419,6 +419,7 @@ const void Panel3D::Draw()
 	ID3D11Buffer* vertex_buffer		= nullptr;
 	ID3D11Buffer* index_buffer		= nullptr;
 	ID3D11Buffer* matrix_buffer	= nullptr;
+	ID3D11Buffer* material_buffer = nullptr;
 	UINT numIndices = 0;
 
 	this->mDirect3D.GetContext()->VSSetConstantBuffers(
@@ -449,6 +450,8 @@ const void Panel3D::Draw()
 		{
 			index_buffer	= *this->mpMeshObjects[i]->pGetIndexBuffer(j);
 			vertex_buffer	= *this->mpMeshObjects[i]->pGetVertexBuffer(j);
+			material_buffer = *this->mpMeshObjects[i]->rGetMaterialBuffer(
+				this->mpMeshObjects[i]->GetMaterialIndexForIndexBuffer(j));
 
 			// Setting the index buffer to the input assembler.
 			this->mDirect3D.GetContext()->IASetVertexBuffers(
@@ -463,6 +466,13 @@ const void Panel3D::Draw()
 				index_buffer,			// Index buffer.
 				DXGI_FORMAT_R32_UINT,	// Format.
 				offset);				// Offset.
+
+			// Setting the material buffer to the pixel shader.
+			this->mDirect3D.GetContext()->PSSetConstantBuffers(
+				0,
+				1,
+				&material_buffer
+			);
 
 			numIndices = (UINT)this->mpMeshObjects[i]->GetIndices()[j].size();
 			this->mDirect3D.GetContext()->DrawIndexed(

@@ -166,3 +166,8 @@ MaterialHandler * MeshObject::pGetMaterialHandler()
 {
 	return &this->mMaterialHandler;
 }
+
+int MeshObject::GetMaterialIndexForIndexBuffer(unsigned int indexBufferIndex) const
+{
+	return this->mMesh->GetSubmeshMaterialIndex(indexBufferIndex);
+}

@@ -53,6 +53,7 @@ public:
 	XMMATRIX *rGetModelMatrix();
 
 	MaterialHandler* pGetMaterialHandler();
+	int GetMaterialIndexForIndexBuffer(unsigned int indexBufferIndex) const;
 
 	void * operator new(size_t i) // To make sure it is 16 bit aligned
 	{
