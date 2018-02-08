@@ -81,6 +81,10 @@ private:
 		XMMATRIX *matrix, 
 		ID3D11Buffer **constantBuffer);
 
+	const void mCreateMaterialBuffer(
+		MaterialStruct *matStruct,
+		ID3D11Buffer **constantBuffer);
+
 
 	const void CreateTexture(std::wstring texturePath);
 

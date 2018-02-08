@@ -258,6 +258,30 @@ const void Panel3D::mCreateMatrixBuffer(
 	}
 }
 
+const void Panel3D::mCreateMaterialBuffer(
+	MaterialStruct * matStruct,
+	ID3D11Buffer ** constantBuffer)
+{
+	D3D11_BUFFER_DESC buffer_desc{};
+	buffer_desc.BindFlags		= D3D11_BIND_CONSTANT_BUFFER;
+	buffer_desc.Usage			= D3D11_USAGE_DYNAMIC;
+	buffer_desc.CPUAccessFlags	= D3D11_CPU_ACCESS_WRITE;
+	buffer_desc.ByteWidth		= sizeof(MaterialStruct);
+
+	D3D11_SUBRESOURCE_DATA buffer_data{};
+	buffer_data.pSysMem = matStruct;
+
+	// Create buffer
+	if (FAILED(this->mDirect3D.GetDevice()->CreateBuffer(
+		&buffer_desc,
+		&buffer_data,
+		constantBuffer)))
+	{
+		MessageBoxA(NULL, "Error creating material buffer.", NULL, MB_OK);
+		exit(-1);
+	}
+}
+
 const void Panel3D::CreateTexture(std::wstring texturePath)
 {
 	if (FAILED(CreateDDSTextureFromFile(
