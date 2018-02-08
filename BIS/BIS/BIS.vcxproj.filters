@@ -168,6 +168,9 @@
     <ClInclude Include="..\..\IO\ObserverPattern\Test_Obs.h">
       <Filter>Header Files\IO</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\GraphicsEngine\Quad.h">
+      <Filter>Header Files\GraphicsEngine</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Logic\Eventlog\LogEvent.h">
       <Filter>Header Files\Logic</Filter>
     </ClInclude>
@@ -331,6 +334,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Logic\BoatTester.cpp">
       <Filter>Source Files\Logic\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\GraphicsEngine\Quad.cpp">
+      <Filter>Source Files\GraphicsEngine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
