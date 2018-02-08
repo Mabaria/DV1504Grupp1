@@ -27,6 +27,7 @@
     <ClCompile Include="..\..\GraphicsEngine\Parsing\Test_AssImp.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\Parsing\Test_Boat.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\Parsing\Test_Mesh.cpp" />
+    <ClCompile Include="..\..\GraphicsEngine\Quad.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\Test_Button.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\Test_Graphics.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\Window.cpp" />
@@ -64,6 +65,7 @@
     <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_AssImp.h" />
     <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_Boat.h" />
     <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_Mesh.h" />
+    <ClInclude Include="..\..\GraphicsEngine\Quad.h" />
     <ClInclude Include="..\..\GraphicsEngine\Test_Button.h" />
     <ClInclude Include="..\..\GraphicsEngine\Test_Graphics.h" />
     <ClInclude Include="..\..\GraphicsEngine\Window.h" />

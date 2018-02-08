@@ -37,7 +37,6 @@ namespace Testing
 
 	bool testOne()
 	{
-		Test_BoatOnScreen();
 		//! ADD YOUR OWN TESTS HERE
 		Test_Text();
 		return true;
