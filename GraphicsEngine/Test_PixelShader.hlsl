@@ -29,12 +29,17 @@ float4 main(PS_IN input) : SV_TARGET
 		texture2d.Sample(ss, input.tex.xy) : ambient;
 	
 
-	if (use_texture) // When writing fonts
+	if (use_texture) // When blending is needed
 	{
 		alpha = ambient.rg > 0.8f && ambient.b == 0.0f ? // Blend if yellow
 			0.5f : 1.0f;
 
 		diffuse -= 0.2f; // Simple fix for ugly edges
+
+		if (alpha != 1.0f)
+		{
+			ambient = float3(1.0f, 0.0f, 0.0f);
+		}
 	}
 	else // Everything else
 	{
@@ -70,10 +75,7 @@ float4 main(PS_IN input) : SV_TARGET
 		}
 	}
 
-	if (alpha < 1.0f)
-	{
-		ambient = float3(1.0f, 0.0f, 0.0f);
-	}
+	
 
 	// FOG
 	float depthValue = pow(input.pos.z + 0.01f, 35.0f);
