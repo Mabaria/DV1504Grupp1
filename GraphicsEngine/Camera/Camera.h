@@ -3,6 +3,8 @@
 #include <d3dcompiler.h>
 #include <DirectXMath.h>
 
+#define PI 3.1415926535897
+
 enum LOOK_MODE {
 	LOOK_AT = 0,
 	LOOK_TO = 1
@@ -95,6 +97,11 @@ public:
 		const float roll);
 	void RotateCameraPitchYawRoll(const DirectX::XMFLOAT3 &pitch_yaw_roll);
 	void RotateCameraPitchYawRoll(const DirectX::XMVECTOR &pitch_yaw_roll);
+
+	float GetViewWidth() const;
+	float GetViewHeight() const;
+	float GetNearZ() const;
+	float GetFarZ() const;
 
 	DirectX::XMVECTOR GetPosition() const;
 	DirectX::XMVECTOR GetUpVector() const;
