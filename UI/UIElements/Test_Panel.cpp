@@ -1,5 +1,6 @@
 #include "Test_Panel.h"
 #include "../../IO/Keyboard.h"
+#include "../../GraphicsEngine/Quad.h"
 /*
 	FÖR DEN SOM REVIEWAR DETTA
 
@@ -229,9 +230,10 @@ void Test_BoatOnScreen()
 	top_view.AddMeshObject("floor1", floor1.GetIndexVectors(), floor1.GetVertexVectors(), L"");
 	top_view.AddMeshObject("floor01", floor01.GetIndexVectors(), floor01.GetVertexVectors(), L"");
 
-	top_view.rGetMeshObject("floor2")->Scale	(0.1f, 0.1f, 0.1f);
-	top_view.rGetMeshObject("floor1")->Scale	(0.1f, 0.1f, 0.1f);
-	top_view.rGetMeshObject("floor01")->Scale	(0.1f, 0.1f, 0.1f);
+	float scale = 0.1f;
+	top_view.rGetMeshObject("floor2")->Scale	(scale, scale, scale);
+	top_view.rGetMeshObject("floor1")->Scale	(scale, scale, scale);
+	top_view.rGetMeshObject("floor01")->Scale	(scale, scale, scale);
 
 	top_view.rGetMeshObject("floor2")->Translate	(0.0f, 0.0f, 0.5f);
 	top_view.rGetMeshObject("floor1")->Translate	(0.0f, 0.0f, 0.0f);
@@ -267,10 +269,53 @@ void Test_BoatOnScreen()
 		{ 0.0f, 1.0f, 0.0f, 0.0f },
 		{ 0.0f, 0.0f, 0.0f, 0.0f },
 		XM_PI / 8.0f, 16.0f / 9.0f,
-		0.1f, 1000.0f, LOOK_AT, PERSPECTIVE);
+		0.1f, 25.0f, LOOK_AT, PERSPECTIVE);
 
 	side_view.SetCamera(&camera2);
 	top_view.SetCamera(&camera);
+
+
+	// --- Text On Screen ---
+
+	Quad txt(true);
+
+	top_view.AddMeshObject("Däck1", txt.GetIndices(), txt.GetVertices(), 
+		L"../../Models/Däck1.DDS"
+	);
+
+	top_view.rGetMeshObject("Däck1")->Scale		(0.4f, 0.15f, 0.15f);
+	top_view.rGetMeshObject("Däck1")->Rotate	(XM_PI / 2.0f, XM_PI / 2.0f, 0.0f);
+	top_view.rGetMeshObject("Däck1")->Translate	(0.2f, 0.0f, 0.2f);
+
+	// --- END ---
+	
+
+	// --- Transparent Boxes ---
+
+	Mesh bb2("../../Models/Bound2UV.obj");
+
+	std::vector<std::vector<Vertex>> tv;
+	std::vector<std::vector<unsigned int>> ti;
+	ti.push_back(bb2.GetIndexVectors()[1]);
+	tv.push_back(bb2.GetVertexVectors()[1]);
+
+
+	top_view.AddMeshObject("Bound2UV", ti, tv,
+		L"../../Models/BlendColor.DDS"
+	);
+	top_view.rGetMeshObject("Bound2UV")->Scale		(0.1f, 0.1f, 0.1f);
+	top_view.rGetMeshObject("Bound2UV")->Rotate		(0.0f, XM_PI, 0.0f);
+	top_view.rGetMeshObject("Bound2UV")->Translate	(0.0f, 0.0f, 0.5f);
+
+
+	side_view.AddMeshObject("Bound2UV", ti, tv,
+		L"../../Models/BlendColor.DDS"
+	);
+	side_view.rGetMeshObject("Bound2UV")->Scale(0.15f, 0.4f, 0.1f);
+	side_view.rGetMeshObject("Bound2UV")->Rotate(0.0f, XM_PI, 0.0f);
+	side_view.rGetMeshObject("Bound2UV")->Translate(0.0f, -0.2f, 0.07f);
+
+	// --- END ---
 
 	float speed = 0.1f;
 

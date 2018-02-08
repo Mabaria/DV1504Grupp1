@@ -22,8 +22,7 @@ void Panel2D::AddButton(
 	std::string buttonName)
 {
 	this->mButtonNames.push_back(buttonName); // Add to names list
-	Button newButton(
-		*this->mDirect2D,
+	Button newButton(this->mDirect2D,
 		imageFilePath,
 		left,
 		top,

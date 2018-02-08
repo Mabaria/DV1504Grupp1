@@ -27,6 +27,7 @@
     <ClCompile Include="..\..\GraphicsEngine\Parsing\Test_AssImp.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\Parsing\Test_Boat.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\Parsing\Test_Mesh.cpp" />
+    <ClCompile Include="..\..\GraphicsEngine\Quad.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\Test_Button.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\Test_Graphics.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\Window.cpp" />
@@ -51,6 +52,8 @@
     <ClCompile Include="..\..\UI\UIElements\Panel2D.cpp" />
     <ClCompile Include="..\..\UI\UIElements\Panel3D.cpp" />
     <ClCompile Include="..\..\UI\UIElements\Test_Panel.cpp" />
+    <ClCompile Include="..\..\UI\UIElements\Test_TextBox.cpp" />
+    <ClCompile Include="..\..\UI\UIElements\TextBox.cpp" />
     <ClCompile Include="BIS.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -62,6 +65,7 @@
     <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_AssImp.h" />
     <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_Boat.h" />
     <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_Mesh.h" />
+    <ClInclude Include="..\..\GraphicsEngine\Quad.h" />
     <ClInclude Include="..\..\GraphicsEngine\Test_Button.h" />
     <ClInclude Include="..\..\GraphicsEngine\Test_Graphics.h" />
     <ClInclude Include="..\..\GraphicsEngine\Window.h" />
@@ -89,6 +93,8 @@
     <ClInclude Include="..\..\UI\UIElements\Panel2D.h" />
     <ClInclude Include="..\..\UI\UIElements\Panel3D.h" />
     <ClInclude Include="..\..\UI\UIElements\Test_Panel.h" />
+    <ClInclude Include="..\..\UI\UIElements\Test_TextBox.h" />
+    <ClInclude Include="..\..\UI\UIElements\TextBox.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\..\GraphicsEngine\Test_PixelShader.hlsl">

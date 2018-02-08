@@ -1,7 +1,7 @@
 #include "Button.h"
 
 Button::Button(
-	Direct2D& D2D1Panel,
+	Direct2D *D2D1Panel,
 	std::string imageFilePath,
 	int left,
 	int top,
@@ -18,10 +18,11 @@ Button::Button(
 	this->mOpacity = 1.0f;
 	this->mBmpLoaded = false;
 	this->mpFailBrush = nullptr;
-	this->D2D1Panel = &D2D1Panel;
+	this->D2D1Panel = D2D1Panel;
 	this->mCurrState = BUTTON_STATE::RESET;
 	
-	this->CreateButton(imageFilePath, 
+	this->CreateButton(
+		imageFilePath, 
 		left, 
 		top, 
 		right, 
@@ -31,17 +32,21 @@ Button::Button(
 
 Button::~Button()
 {
+	this->ReleaseCOM(this->mpBitMap);
+	this->ReleaseCOM(this->mpFailBrush);
 }
 
 const std::wstring Button::StrToWstr(std::string str)
-{
-	std::wstring_convert< std::codecvt<wchar_t, char, std::mbstate_t> > convert;
+{ 
+	//maybe in tools
+	std::wstring_convert<std::codecvt<wchar_t, char, std::mbstate_t>> convert;
 	std::wstring result = convert.from_bytes(str);
 	this->mFilePathAsWstr = result.c_str();
 	return result;
 }
 
-void Button::CreateButton(std::string imageFilePath, 
+void Button::CreateButton(
+	std::string imageFilePath, 
 	int left, 
 	int top, 
 	int right, 
@@ -57,6 +62,14 @@ void Button::CreateButton(std::string imageFilePath,
 			this->mpBitMap->GetSize().width,
 			this->mpBitMap->GetSize().height);
 		this->mWidth = this->mpBitMap->GetSize().width / 3;
+		this->mBoundingBoxPercentage.right = (long)this->mButtonSize.right /
+			this->D2D1Panel->GetpRenderTarget()->GetSize().width;
+		this->mBoundingBoxPercentage.top = this->mButtonSize.top /
+			this->D2D1Panel->GetpRenderTarget()->GetSize().height;
+		this->mBoundingBoxPercentage.left = this->mButtonSize.left /
+			this->D2D1Panel->GetpRenderTarget()->GetSize().width;
+		this->mBoundingBoxPercentage.bottom = this->mButtonSize.bottom /
+			this->D2D1Panel->GetpRenderTarget()->GetSize().height;
 		this->mUpdateBoundingBox();
 	}
 	else
@@ -138,16 +151,16 @@ void Button::SetButtonStatus(BUTTON_STATE buttState)
 	}
 }
 
-void Button::LoadImageToBitmap(std::string imageFilePath)
+void Button::LoadImageToBitmap(
+	std::string imageFilePath)
 {
 	this->mFilePath = imageFilePath;
 	this->StrToWstr(imageFilePath);
 	const wchar_t *p_file_path_wchar = this->mFilePathAsWstr.c_str();
-
 	IWICFormatConverter *converter = this->D2D1Panel->GetpFormatConverter();
 	IWICBitmapDecoder *decoder = this->D2D1Panel->GetpBitmapDecoder();
 	IWICBitmapFrameDecode *bitmapSrc = this->D2D1Panel->GetpBitmapSrc();
-	
+
 	this->D2D1Panel->GetpImagingFactory()->CreateFormatConverter(&converter);
 	this->D2D1Panel->SetpFormatConverter(converter);
 	this->D2D1Panel->GetpImagingFactory()->CreateDecoderFromFilename(
@@ -158,7 +171,7 @@ void Button::LoadImageToBitmap(std::string imageFilePath)
 		&decoder);
 	this->D2D1Panel->SetpBitmapDecoder(decoder);
 	if (this->D2D1Panel->GetpBitmapDecoder() != nullptr)
-	{
+	{			 
 		this->D2D1Panel->GetpBitmapDecoder()->GetFrame(0, &bitmapSrc);
 		this->D2D1Panel->SetpBitmapSrc(bitmapSrc);
 		this->D2D1Panel->GetpFormatConverter()->Initialize(
@@ -172,8 +185,8 @@ void Button::LoadImageToBitmap(std::string imageFilePath)
 			this->D2D1Panel->GetpFormatConverter(),
 			NULL,
 			&this->mpBitMap);
-
 		this->D2D1Panel->GetpFormatConverter()->Release();
+		
 		this->mBitmapRenderSize = D2D1::RectF(
 			0,
 			0,
@@ -189,6 +202,15 @@ void Button::LoadImageToBitmap(std::string imageFilePath)
 BUTTON_STATE Button::GetButtState() const
 {
 	return this->mCurrState;
+}
+
+void Button::ReleaseCOM(IUnknown *object)
+{
+	if (object)
+	{
+		object->Release();
+		object = nullptr;
+	}
 }
 
 void Button::mUpdateBoundingBox()
