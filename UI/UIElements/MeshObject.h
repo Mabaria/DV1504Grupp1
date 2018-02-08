@@ -42,12 +42,11 @@ public:
 	// For passing the model matrix to the shader.
 	ID3D11Buffer **rGetMatrixBuffer();
 	// For passing the material struct to the shader
-	ID3D11Buffer **rGetMaterialBuffer();
+	ID3D11Buffer **rGetMaterialBuffer(int index);
 
 	ID3D11ShaderResourceView **rGetTextureView();
 
 	const void SetMatrixBuffer(ID3D11Buffer **matrixBuffer);
-	const void SetMaterialBuffer(ID3D11Buffer **materialBuffer);
 
 	XMMATRIX *rGetModelMatrix();
 
@@ -72,8 +71,8 @@ private:
 
 	std::vector<ID3D11Buffer*> mpIndexBuffers;
 	std::vector<ID3D11Buffer*> mpVertexBuffers;
+	std::vector<ID3D11Buffer*> mpMaterialBuffers;
 	ID3D11Buffer *mpMatrixBuffer;
-	ID3D11Buffer *mpMaterialBuffer;
 
 	ID3D11ShaderResourceView *mpTextureView;
 
