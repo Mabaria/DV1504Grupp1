@@ -19,6 +19,7 @@ Button::Button(
 	this->mBmpLoaded = false;
 	this->mpFailBrush = nullptr;
 	this->D2D1Panel = D2D1Panel;
+	this->mCurrState = BUTTON_STATE::RESET;
 	
 	this->CreateButton(
 		imageFilePath, 

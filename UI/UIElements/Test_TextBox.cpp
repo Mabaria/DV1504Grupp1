@@ -8,7 +8,7 @@ void Test_Text()
 		window.GetClientSize().width,
 		window.GetClientSize().height);
 	Button butt(&D2Test,"",0,0,0,0);
-	TextBox testBox(&D2Test, 0, 0, 1000, 1000);
+	TextBox testBox(&D2Test, 0, 0, 100, 100);
 	testBox.SetText("hejhejhejhejhejhejhejhejhejhejhejj lol");
 	window.Open();
 	while (window.IsOpen())
