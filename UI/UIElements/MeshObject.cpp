@@ -10,7 +10,8 @@ MeshObject::MeshObject(std::string name,
 
 	// Doesn't matter which one determines the 
 	// size as they are (should be) equal.
-	this->mNumberOfBuffers = (int)this->mIndices.size();
+	this->mNumberOfIndexBuffers = (int)this->mIndices.size();
+	this->mNumberOfMaterialBuffers = this->mMaterialHandler.GetNumberOfMaterials();
 
 	this->mModelMatrix = XMMatrixIdentity();
 	this->mpMatrixBuffer	= nullptr;
@@ -25,7 +26,7 @@ MeshObject::MeshObject(const MeshObject & other)
 	this->mIndices = other.mIndices;
 	this->mVertices = other.mVertices;
 
-	this->mNumberOfBuffers = other.mNumberOfBuffers;
+	this->mNumberOfIndexBuffers = other.mNumberOfIndexBuffers;
 
 	this->mModelMatrix = other.mModelMatrix;
 	this->mpMatrixBuffer = other.mpMatrixBuffer;
@@ -105,9 +106,9 @@ ID3D11Buffer** MeshObject::pGetIndexBuffer(int index)
 	return &this->mpIndexBuffers[index];
 }
 
-const int MeshObject::GetNumberOfBuffers() const
+const int MeshObject::GetNumberOfIndexBuffers() const
 {
-	return this->mNumberOfBuffers;
+	return this->mNumberOfIndexBuffers;
 }
 
 const std::string MeshObject::GetName() const

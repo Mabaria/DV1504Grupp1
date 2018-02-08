@@ -119,7 +119,7 @@ D3D11 & Panel3D::rGetDirect3D()
 //	MeshObject *mesh_object = new MeshObject(name, indices, vertices);
 //	this->mpMeshObjects.push_back(mesh_object);
 //
-//	for (int i = 0; i < this->mpMeshObjects.back()->GetNumberOfBuffers(); i++)
+//	for (int i = 0; i < this->mpMeshObjects.back()->GetNumberOfIndexBuffers(); i++)
 //	{
 //		this->CreateIndexBuffer(indices[i]);
 //		this->CreateVertexBuffer(vertices[i]);
@@ -138,7 +138,7 @@ const void Panel3D::AddMeshObject(MeshObject * meshObject)
 	MeshObject *mesh_object = new MeshObject(*meshObject);
 	this->mpMeshObjects.push_back(mesh_object);
 
-	for (int i = 0; i < this->mpMeshObjects.back()->GetNumberOfBuffers(); i++)
+	for (int i = 0; i < this->mpMeshObjects.back()->GetNumberOfIndexBuffers(); i++)
 	{
 		this->CreateIndexBuffer(meshObject->GetIndices()[i]);
 		this->CreateVertexBuffer(meshObject->GetVertices()[i]);
@@ -438,7 +438,7 @@ const void Panel3D::Draw()
 			1,					// Number of buffers
 			&matrix_buffer);	// Constant buffer.
 
-		for (int j = 0; j < this->mpMeshObjects[i]->GetNumberOfBuffers(); j++)
+		for (int j = 0; j < this->mpMeshObjects[i]->GetNumberOfIndexBuffers(); j++)
 		{
 			index_buffer	= *this->mpMeshObjects[i]->pGetIndexBuffer(j);
 			vertex_buffer	= *this->mpMeshObjects[i]->pGetVertexBuffer(j);

@@ -3,7 +3,8 @@
 MaterialHandler::MaterialHandler(const aiScene * scene)
 {
 	this->mpScene = scene;
-	for (unsigned int i = 0; i < scene->mNumMaterials; i++)
+	this->mNumberOfMaterials = scene->mNumMaterials;
+	for (unsigned int i = 0; i < this->mNumberOfMaterials; i++)
 	{
 		this->mMaterialStructVector.push_back(
 			this->mCreateMaterialStruct(i));
@@ -139,12 +140,18 @@ aiTextureMapMode MaterialHandler::GetMappingModeV(const unsigned int materialInd
 	return mapping_mode;
 }
 
+unsigned int MaterialHandler::GetNumberOfMaterials() const
+{
+	return this->mNumberOfMaterials;
+}
+
 MaterialStruct MaterialHandler::GetMaterialStruct(const unsigned int materialIndex) const
 {
 	if (materialIndex < this->mMaterialStructVector.size())
 	{
 		return this->mMaterialStructVector[materialIndex];
 	}
+	return MaterialStruct();
 }
 
 MaterialStruct MaterialHandler::mCreateMaterialStruct(const unsigned int materialIndex)

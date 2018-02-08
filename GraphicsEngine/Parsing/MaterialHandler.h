@@ -47,13 +47,13 @@ public:
 	aiTextureMapMode_mirror --- "A texture coordinate u|v becomes u%1|v%1
 							if (u-(u%1))%2 is zero and 1-(u%1)|1-(v%1) otherwise. */
 
-
+	unsigned int GetNumberOfMaterials() const;
 	MaterialStruct GetMaterialStruct(const unsigned int materialIndex) const;
 
 private:
 	const aiScene* mpScene;
 	std::vector<MaterialStruct> mMaterialStructVector;
-
+	unsigned int mNumberOfMaterials;
 	MaterialStruct mCreateMaterialStruct(const unsigned int materialIndex);
 
 };

@@ -31,7 +31,7 @@ public:
 	ID3D11Buffer **pGetIndexBuffer(int index);
 
 	// What could it possibly do?
-	const int GetNumberOfBuffers() const;
+	const int GetNumberOfIndexBuffers() const;
 	const std::string GetName() const;
 
 	// Buffer adders add the parameter buffer to the end of the 
@@ -76,8 +76,8 @@ private:
 
 	ID3D11ShaderResourceView *mpTextureView;
 
-
-	int mNumberOfBuffers;
+	int mNumberOfIndexBuffers;
+	int mNumberOfMaterialBuffers;
 
 	XMMATRIX mModelMatrix;
 };
