@@ -10,9 +10,11 @@
 void Test_Material_Handler()
 {
 
-	Mesh material_test_cube("../../Models/TestCube.blend");
+	Mesh material_test_cube("../../Models/RainbowTest.3DS");
 
 	MeshObject mat_test_cube_object("Cube", &material_test_cube);
+
+	mat_test_cube_object.Scale(0.05, 0.05, 0.05);
 
 	mat_test_cube_object.pGetMaterialHandler()->GetDiffuseColor(0);
 	mat_test_cube_object.pGetMaterialHandler()->GetSpecularColor(
