@@ -69,6 +69,7 @@ void Button::CreateButton(
 			this->D2D1Panel->GetpRenderTarget()->GetSize().width;
 		this->mBoundingBoxPercentage.bottom = this->mButtonSize.bottom /
 			this->D2D1Panel->GetpRenderTarget()->GetSize().height;
+		this->mUpdateBoundingBox();
 	}
 	else
 	{
@@ -88,6 +89,7 @@ void Button::DrawButton()
 			this->mOpacity,
 			D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,
 			this->mBitmapRenderSize);
+		this->mUpdateBoundingBox();
 	}
 	else
 	{
@@ -190,7 +192,10 @@ void Button::LoadImageToBitmap(
 			this->mpBitMap->GetSize().width,
 			this->mpBitMap->GetSize().height);
 		this->mBmpLoaded = true;
+		this->D2D1Panel->GetpBitmapSrc()->Release();
+		this->D2D1Panel->GetpBitmapDecoder()->Release();
 	}
+	
 }
 
 BUTTON_STATE Button::GetButtState() const
@@ -205,5 +210,17 @@ void Button::ReleaseCOM(IUnknown *object)
 		object->Release();
 		object = nullptr;
 	}
+}
+
+void Button::mUpdateBoundingBox()
+{
+	this->mBoundingBoxPercentage.right = (long)this->mButtonSize.right /
+		this->D2D1Panel->GetpRenderTarget()->GetSize().width;
+	this->mBoundingBoxPercentage.top = this->mButtonSize.top /
+		this->D2D1Panel->GetpRenderTarget()->GetSize().height;
+	this->mBoundingBoxPercentage.left = this->mButtonSize.left /
+		this->D2D1Panel->GetpRenderTarget()->GetSize().width;
+	this->mBoundingBoxPercentage.bottom = this->mButtonSize.bottom /
+		this->D2D1Panel->GetpRenderTarget()->GetSize().height;
 }
 

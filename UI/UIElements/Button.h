@@ -6,7 +6,8 @@ enum BUTTON_STATE
 {
 	IDLE,
 	HOVER,
-	CLICKED
+	CLICKED,
+	RESET
 };
 
 class Button : public Observable<Button*>
@@ -54,4 +55,5 @@ private:
 	ID2D1SolidColorBrush* mpFailBrush;
 	BUTTON_STATE mCurrState;
 	void ReleaseCOM(IUnknown *object);
+	void mUpdateBoundingBox();
 };

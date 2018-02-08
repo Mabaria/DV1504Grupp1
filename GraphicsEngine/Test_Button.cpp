@@ -1,4 +1,6 @@
 #include "Test_Button.h"
+#include "../UI/UIElements/Panel2D.h"
+#include "../UI/UIElements/Panel3D.h"
 
 void Test_Button()
 {
