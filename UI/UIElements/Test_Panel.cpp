@@ -324,7 +324,7 @@ void Test_BoatOnScreen()
 	top_view.rGetMeshObject("Bound3UV")->Rotate(0.0f, XM_PI, 0.0f);
 	top_view.rGetMeshObject("Bound3UV")->Translate(0.0f, 0.0f, 0.5f);
 
-	data = { 1.0f, 0.0f, 0.0f, 0.0f };
+	data = { 3.0f, 0.0f, 0.0f, 0.0f };
 	top_view.rGetMeshObject("Bound3UV")->SetEvent(
 		data, top_view.rGetDirect3D().GetContext()
 	);
