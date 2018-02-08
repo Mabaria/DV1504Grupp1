@@ -1,5 +1,6 @@
 #include "Test_Panel.h"
 #include "../../IO/Keyboard.h"
+#include "../../IO/Mouse.h"
 #include "../../GraphicsEngine/Quad.h"
 /*
 	FÖR DEN SOM REVIEWAR DETTA
@@ -353,6 +354,7 @@ void Test_BoatOnScreen()
 		{
 			window.Close();
 		}
+
 		side_view.Update();
 		top_view.Update();
 
@@ -458,13 +460,21 @@ void Test_Panel2DTextBoxes()
 		window.GetWindow(),
 		L"Button_Test");
 
-	log_panel.AddButton(100, 100, 20, 20, "../../Models/Button01.png", "Dead");
-	log_panel.AddButton(100, 100, 120, 20, "../../Models/Button02.png", "Gas");
-	log_panel.AddButton(100, 100, 220, 20, "../../Models/Button03.png", "Water");
-	log_panel.AddButton(100, 100, 320, 20, "../../Models/Button04.png", "Fire");
+	control_panel.AddButton(70, 70, 30, 20, "../../Models/Button01.png", "Dead");
+	control_panel.AddButton(70, 70, 30, 90, "../../Models/Button02.png", "Gas");
+	control_panel.AddButton(70, 70, 30, 160, "../../Models/Button03.png", "Water");
+	control_panel.AddButton(70, 70, 30, 230, "../../Models/Button04.png", "Fire");
 
+	//! TEXTBOXES HERE
+	log_panel.AddTextbox(window_width / 6, 20, 0, 0, "Log Panel", "Title");
+	int n_events = 20;
+	for (int i = 0; i < n_events; i++)
+	{
+		log_panel.AddTextbox(window_width / 6 - 20, 20, i * 20 + 50, 20, "Event number: " + std::to_string(i + 1), "Event" + std::to_string(i + 1));
+	}
+	control_panel.AddTextbox(window_width / 2, 20, 0, 0, "Control Panel", "Title");
 
-
+	control_panel.SetTextBoxFontSize(20);
 	float speed = 0.1f;
 
 	window.Open();
@@ -501,6 +511,27 @@ void Test_Panel2DTextBoxes()
 		{
 			window.Close();
 		}
+
+		if (Mouse::GetScroll() != 0.0f)
+		{
+			if (log_panel.GetTextBoxByIndex(1)->GetTextBoxSize().top > 0 &&
+				log_panel.GetTextBoxByIndex(n_events)->GetTextBoxSize().bottom
+				< (log_panel.GetTop() + log_panel.GetHeight()))
+			{
+				for (int i = 0; i < n_events; i++)
+				{
+					float scroll_speed = Mouse::GetScroll() * 10.0f;
+					TextBox *text_box = log_panel.GetTextBoxByIndex(i + 1);
+					text_box->SetTextBoxSize(
+						text_box->GetTextBoxSize().left,
+						text_box->GetTextBoxSize().top + round(scroll_speed),
+						text_box->GetTextBoxSize().right,
+						text_box->GetTextBoxSize().bottom + round(scroll_speed));
+
+				}
+			}
+		}
+
 		side_view.Update();
 		top_view.Update();
 		control_panel.Update();

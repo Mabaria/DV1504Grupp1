@@ -40,6 +40,7 @@ public:
 	
 	TextBox* GetTextBoxByName(std::string name);
 	TextBox* GetTextBoxByIndex(unsigned int index);
+	void SetTextBoxFontSize(int fontSize);
 
 	void Update();
 	void Draw();

@@ -55,14 +55,15 @@ void Panel2D::AddTextbox(
 {
 	this->mTextBoxNames.push_back(name); // Add name.
 
-	//this->mTextBoxVector.push_back(TextBox(
-	//	this->mDirect2D,
-	//	left,
-	//	top,
-	//	left + width,
-	//	top + height)); // Add text box.
+	TextBox *newTextBox = new TextBox(
+		this->mDirect2D,
+		left,
+		top,
+		left + width,
+		top + height);
+	this->mTextBoxVector.push_back(newTextBox); // Add text box.
 
-	//this->mTextBoxVector.back().SetText(text); // Set text.
+	this->mTextBoxVector.back()->SetText(text); // Set text.
 }
 
 Button * Panel2D::GetButtonByName(std::string name)
@@ -128,6 +129,11 @@ TextBox * Panel2D::GetTextBoxByIndex(unsigned int index)
 		to_return = this->mTextBoxVector[index];
 	}
 	return to_return;
+}
+
+void Panel2D::SetTextBoxFontSize(int fontSize)
+{
+	this->mDirect2D->SetFontSize(fontSize);
 }
 
 void Panel2D::Update()
