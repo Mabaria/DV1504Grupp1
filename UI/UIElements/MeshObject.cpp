@@ -150,3 +150,8 @@ XMMATRIX* MeshObject::rGetModelMatrix()
 {
 	return &this->mModelMatrix;
 }
+
+MaterialHandler * MeshObject::pGetMaterialHandler()
+{
+	return &this->mMaterialHandler;
+}

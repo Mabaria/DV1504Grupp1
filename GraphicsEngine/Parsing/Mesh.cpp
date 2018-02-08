@@ -64,7 +64,7 @@ aiMaterial* Mesh::GetMaterialPtr(unsigned int materialIndex)
 
 unsigned int Mesh::GetSubmeshMaterialIndex(unsigned int submeshIndex)
 {
-	if (submeshIndex > this->mpScene->mNumMeshes) {
+	if (submeshIndex < this->mpScene->mNumMeshes) {
 		return this->mSubmeshMaterialIndexVector[submeshIndex];
 	}
 	else
@@ -112,6 +112,10 @@ void Mesh::PopulateVectors()
 
 		for (unsigned int m = 0; m < this->mpScene->mNumMeshes; m++)
 		{
+			this->mSubmeshMaterialIndexVector.push_back(
+				this->mpScene->mMeshes[m]->mMaterialIndex); /* Add the material
+															index to storage
+															vector */
 			for (unsigned int f = 0; f < this->mpScene->mMeshes[m]->mNumFaces; f++)
 			{
 				for (unsigned int i = 0;

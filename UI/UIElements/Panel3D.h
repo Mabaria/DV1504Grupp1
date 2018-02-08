@@ -77,9 +77,10 @@ private:
 	const void CreateIndexBuffer(std::vector<unsigned int> indices);
 
 	// Creates the constant buffer for the last added mesh object.
-	const void CreateMatrixBuffer(
+	const void mCreateMatrixBuffer(
 		XMMATRIX *matrix, 
 		ID3D11Buffer **constantBuffer);
+
 
 	const void CreateTexture(std::wstring texturePath);
 

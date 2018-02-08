@@ -3,6 +3,12 @@
 MaterialHandler::MaterialHandler(const aiScene * scene)
 {
 	this->mpScene = scene;
+	for (unsigned int i = 0; i < scene->mNumMaterials; i++)
+	{
+		this->mMaterialStructVector.push_back(
+			this->mCreateMaterialStruct(i));
+		// Populate vector with ready made structs
+	}
 }
 
 MaterialHandler::~MaterialHandler()
@@ -89,7 +95,7 @@ float MaterialHandler::GetShininess(const unsigned int materialIndex) const
 float MaterialHandler::GetShininessStrength(const unsigned int materialIndex) const
 {
 	float strength = 1.0f;
-	if (this->mpScene->mMaterials[materialIndex]->Get(AI_MATKEY_SHININESS, strength)
+	if (this->mpScene->mMaterials[materialIndex]->Get(AI_MATKEY_SHININESS_STRENGTH, strength)
 		!= AI_SUCCESS)
 	{
 		throw "Failed to get shininess strength component of material.";
@@ -133,13 +139,27 @@ aiTextureMapMode MaterialHandler::GetMappingModeV(const unsigned int materialInd
 	return mapping_mode;
 }
 
-float MaterialHandler::GetOpacity(const unsigned int materialIndex) const
+MaterialStruct MaterialHandler::GetMaterialStruct(const unsigned int materialIndex) const
 {
-	float opacity = 1.0f;
-	if (this->mpScene->mMaterials[materialIndex]->Get(AI_MATKEY_OPACITY, opacity)
-		!= AI_SUCCESS)
+	if (materialIndex < this->mMaterialStructVector.size())
 	{
-		throw "Failed to get opacity component of material.";
+		return this->mMaterialStructVector[materialIndex];
 	}
-	return opacity;
+}
+
+MaterialStruct MaterialHandler::mCreateMaterialStruct(const unsigned int materialIndex)
+{
+	MaterialStruct to_return;
+	aiColor3D diffuseC = this->GetDiffuseColor(materialIndex);
+	aiColor3D specularC = this->GetSpecularColor(materialIndex);
+	aiColor3D ambientC = this->GetAmbientColor(materialIndex);
+	float exp = this->GetShininess(materialIndex);
+	to_return =
+	{
+		diffuseC.r, diffuseC.g, diffuseC.b,
+		ambientC.r, ambientC.g, ambientC.b,
+		specularC.r, specularC.g, specularC.b,
+		exp
+	};
+	return to_return;
 }

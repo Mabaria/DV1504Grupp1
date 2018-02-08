@@ -1,5 +1,13 @@
 #pragma once
 #include "Mesh.h"
+struct MaterialStruct
+{
+	float diffuseR, diffuseG, diffuseB;
+	float ambientR, ambientG, ambientB;
+	float specularR, specularG, specularB;
+	float specExponent;
+};
+
 class MaterialHandler
 {
 public:
@@ -20,7 +28,6 @@ public:
 	// aiBlendMode_Additive
 	// http://assimp.sourceforge.net/lib_html/material_8h.html#ae1236da1ccfbf4f23bb490287a4d61ac
 
-	float GetOpacity(const unsigned int materialIndex) const;
 	float GetShininess(const unsigned int materialIndex) const; /* The exponent
 																used for phong
 																specular shading*/
@@ -41,9 +48,12 @@ public:
 							if (u-(u%1))%2 is zero and 1-(u%1)|1-(v%1) otherwise. */
 
 
-
+	MaterialStruct GetMaterialStruct(const unsigned int materialIndex) const;
 
 private:
 	const aiScene* mpScene;
+	std::vector<MaterialStruct> mMaterialStructVector;
+
+	MaterialStruct mCreateMaterialStruct(const unsigned int materialIndex);
 
 };

@@ -51,6 +51,8 @@ public:
 
 	XMMATRIX *rGetModelMatrix();
 
+	MaterialHandler* pGetMaterialHandler();
+
 	void * operator new(size_t i) // To make sure it is 16 bit aligned
 	{
 		return _aligned_malloc(i, 16);

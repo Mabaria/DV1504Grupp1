@@ -13,12 +13,18 @@ void Test_Material_Handler()
 	Mesh floor1("../../Models/Floor1.obj");
 	Mesh floor01("../../Models/Floor01.obj");
 
+	Mesh material_test_cube("../../Models/TestCube.blend");
+
 	MeshObject floor2_object("floor2", &floor2);
 	MeshObject floor1_object("floor1", &floor1);
 	MeshObject floor01_object("floor01", &floor01);
+	MeshObject mat_test_cube_object("Cube", &material_test_cube);
 
-
-
+	mat_test_cube_object.pGetMaterialHandler()->GetDiffuseColor(0);
+	mat_test_cube_object.pGetMaterialHandler()->GetSpecularColor(
+	material_test_cube.GetSubmeshMaterialIndex(0));
+	mat_test_cube_object.pGetMaterialHandler()->GetAmbientColor(
+		material_test_cube.GetSubmeshMaterialIndex(0));
 	std::wstring window_name = L"Demo_BIS";
 
 	Window window(window_name, 1280, 720);
@@ -31,7 +37,7 @@ void Test_Material_Handler()
 	side_view.AddMeshObject(&floor1_object);
 	side_view.AddMeshObject(&floor01_object);
 
-	top_view.AddMeshObject(&floor2_object);
+	/*top_view.AddMeshObject(&floor2_object);
 	top_view.AddMeshObject(&floor1_object);
 	top_view.AddMeshObject(&floor01_object);
 
@@ -41,7 +47,9 @@ void Test_Material_Handler()
 
 	top_view.rGetMeshObject("floor2")->Translate(0.0f, 0.0f, 0.5f);
 	top_view.rGetMeshObject("floor1")->Translate(0.0f, 0.0f, 0.0f);
-	top_view.rGetMeshObject("floor01")->Translate(0.0f, 0.0f, -0.5f);
+	top_view.rGetMeshObject("floor01")->Translate(0.0f, 0.0f, -0.5f);*/
+
+	top_view.AddMeshObject(&mat_test_cube_object);
 
 	side_view.rGetMeshObject("floor2")->Scale(0.15f, 0.4f, 0.1f);
 	side_view.rGetMeshObject("floor1")->Scale(0.15f, 0.4f, 0.1f);
