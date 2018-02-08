@@ -9,7 +9,14 @@
 class TextBox
 {
 public:
-	TextBox() {};
+	TextBox(
+	Direct2D *D2D1Panel,
+		int left,
+		int top,
+		int right, 
+		int bottom) {};
+	void SetText(std::string text) {};
+	void DrawTextBox() {};
 private:
 };
 
@@ -17,10 +24,17 @@ private:
 class Panel2D : public Panel
 {
 public:
-	Panel2D(int width, int height, int top, int left, HWND handle, LPCTSTR title);
+	Panel2D(
+		int width, 
+		int height, 
+		int top, 
+		int left, 
+		HWND handle, 
+		LPCTSTR title);
 	~Panel2D();
 
-	void AddButton(int width,
+	void AddButton(
+		int width,
 		int height,
 		int top,
 		int left,

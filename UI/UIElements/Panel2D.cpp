@@ -22,7 +22,8 @@ void Panel2D::AddButton(
 	std::string buttonName)
 {
 	this->mButtonNames.push_back(buttonName); // Add to names list
-	Button newButton(*this->mDirect2D,
+	Button newButton(
+		*this->mDirect2D,
 		imageFilePath,
 		left,
 		top,
@@ -39,10 +40,17 @@ void Panel2D::AddTextbox(
 	std::string text,
 	std::string name)
 {
-	this->mTextBoxNames.push_back(name);
+	this->mTextBoxNames.push_back(name); // Add name.
+	
+	TextBox newTextBox(
+	this->mDirect2D,
+	left,
+	top,
+	left + width,
+	top + height);
 
-
-	// Push textbox into list of UI elements.
+	this->mTextBoxVector.push_back(newTextBox); // Add text box.
+	this->mTextBoxVector.back().SetText(text); // Set text.
 }
 
 Button * Panel2D::GetButtonByName(std::string name)
@@ -88,10 +96,13 @@ TextBox * Panel2D::GetTextBoxByName(std::string name)
 	{
 		if (name.compare(*it) == 0) // Button with correct name found
 		{
-			to_return = &this->mTextBoxVector[count]; // Return pointer to button
-			it = this->mTextBoxNames.end() - 1; // Set iterator to end
-											   // -1 because incrementation is performed after this.
-											   // Incrementing on .end() is a baaad idea.
+			// Return pointer to button
+			to_return = &this->mTextBoxVector[count];
+
+			// Set iterator to end
+			// -1 because incrementation is performed after this.
+			// Incrementing on .end() is a baaad idea.
+			it = this->mTextBoxNames.end() - 1; 
 		}
 	}
 	return to_return;
@@ -117,11 +128,23 @@ void Panel2D::Update()
 void Panel2D::Draw()
 {
 	this->mDirect2D->GetpRenderTarget()->BeginDraw();
-	this->mDirect2D->GetpRenderTarget()->Clear(D2D1::ColorF(D2D1::ColorF::CornflowerBlue));
+	this->mDirect2D->GetpRenderTarget()->Clear(
+		D2D1::ColorF(D2D1::ColorF::CornflowerBlue));
 	// Draw all the buttons in the panel
-	for (std::vector<Button>::iterator it = this->mButtonVector.begin(); it != this->mButtonVector.end(); it++)
+	for (std::vector<Button>::iterator it = 
+		this->mButtonVector.begin(); 
+		it != this->mButtonVector.end(); 
+		it++)
 	{
 		it->DrawButton();
+	}
+	// Draw all the text boxes in the panel
+	for (std::vector<TextBox>::iterator it = 
+		this->mTextBoxVector.begin(); 
+		it != this->mTextBoxVector.end(); 
+		it++)
+	{
+		it->DrawTextBox();
 	}
 	this->mDirect2D->GetpRenderTarget()->EndDraw();
 }
