@@ -47,7 +47,7 @@ float4 main(PS_IN input) : SV_TARGET
 
 		if (alpha != 1.0f) // If it's going to blend, write it red
 		{
-			ambient = float3(1.0f, 0.0f, 0.0f);
+			ambient = float3(0.5f, 0.5f, 0.5f);
 		}
 	}
 	else // Everything else
