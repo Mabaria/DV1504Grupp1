@@ -7,8 +7,8 @@ void Test_Button()
 		window.GetWindow(),
 		window.GetClientSize().width,
 		window.GetClientSize().height);
-	Button button(D2Test, "../../Models/testFile.bmp", 100, 100, 200, 200), 
-		button2(D2Test, "../../Models/pepehands.jpg", 205, 100, 305, 200);
+	Button button(&D2Test, "../../Models/testFile.bmp", 100, 100, 200, 200), 
+		button2(&D2Test, "../../Models/pepehands.jpg", 205, 100, 305, 200);
 	Mouse mouse;
 	window.Open();
 	

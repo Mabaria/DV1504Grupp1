@@ -43,9 +43,7 @@ void Direct2D::mInit()
 	this->mCreateFactory();
 	this->mCreateWicFactory();
 	this->mCreateTextFactory();
-	this->mCreateTextFormat();
-	this->mpTextFormat->SetTrimming(&this->mTrimmer, NULL);
-	this->mpTextFormat->SetWordWrapping(DWRITE_WORD_WRAPPING_EMERGENCY_BREAK);
+	this->mCreateTextFormat();	
 }
 
 void Direct2D::ReleaseCOM(IUnknown * object)
@@ -133,7 +131,7 @@ void Direct2D::SetpBitmapSrc(IWICBitmapFrameDecode * pBitmapSrc)
 void Direct2D::SetFontSize(int size)
 {
 	this->mFontSize = size;
-	this->mpTextFormat->Release();
+	this->mpTextFormat->Release();	
 	this->mCreateTextFormat();
 }
 
@@ -166,5 +164,7 @@ void Direct2D::mCreateTextFormat()
 		L"sv-SE",
 		&this->mpTextFormat
 	);
+	this->mpTextFormat->SetTrimming(&this->mTrimmer, NULL);
+	this->mpTextFormat->SetWordWrapping(DWRITE_WORD_WRAPPING_EMERGENCY_BREAK);
 }
 

@@ -9,7 +9,7 @@ class TextBox
 {
 public:
 	TextBox(
-		Direct2D& D2D1Panel,
+		Direct2D *D2D1Panel,
 		int left,
 		int top,
 		int right,
@@ -35,4 +35,5 @@ private:
 	D2D1_RECT_F mLayoutRect;
 
 	void mCreateColor();
+	void ReleaseCOM(IUnknown *object);
 };

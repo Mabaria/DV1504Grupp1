@@ -1,13 +1,13 @@
 #include "TextBox.h"
 
 TextBox::TextBox(
-	Direct2D& D2D1Panel,
+	Direct2D *D2D1Panel,
 	int left,
 	int top,
 	int right,
 	int bottom)
 {
-	this->D2D1Panel = &D2D1Panel;
+	this->D2D1Panel = D2D1Panel;
 	this->SetTextBoxSize(left, top, right, bottom);
 	this->mTextString = "";
 	this->mTextWString = L"";
@@ -21,6 +21,7 @@ TextBox::TextBox(
 
 TextBox::~TextBox()
 {
+	this->ReleaseCOM(this->mpColor);
 }
 
 D2D1_RECT_F TextBox::GetTextBoxSize() const
@@ -38,7 +39,6 @@ void TextBox::SetText(std::string text)
 	this->mTextString = text;
 	this->mTextWString = this->mStrConverter.from_bytes(text);
 	this->mpTextWchar = this->mTextWString.c_str();
-	//this->mpTextWchar = new wchar_t(*this->mStrConverter.from_bytes(text).c_str());
 }
 
 void TextBox::DrawTextBox()
@@ -64,4 +64,13 @@ void TextBox::mCreateColor()
 		D2D1::ColorF(D2D1::ColorF::Black),
 		&this->mpColor
 	);
+}
+
+void TextBox::ReleaseCOM(IUnknown * object)
+{
+	if (object)
+	{
+		object->Release();
+		object = nullptr;
+	}
 }

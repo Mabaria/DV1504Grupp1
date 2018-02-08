@@ -7,12 +7,10 @@ void Test_Text()
 		window.GetWindow(),
 		window.GetClientSize().width,
 		window.GetClientSize().height);
-	Button butt(D2Test,"",0,0,0,0);
-	TextBox testBox(D2Test, 0, 0, 100, 100);
-	D2Test.SetFontSize(33);
+	Button butt(&D2Test,"",0,0,0,0);
+	TextBox testBox(&D2Test, 0, 0, 1000, 1000);
 	testBox.SetText("hejhejhejhejhejhejhejhejhejhejhejj lol");
 	window.Open();
-
 	while (window.IsOpen())
 	{
 		window.Update();
