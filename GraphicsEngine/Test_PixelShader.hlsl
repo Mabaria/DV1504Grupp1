@@ -17,7 +17,7 @@ struct PS_IN
 
 float4 main(PS_IN input) : SV_TARGET
 {
-	float4 diffuse_material = float4(DiffR, DiffG, DiffB, 1.0f);
+	float3 diffuse_material = float3(DiffR, DiffG, DiffB);
 	float4 specular_material = float4(SpecR, SpecG, SpecB, 1.0f);
 
 	float3 light_direction = float3(0.0f, 1.0f, 0.0f);
@@ -28,5 +28,6 @@ float4 main(PS_IN input) : SV_TARGET
 	illuminate = saturate(illuminate);
 
 	// return float4(illuminate.xxx + 0.2f, 1.0f);
-	return illuminate * diffuse_material;
+	return float4(((illuminate + 0.2f) * diffuse_material), 1.0f);
+	//return float4(illuminate.xxx + 0.2f, 1.0f);
 }
