@@ -14,7 +14,7 @@ class Button : public Observable<Button*>
 {
 public:
 	Button(
-		Direct2D& D2D1Panel,
+		Direct2D *D2D1Panel,
 		std::string imageFilePath,
 		int left,
 		int top,
@@ -23,7 +23,8 @@ public:
 	~Button();
 
 	const std::wstring StrToWstr(std::string str);
-	void CreateButton(std::string imageFilePath,
+	void CreateButton(
+		std::string imageFilePath,
 		int left,
 		int top,
 		int right,
@@ -45,7 +46,9 @@ private:
 	ID2D1Bitmap *mpBitMap;
 	std::string mFilePath;
 	D2D1_RECT_F mButtonSize; // left, top, right, bottom
-	D2D1_RECT_F mBitmapRenderSize; // how much of the bitmap the button is gonna show
+
+	// how much of the bitmap the button is gonna show!
+	D2D1_RECT_F mBitmapRenderSize;
 	std::wstring mFilePathAsWstr;
 	float mWidth; // Width of bitmap divided by 3
 	D2D1_RECT_F mBoundingBoxPercentage;
@@ -53,5 +56,6 @@ private:
 	bool mBmpLoaded;
 	ID2D1SolidColorBrush* mpFailBrush;
 	BUTTON_STATE mCurrState;
+	void ReleaseCOM(IUnknown *object);
 	void mUpdateBoundingBox();
 };
