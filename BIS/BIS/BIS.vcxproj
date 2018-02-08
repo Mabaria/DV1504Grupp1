@@ -29,6 +29,7 @@
     <ClCompile Include="..\..\GraphicsEngine\Parsing\Test_Boat.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\Parsing\Test_MaterialHandler.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\Parsing\Test_Mesh.cpp" />
+    <ClCompile Include="..\..\GraphicsEngine\Quad.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\Test_Button.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\Test_Graphics.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\Window.cpp" />
@@ -36,6 +37,7 @@
     <ClCompile Include="..\..\IO\Keyboard.cpp" />
     <ClCompile Include="..\..\IO\Mouse.cpp" />
     <ClCompile Include="..\..\IO\ObserverPattern\Test_Obs.cpp" />
+    <ClCompile Include="..\..\IO\Picking.cpp" />
     <ClCompile Include="..\..\IO\Test_Input.cpp" />
     <ClCompile Include="..\..\Logic\BoatTester.cpp" />
     <ClCompile Include="..\..\Logic\Boat\Boat.cpp" />
@@ -46,6 +48,7 @@
     <ClCompile Include="..\..\Logic\Eventlog\EventLog.cpp" />
     <ClCompile Include="..\..\Logic\Eventlog\LogEvent.cpp" />
     <ClCompile Include="..\..\Logic\Event\Event.cpp" />
+    <ClCompile Include="..\..\IO\Test_Picking.cpp" />
     <ClCompile Include="..\..\Logic\Timer.cpp" />
     <ClCompile Include="..\..\UI\UIElements\Button.cpp" />
     <ClCompile Include="..\..\UI\UIElements\MeshObject.cpp" />
@@ -53,6 +56,8 @@
     <ClCompile Include="..\..\UI\UIElements\Panel2D.cpp" />
     <ClCompile Include="..\..\UI\UIElements\Panel3D.cpp" />
     <ClCompile Include="..\..\UI\UIElements\Test_Panel.cpp" />
+    <ClCompile Include="..\..\UI\UIElements\Test_TextBox.cpp" />
+    <ClCompile Include="..\..\UI\UIElements\TextBox.cpp" />
     <ClCompile Include="BIS.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -66,6 +71,7 @@
     <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_Boat.h" />
     <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_MaterialHandler.h" />
     <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_Mesh.h" />
+    <ClInclude Include="..\..\GraphicsEngine\Quad.h" />
     <ClInclude Include="..\..\GraphicsEngine\Test_Button.h" />
     <ClInclude Include="..\..\GraphicsEngine\Test_Graphics.h" />
     <ClInclude Include="..\..\GraphicsEngine\Window.h" />
@@ -75,7 +81,9 @@
     <ClInclude Include="..\..\IO\ObserverPattern\Observable.h" />
     <ClInclude Include="..\..\IO\ObserverPattern\Observer.h" />
     <ClInclude Include="..\..\IO\ObserverPattern\Test_Obs.h" />
+    <ClInclude Include="..\..\IO\Picking.h" />
     <ClInclude Include="..\..\IO\Test_Input.h" />
+    <ClInclude Include="..\..\IO\Test_Picking.h" />
     <ClInclude Include="..\..\Logic\BoatTester.h" />
     <ClInclude Include="..\..\Logic\Boat\Boat.h" />
     <ClInclude Include="..\..\Logic\Boat\Deck.h" />
@@ -93,6 +101,8 @@
     <ClInclude Include="..\..\UI\UIElements\Panel2D.h" />
     <ClInclude Include="..\..\UI\UIElements\Panel3D.h" />
     <ClInclude Include="..\..\UI\UIElements\Test_Panel.h" />
+    <ClInclude Include="..\..\UI\UIElements\Test_TextBox.h" />
+    <ClInclude Include="..\..\UI\UIElements\TextBox.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\..\GraphicsEngine\Test_PixelShader.hlsl">

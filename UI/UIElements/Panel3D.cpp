@@ -1,11 +1,11 @@
 #include "Panel3D.h"
 
 Panel3D::Panel3D(int width, int height, int top, int left, HWND handle, LPCTSTR title)
-	:Panel(width, height, top, left, handle), mDirect3D(width, height)
+	:Panel(width, height, top, left, handle, title), mDirect3D(width, height)
 {
 	// Creating a child window that will be 
 	// the canvas to draw on for the panel.
-	this->mPanelWindow = CreateWindowEx(
+	/*this->mPanelWindow = CreateWindowEx(
 		0,
 		title, 
 		title, 
@@ -18,8 +18,8 @@ Panel3D::Panel3D(int width, int height, int top, int left, HWND handle, LPCTSTR 
 		0, 
 		GetModuleHandle(0),
 		0);	
+	ShowWindow(this->mPanelWindow, SW_NORMAL);*/
 	this->mDirect3D.Init(this->mPanelWindow);
-	ShowWindow(this->mPanelWindow, SW_NORMAL);
 
 	this->mpVertexShader	= nullptr;
 	this->mpGeometryShader	= nullptr;
@@ -404,6 +404,7 @@ const void Panel3D::Update()
 			&this->mpCamera->GetProjectionMatrix(),
 			&this->mpProjBuffer);
 	}
+	this->UpdateWindowSize();
 }
 
 const void Panel3D::Draw()
@@ -439,6 +440,11 @@ const void Panel3D::Draw()
 	for (int i = 0; i < (int)this->mpMeshObjects.size(); i++)
 	{
 		matrix_buffer = *this->mpMeshObjects[i]->rGetMatrixBuffer();
+		this->mDirect3D.GetContext()->PSSetShaderResources(
+			0, 1, this->mpMeshObjects[i]->rGetTextureView()
+		);
+
+		constant_buffer = *this->mpMeshObjects[i]->rGetConstantBuffer();
 
 		// Setting the constant buffer to the vertex shader.
 		this->mDirect3D.GetContext()->VSSetConstantBuffers(

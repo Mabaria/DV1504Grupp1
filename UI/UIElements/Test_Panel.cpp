@@ -1,5 +1,6 @@
 #include "Test_Panel.h"
 #include "../../IO/Keyboard.h"
+#include "../../GraphicsEngine/Quad.h"
 /*
 	FÖR DEN SOM REVIEWAR DETTA
 
@@ -124,7 +125,83 @@ void Test_Panel3D()
 
 void Test_Panel2D()
 {
-	// TODO: Test 2D panel when finished.
+	int window_height = 720;
+	int window_width = 1280;
+
+	Window window(L"Button_Test", window_width, window_height);
+	Panel2D testPanel(
+		window_width / 6,		// Width
+		window_height,			// Height
+		0,						// Top
+		5 * window_width / 6,	// Left
+		window.GetWindow(), 
+		L"Button_Test");
+	Panel2D testHeadPanel(
+		window_width / 2, 
+		window_height / 6, 
+		0, 
+		window_width / 3, 
+		window.GetWindow(), 
+		L"Button_Test");
+	Panel3D testHead3DPanel(
+		window_width / 3, 
+		window_height / 6, 
+		0, 
+		0, 
+		window.GetWindow(), 
+		L"Button_Test");
+	Panel3D test3DPanel(
+		5 * window_width / 6, 
+		5 * window_height / 6, 
+		window_height / 6, 
+		0, 
+		window.GetWindow(), L"Button_Test");
+
+	testPanel.AddButton(100, 100, 20, 20, "../../Models/FireButton.png", "FireButton");
+	testPanel.AddButton(100, 100, 120, 20, "../../Models/FireButton.png", "FireButton2");
+	testPanel.AddButton(100, 100, 220, 20, "../../Models/FireButton.png", "FireButton3");
+	testHeadPanel.AddButton(100, 100, 20, 20, "../../Models/Fern.jpg", "FernButton");
+	testHeadPanel.AddButton(200, 200, 20, 400, "../../Models/pepehands.jpg", "FernButton");
+	testHeadPanel.AddButton(200, 200, 20, 700, "../../Models/feelsrain.gif", "FernButton");
+	window.Open();
+	testPanel.GetButtonByIndex(1); // Expected: FireButton2
+	testPanel.GetButtonByName("FireButton3")->SetButtonsize(-220, 320, 140, 420);
+	/* Expected: Button 3 is displaced and stretches a bit*/
+	testPanel.GetButtonByIndex(-1); // Expected: nullptr
+	testPanel.GetButtonByIndex(3285); // Expected: nullptr
+	testHeadPanel.GetButtonByName("Wesseboii"); // Expected: nullptr
+
+
+
+	Mesh testMesh("../../Models/OBJTEST2.obj");
+	test3DPanel.CreateShadersAndSetup(L"../../GraphicsEngine/Test_VertexShader.hlsl", L"", L"../../GraphicsEngine/Test_PixelShader.hlsl");
+	test3DPanel.AddMeshObject("Test", testMesh.GetIndexVectors(), testMesh.GetVertexVectors(), L"");
+	test3DPanel.rGetMeshObject("Test")->Scale(1.0f, 1.0f, 1.0f);
+	Camera testCamera(0.0f, 50.0f, -50.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 90.0f, 1920.0f / 1080.0f, 0.1f, 1000.0f);
+	test3DPanel.SetCamera(&testCamera);
+
+	Mesh testMesh2("../../Models/OBJTEST2.obj");
+	testHead3DPanel.CreateShadersAndSetup(L"../../GraphicsEngine/Test_VertexShader.hlsl", L"", L"../../GraphicsEngine/Test_PixelShader.hlsl");
+	testHead3DPanel.AddMeshObject("Test2", testMesh2.GetIndexVectors(), testMesh2.GetVertexVectors(), L"");
+	Camera testCamera2(0.0f, 50.0f, -50.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 90.0f, 1920.0f / 1080.0f, 0.1f, 1000.0f);
+	testHead3DPanel.SetCamera(&testCamera2);
+	// testHeadPanel.GetButtonByName("FernButton")->AddObserver(&window);
+	// Doesnt work because there's no class that inherits observer yet
+	// But shows how you would do to add functionality to a button
+
+	while (window.IsOpen())
+	{
+		window.Update();
+		testPanel.Update();
+		testHeadPanel.Update();
+		test3DPanel.Update();
+		testHead3DPanel.Update();
+		testPanel.Draw();
+		testHeadPanel.Draw();
+		test3DPanel.Draw();
+		testHead3DPanel.Draw();
+
+	}
 }
 
 void Test_BoatOnScreen()
@@ -153,9 +230,10 @@ void Test_BoatOnScreen()
 	top_view.AddMeshObject(&floor1_object);
 	top_view.AddMeshObject(&floor01_object);
 
-	top_view.rGetMeshObject("floor2")->Scale	(0.1f, 0.1f, 0.1f);
-	top_view.rGetMeshObject("floor1")->Scale	(0.1f, 0.1f, 0.1f);
-	top_view.rGetMeshObject("floor01")->Scale	(0.1f, 0.1f, 0.1f);
+	float scale = 0.1f;
+	top_view.rGetMeshObject("floor2")->Scale	(scale, scale, scale);
+	top_view.rGetMeshObject("floor1")->Scale	(scale, scale, scale);
+	top_view.rGetMeshObject("floor01")->Scale	(scale, scale, scale);
 
 	top_view.rGetMeshObject("floor2")->Translate	(0.0f, 0.0f, 0.5f);
 	top_view.rGetMeshObject("floor1")->Translate	(0.0f, 0.0f, 0.0f);
@@ -191,10 +269,53 @@ void Test_BoatOnScreen()
 		{ 0.0f, 1.0f, 0.0f, 0.0f },
 		{ 0.0f, 0.0f, 0.0f, 0.0f },
 		XM_PI / 8.0f, 16.0f / 9.0f,
-		0.1f, 1000.0f, LOOK_AT, PERSPECTIVE);
+		0.1f, 25.0f, LOOK_AT, PERSPECTIVE);
 
 	side_view.SetCamera(&camera2);
 	top_view.SetCamera(&camera);
+
+
+	// --- Text On Screen ---
+
+	Quad txt(true);
+
+	top_view.AddMeshObject("Däck1", txt.GetIndices(), txt.GetVertices(), 
+		L"../../Models/Däck1.DDS"
+	);
+
+	top_view.rGetMeshObject("Däck1")->Scale		(0.4f, 0.15f, 0.15f);
+	top_view.rGetMeshObject("Däck1")->Rotate	(XM_PI / 2.0f, XM_PI / 2.0f, 0.0f);
+	top_view.rGetMeshObject("Däck1")->Translate	(0.2f, 0.0f, 0.2f);
+
+	// --- END ---
+	
+
+	// --- Transparent Boxes ---
+
+	Mesh bb2("../../Models/Bound2UV.obj");
+
+	std::vector<std::vector<Vertex>> tv;
+	std::vector<std::vector<unsigned int>> ti;
+	ti.push_back(bb2.GetIndexVectors()[1]);
+	tv.push_back(bb2.GetVertexVectors()[1]);
+
+
+	top_view.AddMeshObject("Bound2UV", ti, tv,
+		L"../../Models/BlendColor.DDS"
+	);
+	top_view.rGetMeshObject("Bound2UV")->Scale		(0.1f, 0.1f, 0.1f);
+	top_view.rGetMeshObject("Bound2UV")->Rotate		(0.0f, XM_PI, 0.0f);
+	top_view.rGetMeshObject("Bound2UV")->Translate	(0.0f, 0.0f, 0.5f);
+
+
+	side_view.AddMeshObject("Bound2UV", ti, tv,
+		L"../../Models/BlendColor.DDS"
+	);
+	side_view.rGetMeshObject("Bound2UV")->Scale(0.15f, 0.4f, 0.1f);
+	side_view.rGetMeshObject("Bound2UV")->Rotate(0.0f, XM_PI, 0.0f);
+	side_view.rGetMeshObject("Bound2UV")->Translate(0.0f, -0.2f, 0.07f);
+
+	// --- END ---
 
 	float speed = 0.1f;
 

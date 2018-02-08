@@ -8,10 +8,14 @@
 #include "../../GraphicsEngine/Parsing/Test_Mesh.h"
 #include "../../GraphicsEngine/Parsing/Test_MaterialHandler.h"
 
+#include "../IO/Test_Input.h"
+#include "../IO/ObserverPattern/Test_Obs.h"
+
 #include "../../IO/Test_Input.h"
 #include "../../IO/ObserverPattern/Test_Obs.h"
-
-#include "../../UI/UIElements/Test_Panel.h"
+#include "../../IO/Test_Picking.h"
+#include "../UI/UIElements/Test_Panel.h"
+#include "../UI/UIElements/Test_TextBox.h"
 
 #include "../Logic/BoatTester.h"
 
@@ -19,16 +23,15 @@ namespace Testing
 {
 	bool testAll()
 	{
-		TestAssimp();
-		TestBoat();
-		Test_Button();
-		TestCamera();
-		Test_Window();
-		Test_D3D11();
-		TestMesh();
-		Test_Input();
-		Test_Observer();
-		//Todo This test is blank
+		//TestAssimp();
+		//TestBoat();
+		//Test_Button();
+		//TestCamera();
+		//Test_Window();
+		//Test_D3D11();
+		//TestMesh();
+		//Test_Input();
+		//Test_Observer();*/
 		Test_Panel2D();
 		//Todo This test crashes
 		//Test_Panel3D();

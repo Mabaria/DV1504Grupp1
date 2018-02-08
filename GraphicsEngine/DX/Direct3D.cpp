@@ -28,7 +28,7 @@ D3D11::D3D11(
 
 	// -- Sample --
 	this->mSampleDesc = { 0 };
-	this->mSampleDesc.Count = 1;
+	this->mSampleDesc.Count = 2;
 	this->mSampleDesc.Quality = 0;
 
 	// -- Viewport --
@@ -39,9 +39,9 @@ D3D11::D3D11(
 	this->mViewport.MinDepth = 0.1f;
 	this->mViewport.MaxDepth = 1.0f;
 
-	this->mClearColor[0] = 0.0f;
-	this->mClearColor[1] = 0.0f;
-	this->mClearColor[2] = 0.0f;
+	this->mClearColor[0] = 0.88f;
+	this->mClearColor[1] = 0.87f;
+	this->mClearColor[2] = 0.85f;
 	this->mClearColor[3] = 1.0f;
 }
 
@@ -75,6 +75,8 @@ void D3D11::Init(HWND window)
 		MessageBoxA(NULL, "Error creating sampler state.", NULL, MB_OK);
 		exit(-1);
 	}
+
+	this->mContext->PSSetSamplers(0, 1, &this->mSamplerState);
 
 	ID3D11BlendState *blend_state = nullptr;
 	D3D11_BLEND_DESC blend_desc{};
