@@ -10,6 +10,9 @@
 #include "../IO/Test_Input.h"
 #include "../IO/ObserverPattern/Test_Obs.h"
 
+#include "../../IO/Test_Input.h"
+#include "../../IO/ObserverPattern/Test_Obs.h"
+#include "../../IO/Test_Picking.h"
 #include "../UI/UIElements/Test_Panel.h"
 #include "../UI/UIElements/Test_TextBox.h"
 
@@ -40,6 +43,17 @@ namespace Testing
 	bool testOne()
 	{
 		//! ADD YOUR OWN TESTS HERE
+		try
+		{
+			Test_Picking();
+		}
+		catch (const char *e)
+		{
+			std::cout << e << std::endl;
+		}
+
+		getchar();
+		
 		Test_Text();
 		return true;
 	}
