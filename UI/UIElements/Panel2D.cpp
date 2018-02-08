@@ -36,8 +36,12 @@ void Panel2D::AddTextbox(
 	int height, 
 	int top, 
 	int left, 
-	LPCTSTR name)
+	std::string text,
+	std::string name)
 {
+	this->mTextBoxNames.push_back(name);
+
+
 	// Push textbox into list of UI elements.
 }
 

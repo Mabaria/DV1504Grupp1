@@ -363,8 +363,8 @@ void Test_Panel2DTextBoxes()
 	top_view.rGetMeshObject("floor1")->Translate(0.0f, 0.0f, 0.0f);
 	top_view.rGetMeshObject("floor01")->Translate(0.0f, 0.0f, -0.5f);
 
-	side_view.rGetMeshObject("floor2")->Scale(0.15f, 0.4f, 0.1f);
-	side_view.rGetMeshObject("floor1")->Scale(0.15f, 0.4f, 0.1f);
+	side_view.rGetMeshObject("floor2")->Scale( 0.15f, 0.4f, 0.1f);
+	side_view.rGetMeshObject("floor1")->Scale( 0.15f, 0.4f, 0.1f);
 	side_view.rGetMeshObject("floor01")->Scale(0.15f, 0.4f, 0.1f);
 
 	side_view.rGetMeshObject("floor2")->Translate(0.05f, -0.2f, 0.0f);
@@ -413,12 +413,10 @@ void Test_Panel2DTextBoxes()
 		window.GetWindow(),
 		L"Button_Test");
 
-	log_panel.AddButton(100, 100, 20, 20, "../../Models/FireButton.png", "FireButton");
-	log_panel.AddButton(100, 100, 120, 20, "../../Models/FireButton.png", "FireButton2");
-	log_panel.AddButton(100, 100, 220, 20, "../../Models/FireButton.png", "FireButton3");
-	control_panel.AddButton(100, 100, 20, 20, "../../Models/Fern.jpg", "FernButton");
-	control_panel.AddButton(200, 200, 20, 400, "../../Models/pepehands.jpg", "FernButton");
-	control_panel.AddButton(200, 200, 20, 700, "../../Models/feelsrain.gif", "FernButton");
+	log_panel.AddButton(100, 100, 20, 20, "../../Models/Button01.png", "Dead");
+	log_panel.AddButton(100, 100, 120, 20, "../../Models/Button02.png", "Gas");
+	log_panel.AddButton(100, 100, 220, 20, "../../Models/Button03.png", "Water");
+	log_panel.AddButton(100, 100, 320, 20, "../../Models/Button04.png", "Fire");
 
 	float speed = 0.1f;
 

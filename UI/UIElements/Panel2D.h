@@ -27,7 +27,13 @@ public:
 		std::string imageFilePath,
 		std::string buttonName);
 
-	void AddTextbox(int width, int height, int top, int left, LPCTSTR name);
+	void AddTextbox(
+		int width, 
+		int height, 
+		int top, 
+		int left, 
+		std::string text,
+		std::string name);
 
 	Button* GetButtonByName(std::string name);
 	Button* GetButtonByIndex(unsigned int index);
