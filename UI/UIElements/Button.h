@@ -46,7 +46,9 @@ private:
 	ID2D1Bitmap *mpBitMap;
 	std::string mFilePath;
 	D2D1_RECT_F mButtonSize; // left, top, right, bottom
-	D2D1_RECT_F mBitmapRenderSize; // how much of the bitmap the button is gonna show
+
+	// how much of the bitmap the button is gonna show!
+	D2D1_RECT_F mBitmapRenderSize;
 	std::wstring mFilePathAsWstr;
 	float mWidth; // Width of bitmap divided by 3
 	D2D1_RECT_F mBoundingBoxPercentage;

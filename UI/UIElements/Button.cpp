@@ -39,7 +39,7 @@ Button::~Button()
 const std::wstring Button::StrToWstr(std::string str)
 { 
 	//maybe in tools
-	std::wstring_convert< std::codecvt<wchar_t, char, std::mbstate_t> > convert;
+	std::wstring_convert<std::codecvt<wchar_t, char, std::mbstate_t>> convert;
 	std::wstring result = convert.from_bytes(str);
 	this->mFilePathAsWstr = result.c_str();
 	return result;

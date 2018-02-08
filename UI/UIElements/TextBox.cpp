@@ -9,7 +9,7 @@ TextBox::TextBox(
 {
 	this->D2D1Panel = D2D1Panel;
 	this->SetTextBoxSize(left, top, right, bottom);
-	this->mTextString = "";
+	this->mTextString = "Default Text ;) Error x00074352EF";
 	this->mTextWString = L"";
 	this->mpTextWchar = nullptr;
 	std::wstring mTextWString;
@@ -17,6 +17,7 @@ TextBox::TextBox(
 	const wchar_t *mpTestWchar;
 	this->mCreateColor();
 	this->SetColor(D2D1::ColorF::Black);
+	this->SetText(this->mTextString);
 }
 
 TextBox::~TextBox()

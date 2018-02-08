@@ -9,14 +9,24 @@ void Test_Text()
 		window.GetClientSize().height);
 	Button butt(&D2Test,"",0,0,0,0);
 	TextBox testBox(&D2Test, 0, 0, 100, 100);
-	testBox.SetText("hejhejhejhejhejhejhejhejhejhejhejj lol");
+	TextBox testBox2(&D2Test, 0, 0, 100, 100);
+	testBox.SetText("");
+	testBox.SetText("Fuck you robin");
 	window.Open();
+	std::string testText = "";
 	while (window.IsOpen())
 	{
+		testText += "h";
+		testBox.SetText(testText);
+		testBox.SetTextBoxSize(testBox.GetTextBoxSize().left + 1,
+			testBox.GetTextBoxSize().top + 1,
+			testBox.GetTextBoxSize().right + 2,
+			testBox.GetTextBoxSize().bottom + 2);
 		window.Update();
 		D2Test.GetpRenderTarget()->BeginDraw();
 		D2Test.GetpRenderTarget()->Clear(D2D1::ColorF(D2D1::ColorF::AliceBlue));
 		testBox.DrawTextBox();
+		testBox2.DrawTextBox();
 		D2Test.GetpRenderTarget()->EndDraw();
 	}
 
