@@ -10,9 +10,11 @@ void Picking::GetWorldRay(
 {
 	float width, height, nearZ;
 
+	// Map click location from [0.0;1.0] to [-1.0;1.0]
 	nScreenX = nScreenX * 2.f - 1.f;
-	nScreenY = (nScreenY * 2.f - 1.f) * (-1.f);
+	nScreenY = (nScreenY * 2.f - 1.f) * (-1.f);	// Invert "up" direction
 
+	// Get resourses from camera
 	width = pCamera->GetViewWidth();
 	height = pCamera->GetViewHeight();
 	nearZ = pCamera->GetNearZ();
