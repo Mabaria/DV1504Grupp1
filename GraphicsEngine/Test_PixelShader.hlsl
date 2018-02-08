@@ -19,7 +19,6 @@ struct Light
 float4 main(PS_IN input) : SV_TARGET
 {
 	float alpha			= 1.0f;
-	//float3 ambient		= 0.32f;
 	float3 ambient		= 0.15f;
 	float3 diffuse		= 0.0f;
 
