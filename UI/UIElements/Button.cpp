@@ -137,6 +137,27 @@ void Button::SetIconSize(int left, int top, int right, int bottom)
 	this->mIconSize = D2D1::RectF(left, top, right, bottom);
 }
 
+void Button::MoveButton(int x, int y)
+{
+	this->mButtonSize = D2D1::RectF(
+		this->mButtonSize.bottom + y,
+		this->mButtonSize.left + x,
+		this->mButtonSize.right + x,
+		this->mButtonSize.top + y
+	);
+	this->MoveIcon(x, y);
+}
+
+void Button::MoveIcon(int x, int y)
+{
+	this->mIconSize = D2D1::RectF(
+		this->mIconSize.bottom + y,
+		this->mIconSize.left + x,
+		this->mIconSize.right + x,
+		this->mIconSize.top + y
+	);
+}
+
 void Button::SetButtonStatus(BUTTON_STATE buttState)
 {
 	if (!(this->mCurrState == buttState))
