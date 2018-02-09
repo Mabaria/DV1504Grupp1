@@ -67,6 +67,7 @@ void D3D11::Init(HWND window)
 	sampler_desc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
 	sampler_desc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
 	sampler_desc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+	sampler_desc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 
 	if (FAILED(this->mDevice->CreateSamplerState(
 		&sampler_desc, 

@@ -1,5 +1,5 @@
-Texture2D texture2d		: register(t0);
-sampler ss				: register(s0);
+Texture2D texture2d			: register(t0);
+SamplerState ss				: register(s0);
 
 cbuffer event_data : register(b0)
 {
