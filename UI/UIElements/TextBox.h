@@ -18,6 +18,7 @@ public:
 	void SetText(std::string text);
 	void DrawTextBox();
 	void SetColor(D2D1::ColorF color);
+	void MoveTextBox(int x, int y);
 
 
 private:

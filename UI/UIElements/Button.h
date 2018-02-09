@@ -38,6 +38,8 @@ public:
 	void SetButtonsize(int left, int top, int right, int bottom);
 	void SetBitmapRendersize(int left, int top, int right, int bottom);
 	void SetIconSize(int left, int top, int right, int bottom);
+	void MoveButton(int x, int y);
+	void MoveIcon(int x, int y);
 	void SetButtonStatus(BUTTON_STATE buttState);
 	void LoadImageToBitmap(std::string imageFilePath);
 	BUTTON_STATE GetButtState() const;

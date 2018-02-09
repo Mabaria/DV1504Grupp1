@@ -59,6 +59,16 @@ void TextBox::SetColor(D2D1::ColorF color)
 	this->mpColor->SetColor(&color);
 }
 
+void TextBox::MoveTextBox(int x, int y)
+{
+	this->mLayoutRect = D2D1::RectF(
+		this->mLayoutRect.bottom + y,
+		this->mLayoutRect.left + x,
+		this->mLayoutRect.right + x,
+		this->mLayoutRect.top + y
+	);
+}
+
 void TextBox::mCreateColor()
 {
 	this->D2D1Panel->GetpRenderTarget()->CreateSolidColorBrush(
