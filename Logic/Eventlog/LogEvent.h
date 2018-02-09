@@ -29,10 +29,13 @@ public:
 	const int GetElapsedTime();
 	const std::string GetStartTimeAsString();
 	const std::string GetElapsedTimeAsString();
+	
+	Timer *GetTimer();
+
 
 private:
 
-	Timer mTime;
+	Timer mTimer;
 	int mActiveEventIndex;
 	Event::Type mType;
 };
