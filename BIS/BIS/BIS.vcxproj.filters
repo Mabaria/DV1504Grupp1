@@ -210,6 +210,9 @@
     <ClInclude Include="..\..\IO\Test_Picking.h">
       <Filter>Header Files\IO\Test</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\UI\UIElements\NotificationObject.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BIS.cpp">
@@ -361,6 +364,9 @@
     </ClCompile>
     <ClCompile Include="..\..\IO\ObserverPattern\Test_Obs.cpp">
       <Filter>Source Files\IO\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UI\UIElements\NotificationObject.cpp">
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

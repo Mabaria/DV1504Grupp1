@@ -50,6 +50,7 @@
     <ClCompile Include="..\..\Logic\Timer.cpp" />
     <ClCompile Include="..\..\UI\UIElements\Button.cpp" />
     <ClCompile Include="..\..\UI\UIElements\MeshObject.cpp" />
+    <ClCompile Include="..\..\UI\UIElements\NotificationObject.cpp" />
     <ClCompile Include="..\..\UI\UIElements\Panel.cpp" />
     <ClCompile Include="..\..\UI\UIElements\Panel2D.cpp" />
     <ClCompile Include="..\..\UI\UIElements\Panel3D.cpp" />
@@ -93,6 +94,7 @@
     <ClInclude Include="..\..\Test\Testing.h" />
     <ClInclude Include="..\..\UI\UIElements\Button.h" />
     <ClInclude Include="..\..\UI\UIElements\MeshObject.h" />
+    <ClInclude Include="..\..\UI\UIElements\NotificationObject.h" />
     <ClInclude Include="..\..\UI\UIElements\Panel.h" />
     <ClInclude Include="..\..\UI\UIElements\Panel2D.h" />
     <ClInclude Include="..\..\UI\UIElements\Panel3D.h" />
