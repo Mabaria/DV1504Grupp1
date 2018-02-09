@@ -2,9 +2,6 @@
 #include <locale>
 #include "../../GraphicsEngine/DX/Direct2D.h"
 
-
-
-
 class TextBox
 {
 public:
