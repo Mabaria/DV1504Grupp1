@@ -6,6 +6,10 @@ Panel2D::Panel2D(int width, int height, int top, int left, HWND handle, LPCTSTR 
 	:Panel(width, height, top, left, handle, title)
 {
 	this->mDirect2D = new Direct2D(mPanelWindow, width, height);
+
+	// Assumes the panel does not have a notification list.
+	this->mNotificationList = nullptr;
+	this->mNotificationListIsActive = false;
 }
 
 Panel2D::~Panel2D()
@@ -25,6 +29,13 @@ Panel2D::~Panel2D()
 		}
 	}
 	delete this->mDirect2D;
+
+	// Deleting the notification list only if 
+	// there is one to delete.
+	if (this->mNotificationListIsActive)
+	{
+		delete this->mNotificationList;
+	}
 }
 
 void Panel2D::AddButton(
@@ -136,11 +147,37 @@ void Panel2D::SetTextBoxFontSize(int fontSize)
 	this->mDirect2D->SetFontSize(fontSize);
 }
 
+void Panel2D::SetNotificationList(int posX, int posY)
+{
+	this->mNotificationList = new NotificationList(posX, posY);
+	this->mNotificationListIsActive = true;
+}
+
+void Panel2D::AddNotification(Room * room, LogEvent * event)
+{
+	this->mNotificationList->AddNotification(
+		this->mDirect2D, 
+		room, 
+		event);
+}
+
+bool Panel2D::RemoveNotification(Room * room, LogEvent * event)
+{
+	return this->mNotificationList->RemoveNotification(room, event);
+}
+
 void Panel2D::Update()
 {
 	this->UpdateWindowSize();
 	this->mUpdateButtons();
 	this->mUpdateTextBoxes();
+
+	// Updating the notification list only if
+	// the panel has one.
+	if (this->mNotificationListIsActive)
+	{
+		this->mNotificationList->Update();
+	}
 }
 
 void Panel2D::Draw()
@@ -164,6 +201,13 @@ void Panel2D::Draw()
 	{
 		(*it)->DrawTextBox();
 	}
+	// Draw all the notification objects if there is a list.
+	if (this->mNotificationListIsActive)
+	{
+		this->mNotificationList->Draw();
+	}
+
+
 	this->mDirect2D->GetpRenderTarget()->EndDraw();
 }
 

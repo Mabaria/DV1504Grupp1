@@ -43,6 +43,8 @@ public:
 	void SetButtonStatus(BUTTON_STATE buttState);
 	void LoadImageToBitmap(std::string imageFilePath);
 	BUTTON_STATE GetButtState() const;
+
+	void SetOpacity(float opacity);
 private:
 	
 	Direct2D *D2D1Panel;

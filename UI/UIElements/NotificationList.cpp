@@ -20,9 +20,9 @@ void NotificationList::AddNotification(
 	LogEvent * event)
 {
 	this->mObjects.push_back(new NotificationObject(room, event, direct2d));
-	this->mObjects.back()->SetPosition(
-		this->mPosX, 
-		this->mPosY + (this->mObjects.size() - 1) * 80);
+	this->mObjects.back()->Move(
+		0, 
+		(this->mObjects.size() - 1) * 80);
 }
 
 bool NotificationList::RemoveNotification(Room * room, LogEvent * event)
@@ -52,9 +52,9 @@ bool NotificationList::RemoveNotification(Room * room, LogEvent * event)
 			for (int j = i; j < (int)this->mObjects.size() - 1; j++)
 			{
 				this->mObjects[j] = this->mObjects[j + 1];
-				this->mObjects[j]->SetPosition(
-					this->mPosX,
-					this->mPosY + (this->mObjects.size() - 2) * 80);
+				this->mObjects[j]->Move(
+					0,
+					-80);
 			}
 
 			// Deleting the last object of the vector
@@ -64,4 +64,20 @@ bool NotificationList::RemoveNotification(Room * room, LogEvent * event)
 		}
 	}
 	return result;
+}
+
+void NotificationList::Update()
+{
+	for (int i = 0; i < (int)this->mObjects.size(); i++)
+	{
+		this->mObjects[i]->Update();
+	}
+}
+
+void NotificationList::Draw()
+{
+	for (int i = 0; i < (int)this->mObjects.size(); i++)
+	{
+		this->mObjects[i]->Draw();
+	}
 }

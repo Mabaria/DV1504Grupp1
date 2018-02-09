@@ -18,7 +18,8 @@ public:
 	void AddNotification(Direct2D *direct2d, Room *room, LogEvent *event);
 	bool RemoveNotification(Room *room, LogEvent *event);
 
-
+	void Update();
+	void Draw();
 
 private:
 	int mPosX;

@@ -27,6 +27,7 @@ public:
 	const void SetText(std::string text);
 
 	void Update();
+	void Draw();
 
 private:
 	Button mButton;

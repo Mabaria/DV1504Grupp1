@@ -30,10 +30,10 @@ NotificationObject::NotificationObject(
 
 	// 150x80 text box.
 	D2D1_RECT_F textbox_size;
-	textbox_size.top = 0;
+	textbox_size.top = 20;
 	textbox_size.left = 50;
 	textbox_size.right = 190;
-	textbox_size.bottom = 80;
+	textbox_size.bottom = 60;
 
 	std::string file_path = "../../Models/";
 	switch (this->mEventType)
@@ -54,24 +54,27 @@ NotificationObject::NotificationObject(
 		file_path += "pepehands.jpg";
 	}
 
+	// Every notification object starts at the same place,
+	// the handler places them where they need to be.
 	this->mButton.CreateButton(
 		file_path, 
-		object_size.left, 
-		object_size.top, 
-		object_size.right, 
-		object_size.bottom);
+		(int)object_size.left,
+		(int)object_size.top,
+		(int)object_size.right,
+		(int)object_size.bottom);
 
 	this->mButton.SetIconSize(
-		icon_size.left,
-		icon_size.top,
-		icon_size.right,
-		icon_size.bottom);
+		(int)icon_size.left,
+		(int)icon_size.top,
+		(int)icon_size.right,
+		(int)icon_size.bottom);
+
 
 	this->mTextBox.SetTextBoxSize(
-		textbox_size.left,
-		textbox_size.top,
-		textbox_size.right,
-		textbox_size.bottom);
+		(int)textbox_size.left,
+		(int)textbox_size.top,
+		(int)textbox_size.right,
+		(int)textbox_size.bottom);
 
 	this->mTextBox.SetText(this->GetNotificationString());
 }
@@ -121,20 +124,27 @@ const std::string NotificationObject::GetNotificationString() const
 
 const void NotificationObject::SetPosition(int x, int y)
 {
-	this->mButton.SetButtonsize(
-		x, 
-		y, 
-		this->mButton.GetButtonsize().right + x, 
-		this->mButton.GetButtonsize().bottom + y);
-	
+		
 }
 
 const void NotificationObject::Move(int x, int y)
 {
-	return void();
+	this->mButton.MoveButton(x, y);
+	this->mTextBox.MoveTextBox(x, y);
+}
+
+const void NotificationObject::SetText(std::string text)
+{
+	this->mTextBox.SetText(text);
 }
 
 void NotificationObject::Update()
 {
 	this->mElapsedTime = this->mTimer->GetTimeAsStr();
+}
+
+void NotificationObject::Draw()
+{
+	this->mTextBox.DrawTextBox();
+	this->mButton.DrawButton();
 }

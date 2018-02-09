@@ -52,7 +52,11 @@ void Button::CreateButton(
 	int right, 
 	int bottom)
 {
-	this->mButtonSize = D2D1::RectF(left, top, right, bottom);
+	this->mButtonSize = D2D1::RectF(
+		(float)left, 
+		(float)top, 
+		(float)right, 
+		(float)bottom);
 	this->mIconSize = this->mButtonSize;
 	this->LoadImageToBitmap(imageFilePath);
 	if (this->mBmpLoaded)
@@ -123,17 +127,29 @@ const D2D1_RECT_F Button::GetBoundingBoxPercentage() const
 
 void Button::SetButtonsize(int left, int top, int right, int bottom)
 {
-	this->mButtonSize = D2D1::RectF(left, top, right, bottom);
+	this->mButtonSize = D2D1::RectF(
+		(float)left, 
+		(float)top, 
+		(float)right, 
+		(float)bottom);
 }
 
 void Button::SetBitmapRendersize(int left, int top, int right, int bottom)
 {
-	this->mBitmapRenderSize = D2D1::RectF(left, top, right, bottom);
+	this->mBitmapRenderSize = D2D1::RectF(
+		(float)left, 
+		(float)top, 
+		(float)right, 
+		(float)bottom);
 }
 
 void Button::SetIconSize(int left, int top, int right, int bottom)
 {
-	this->mIconSize = D2D1::RectF(left, top, right, bottom);
+	this->mIconSize = D2D1::RectF(
+		(float)left,
+		(float)top, 
+		(float)right, 
+		(float)bottom);
 }
 
 void Button::MoveButton(int x, int y)
@@ -221,6 +237,11 @@ void Button::LoadImageToBitmap(
 BUTTON_STATE Button::GetButtState() const
 {
 	return this->mCurrState;
+}
+
+void Button::SetOpacity(float opacity)
+{
+	this->mOpacity = opacity;
 }
 
 void Button::ReleaseCOM(IUnknown *object)
