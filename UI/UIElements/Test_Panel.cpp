@@ -369,9 +369,9 @@ void Test_Panel2DTextBoxes()
 	Mesh floor1("../../Models/Floor1.obj");
 	Mesh floor01("../../Models/Floor01.obj");
 
-	MeshObject floor2_object("floor2", floor2.GetIndexVectors(), floor2.GetVertexVectors());
-	MeshObject floor1_object("floor1", floor1.GetIndexVectors(), floor1.GetVertexVectors());
-	MeshObject floor01_object("floor01", floor01.GetIndexVectors(), floor01.GetVertexVectors());
+	MeshObject floor2_object("floor2", &floor2);
+	MeshObject floor1_object("floor1", &floor1);
+	MeshObject floor01_object("floor01", &floor01);
 
 	std::wstring window_name = L"Testboi";
 	int window_height = 720;
@@ -394,13 +394,13 @@ void Test_Panel2DTextBoxes()
 		window.GetWindow(), L"Button_Test");
 
 	// Hela båten tjoff in i panelerna och sen mixtras matriserna med.
-	side_view.AddMeshObject("floor2", floor2.GetIndexVectors(), floor2.GetVertexVectors(), L"");
-	side_view.AddMeshObject("floor1", floor1.GetIndexVectors(), floor1.GetVertexVectors(), L"");
-	side_view.AddMeshObject("floor01", floor01.GetIndexVectors(), floor01.GetVertexVectors(), L"");
+	side_view.AddMeshObject(&floor2_object);
+	side_view.AddMeshObject(&floor1_object);
+	side_view.AddMeshObject(&floor01_object);
 
-	top_view.AddMeshObject("floor2", floor2.GetIndexVectors(), floor2.GetVertexVectors(), L"");
-	top_view.AddMeshObject("floor1", floor1.GetIndexVectors(), floor1.GetVertexVectors(), L"");
-	top_view.AddMeshObject("floor01", floor01.GetIndexVectors(), floor01.GetVertexVectors(), L"");
+	top_view.AddMeshObject(&floor2_object);
+	top_view.AddMeshObject(&floor1_object);
+	top_view.AddMeshObject(&floor01_object);
 
 	top_view.rGetMeshObject("floor2")->Scale(0.1f, 0.1f, 0.1f);
 	top_view.rGetMeshObject("floor1")->Scale(0.1f, 0.1f, 0.1f);
