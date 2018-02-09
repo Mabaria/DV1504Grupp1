@@ -465,6 +465,9 @@ void Test_Panel2DTextBoxes()
 	control_panel.AddButton(70, 70, 30, 160, "../../Models/Button03.png", "Water");
 	control_panel.AddButton(70, 70, 30, 230, "../../Models/Button04.png", "Fire");
 
+	control_panel.AddButton(200, 70, 30, 300, "tt5t5rgefd", "Nofitication");
+	control_panel.GetButtonByName("Nofitication")->SetOpacity(0.0f);
+
 	//! TEXTBOXES HERE
 	log_panel.AddTextbox(window_width / 6, 20, 0, 0, "Log Panel", "Title");
 	int n_events = 1000;

@@ -199,6 +199,11 @@ BUTTON_STATE Button::GetButtState() const
 	return this->mCurrState;
 }
 
+void Button::SetOpacity(float opacity)
+{
+	this->mOpacity = opacity;
+}
+
 void Button::ReleaseCOM(IUnknown *object)
 {
 	if (object)
