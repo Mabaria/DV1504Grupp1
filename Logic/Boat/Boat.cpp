@@ -28,7 +28,7 @@ void Boat::SetModelName(std::string name)
 
 
 /**
-*	Build boat structure
+*	Deck specific
 */
 
 void Boat::AddDeck(std::string name)
@@ -43,6 +43,24 @@ void Boat::AddDeck(std::string name)
 
 	this->mDecks.push_back(newDeck);
 }
+
+Deck* Boat::GetDeckPointerAt(int index)
+{
+	// Sanity check
+	if (index >= 0 && index < (int)this->mDecks.size())
+	{
+		return &this->mDecks[index];
+	}
+
+	// If invalid index
+	return nullptr;
+}
+
+
+
+/**
+*	Room specific
+*/
 
 void Boat::AddRoom(std::string roomName,
 	std::string deckName,
@@ -93,6 +111,46 @@ void Boat::AddRoom(std::string roomName,
 	throw("Deck '" + deckName + "' not found");
 }
 
+Room* Boat::GetPickedRoom(Ray ray)
+{
+	float hitIndex, tMain, t;
+
+	tMain = -1; // Assume miss and prove collision
+	hitIndex = -1;
+
+	// Check all rooms for collision
+	for (int i = 0; i < (int)this->mRooms.size(); i++)
+	{
+		t = this->mRooms[i].CheckRayCollision(ray);
+
+		if (
+			(tMain == -1 && t >= 0) ||	// First hit
+			(t >= 0 && t < tMain))	// Hit and closer to the "eye" than previous room
+		{
+			tMain = t;
+			hitIndex = i;
+		}
+	}
+
+	if (hitIndex != -1) // Hit found
+	{
+		return &this->mRooms[hitIndex];
+	}
+
+	// No hit = return nullptr
+	return nullptr;
+}
+
+Room* Boat::GetRoomPointerAt(int index)
+{
+	// Sanity check
+	if (index >= 0 && index < (int)this->mRooms.size())
+		return &this->mRooms[index];
+
+	// If invalid index
+	return nullptr;
+}
+
 
 
 /**
@@ -108,6 +166,8 @@ void Boat::SetEventLog(EventLog *pEventLog)
 		this->mRooms[i].SetEventLog(pEventLog);
 	}
 }
+
+
 
 /**
 *	Event specific
@@ -143,7 +203,7 @@ std::vector<Event::Type> Boat::GetEventsInRoom(std::string roomName, std::string
 *	Disk specific
 */
 
-void Boat::WriteFile(std::string filePath)
+void Boat::WriteFile(std::string filePath) const
 {
 	std::ofstream file;
 

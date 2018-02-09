@@ -11,6 +11,8 @@
 #include "../../IO/Picking.h"
 #include "../../UI/UIElements/MeshObject.h"
 
+#include "../../IO/Picking.h"
+
 class Boat
 {
 public:
@@ -24,12 +26,15 @@ public:
 
 	// Deck specific
 	void AddDeck(std::string name);
+	Deck* GetDeckPointerAt(int index);
 
 	// Room specific
 	//void AddRoom(std::string roomName, std::string deckName);
 	void AddRoom(std::string roomName,
 		std::string deckName,
 		std::vector<Event::Type> inputs);
+	Room* GetPickedRoom(Ray ray);
+	Room* GetRoomPointerAt(int index);
 
 	// Log specific
 	void SetEventLog(EventLog *pEventLog);
@@ -42,7 +47,7 @@ public:
 	std::vector<Event::Type> GetEventsInRoom(std::string roomName, std::string deckName);
 
 	// Disk specific
-	void WriteFile(std::string filePath);
+	void WriteFile(std::string filePath) const;
 	bool ReadFile(std::string filePath);
 
 	// Room data specific
