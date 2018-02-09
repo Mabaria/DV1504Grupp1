@@ -32,7 +32,7 @@ std::string Room::GetName() const
 	return this->mName;
 }
 
-float Room::CheckRayCollision(Ray ray)
+/*float Room::CheckRayCollision(Ray ray)
 {
 	// TODO 1: in the near future in the conceptual image of time as we know it:
 	// UNCOMMENT THIS LINE BELOW! :D (mBoundingAABB didn't exist when this
@@ -44,7 +44,7 @@ float Room::CheckRayCollision(Ray ray)
 	// TODO 2: Delete lines below in this function. They may never exist from now
 	// on. Rip in pieces deer bear.
 	return -1; // (Note that -1 indicates that there is now collision)
-}
+}*/
 
 
 

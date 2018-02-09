@@ -5,7 +5,7 @@
 #include "../Event/Event.h"
 #include "Sensor.h"
 
-#include "../../IO/Picking.h"
+//#include "../../IO/Picking.h"
 
 class Room
 {
@@ -19,7 +19,7 @@ public:
 	void SetName(std::string name);
 	std::string GetName() const;
 
-	float CheckRayCollision(Ray ray);
+	//float CheckRayCollision(Ray ray);
 
 	// Deck specific
 	void SetDeckName(std::string name);

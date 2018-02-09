@@ -119,9 +119,10 @@ Room* Boat::GetPickedRoom(Ray ray)
 	hitIndex = -1;
 
 	// Check all rooms for collision
-	for (int i = 0; i < (int)this->mRooms.size(); i++)
+	for (int i = 0; i < (int)this->mBoundingAABB.size(); i++)
 	{
-		t = this->mRooms[i].CheckRayCollision(ray);
+		//t = this->mRooms[i].CheckRayCollision(ray);
+		t = Picking::IsRayIntersectingAABB(ray, this->mBoundingAABB[i]);
 
 		if (
 			(tMain == -1 && t >= 0) ||	// First hit
@@ -449,17 +450,17 @@ bool Boat::LoadBoundingBoxes()
 	this->mBoundingMesh.push_back(
 		Mesh("../../Models/Bounding/Bound2UV.obj"));
 
-	this->mDeckMeshObject.push_back(MeshObject(
+	this->mBoundingMeshObjects.push_back(MeshObject(
 		"Bound01",
 		this->mBoundingMesh[0].GetIndexVectors(),
 		this->mBoundingMesh[0].GetVertexVectors()
 	));
-	this->mDeckMeshObject.push_back(MeshObject(
+	this->mBoundingMeshObjects.push_back(MeshObject(
 		"Bound1",
 		this->mBoundingMesh[1].GetIndexVectors(),
 		this->mBoundingMesh[1].GetVertexVectors()
 	));
-	this->mDeckMeshObject.push_back(MeshObject(
+	this->mBoundingMeshObjects.push_back(MeshObject(
 		"Bound2",
 		this->mBoundingMesh[2].GetIndexVectors(),
 		this->mBoundingMesh[2].GetVertexVectors()
@@ -499,15 +500,22 @@ bool Boat::LoadBoatMesh()
 	));
 	this->mDeckMeshObject.push_back(MeshObject(
 		"Floor1",
-		this->mDeckMesh[0].GetIndexVectors(),
-		this->mDeckMesh[0].GetVertexVectors()
+		this->mDeckMesh[1].GetIndexVectors(),
+		this->mDeckMesh[1].GetVertexVectors()
 	));
 	this->mDeckMeshObject.push_back(MeshObject(
 		"Floor2",
-		this->mDeckMesh[0].GetIndexVectors(),
-		this->mDeckMesh[0].GetVertexVectors()
+		this->mDeckMesh[2].GetIndexVectors(),
+		this->mDeckMesh[2].GetVertexVectors()
 	));
 	return true;
+}
+
+MeshObject *Boat::GetDeckMeshObject(int index)
+{
+	if (index < 0 || index >= this->mDeckMeshObject.size())
+		return nullptr;
+	return &this->mDeckMeshObject[index];
 }
 
 

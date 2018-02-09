@@ -56,6 +56,7 @@ public:
 
 	// Boat mesh specific
 	bool LoadBoatMesh();
+	MeshObject *GetDeckMeshObject(int index);
 
 	// Bounding volumes
 	//void StoreBoundings(std::vector<AABB> boundings);
