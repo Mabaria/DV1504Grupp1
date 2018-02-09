@@ -31,11 +31,13 @@ namespace Testing
 		//Test_D3D11();
 		//TestMesh();
 		//Test_Input();
-		//Test_Observer();*/
+		//Test_Observer();
 		//Test_Panel2D();
 		//Todo This test crashes
 		//Test_Panel3D();
+		//Test_BoatOnScreen();
 
+		Test_Panel2DTextBoxes();
 		return true;
 	}
 

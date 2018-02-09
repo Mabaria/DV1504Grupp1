@@ -12,7 +12,8 @@ namespace Event
 	 {
 	 	Fire,
 	 	Water,
-	 	Gas
+	 	Gas,
+		Injury
 	 };
 
 	 std::string GetString(Type type);
