@@ -130,8 +130,8 @@ AABB Picking::FromMeshToAABB(const std::vector<Vertex> &vertex)
 {
 	AABB retAABB;
 	retAABB.x.max = retAABB.x.min = vertex[0].x;
-	retAABB.y.max = retAABB.y.min = vertex[0].x;
-	retAABB.z.max = retAABB.z.min = vertex[0].x;
+	retAABB.y.max = retAABB.y.min = vertex[0].y;
+	retAABB.z.max = retAABB.z.min = vertex[0].z;
 
 	for (unsigned int i = 1; i < vertex.size(); i++)
 	{

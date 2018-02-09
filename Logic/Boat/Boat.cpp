@@ -382,17 +382,33 @@ bool Boat::LoadBoundingBoxes()
 {
 	//? Is there any point in not hardcode the files?
 	//Todo Need to try-catch this
-	this->mBoundingMeshes.push_back(
+	this->mBoundingMesh.push_back(
 		Mesh("../../Models/Bounding/Bound01UV.obj"));
-	this->mBoundingMeshes.push_back(
+	this->mBoundingMesh.push_back(
 		Mesh("../../Models/Bounding/Bound1UV.obj"));
-	this->mBoundingMeshes.push_back(
+	this->mBoundingMesh.push_back(
 		Mesh("../../Models/Bounding/Bound2UV.obj"));
 
-	for (int i = 0; i < this->mBoundingMeshes.size(); i++)
+	this->mDeckMeshObject.push_back(MeshObject(
+		"Bound01",
+		this->mBoundingMesh[0].GetIndexVectors(),
+		this->mBoundingMesh[0].GetVertexVectors()
+	));
+	this->mDeckMeshObject.push_back(MeshObject(
+		"Bound1",
+		this->mBoundingMesh[1].GetIndexVectors(),
+		this->mBoundingMesh[1].GetVertexVectors()
+	));
+	this->mDeckMeshObject.push_back(MeshObject(
+		"Bound2",
+		this->mBoundingMesh[2].GetIndexVectors(),
+		this->mBoundingMesh[2].GetVertexVectors()
+	));
+
+	for (int i = 0; i < this->mBoundingMesh.size(); i++)
 	{
 		std::vector<std::vector<Vertex>> &submeshList =
-			this->mBoundingMeshes[i].GetVertexVectors();
+			this->mBoundingMesh[i].GetVertexVectors();
 		for (int j = 0; j < submeshList.size(); j++)
 		{
 			this->mBoundingAABB.push_back(
@@ -400,6 +416,37 @@ bool Boat::LoadBoundingBoxes()
 			
 		}
 	}
+	return true;
+}
+
+MeshObject *Boat::GetBoundingMeshObject(int index)
+{
+	if (index < 0 || index >= this->mBoundingMeshObjects.size())
+		return nullptr;
+	return &this->mBoundingMeshObjects[index];
+}
+
+bool Boat::LoadBoatMesh()
+{
+	this->mDeckMesh.push_back(Mesh("../../Models/DeckMesh/Floor01.obj"));
+	this->mDeckMesh.push_back(Mesh("../../Models/DeckMesh/Floor1.obj"));
+	this->mDeckMesh.push_back(Mesh("../../Models/DeckMesh/Floor2.obj"));
+
+	this->mDeckMeshObject.push_back(MeshObject(
+		"Floor01",
+		this->mDeckMesh[0].GetIndexVectors(),
+		this->mDeckMesh[0].GetVertexVectors()
+	));
+	this->mDeckMeshObject.push_back(MeshObject(
+		"Floor1",
+		this->mDeckMesh[0].GetIndexVectors(),
+		this->mDeckMesh[0].GetVertexVectors()
+	));
+	this->mDeckMeshObject.push_back(MeshObject(
+		"Floor2",
+		this->mDeckMesh[0].GetIndexVectors(),
+		this->mDeckMesh[0].GetVertexVectors()
+	));
 	return true;
 }
 

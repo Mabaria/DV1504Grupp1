@@ -17,6 +17,7 @@
 #include "../UI/UIElements/Test_TextBox.h"
 
 #include "../Logic/BoatTester.h"
+#include "../../Logic/Boat/Boat.h"
 
 namespace Testing
 {
@@ -41,18 +42,10 @@ namespace Testing
 	bool testOne()
 	{
 		//! ADD YOUR OWN TESTS HERE
-		try
-		{
-			Test_Picking();
-		}
-		catch (const char *e)
-		{
-			std::cout << e << std::endl;
-		}
+		Boat boat;
+		boat.LoadBoatMesh();
+		boat.LoadBoundingBoxes();
 
-		getchar();
-		
-		Test_Text();
 		return true;
 	}
 }

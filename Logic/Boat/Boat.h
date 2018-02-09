@@ -9,6 +9,7 @@
 #include "../Eventlog/EventLog.h"
 #include "../Event/Event.h"
 #include "../../IO/Picking.h"
+#include "../../UI/UIElements/MeshObject.h"
 
 class Boat
 {
@@ -46,6 +47,11 @@ public:
 
 	// Room data specific
 	bool LoadBoundingBoxes();
+	MeshObject *GetBoundingMeshObject(int index);
+
+	// Boat mesh specific
+	bool LoadBoatMesh();
+
 	// Bounding volumes
 	//void StoreBoundings(std::vector<AABB> boundings);
 
@@ -62,9 +68,13 @@ private:
 	std::vector<Deck> mDecks;
 	std::vector<Room> mRooms;
 
-	std::vector<Mesh> mDeckMesh;
-	std::vector<Mesh> mBoundingMeshes;
+	std::vector<Mesh> mBoundingMesh;
+	std::vector<MeshObject> mBoundingMeshObjects;
 	std::vector<AABB> mBoundingAABB;
+	std::vector<Mesh> mDeckMesh;
+	std::vector<MeshObject> mDeckMeshObject;
+	//! World matrices are inside the MeshObject class
+	//std::vector<DirectX::XMMATRIX> mDeckWorldMatrix;
 
 	EventLog *mpEventLog;
 
