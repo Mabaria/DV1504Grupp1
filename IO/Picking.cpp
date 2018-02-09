@@ -78,52 +78,83 @@ void Picking::GetWorldRay(
 	rRay.direction = DirectX::XMVector4Normalize(rRay.direction);
 }
 
-bool Picking::IsRayIntersectingAABB(
+float Picking::IsRayIntersectingAABB(
 	const Ray &ray,
 	const AABB &box)
 {
 	// Initializing variables
 	DirectX::XMFLOAT3 fRayOrigin, fRayDirection;
-	float tmin, tymin, tzmin;
-	float tmax, tymax, tzmax;
+	float tXMin, tYMin, tZMin;
+	float tXMax, tYMax, tZMax;
 
 	// Storing vectors as floats instead
 	DirectX::XMStoreFloat3(&fRayOrigin, ray.origin);
 	DirectX::XMStoreFloat3(&fRayDirection, ray.direction);
 
-	// Sanity check this
-	// if (fRayDirection.x > 0.0001f)
-	tmin = (box.x.min - fRayOrigin.x) / fRayDirection.x;
-	tmax = (box.x.max - fRayOrigin.x) / fRayDirection.x;
+	tXMin = box.x.min - fRayOrigin.x;
+	tXMax = box.x.max - fRayOrigin.x;
 
-	if (tmin > tmax)
-		std::swap(tmin, tmax);
+	// Sanity check
+	if (fRayDirection.x != 0.f)
+	{
+			tXMin /= fRayDirection.x;
+			tXMax /= fRayDirection.x;
+	}
 
-	tymin = (box.y.min - fRayOrigin.y) / fRayDirection.y;
-	tymax = (box.y.max - fRayOrigin.y) / fRayDirection.y;
+	if (tXMin > tXMax)
+		std::swap(tXMin, tXMax);
 
-	if (tymin > tymax)
-		std::swap(tymin, tymax);
+	tYMin = box.y.min - fRayOrigin.y;
+	tYMax = box.y.max - fRayOrigin.y;
 
-	if ((tmin > tymax) || (tymin > tmax))
-		return false;
+	// Sanity check
+	if (fRayDirection.y != 0.f)
+	{
+		tYMin /= fRayDirection.y;
+		tYMax /= fRayDirection.y;
+	}
 
-	if (tymin > tmin)
-		tmin = tymin;
+	if (tYMin > tYMax)
+		std::swap(tYMin, tYMax);
 
-	if (tymax < tmax)
-		tmax = tymax;
+	if ((tXMin > tYMax) || (tYMin > tXMax))
+		return -1.f;
 
-	tzmin = (box.z.min - fRayOrigin.z) / fRayDirection.z;
-	tzmax = (box.z.max - fRayOrigin.z) / fRayDirection.z;
+	if (tYMin > tXMin)
+		tXMin = tYMin;
 
-	if (tzmin > tzmax)
-		std::swap(tzmin, tzmax);
+	if (tYMax < tXMax)
+		tXMax = tYMax;
 
-	if ((tmin > tzmax) || (tzmin > tmax))
-		return false;
+	tZMin = box.z.min - fRayOrigin.z;
+	tZMax = box.z.max - fRayOrigin.z;
 
-	return true;
+	// Sanity check
+	if (fRayDirection.z != 0.f)
+	{
+		tZMin /= fRayDirection.z;
+		tZMax /= fRayDirection.z;
+	}
+
+	if (tZMin > tZMax)
+		std::swap(tZMin, tZMax);
+
+	if ((tXMin > tZMax) || (tZMin > tXMax))
+		return -1.f;
+
+
+	/**
+	*	Compute the length (t) from ray origin to point of collision
+	*/
+
+	// 1. Create a vector of all tMins
+	DirectX::XMVECTOR vec = {tXMin, tYMin, tZMin};
+	
+	// 2. Get length of vec (result will be stored in all components of vec)
+	vec = DirectX::XMVector3Length(vec);
+
+	// 3. Return length of vector
+	return DirectX::XMVectorGetX(vec);
 }
 
 bool FillAABBVectorFromFile(const std::string &path, std::vector<AABB> &rList)

@@ -24,19 +24,12 @@ bool FillAABBVectorFromFile(const std::string &path, std::vector<AABB> &rList);
 namespace Picking
 {
 	void GetWorldRay (
-		const DirectX::XMMATRIX &projectionMatrix,
-		const DirectX::XMMATRIX &viewMatrix,
-		float nScreenX,
-		float nScreenY,
-		Ray &rRay);
-
-	void GetWorldRay (
 		const Camera *pCamera,
 		float nScreenX,
 		float nScreenY,
 		Ray &rRay);
 
-	bool IsRayIntersectingAABB(
+	float IsRayIntersectingAABB(
 		const Ray &ray,
 		const AABB &box);
 }

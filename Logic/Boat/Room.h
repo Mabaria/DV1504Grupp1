@@ -5,6 +5,8 @@
 #include "../Event/Event.h"
 #include "Sensor.h"
 
+#include "../../IO/Picking.h"
+
 class Room
 {
 public:
@@ -16,6 +18,8 @@ public:
 	void SetIndex(int index);
 	void SetName(std::string name);
 	std::string GetName() const;
+
+	float CheckRayCollision(Ray ray);
 
 	// Deck specific
 	void SetDeckName(std::string name);
