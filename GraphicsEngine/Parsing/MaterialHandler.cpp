@@ -72,6 +72,14 @@ float MaterialHandler::GetShininessStrength(const unsigned int materialIndex) co
 	return strength;
 }
 
+float MaterialHandler::GetOpacity(const unsigned int materialIndex) const
+{
+	float opacity = 1.0f;
+	this->mpScene->mMaterials[materialIndex]->Get(
+		AI_MATKEY_OPACITY, opacity);
+	return opacity;
+}
+
 std::string MaterialHandler::GetDiffuseTexturePath(const unsigned int materialIndex) const
 {
 	aiString texture_path;
@@ -117,12 +125,13 @@ MaterialStruct MaterialHandler::mCreateMaterialStruct(const unsigned int materia
 	aiColor3D specularC = this->GetSpecularColor(materialIndex);
 	aiColor3D ambientC = this->GetAmbientColor(materialIndex);
 	float exp = this->GetShininess(materialIndex);
+	float opacity = this->GetOpacity(materialIndex);
 	to_return =
 	{
 		diffuseC.r, diffuseC.g, diffuseC.b,
 		ambientC.r, ambientC.g, ambientC.b,
 		specularC.r, specularC.g, specularC.b,
-		exp
+		exp, opacity
 	};
 	return to_return;
 }

@@ -32,7 +32,7 @@ namespace Testing
 		//TestMesh();
 		//Test_Input();
 		//Test_Observer();*/
-		Test_Panel2D();
+		//Test_Panel2D();
 		//Todo This test crashes
 		//Test_Panel3D();
 

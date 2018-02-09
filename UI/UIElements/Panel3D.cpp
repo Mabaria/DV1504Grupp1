@@ -189,6 +189,23 @@ bool Panel3D::CreateShadersAndSetup(
 	(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	this->mDirect3D.GetContext()->IASetInputLayout(this->mpInputLayout);
 
+	D3D11_RASTERIZER_DESC rasterizer_desc =
+	{
+		D3D11_FILL_SOLID,
+		D3D11_CULL_NONE,
+		FALSE,
+		0,
+		0.0f,
+		0.0f,
+		TRUE,
+		FALSE,
+		FALSE,
+		FALSE
+	};
+	ID3D11RasterizerState *rasterizer_state;
+	this->mDirect3D.GetDevice()->CreateRasterizerState(&rasterizer_desc, &rasterizer_state);
+	this->mDirect3D.GetContext()->RSSetState(rasterizer_state);
+
 	return result;
 }
 
@@ -444,7 +461,6 @@ const void Panel3D::Draw()
 			0, 1, this->mpMeshObjects[i]->rGetTextureView()
 		);
 
-		constant_buffer = *this->mpMeshObjects[i]->rGetConstantBuffer();
 
 		// Setting the constant buffer to the vertex shader.
 		this->mDirect3D.GetContext()->VSSetConstantBuffers(

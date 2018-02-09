@@ -96,6 +96,7 @@ bool Mesh::ReadFile(const std::string &filePath)
 		aiProcess_JoinIdenticalVertices | // Removes duplicate vertices in the mesh
 		aiProcess_SortByPType | // Removes potential useless lines and points from mesh
 		aiProcess_OptimizeMeshes | // Reduces total mesh count by combining
+		aiProcess_SplitLargeMeshes | // Splits large meshes
 		aiProcess_ConvertToLeftHanded); // Flips UVs, flips winding order and 
 										// converts all right handed matrices
 										// to left handed

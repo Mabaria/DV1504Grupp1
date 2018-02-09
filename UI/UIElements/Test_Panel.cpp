@@ -175,14 +175,14 @@ void Test_Panel2D()
 
 	Mesh testMesh("../../Models/OBJTEST2.obj");
 	test3DPanel.CreateShadersAndSetup(L"../../GraphicsEngine/Test_VertexShader.hlsl", L"", L"../../GraphicsEngine/Test_PixelShader.hlsl");
-	test3DPanel.AddMeshObject("Test", testMesh.GetIndexVectors(), testMesh.GetVertexVectors(), L"");
+	//test3DPanel.AddMeshObject("Test", testMesh.GetIndexVectors(), testMesh.GetVertexVectors(), L"");
 	test3DPanel.rGetMeshObject("Test")->Scale(1.0f, 1.0f, 1.0f);
 	Camera testCamera(0.0f, 50.0f, -50.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 90.0f, 1920.0f / 1080.0f, 0.1f, 1000.0f);
 	test3DPanel.SetCamera(&testCamera);
 
 	Mesh testMesh2("../../Models/OBJTEST2.obj");
 	testHead3DPanel.CreateShadersAndSetup(L"../../GraphicsEngine/Test_VertexShader.hlsl", L"", L"../../GraphicsEngine/Test_PixelShader.hlsl");
-	testHead3DPanel.AddMeshObject("Test2", testMesh2.GetIndexVectors(), testMesh2.GetVertexVectors(), L"");
+	//testHead3DPanel.AddMeshObject("Test2", testMesh2.GetIndexVectors(), testMesh2.GetVertexVectors(), L"");
 	Camera testCamera2(0.0f, 50.0f, -50.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 90.0f, 1920.0f / 1080.0f, 0.1f, 1000.0f);
 	testHead3DPanel.SetCamera(&testCamera2);
 	// testHeadPanel.GetButtonByName("FernButton")->AddObserver(&window);
@@ -279,9 +279,9 @@ void Test_BoatOnScreen()
 
 	Quad txt(true);
 
-	top_view.AddMeshObject("Däck1", txt.GetIndices(), txt.GetVertices(), 
-		L"../../Models/Däck1.DDS"
-	);
+	//top_view.AddMeshObject("Däck1", txt.GetIndices(), txt.GetVertices(), 
+	//	L"../../Models/Däck1.DDS"
+	//);
 
 	top_view.rGetMeshObject("Däck1")->Scale		(0.4f, 0.15f, 0.15f);
 	top_view.rGetMeshObject("Däck1")->Rotate	(XM_PI / 2.0f, XM_PI / 2.0f, 0.0f);
@@ -300,17 +300,17 @@ void Test_BoatOnScreen()
 	tv.push_back(bb2.GetVertexVectors()[1]);
 
 
-	top_view.AddMeshObject("Bound2UV", ti, tv,
-		L"../../Models/BlendColor.DDS"
-	);
+	//top_view.AddMeshObject("Bound2UV", ti, tv,
+	//	L"../../Models/BlendColor.DDS"
+	//);
 	top_view.rGetMeshObject("Bound2UV")->Scale		(0.1f, 0.1f, 0.1f);
 	top_view.rGetMeshObject("Bound2UV")->Rotate		(0.0f, XM_PI, 0.0f);
 	top_view.rGetMeshObject("Bound2UV")->Translate	(0.0f, 0.0f, 0.5f);
 
 
-	side_view.AddMeshObject("Bound2UV", ti, tv,
-		L"../../Models/BlendColor.DDS"
-	);
+	//side_view.AddMeshObject("Bound2UV", ti, tv,
+	//	L"../../Models/BlendColor.DDS"
+	//);
 	side_view.rGetMeshObject("Bound2UV")->Scale(0.15f, 0.4f, 0.1f);
 	side_view.rGetMeshObject("Bound2UV")->Rotate(0.0f, XM_PI, 0.0f);
 	side_view.rGetMeshObject("Bound2UV")->Translate(0.0f, -0.2f, 0.07f);

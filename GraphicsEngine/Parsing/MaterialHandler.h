@@ -6,7 +6,8 @@ struct MaterialStruct
 	float ambientR, ambientG, ambientB;
 	float specularR, specularG, specularB;
 	float specExponent;
-	float pad0, pad1, pad2, pad3, pad4, pad5;
+	float opacity;
+	float pad0, pad1, pad2, pad3, pad4;
 };
 
 class MaterialHandler
@@ -33,6 +34,8 @@ public:
 																used for phong
 																specular shading*/
 	float GetShininessStrength(const unsigned int materialIndex) const;
+
+	float GetOpacity(const unsigned int materialIndex) const;
 
 	std::string GetDiffuseTexturePath(const unsigned int materialIndex) const;
 	//! NOTE: This function assumes there is only one texture per material.
