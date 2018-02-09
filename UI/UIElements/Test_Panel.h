@@ -8,6 +8,7 @@
 #include "../../GraphicsEngine/Window.h"
 #include "Button.h"
 #include "../../GraphicsEngine/DX/Direct2D.h"
+#include "../UIElements/NotificationList.h"
 
 void Test_Panel3D();
 void Test_Panel2D();

@@ -97,8 +97,7 @@ void Button::DrawButton()
 	{
 		this->D2D1Panel->GetpRenderTarget()->FillRectangle(
 			this->mButtonSize,
-			mpFailBrush
-		);
+			mpFailBrush);
 	}
 }
 
@@ -143,8 +142,7 @@ void Button::MoveButton(int x, int y)
 		this->mButtonSize.bottom + y,
 		this->mButtonSize.left + x,
 		this->mButtonSize.right + x,
-		this->mButtonSize.top + y
-	);
+		this->mButtonSize.top + y);
 	this->MoveIcon(x, y);
 }
 
@@ -154,8 +152,7 @@ void Button::MoveIcon(int x, int y)
 		this->mIconSize.bottom + y,
 		this->mIconSize.left + x,
 		this->mIconSize.right + x,
-		this->mIconSize.top + y
-	);
+		this->mIconSize.top + y);
 }
 
 void Button::SetButtonStatus(BUTTON_STATE buttState)

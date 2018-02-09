@@ -213,6 +213,9 @@
     <ClInclude Include="..\..\UI\UIElements\NotificationObject.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
+    <ClInclude Include="NotificationList.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BIS.cpp">
@@ -367,6 +370,9 @@
     </ClCompile>
     <ClCompile Include="..\..\UI\UIElements\NotificationObject.cpp">
       <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UI\UIElements\NotificationList.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

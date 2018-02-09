@@ -50,6 +50,7 @@
     <ClCompile Include="..\..\Logic\Timer.cpp" />
     <ClCompile Include="..\..\UI\UIElements\Button.cpp" />
     <ClCompile Include="..\..\UI\UIElements\MeshObject.cpp" />
+    <ClCompile Include="..\..\UI\UIElements\NotificationList.cpp" />
     <ClCompile Include="..\..\UI\UIElements\NotificationObject.cpp" />
     <ClCompile Include="..\..\UI\UIElements\Panel.cpp" />
     <ClCompile Include="..\..\UI\UIElements\Panel2D.cpp" />
@@ -101,6 +102,7 @@
     <ClInclude Include="..\..\UI\UIElements\Test_Panel.h" />
     <ClInclude Include="..\..\UI\UIElements\Test_TextBox.h" />
     <ClInclude Include="..\..\UI\UIElements\TextBox.h" />
+    <ClInclude Include="NotificationList.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\..\GraphicsEngine\Test_PixelShader.hlsl">
