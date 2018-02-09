@@ -50,3 +50,22 @@ int LogEvent::GetActiveEventIndex() const
 {
 	return this->mActiveEventIndex;
 }
+
+const int LogEvent::GetElapsedTime()
+{
+	return this->mTime.GetSeconds();
+}
+
+const std::string LogEvent::GetStartTimeAsString()
+{
+	return this->mTime.WhenTimerStarted();
+}
+
+const std::string LogEvent::GetElapsedTimeAsString()
+{
+	return this->mTime.GetTimeAsStr();
+}
+
+
+
+

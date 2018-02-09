@@ -24,7 +24,7 @@ private:
 	
 	// Event specific
 	std::vector<int> mEventIndices; /* Points to all events in the eventLog
-																		 that are active in the room */
+									that are active in the room */
 	// Room specific
 	int mRoomIndex;
 };
