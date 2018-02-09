@@ -365,7 +365,7 @@ void Test_BoatOnScreen()
 
 void Test_Panel2DTextBoxes()
 {
-	Mesh floor2("../../Models/Floor2.obj");
+	Mesh floor2("../../Models/Floor2Materials.obj");
 	Mesh floor1("../../Models/Floor1.obj");
 	Mesh floor01("../../Models/Floor01.obj");
 

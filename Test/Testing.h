@@ -38,6 +38,7 @@ namespace Testing
 		//Test_BoatOnScreen();
 
 		Test_Panel2DTextBoxes();
+		Test_Material_Handler();
 		return true;
 	}
 
