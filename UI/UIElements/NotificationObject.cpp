@@ -28,7 +28,7 @@ NotificationObject::NotificationObject(Room * room, LogEvent * event, Direct2D *
 		file_path += "pepehands.jpg";
 	}
 	this->mButton.CreateButton(file_path, 0, 0, 0, 0);
-	this->mTextBox.SetText(this->Get)
+	this->mTextBox.SetText(this->GetNotificationString());
 }
 
 NotificationObject::~NotificationObject()

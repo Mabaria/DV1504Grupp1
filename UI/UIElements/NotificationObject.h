@@ -25,12 +25,8 @@ public:
 	void Update();
 
 private:
-
 	Button mButton;
 	TextBox mTextBox;
-
-
-	
 	Timer *mTimer;
 
 	std::string mRoomName;
