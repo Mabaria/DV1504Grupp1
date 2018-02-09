@@ -22,6 +22,10 @@ public:
 
 	const std::string GetNotificationString() const;
 
+	const void SetPosition(int x, int y);
+	const void Move(int x, int y);
+	const void SetText(std::string text);
+
 	void Update();
 
 private:
