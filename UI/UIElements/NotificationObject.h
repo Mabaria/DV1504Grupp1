@@ -4,11 +4,14 @@
 #include "../../Logic/Timer.h"
 #include "../../Logic/Eventlog/LogEvent.h"
 #include "../../Logic/Boat/Room.h"
+#include "../../UI/UIElements/Button.h"
+#include "../../UI/UIElements/TextBox.h"
+#include "../../GraphicsEngine/DX/Direct2D.h"
 
 class NotificationObject
 {
 public:
-	NotificationObject(Room *room, LogEvent *event);
+	NotificationObject(Room *room, LogEvent *event, Direct2D *direct2d);
 	~NotificationObject();
 	
 	const Event::Type GetEventType() const;
@@ -23,6 +26,11 @@ public:
 
 private:
 
+	Button mButton;
+	TextBox mTextBox;
+
+
+	
 	Timer *mTimer;
 
 	std::string mRoomName;

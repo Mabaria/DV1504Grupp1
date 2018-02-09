@@ -1,12 +1,34 @@
 #include "NotificationObject.h"
 
-NotificationObject::NotificationObject(Room * room, LogEvent * event)
+NotificationObject::NotificationObject(Room * room, LogEvent * event, Direct2D *direct2d) : mButton(direct2d, "", 0, 0, 0, 0), mTextBox(direct2d, 0, 0, 0, 0)
 {
 	this->mTimer = event->GetTimer();
 	this->mRoomName = room->GetName();
 	this->mDeckName = room->GetDeckName();
 	this->mStartTime = this->mTimer->WhenTimerStarted();
 	this->mElapsedTime = this->mTimer->GetTimeAsStr();
+	this->mEventType = event->GetType();
+
+	std::string file_path = "../../Models/";
+	switch (this->mEventType)
+	{
+	case Event::Type::Fire:
+		file_path += "Button04.png";
+		break;
+	case Event::Type::Water:
+		file_path += "Button03.png";
+		break;
+	case Event::Type::Gas:
+		file_path += "Button02.png";
+		break;
+	case Event::Type::Injury:
+		file_path += "Button01.png";
+		break;
+	default:
+		file_path += "pepehands.jpg";
+	}
+	this->mButton.CreateButton(file_path, 0, 0, 0, 0);
+	this->mTextBox.SetText(this->Get)
 }
 
 NotificationObject::~NotificationObject()

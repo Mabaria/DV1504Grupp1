@@ -53,6 +53,7 @@ void Button::CreateButton(
 	int bottom)
 {
 	this->mButtonSize = D2D1::RectF(left, top, right, bottom);
+	this->mIconSize = this->mButtonSize;
 	this->LoadImageToBitmap(imageFilePath);
 	if (this->mBmpLoaded)
 	{	
@@ -86,7 +87,7 @@ void Button::DrawButton()
 	{
 		this->D2D1Panel->GetpRenderTarget()->DrawBitmap(
 			this->mpBitMap,
-			this->mButtonSize,
+			this->mIconSize,
 			this->mOpacity,
 			D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,
 			this->mBitmapRenderSize);
@@ -129,6 +130,11 @@ void Button::SetButtonsize(int left, int top, int right, int bottom)
 void Button::SetBitmapRendersize(int left, int top, int right, int bottom)
 {
 	this->mBitmapRenderSize = D2D1::RectF(left, top, right, bottom);
+}
+
+void Button::SetIconSize(int left, int top, int right, int bottom)
+{
+	this->mIconSize = D2D1::RectF(left, top, right, bottom);
 }
 
 void Button::SetButtonStatus(BUTTON_STATE buttState)

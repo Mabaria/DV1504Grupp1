@@ -37,6 +37,7 @@ public:
 	const D2D1_RECT_F GetBoundingBoxPercentage() const;
 	void SetButtonsize(int left, int top, int right, int bottom);
 	void SetBitmapRendersize(int left, int top, int right, int bottom);
+	void SetIconSize(int left, int top, int right, int bottom);
 	void SetButtonStatus(BUTTON_STATE buttState);
 	void LoadImageToBitmap(std::string imageFilePath);
 	BUTTON_STATE GetButtState() const;
@@ -46,6 +47,8 @@ private:
 	ID2D1Bitmap *mpBitMap;
 	std::string mFilePath;
 	D2D1_RECT_F mButtonSize; // left, top, right, bottom
+
+	D2D1_RECT_F mIconSize;
 
 	// how much of the bitmap the button is gonna show!
 	D2D1_RECT_F mBitmapRenderSize;
