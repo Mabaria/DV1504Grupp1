@@ -15,7 +15,8 @@ void Test_Material_Handler()
 
 	MeshObject mat_test_boat_object("Cube", &material_test_boat);
 	MeshObject mixbag_object("Mixbag", &mixbag);
-	mixbag_object.Scale(0.1f, 0.1f, 0.1f);
+	mixbag_object.Scale(0.2f, 0.2f, 0.2f);
+	mixbag_object.Translate(-30.0f, -10.0f, 0.0f);
 
 	mat_test_boat_object.Scale(50.5, 50.5, 50.5);
 	//mat_test_boat_object.Rotate(0.0f, 0.00f, 3.14f);
@@ -76,27 +77,27 @@ void Test_Material_Handler()
 
 		if (Keyboard::IsKeyDown(Keys::W))
 		{
-			camera.MoveCamera(0.0f, 0.0f, 1.0f, speed);
+			camera2.MoveCamera(0.0f, 0.0f, 1.0f, speed);
 		}
 		else if (Keyboard::IsKeyDown(Keys::S))
 		{
-			camera.MoveCamera(0.0f, 0.0f, -1.0f, speed);
+			camera2.MoveCamera(0.0f, 0.0f, -1.0f, speed);
 		}
 		else if (Keyboard::IsKeyDown(Keys::D))
 		{
-			camera.MoveCamera(1.0f, 0.0f, 0.0f, speed);
+			camera2.MoveCamera(1.0f, 0.0f, 0.0f, speed);
 		}
 		else if (Keyboard::IsKeyDown(Keys::A))
 		{
-			camera.MoveCamera(-1.0f, 0.0f, 0.0f, speed);
+			camera2.MoveCamera(-1.0f, 0.0f, 0.0f, speed);
 		}
 		else if (Keyboard::IsKeyDown(Keys::Space))
 		{
-			camera.MoveCamera(0.0f, 1.0f, 0.0f, speed);
+			camera2.MoveCamera(0.0f, 1.0f, 0.0f, speed);
 		}
 		else if (Keyboard::IsKeyDown(Keys::Shift))
 		{
-			camera.MoveCamera(0.0f, -1.0f, 0.0f, speed);
+			camera2.MoveCamera(0.0f, -1.0f, 0.0f, speed);
 		}
 
 		if (Keyboard::IsKeyPressed(Keys::Esc))
