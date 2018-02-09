@@ -491,14 +491,14 @@ void Test_Panel2DTextBoxes()
 	test_room2.SetDeckName("testdeck2");
 
 	LogEvent test_event2;
-	test_event2.SetType(Event::Fire);
+	test_event2.SetType(Event::Water);
 	
 	Room test_room3;
 	test_room3.SetName("testroom3");
 	test_room3.SetDeckName("testdeck3");
 
 	LogEvent test_event3;
-	test_event3.SetType(Event::Fire);
+	test_event3.SetType(Event::Gas);
 
 	log_panel.SetNotificationList(30, 0);
 	log_panel.AddNotification(&test_room, &test_event);
