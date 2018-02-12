@@ -23,21 +23,22 @@ NotificationObject::NotificationObject(
 	object_size.top = 0;
 	object_size.left = 0;
 	object_size.right = render_target_size.width;
-	object_size.bottom = render_target_size.height / 15;
+	object_size.bottom = render_target_size.height / 11;
+	direct2d->SetFontSize(12.5f);
 
 	// 40x40 pixel icon.
 	D2D1_RECT_F icon_size;
 	icon_size.top = 5;
-	icon_size.left = render_target_size.width / 20;
-	icon_size.right = render_target_size.width / 4;
+	icon_size.left = 5;
+	icon_size.right = object_size.bottom - 5;
 	icon_size.bottom = object_size.bottom - 5;
 
 	// 150x80 text box.
 	D2D1_RECT_F textbox_size;
-	textbox_size.top = icon_size.top;
+	textbox_size.top = icon_size.top + 13;
 	textbox_size.left = icon_size.right + 5;
 	textbox_size.right = 19 * render_target_size.width / 20;
-	textbox_size.bottom = object_size.bottom * 3 / 4;
+	textbox_size.bottom = object_size.bottom;
 
 	std::string file_path = "../../Models/";
 	switch (this->mEventType)
@@ -82,7 +83,6 @@ NotificationObject::NotificationObject(
 
 	this->mTextBox.SetText(this->GetNotificationString());
 	this->mButton.SetButtonStatus(BUTTON_STATE::IDLE);
-
 }
 
 NotificationObject::~NotificationObject()
@@ -119,12 +119,12 @@ const std::string NotificationObject::GetNotificationString() const
 	std::string return_string = "";
 	return_string += Event::GetString(this->mEventType);
 	return_string += " ";
-	return_string += this->mDeckName;
-	return_string += "\n";
-	return_string += this->mRoomName;
-	return_string += " ";
 	return_string += this->mElapsedTime;
-
+	return_string += "\n";
+	return_string += this->mDeckName;
+	return_string += " ";
+	return_string += this->mRoomName;
+	
 	return return_string;
 }
 
@@ -164,6 +164,7 @@ void NotificationObject::Update()
 
 void NotificationObject::Draw()
 {
+	this->mButton.DrawRect();
 	this->mTextBox.DrawTextBox();
 	this->mButton.DrawButton();
 }

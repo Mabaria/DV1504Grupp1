@@ -480,30 +480,44 @@ void Test_Panel2DTextBoxes()
 
 	//! ACTIVE LOG HERE
 	Room test_room;
-	test_room.SetName("testroom");
-	test_room.SetDeckName("testdeck");
+	test_room.SetName("Hjälpmaskinrum");
+	test_room.SetDeckName("Trossdäck");
 
 	LogEvent test_event;
 	test_event.SetType(Event::Fire);
 	
 	Room test_room2;
-	test_room2.SetName("testroom2");
-	test_room2.SetDeckName("testdeck2");
+	test_room2.SetName("SkyC");
+	test_room2.SetDeckName("Bryggdäck");
 
 	LogEvent test_event2;
 	test_event2.SetType(Event::Water);
 	
 	Room test_room3;
-	test_room3.SetName("testroom3");
-	test_room3.SetDeckName("testdeck3");
+	test_room3.SetName("Omformarrum");
+	test_room3.SetDeckName("Huvuddäck");
 
 	LogEvent test_event3;
 	test_event3.SetType(Event::Gas);
+
+	Room test_room4;
+	test_room4.SetName("Ammdurk");
+	test_room4.SetDeckName("Trossdäck");
+
+	LogEvent test_event4;
+	test_event4.SetType(Event::Injury);
 
 	log_panel.SetNotificationList(30, 0);
 	log_panel.AddNotification(&test_room, &test_event);
 	log_panel.AddNotification(&test_room2, &test_event2);
 	log_panel.AddNotification(&test_room3, &test_event3);
+	log_panel.AddNotification(&test_room, &test_event);
+	log_panel.AddNotification(&test_room2, &test_event2);
+	log_panel.AddNotification(&test_room3, &test_event3);
+	log_panel.AddNotification(&test_room, &test_event);
+	log_panel.AddNotification(&test_room2, &test_event2);
+	log_panel.AddNotification(&test_room3, &test_event3);
+	log_panel.AddNotification(&test_room4, &test_event4);
 
 
 	float speed = 0.1f;
