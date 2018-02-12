@@ -2,7 +2,13 @@
 #include "../../IO/Mouse.h"
 #include <string>
 
-Panel2D::Panel2D(int width, int height, int top, int left, HWND handle, LPCTSTR title)
+Panel2D::Panel2D(
+	int width, 
+	int height, 
+	int top, 
+	int left, 
+	HWND handle, 
+	LPCTSTR title)
 	:Panel(width, height, top, left, handle, title)
 {
 	this->mDirect2D = new Direct2D(mPanelWindow, width, height);
@@ -149,7 +155,10 @@ void Panel2D::SetTextBoxFontSize(int fontSize)
 
 void Panel2D::SetNotificationList(int posX, int posY)
 {
-	this->mNotificationList = new NotificationList(this->mDirect2D, posX, posY);
+	this->mNotificationList = new NotificationList(
+		this->mDirect2D, 
+		posX, 
+		posY);
 	this->mNotificationListIsActive = true;
 }
 
@@ -313,7 +322,10 @@ void Panel2D::mUpdateButtons()
 				i < this->mNotificationList->GetNumberOfNotificationObjects();
 				i++)
 			{
-				this->mNotificationList->GetNotificationObjectByIndex(i)->GetButton()->SetRectStatus(BUTTON_STATE::IDLE);
+				this->mNotificationList->
+					GetNotificationObjectByIndex(i)->
+					GetButton()->
+					SetRectStatus(BUTTON_STATE::IDLE);
 			}
 		}
 	}

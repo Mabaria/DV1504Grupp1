@@ -131,14 +131,14 @@ Button * NotificationObject::GetButton()
 
 const int NotificationObject::GetWidth() const
 {
-	return (int)this->mButton.GetButtonsize().right 
-		-  (int)this->mButton.GetButtonsize().left;
+	return (int)this->mButton.GetButtonSize().right 
+		-  (int)this->mButton.GetButtonSize().left;
 }
 
 const int NotificationObject::GetHeight() const
 {
-	return (int)this->mButton.GetButtonsize().bottom
-		-  (int)this->mButton.GetButtonsize().top;
+	return (int)this->mButton.GetButtonSize().bottom
+		-  (int)this->mButton.GetButtonSize().top;
 }
 
 const void NotificationObject::Move(int x, int y)

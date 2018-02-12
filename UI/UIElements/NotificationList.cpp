@@ -140,12 +140,12 @@ void NotificationList::UpdateBorders()
 	this->mListTop = (int)
 		this->mObjects.front()->
 		GetButton()->
-		GetButtonsize().
+		GetButtonSize().
 		top;
 	this->mListBottom = (int)
 		this->mObjects.back()->
 		GetButton()->
-		GetButtonsize().
+		GetButtonSize().
 		bottom;
 }
 
