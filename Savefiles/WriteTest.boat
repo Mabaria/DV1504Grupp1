@@ -1,0 +1,31 @@
+boatmodel Testskepp
+
+// d <<deck name>> <<offset>> <<count>>
+// r <<deck name>> / <<room name>> / sensor <<room event index>>
+
+d Bryggdäck
+r Trossdäck / Ammdurk / sensor -1 { 0 2 }
+r Trossdäck / Lastrum / sensor -1 { 0 2 }
+r Trossdäck / Maskinrum / sensor -1 { 0 2 }
+
+d Huvuddäck
+r Trossdäck / Ammdurk / sensor -1 { 0 2 }
+r Trossdäck / Lastrum / sensor -1 { 0 2 }
+r Trossdäck / Maskinrum / sensor -1 { 0 2 }
+r Trossdäck / MC / sensor -1 { 0 2 }
+r Trossdäck / Gång1 / sensor -1 { 0 2 }
+r Trossdäck / Apparatrum / sensor -1 { 0 2 }
+
+d Trossdäck
+r Trossdäck / Ammdurk / sensor -1 { 0 2 }
+r Trossdäck / Lastrum / sensor -1 { 0 2 }
+r Trossdäck / Maskinrum / sensor -1 { 0 2 }
+r Trossdäck / MC / sensor -1 { 0 2 }
+r Trossdäck / Gång1 / sensor -1 { 0 2 }
+r Trossdäck / Apparatrum / sensor -1 { 0 2 }
+r Trossdäck / Gång2 / sensor -1 { 0 2 }
+r Trossdäck / Hjälpmaskinrum / sensor -1 { 0 2 }
+r Trossdäck / Byssa / sensor -1 { 0 2 }
+r Trossdäck / SB Mäss / sensor -1 { 0 2 }
+r Trossdäck / Skyddsrum / sensor -1 { 0 2 }
+

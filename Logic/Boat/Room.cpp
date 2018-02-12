@@ -95,7 +95,8 @@ int Room::GetActiveEventIndex() const
 std::string Room::WriteString() const
 {
 	std::string print = "";
-	print += "r#" + std::to_string(this->mIndex) + " ";
+
+	print += "r ";
 	print += this->mDeckName;
 	print += " / ";
 	print += this->mName;

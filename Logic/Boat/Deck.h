@@ -22,7 +22,7 @@ public:
 	std::string GetName() const;
 
 	// Room specific
-	void AddRoom(); // Increases room counter
+	void AddRoom(Room *pRoom, int index = -1);
 	void SetRoomCount(int count);
 	void SetRoomOffset(int index);
 	void PushRoomOffset(int value = 1);
@@ -41,4 +41,5 @@ private:
 	// Room specific
 	int mRoomCount;
 	int mRoomOffset;
+	std::vector<Room*> mRooms;
 };

@@ -1,5 +1,10 @@
 #include "Boat.h"
 
+/**
+*	TODO
+*		Varje deck läses in för sig, där deras rum raddas upp efter däcknamnet. Fixa ReadFile för room-line.
+*/
+
 Boat::Boat()
 {
 	this->mpEventLog = nullptr;
@@ -28,7 +33,7 @@ void Boat::SetModelName(std::string name)
 
 
 /**
-*	Build boat structure
+*	Deck specific
 */
 
 void Boat::AddDeck(std::string name)
@@ -43,6 +48,22 @@ void Boat::AddDeck(std::string name)
 
 	this->mDecks.push_back(newDeck);
 }
+
+Deck* Boat::GetDeckPointer(std::string name)
+{
+	int index = this->GetDeckIndex(name);
+
+	if (index != -1)
+		return &this->mDecks[index];
+
+	return nullptr;
+}
+
+
+
+/**
+* Room specific
+*/
 
 void Boat::AddRoom(std::string roomName,
 	std::string deckName,
@@ -78,19 +99,23 @@ void Boat::AddRoom(std::string roomName,
 			}
 
 			this->mRooms.insert(this->mRooms.begin() + offset, newRoom);
-			this->mDecks[i].AddRoom();
-
-			// Add +1 to remaining decks offset after this deck, if any
-			for (int j = i+1; j < (int)this->mDecks.size(); j++)
-			{
-				this->mDecks[j].PushRoomOffset(); // Push 1 step to the right
-			}
+			this->mDecks[i].AddRoom(&this->mRooms[offset]);
 
 			return;
 		}
 	}
 
 	throw("Deck '" + deckName + "' not found");
+}
+
+Room* Boat::GetRoomPointer(std::string roomName, std::string deckName)
+{
+	int index = this->GetRoomIndex(roomName, deckName);
+
+	if (index != -1)
+		return &this->mRooms[index];
+
+	return nullptr;
 }
 
 
@@ -153,19 +178,22 @@ void Boat::WriteFile(std::string filePath)
 
 	file << "\n"; // Space
 	
-	file << "// d#index <<deck name>> <<offset>> <<count>>" << "\n";
-	file << "deckcount " << this->mDecks.size() << "\n";
+	file << "// d <<deck name>> <<offset>> <<count>>" << "\n";
+	file << "// r <<room name>> / sensor <<room event index>>" << "\n\n";
 
 	for (int i = 0; i < (int)this->mDecks.size(); i++)
-		file << this->mDecks[i].GetString() << "\n";
-
-	file << "\n"; // Space
-
-	file << "// r#index <<deck name>> / <<room name>> / sensor <<room event index>>" << "\n";
-	file << "roomcount " << this->mRooms.size() << "\n";
-	for (int i = 0; i < (int)this->mRooms.size(); i++)
 	{
-		file << this->mRooms[i].WriteString() << "\n";
+		Deck *pDeck = &this->mDecks[i];
+		file << pDeck->GetString() << "\n";
+
+		for (int j = pDeck->GetRoomOffset();
+			j < pDeck->GetRoomOffset() + pDeck->GetRoomCount();
+			j++)
+		{
+			file << this->mRooms[j].WriteString() << "\n";
+		}
+
+		file << "\n"; // Space
 	}
 
 	file.close();
@@ -266,100 +294,99 @@ bool Boat::ReadFile(std::string filePath)
 					buffer.str(line);	// Fill buffer with line
 					buffer >> word;
 
-					if (word[1] == '#') // room line
+					Room newRoom;
+
+					std::string roomName;
+					std::string deckName;
+
+					/**
+					*	Get index
+					*/
+					std::stringstream intParse;
+					for (int i = 2; i < (int)word.size(); i++)
 					{
-						Room newRoom;
+					intParse << word[i];
+					}
+					intParse >> number;
 
-						/**
-						*	Get index
-						*/
-						std::stringstream intParse;
-						for (int i = 2; i < (int)word.size(); i++)
-						{
-							intParse << word[i];
-						}
-						intParse >> number;
+					newRoom.SetIndex(number);
+					
+					/**
+					*	Get deck name
+					*/
+					buffer >> word; // Deck name
+					newRoom.SetDeckName(word);
+					deckName = word;
+					
+					int deckIndex = this->GetDeckIndex(word);
 
-						newRoom.SetIndex(number);
-						
-						/**
-						*	Get deck name
-						*/
-						buffer >> word; // Deck name
-						newRoom.SetDeckName(word);
-						
-						int deckIndex = this->GetDeckIndex(word);
+					// (Reads in automaticaly from file)
+					//this->mDecks[deckIndex].AddRoom();
+					//for (int i = deckIndex; i < this->mDecks.size(); i++)
+					//{
+					//	this->mDecks[i].PushRoomOffset();
+					//}
 
-						// (Reads in automaticaly from file)
-						//this->mDecks[deckIndex].AddRoom();
-						//for (int i = deckIndex; i < this->mDecks.size(); i++)
-						//{
-						//	this->mDecks[i].PushRoomOffset();
-						//}
+					/**
+					*	Get room name
+					*/
+					buffer >> word;	// Get rid of '/'
 
-						/**
-						*	Get room name
-						*/
-						buffer >> word;	// Get rid of '/'
+					std::string tempName = "";
 
-						std::string tempName = "";
+					buffer >> word;
 
-						buffer >> word;
+					while (word != "/")
+					{
+					if (tempName != "")
+					tempName += " ";
+					tempName +=	word;
 
-						while (word != "/")
-						{
-							if (tempName != "")
-								tempName += " ";
-							tempName +=	word;
-
-							buffer >> word;
-						}
-
-						newRoom.SetName(tempName);
-
-						/**
-						*	Get sensor data
-						*/
-						buffer >> word; // 'sensor'
-						buffer >> number;	// roomEventIndex
-						newRoom.SetActiveEventIndex(number);
-
-						buffer >> word; // Get rid of '{'
-
-						while (buffer >> word)
-						{
-							if (word != "}")
-							{
-								number = std::stoi(word);
-								newRoom.AddInputType((Event::Type)number); // Cast int to enum
-							}
-							else	// word == '}'
-								break;
-						}
-
-						/**
-						*	Give the room an eventlog pointer, if possible
-						*/
-						if (this->mpEventLog != nullptr)
-							newRoom.SetEventLog(this->mpEventLog);
-
-						/**
-						*	Insert room into list
-						*/
-						this->mRooms.push_back(newRoom);
+					buffer >> word;
 					}
 
-					else if (word[1] == 'o')
-					{
-						if (buffer >> number)
-							this->mRooms.reserve(number);
-						else
-							throw ("Number missing after 'roomcount'.");
+					newRoom.SetName(tempName);
+					roomName = tempName;
 
+					/**
+					*	Get sensor data
+					*/
+					buffer >> word; // 'sensor'
+					buffer >> number;	// roomEventIndex
+					newRoom.SetActiveEventIndex(number);
+
+					buffer >> word; // Get rid of '{'
+
+					while (buffer >> word)
+					{
+					if (word != "}")
+					{
+					number = std::stoi(word);
+					newRoom.AddInputType((Event::Type)number); // Cast int to enum
 					}
+					else	// word == '}'
+					break;
+					}
+
+					/**
+					*	Give the room an eventlog pointer, if possible
+					*/
+					if (this->mpEventLog != nullptr)
+					newRoom.SetEventLog(this->mpEventLog);
+
+					/**
+					*	Insert room into list
+					*/
+					this->mRooms.push_back(newRoom);
+
+					/**
+					*	Send room pointer to deck
+					*/
+					Deck* deck = &this->mDecks[deckIndex];
+					// TODO
+					int roomDeckIndex = deck->GetRoomCount();
+
 					break; // End case 'r'
-
-
 
 				default: // Comments
 					break;

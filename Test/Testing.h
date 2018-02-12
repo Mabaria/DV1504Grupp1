@@ -45,7 +45,7 @@ namespace Testing
 		//! ADD YOUR OWN TESTS HERE
 		try
 		{
-			Test_Picking();
+			BoatTester::WriteTest();
 		}
 		catch (const char *e)
 		{
@@ -54,7 +54,6 @@ namespace Testing
 
 		getchar();
 		
-		Test_Text();
 		return true;
 	}
 }

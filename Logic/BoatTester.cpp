@@ -1,5 +1,26 @@
 #include "BoatTester.h"
 
+void BoatTester::WriteTest()
+{
+	EventLog *pEventLog;
+	Boat *pBoat;
+
+	pEventLog = new EventLog;
+
+	/**
+	*	Create boat
+	*/
+	pBoat = CreateBoat(pEventLog);
+
+	/**
+	*	Write boat to file
+	*/
+	WriteFile(pBoat, "../../SaveFiles/WriteTest.boat");
+
+	delete pBoat;
+	delete pEventLog;
+}
+
 void BoatTester::TestBoat()
 {
 	EventLog *pEventLog;

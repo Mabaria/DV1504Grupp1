@@ -22,12 +22,14 @@ public:
 
 	// Deck specific
 	void AddDeck(std::string name);
+	Deck* GetDeckPointer(std::string name);
 
 	// Room specific
 	//void AddRoom(std::string roomName, std::string deckName);
 	void AddRoom(std::string roomName,
 		std::string deckName,
 		std::vector<Event::Type> inputs);
+	Room* GetRoomPointer(std::string roomName, std::string deckName);
 
 	// Log specific
 	void SetEventLog(EventLog *pEventLog);

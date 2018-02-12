@@ -37,8 +37,13 @@ std::string Deck::GetName() const
 *	Room specific
 */
 
-void Deck::AddRoom()
+void Deck::AddRoom(Room *pRoom, int index)
 {
+	if (index == -1)
+		this->mRooms.push_back(pRoom);
+	else
+		this->mRooms.insert(this->mRooms.begin() + index, pRoom);
+
 	this->mRoomCount++;
 }
 
@@ -77,10 +82,8 @@ std::string Deck::GetString() const
 {
 	std::string print = "";
 
-	print += "d#" + std::to_string(this->mIndex) + " ";
-	print += this->mName + " ";
-	print += std::to_string(this->mRoomOffset) + " ";
-	print += std::to_string(this->mRoomCount);
+	print += "d ";
+	print += this->mName;
 
 	return print;
 }
