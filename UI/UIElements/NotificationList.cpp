@@ -22,7 +22,7 @@ void NotificationList::AddNotification(
 	this->mObjects.push_back(new NotificationObject(room, event, direct2d));
 	this->mObjects.back()->Move(
 		10, 
-		(this->mObjects.size() - 1) * 80);
+		(this->mObjects.size() - 1) * this->mObjects[0]->GetHeight());
 }
 
 bool NotificationList::RemoveNotification(Room * room, LogEvent * event)

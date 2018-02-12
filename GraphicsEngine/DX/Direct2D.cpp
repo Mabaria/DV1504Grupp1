@@ -66,6 +66,10 @@ void Direct2D::CreateRenderTarget(
 			window,
 			D2D1::SizeU(width, height)),
 		&this->mpRenderTarget);
+	this->mpRenderTarget->SetAntialiasMode
+	(D2D1_ANTIALIAS_MODE_ALIASED);
+	this->mpRenderTarget->SetTextAntialiasMode
+	(D2D1_TEXT_ANTIALIAS_MODE_ALIASED);
 }
 
 IWICFormatConverter *Direct2D::GetpFormatConverter()
