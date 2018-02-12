@@ -72,6 +72,12 @@ float4 main(PS_IN input) : SV_TARGET
 				)
 			{
 				ambient = GetEvent(events[i]);
+				if (input.tex.x < 0.05f || input.tex.y < 0.05f
+					|| input.tex.x > 0.95f || input.tex.y > 0.95f)
+				{
+					ambient = ambient * 0.0f;
+					alpha = 0.75f;
+				}
 				break;
 			}
 		}

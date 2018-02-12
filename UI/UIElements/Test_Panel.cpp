@@ -307,7 +307,7 @@ void Test_BoatOnScreen()
 	top_view.rGetMeshObject("Bound2UV")->Rotate		(0.0f, XM_PI, 0.0f);
 	top_view.rGetMeshObject("Bound2UV")->Translate	(0.0f, 0.0f, 0.5f);
 
-	EventData data = { 2.0f, 3.0f, 4.0f, 1.0f };
+	EventData data = { 1.0f, 3.0f, 0.0f, 0.0f };
 	top_view.rGetMeshObject("Bound2UV")->SetEvent(
 		data, top_view.rGetDirect3D().GetContext()
 	);
