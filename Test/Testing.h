@@ -43,18 +43,9 @@ namespace Testing
 	bool testOne()
 	{
 		//! ADD YOUR OWN TESTS HERE
-		try
-		{
-			Test_Picking();
-		}
-		catch (const char *e)
-		{
-			std::cout << e << std::endl;
-		}
-
-		getchar();
 		
-		Test_Text();
+		TestCameraMovementOrtographic();
+
 		return true;
 	}
 }

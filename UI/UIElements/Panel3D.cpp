@@ -369,6 +369,12 @@ const void Panel3D::Update()
 			&this->mpProjBuffer);
 	}
 	this->UpdateWindowSize();
+
+	// Camera movement
+	if (this->mIsMouseInsidePanel())
+	{
+
+	}
 }
 
 const void Panel3D::Draw()
