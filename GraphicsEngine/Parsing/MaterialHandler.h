@@ -24,7 +24,7 @@ public:
 
 	~MaterialHandler();
 
-	bool SetMaterialStruct(const MaterialStruct &newStruct,
+	void SetMaterialStruct(const MaterialStruct &newStruct,
 		const unsigned int materialIndex);
 
 

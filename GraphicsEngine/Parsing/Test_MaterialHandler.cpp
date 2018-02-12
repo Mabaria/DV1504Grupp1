@@ -29,6 +29,18 @@ void Test_Material_Handler()
 	mat_test_boat_object.pGetMaterialHandler()->GetAmbientColor(
 		material_test_boat.GetSubmeshMaterialIndex(0));
 
+	MaterialStruct testMaterial =
+	{
+		1.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.0f,
+		0.0f, 0.0f, 0.0f,
+		1.0f,
+		1.0f
+	};
+
+	mat_test_boat_object.pGetMaterialHandler()->SetMaterialStruct(testMaterial, 0);
+	mat_test_boat_object.pGetMaterialHandler()->SetMaterialStruct(testMaterial, 2);
+
 	std::wstring window_name = L"Demo_BIS";
 
 	Window window(window_name, 1280, 720);

@@ -16,7 +16,7 @@ MaterialHandler::~MaterialHandler()
 {
 }
 
-bool MaterialHandler::SetMaterialStruct(const MaterialStruct & newStruct, const unsigned int materialIndex)
+void MaterialHandler::SetMaterialStruct(const MaterialStruct & newStruct, const unsigned int materialIndex)
 {
 	if (materialIndex >= this->mNumberOfMaterials)
 	{
