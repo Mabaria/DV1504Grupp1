@@ -30,6 +30,7 @@ public:
 		int right,
 		int bottom);
 	void DrawButton();
+	void DrawRect();
 
 	ID2D1Bitmap* getBitmapPointer();
 	const D2D1_RECT_F GetButtonsize() const;
@@ -62,6 +63,7 @@ private:
 	float mOpacity;
 	bool mBmpLoaded;
 	ID2D1SolidColorBrush* mpFailBrush;
+	ID2D1SolidColorBrush* mpRectBrush;
 	BUTTON_STATE mCurrState;
 	void ReleaseCOM(IUnknown *object);
 	void mUpdateBoundingBox();

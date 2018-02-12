@@ -18,6 +18,7 @@ Button::Button(
 	this->mOpacity = 1.0f;
 	this->mBmpLoaded = false;
 	this->mpFailBrush = nullptr;
+	this->mpRectBrush = nullptr;
 	this->D2D1Panel = D2D1Panel;
 	this->mCurrState = BUTTON_STATE::RESET;
 	
@@ -52,6 +53,9 @@ void Button::CreateButton(
 	int right, 
 	int bottom)
 {
+	this->D2D1Panel->GetpRenderTarget()->CreateSolidColorBrush(
+		D2D1::ColorF(D2D1::ColorF::Black),
+		&this->mpRectBrush);
 	this->mButtonSize = D2D1::RectF(
 		(float)left, 
 		(float)top, 
@@ -96,6 +100,14 @@ void Button::DrawButton()
 			this->mButtonSize,
 			mpFailBrush);
 	}
+}
+
+void Button::DrawRect()
+{
+	this->D2D1Panel->GetpRenderTarget()->DrawRectangle(
+		this->mButtonSize,
+		this->mpRectBrush
+	);
 }
 
 ID2D1Bitmap* Button::getBitmapPointer()
