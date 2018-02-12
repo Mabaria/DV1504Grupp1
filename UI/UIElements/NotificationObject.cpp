@@ -16,12 +16,14 @@ NotificationObject::NotificationObject(
 	
 	D2D1_SIZE_F render_target_size = direct2d->GetpRenderTarget()->GetSize();
 	
+	
+
 	// 200x80 notification object.
 	D2D1_RECT_F object_size;
 	object_size.top = 0;
 	object_size.left = 0;
 	object_size.right = render_target_size.width;
-	object_size.bottom = render_target_size.height / 20;
+	object_size.bottom = render_target_size.height / 15;
 
 	// 40x40 pixel icon.
 	D2D1_RECT_F icon_size;
@@ -33,7 +35,7 @@ NotificationObject::NotificationObject(
 	// 150x80 text box.
 	D2D1_RECT_F textbox_size;
 	textbox_size.top = icon_size.top;
-	textbox_size.left = icon_size.right;
+	textbox_size.left = icon_size.right + 5;
 	textbox_size.right = 19 * render_target_size.width / 20;
 	textbox_size.bottom = object_size.bottom * 3 / 4;
 
@@ -118,7 +120,7 @@ const std::string NotificationObject::GetNotificationString() const
 	return_string += Event::GetString(this->mEventType);
 	return_string += " ";
 	return_string += this->mDeckName;
-	return_string += " ";
+	return_string += "\n";
 	return_string += this->mRoomName;
 	return_string += " ";
 	return_string += this->mElapsedTime;
