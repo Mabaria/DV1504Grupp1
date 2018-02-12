@@ -319,23 +319,28 @@ void Test_BoatOnScreen()
 		data, top_view.rGetDirect3D().GetContext(), 1
 	);
 
-	data = { 3.0f, 4.0f, 0.0f, 0.0f };
+	data = { 3.0f, 4.0f, 2.0f, 1.0f };
 	top_view.rGetMeshObject("Bound2UV")->SetEvent(
 		data, top_view.rGetDirect3D().GetContext(), 0
 	);
 
 	//// -- side view ---
 
-	//side_view.AddMeshObject("Bound2UV", ti, tv,
-	//	L"../../Models/BlendColor.DDS", true
-	//);
-	//side_view.rGetMeshObject("Bound2UV")->Scale(0.15f, 0.4f, 0.1f);
-	//side_view.rGetMeshObject("Bound2UV")->Rotate(0.0f, XM_PI, 0.0f);
-	//side_view.rGetMeshObject("Bound2UV")->Translate(0.0f, -0.2f, 0.07f);
+	side_view.AddMeshObject(&bb2_object,
+		L"../../Models/BlendColor.DDS", true
+	);
+	side_view.rGetMeshObject("Bound2UV")->Scale(0.15f, 0.4f, 0.1f);
+	side_view.rGetMeshObject("Bound2UV")->Rotate(0.0f, XM_PI, 0.0f);
+	side_view.rGetMeshObject("Bound2UV")->Translate(0.0f, -0.2f, 0.07f);
 
-	//side_view.rGetMeshObject("Bound2UV")->SetEvent(
-	//	data, side_view.rGetDirect3D().GetContext()
-	//);
+	data = { 1.0f, 3.0f, 0.0f, 0.0f };
+	side_view.rGetMeshObject("Bound2UV")->SetEvent(
+		data, side_view.rGetDirect3D().GetContext(), 2
+	);
+
+	side_view.rGetMeshObject("Bound2UV")->SetEvent(
+		data, side_view.rGetDirect3D().GetContext(), 1
+	);
 
 	//// --- new event in different room
 

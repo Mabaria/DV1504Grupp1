@@ -86,8 +86,9 @@ if (Are_there_active_events)
 			if (input.tex.x < 0.05f || input.tex.y < 0.05f
 				|| input.tex.x > 0.95f || input.tex.y > 0.95f)
 			{
-				ambient = ambient * 0.0f;
-				alpha = 0.75f;
+				ambient = ambient * 0.2f;
+				diffuse = diffuse * 0.0f;
+				alpha = 1.0f;
 			}
 			break;
 		}
