@@ -28,7 +28,9 @@ public:
 		std::string name,
 		std::vector<std::vector<unsigned int>> indices, 
 		std::vector<std::vector<Vertex>> vertices,
-		std::wstring texturePath);
+		std::wstring texturePath,
+		bool use_event);
+
 	const void AddMeshObject(MeshObject *meshObject);
 
 	// Pass through for the create shader function in D3D11,

@@ -7,7 +7,7 @@ std::string Event::GetString(Event::Type type)
 		case Fire:
 			return "Eldsvåda";
 		case Water:
-			return "Vatteninträngning";
+			return "Vattenläcka";
 		case Gas:
 			return "Kontaminering";
 		case Injury:

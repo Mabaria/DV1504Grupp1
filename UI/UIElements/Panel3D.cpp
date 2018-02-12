@@ -110,7 +110,8 @@ const void Panel3D::AddMeshObject(
 	std::string name,
 	std::vector<std::vector<unsigned int>> indices, 
 	std::vector<std::vector<Vertex>> vertices,
-	std::wstring texturePath)
+	std::wstring texturePath,
+	bool use_event)
 {
 	MeshObject *mesh_object = new MeshObject(name, indices, vertices);
 	this->mpMeshObjects.push_back(mesh_object);
@@ -123,9 +124,30 @@ const void Panel3D::AddMeshObject(
 	this->CreateConstantBuffer(
 		this->mpMeshObjects.back()->rGetModelMatrix(), 
 		this->mpMeshObjects.back()->rGetConstantBuffer());
+
 	if (texturePath != L"")
 	{
 		this->CreateTexture(texturePath);
+	}
+
+	if (use_event)
+	{
+		EventData data = { 0 };
+
+		D3D11_BUFFER_DESC event_desc = { 0 };
+		event_desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		event_desc.ByteWidth = sizeof(EventData);
+		event_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		event_desc.Usage = D3D11_USAGE_DYNAMIC;
+
+		D3D11_SUBRESOURCE_DATA event_data = { 0 };
+		event_data.pSysMem = &data;
+
+		this->mDirect3D.GetDevice()->CreateBuffer(
+			&event_desc,
+			&event_data,
+			this->mpMeshObjects.back()->rGetEventBuffer()
+		);
 	}
 }
 
@@ -402,6 +424,10 @@ const void Panel3D::Draw()
 	// and draws them one by one.
 	for (int i = 0; i < (int)this->mpMeshObjects.size(); i++)
 	{
+		this->mDirect3D.GetContext()->PSSetConstantBuffers(
+			0, 1, this->mpMeshObjects[i]->rGetEventBuffer()
+		);
+
 		this->mDirect3D.GetContext()->PSSetShaderResources(
 			0, 1, this->mpMeshObjects[i]->rGetTextureView()
 		);
