@@ -26,6 +26,11 @@ public:
 		Mesh* mesh);
 	MeshObject(
 		const MeshObject &other);
+	MeshObject(
+		const std::string name,
+		std::vector<std::vector<unsigned int>> indices,
+		std::vector<std::vector<Vertex>> vertices
+	);
 	~MeshObject();
 
 	const void Translate(float x, float y, float z);

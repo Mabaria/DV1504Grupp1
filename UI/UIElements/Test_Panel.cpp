@@ -175,15 +175,17 @@ void Test_Panel2D()
 
 
 	Mesh testMesh("../../Models/OBJTEST2.obj");
+	MeshObject testMeshObject("Test", &testMesh);
 	test3DPanel.CreateShadersAndSetup(L"../../GraphicsEngine/Test_VertexShader.hlsl", L"", L"../../GraphicsEngine/Test_PixelShader.hlsl");
-	test3DPanel.AddMeshObject("Test", testMesh.GetIndexVectors(), testMesh.GetVertexVectors(), L"", false);
+	test3DPanel.AddMeshObject(&testMeshObject);
 	test3DPanel.rGetMeshObject("Test")->Scale(1.0f, 1.0f, 1.0f);
 	Camera testCamera(0.0f, 50.0f, -50.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 90.0f, 1920.0f / 1080.0f, 0.1f, 1000.0f);
 	test3DPanel.SetCamera(&testCamera);
 
 	Mesh testMesh2("../../Models/OBJTEST2.obj");
+	MeshObject testMeshObject2("Test", &testMesh2);
 	testHead3DPanel.CreateShadersAndSetup(L"../../GraphicsEngine/Test_VertexShader.hlsl", L"", L"../../GraphicsEngine/Test_PixelShader.hlsl");
-	testHead3DPanel.AddMeshObject("Test2", testMesh2.GetIndexVectors(), testMesh2.GetVertexVectors(), L"", false);
+	testHead3DPanel.AddMeshObject(&testMeshObject2);
 	Camera testCamera2(0.0f, 50.0f, -50.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 90.0f, 1920.0f / 1080.0f, 0.1f, 1000.0f);
 	testHead3DPanel.SetCamera(&testCamera2);
 	// testHeadPanel.GetButtonByName("FernButton")->AddObserver(&window);
@@ -211,9 +213,9 @@ void Test_BoatOnScreen()
 	Mesh floor1("../../Models/Floor1.obj");
 	Mesh floor01("../../Models/Floor01.obj");
 
-	MeshObject floor2_object ("floor2", floor2.GetIndexVectors(), floor2.GetVertexVectors());
-	MeshObject floor1_object ("floor1", floor1.GetIndexVectors(), floor1.GetVertexVectors());
-	MeshObject floor01_object("floor01", floor01.GetIndexVectors(), floor01.GetVertexVectors()); 
+	MeshObject floor2_object ("floor2", &floor2);
+	MeshObject floor1_object ("floor1", &floor1);
+	MeshObject floor01_object("floor01", &floor01); 
 
 	std::wstring window_name = L"Demo_BIS";
 
@@ -223,13 +225,13 @@ void Test_BoatOnScreen()
 	Panel3D top_view(2 * 1280 / 3, 2 * 720 / 3, 720 / 3, 0, window.GetWindow(), window_name.c_str());
 
 	// Hela båten tjoff in i panelerna och sen mixtras matriserna med.
-	side_view.AddMeshObject("floor2", floor2.GetIndexVectors(), floor2.GetVertexVectors(), L"", false);
-	side_view.AddMeshObject("floor1", floor1.GetIndexVectors(), floor1.GetVertexVectors(), L"", false);
-	side_view.AddMeshObject("floor01", floor01.GetIndexVectors(), floor01.GetVertexVectors(), L"", false);
+	side_view.AddMeshObject(&floor2_object);
+	side_view.AddMeshObject(&floor1_object);
+	side_view.AddMeshObject(&floor01_object);
 
-	top_view.AddMeshObject("floor2", floor2.GetIndexVectors(), floor2.GetVertexVectors(), L"", false);
-	top_view.AddMeshObject("floor1", floor1.GetIndexVectors(), floor1.GetVertexVectors(), L"", false);
-	top_view.AddMeshObject("floor01", floor01.GetIndexVectors(), floor01.GetVertexVectors(), L"", false);
+	top_view.AddMeshObject(&floor2_object);
+	top_view.AddMeshObject(&floor1_object);
+	top_view.AddMeshObject(&floor01_object);
 
 	float scale = 0.1f;
 	top_view.rGetMeshObject("floor2")->Scale	(scale, scale, scale);
@@ -279,7 +281,7 @@ void Test_BoatOnScreen()
 	// --- Text On Screen ---
 
 	Quad txt(true);
-
+	//todo FIX 3D TEXTBOXES BECAUSE THEY ARE BROEKDN
 	top_view.AddMeshObject("Däck1", txt.GetIndices(), txt.GetVertices(), 
 		L"../../Models/Däck1.DDS", false
 	);
@@ -291,71 +293,73 @@ void Test_BoatOnScreen()
 	// --- END ---
 	
 
-	// --- Transparent Boxes ---
+	//// --- Transparent Boxes ---
+
+
+
 
 	Mesh bb2("../../Models/Bound2UV.obj");
-
+	MeshObject bb2_object("Bound2UV", &bb2);
 	std::vector<std::vector<Vertex>> tv;
 	std::vector<std::vector<unsigned int>> ti;
 	ti.push_back(bb2.GetIndexVectors()[1]);
 	tv.push_back(bb2.GetVertexVectors()[1]);
 
 
-	top_view.AddMeshObject("Bound2UV", ti, tv,
+	top_view.AddMeshObject(&bb2_object,
 		L"../../Models/BlendColor.DDS", true
 	);
-	top_view.rGetMeshObject("Bound2UV")->Scale		(0.1f, 0.1f, 0.1f);
-	top_view.rGetMeshObject("Bound2UV")->Rotate		(0.0f, XM_PI, 0.0f);
-	top_view.rGetMeshObject("Bound2UV")->Translate	(0.0f, 0.0f, 0.5f);
+	top_view.rGetMeshObject("Bound2UV")->Scale(0.1f, 0.1f, 0.1f);
+	top_view.rGetMeshObject("Bound2UV")->Rotate(0.0f, XM_PI, 0.0f);
+	top_view.rGetMeshObject("Bound2UV")->Translate(0.0f, 0.0f, 0.5f);
 
 	EventData data = { 1.0f, 3.0f, 0.0f, 0.0f };
 	top_view.rGetMeshObject("Bound2UV")->SetEvent(
 		data, top_view.rGetDirect3D().GetContext()
 	);
 
-	// -- side view ---
+	//// -- side view ---
 
-	side_view.AddMeshObject("Bound2UV", ti, tv,
-		L"../../Models/BlendColor.DDS", true
-	);
-	side_view.rGetMeshObject("Bound2UV")->Scale(0.15f, 0.4f, 0.1f);
-	side_view.rGetMeshObject("Bound2UV")->Rotate(0.0f, XM_PI, 0.0f);
-	side_view.rGetMeshObject("Bound2UV")->Translate(0.0f, -0.2f, 0.07f);
+	//side_view.AddMeshObject("Bound2UV", ti, tv,
+	//	L"../../Models/BlendColor.DDS", true
+	//);
+	//side_view.rGetMeshObject("Bound2UV")->Scale(0.15f, 0.4f, 0.1f);
+	//side_view.rGetMeshObject("Bound2UV")->Rotate(0.0f, XM_PI, 0.0f);
+	//side_view.rGetMeshObject("Bound2UV")->Translate(0.0f, -0.2f, 0.07f);
 
-	side_view.rGetMeshObject("Bound2UV")->SetEvent(
-		data, side_view.rGetDirect3D().GetContext()
-	);
+	//side_view.rGetMeshObject("Bound2UV")->SetEvent(
+	//	data, side_view.rGetDirect3D().GetContext()
+	//);
 
-	// --- new event in different room
+	//// --- new event in different room
 
-	ti.push_back(bb2.GetIndexVectors()[0]);
-	tv.push_back(bb2.GetVertexVectors()[0]);
+	//ti.push_back(bb2.GetIndexVectors()[0]);
+	//tv.push_back(bb2.GetVertexVectors()[0]);
 
 
-	top_view.AddMeshObject("Bound3UV", ti, tv,
-		L"../../Models/BlendColor.DDS", true
-	);
-	top_view.rGetMeshObject("Bound3UV")->Scale(0.1f, 0.1f, 0.1f);
-	top_view.rGetMeshObject("Bound3UV")->Rotate(0.0f, XM_PI, 0.0f);
-	top_view.rGetMeshObject("Bound3UV")->Translate(0.0f, 0.0f, 0.5f);
+	//top_view.AddMeshObject("Bound3UV", ti, tv,
+	//	L"../../Models/BlendColor.DDS", true
+	//);
+	//top_view.rGetMeshObject("Bound3UV")->Scale(0.1f, 0.1f, 0.1f);
+	//top_view.rGetMeshObject("Bound3UV")->Rotate(0.0f, XM_PI, 0.0f);
+	//top_view.rGetMeshObject("Bound3UV")->Translate(0.0f, 0.0f, 0.5f);
 
-	data = { 3.0f, 0.0f, 0.0f, 0.0f };
-	top_view.rGetMeshObject("Bound3UV")->SetEvent(
-		data, top_view.rGetDirect3D().GetContext()
-	);
+	//data = { 1.0f, 3.0f, 0.0f, 0.0f };
+	//top_view.rGetMeshObject("Bound3UV")->SetEvent(
+	//	data, top_view.rGetDirect3D().GetContext()
+	//);
 
-	side_view.AddMeshObject("Bound3UV", ti, tv,
-		L"../../Models/BlendColor.DDS", true
-	);
-	side_view.rGetMeshObject("Bound3UV")->Scale(0.15f, 0.4f, 0.1f);
-	side_view.rGetMeshObject("Bound3UV")->Rotate(0.0f, XM_PI, 0.0f);
-	side_view.rGetMeshObject("Bound3UV")->Translate(0.0f, -0.2f, 0.07f);
+	//side_view.AddMeshObject("Bound3UV", ti, tv,
+	//	L"../../Models/BlendColor.DDS", true
+	//);
+	//side_view.rGetMeshObject("Bound3UV")->Scale(0.15f, 0.4f, 0.1f);
+	//side_view.rGetMeshObject("Bound3UV")->Rotate(0.0f, XM_PI, 0.0f);
+	//side_view.rGetMeshObject("Bound3UV")->Translate(0.0f, -0.2f, 0.07f);
 
-	data = { 3.0f, 0.0f, 0.0f, 0.0f };
-	side_view.rGetMeshObject("Bound3UV")->SetEvent(
-		data, side_view.rGetDirect3D().GetContext()
-	);
-
+	//data = { 3.0f, 0.0f, 0.0f, 0.0f };
+	//side_view.rGetMeshObject("Bound3UV")->SetEvent(
+	//	data, side_view.rGetDirect3D().GetContext()
+	//);
 	// --- END ---
 
 	float speed = 0.1f;
@@ -409,9 +413,9 @@ void Test_Panel2DTextBoxes()
 	Mesh floor1("../../Models/Floor1.obj");
 	Mesh floor01("../../Models/Floor01.obj");
 
-	MeshObject floor2_object("floor2", floor2.GetIndexVectors(), floor2.GetVertexVectors());
-	MeshObject floor1_object("floor1", floor1.GetIndexVectors(), floor1.GetVertexVectors());
-	MeshObject floor01_object("floor01", floor01.GetIndexVectors(), floor01.GetVertexVectors());
+	MeshObject floor2_object("floor2", &floor2);
+	MeshObject floor1_object("floor1", &floor1);
+	MeshObject floor01_object("floor01", &floor01);
 
 	std::wstring window_name = L"Testboi";
 	int window_height = 720;
@@ -434,13 +438,13 @@ void Test_Panel2DTextBoxes()
 		window.GetWindow(), L"Button_Test");
 
 	// Hela båten tjoff in i panelerna och sen mixtras matriserna med.
-	side_view.AddMeshObject("floor2", floor2.GetIndexVectors(), floor2.GetVertexVectors(), L"");
-	side_view.AddMeshObject("floor1", floor1.GetIndexVectors(), floor1.GetVertexVectors(), L"");
-	side_view.AddMeshObject("floor01", floor01.GetIndexVectors(), floor01.GetVertexVectors(), L"");
+	side_view.AddMeshObject(&floor2_object);
+	side_view.AddMeshObject(&floor1_object);
+	side_view.AddMeshObject(&floor01_object);
 
-	top_view.AddMeshObject("floor2", floor2.GetIndexVectors(), floor2.GetVertexVectors(), L"");
-	top_view.AddMeshObject("floor1", floor1.GetIndexVectors(), floor1.GetVertexVectors(), L"");
-	top_view.AddMeshObject("floor01", floor01.GetIndexVectors(), floor01.GetVertexVectors(), L"");
+	top_view.AddMeshObject(&floor2_object);
+	top_view.AddMeshObject(&floor1_object);
+	top_view.AddMeshObject(&floor01_object);
 
 	top_view.rGetMeshObject("floor2")->Scale(0.1f, 0.1f, 0.1f);
 	top_view.rGetMeshObject("floor1")->Scale(0.1f, 0.1f, 0.1f);

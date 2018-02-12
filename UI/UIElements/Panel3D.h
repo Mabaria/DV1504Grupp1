@@ -24,14 +24,16 @@ public:
 
 	// Creates buffers for and adds mesh 
 	// objects into the vector of mesh objects.
-	/*const void AddMeshObject(
+	const void AddMeshObject(
 		std::string name,
 		std::vector<std::vector<unsigned int>> indices, 
 		std::vector<std::vector<Vertex>> vertices,
 		std::wstring texturePath,
 		bool use_event);
 
-	const void AddMeshObject(MeshObject *meshObject);
+	const void AddMeshObject(MeshObject *meshObject,
+		std::wstring texturePath = L"",
+		bool use_event = false);
 
 	// Pass through for the create shader function in D3D11,
 	// setting shaders and setting up the input assembler.

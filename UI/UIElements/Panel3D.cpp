@@ -112,22 +112,43 @@ D3D11 & Panel3D::rGetDirect3D()
 
 const void Panel3D::AddMeshObject(
 	std::string name,
-	std::vector<std::vector<unsigned int>> indices, 
+	std::vector<std::vector<unsigned int>> indices,
 	std::vector<std::vector<Vertex>> vertices,
 	std::wstring texturePath,
 	bool use_event)
 {
-	MeshObject *mesh_object = new MeshObject(*meshObject);
+	MeshObject *mesh_object = new MeshObject(name, indices, vertices);
 	this->mpMeshObjects.push_back(mesh_object);
 
 	for (int i = 0; i < this->mpMeshObjects.back()->GetNumberOfIndexBuffers(); i++)
 	{
-		this->CreateIndexBuffer(meshObject->GetIndices()[i]);
-		this->CreateVertexBuffer(meshObject->GetVertices()[i]);
+		this->CreateIndexBuffer(indices[i]);
+		this->CreateVertexBuffer(vertices[i]);
 	}
-	this->CreateConstantBuffer(
-		this->mpMeshObjects.back()->rGetModelMatrix(), 
-		this->mpMeshObjects.back()->rGetConstantBuffer());
+	this->mCreateMatrixBuffer(
+		this->mpMeshObjects.back()->rGetModelMatrix(),
+		this->mpMeshObjects.back()->rGetMatrixBuffer());
+
+	for (int i = 0; i < this->mpMeshObjects.back()->GetNumberOfMaterialBuffers(); i++)
+	{
+		this->mCreateMaterialBuffer(
+			&mesh_object->pGetMaterialHandler()->GetMaterialStruct(i));
+	}
+
+	if (this->mpMeshObjects.back()->GetNumberOfMaterialBuffers() == 0)
+	{
+		// Add a default material if no material exists
+		MaterialStruct defaultMat =
+		{ 1.0f, 1.0f, 1.0f,
+			1.0f, 1.0f, 1.0f,
+			1.0f, 1.0f, 1.0f,
+			1.0f,
+			1.0f };
+		this->mCreateMaterialBuffer(&defaultMat);
+
+
+	}
+
 
 	if (texturePath != L"")
 	{
@@ -155,15 +176,67 @@ const void Panel3D::AddMeshObject(
 	}
 }
 
-const void Panel3D::AddMeshObject(MeshObject * meshObject)
+const void Panel3D::AddMeshObject(MeshObject * meshObject,
+	std::wstring texturePath,
+	bool use_event)
 {
-	this->mpMeshObjects.push_back(meshObject);
+	MeshObject *mesh_object = new MeshObject(*meshObject);
+	this->mpMeshObjects.push_back(mesh_object);
+
+	for (int i = 0; i < this->mpMeshObjects.back()->GetNumberOfIndexBuffers(); i++)
+	{
+		this->CreateIndexBuffer(meshObject->GetIndices()[i]);
+		this->CreateVertexBuffer(meshObject->GetVertices()[i]);
+	}
+
+	this->mCreateMatrixBuffer(
+		this->mpMeshObjects.back()->rGetModelMatrix(),
+		this->mpMeshObjects.back()->rGetMatrixBuffer());
 
 	for (int i = 0; i < this->mpMeshObjects.back()->GetNumberOfMaterialBuffers(); i++)
 	{
 		this->mCreateMaterialBuffer(
 			&meshObject->pGetMaterialHandler()->GetMaterialStruct(i));
 	}
+
+	if (this->mpMeshObjects.back()->GetNumberOfMaterialBuffers() == 0)
+	{
+		// Add a default material if no material exists
+		MaterialStruct defaultMat =
+		{ 1.0f, 1.0f, 1.0f,
+		  1.0f, 1.0f, 1.0f,
+		  1.0f, 1.0f, 1.0f,
+		  1.0f,
+		  1.0f };
+		this->mCreateMaterialBuffer(&defaultMat);
+			
+		
+	}
+
+		if (texturePath != L"")
+		{
+			this->CreateTexture(texturePath);
+		}
+	
+		if (use_event)
+		{
+			EventData data = { 0 };
+
+			D3D11_BUFFER_DESC event_desc = { 0 };
+			event_desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+			event_desc.ByteWidth = sizeof(EventData);
+			event_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+			event_desc.Usage = D3D11_USAGE_DYNAMIC;
+
+			D3D11_SUBRESOURCE_DATA event_data = { 0 };
+			event_data.pSysMem = &data;
+
+			this->mDirect3D.GetDevice()->CreateBuffer(
+				&event_desc,
+				&event_data,
+				this->mpMeshObjects.back()->rGetEventBuffer()
+			);
+		}
 }
 
 bool Panel3D::CreateShadersAndSetup(
@@ -490,7 +563,7 @@ const void Panel3D::Draw()
 
 			// Setting the material buffer to the pixel shader.
 			this->mDirect3D.GetContext()->PSSetConstantBuffers(
-				0,
+				1,
 				1,
 				&material_buffer
 			);

@@ -64,13 +64,13 @@ aiMaterial* Mesh::GetMaterialPtr(unsigned int materialIndex)
 
 unsigned int Mesh::GetSubmeshMaterialIndex(unsigned int submeshIndex)
 {
-	if (submeshIndex < this->mpScene->mNumMeshes) {
-		return this->mSubmeshMaterialIndexVector[submeshIndex];
-	}
-	else
+	if (this->mpScene != nullptr)
 	{
-		return -1;
+		if (submeshIndex < this->mpScene->mNumMeshes) {
+			return this->mSubmeshMaterialIndexVector[submeshIndex];
 	}
+}
+	return -1;
 }
 
 bool Mesh::HasNormals() const

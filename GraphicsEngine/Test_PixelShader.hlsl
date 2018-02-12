@@ -1,4 +1,9 @@
-cbuffer MATERIAL_BUFFER : register(b0)
+cbuffer event_data : register(b0)
+{
+	float4 events;
+}
+
+cbuffer MATERIAL_BUFFER : register(b1)
 {
 	float DiffR, DiffG, DiffB;
 	float AmbR, AmbG, AmbB;
@@ -11,10 +16,7 @@ cbuffer MATERIAL_BUFFER : register(b0)
 Texture2D texture2d		: register(t0);
 sampler ss				: register(s0);
 
-cbuffer event_data : register(b0)
-{
-	float4 events;
-}
+
 
 struct PS_IN
 {
@@ -44,18 +46,18 @@ float4 main(PS_IN input) : SV_TARGET
 	bool use_texture	= input.tex.xy != -1.0f ? 
 		true : false;
 
-	/*ambient	= use_texture ?
-		texture2d.Sample(ss, input.tex.xy) : ambient;*/
+	ambient	= use_texture ?
+		texture2d.Sample(ss, input.tex.xy) : ambient;
 	
 
-	//if (use_texture) // When blending is needed
-	//{
-	//	alpha = ambient.rg > 0.8f && ambient.b == 0.0f ? // Blend if yellow
-	//		0.5f : 1.0f;
+	if (use_texture) // When blending is needed
+	{
+		alpha = ambient.rg > 0.8f && ambient.b == 0.0f ? // Blend if yellow
+			0.5f : 1.0f;
 
-	//	diffuse -= 0.2f; // Simple fix for ugly edges
+		diffuse -= 0.2f; // Simple fix for ugly edges
 
-		if (alpha != 1.0f) // If it's going to blend, write it red
+	if (alpha != 1.0f) // If it's going to blend, write it red
 		{
 			ambient = float3(0.5f, 0.5f, 0.5f);
 		}

@@ -35,6 +35,28 @@ MeshObject::MeshObject(const MeshObject & other)
 	this->mpMatrixBuffer = other.mpMatrixBuffer;
 	this->mpMaterialBuffers = other.mpMaterialBuffers;
 	this->mpTextureView = other.mpTextureView;
+
+	this->mpEventBuffer = other.mpEventBuffer;
+}
+
+MeshObject::MeshObject(const std::string name,
+	std::vector<std::vector<unsigned int>> indices,
+	std::vector<std::vector<Vertex>> vertices) : mMaterialHandler{ nullptr }
+{
+	this->mName = name;
+	this->mIndices = indices;
+	this->mVertices = vertices;
+
+	// Doesn't matter which one determines the 
+	// size as they are (should be) equal.
+	this->mNumberOfIndexBuffers = (int)indices.size();
+	this->mNumberOfMaterialBuffers = 0;
+
+	this->mModelMatrix = XMMatrixIdentity();
+	this->mpMatrixBuffer = nullptr;
+	this->mpTextureView = nullptr;
+
+	this->mpEventBuffer = nullptr;
 }
 
 MeshObject::~MeshObject()
@@ -142,6 +164,10 @@ const void MeshObject::AddIndexBuffer(ID3D11Buffer **indexBuffer)
 const void MeshObject::AddMaterialBuffer(ID3D11Buffer ** materialBuffer)
 {
 	this->mpMaterialBuffers.push_back(*materialBuffer);
+	if (this->mMesh == nullptr)
+	{
+		this->mNumberOfMaterialBuffers++;
+	}
 }
 
 ID3D11Buffer ** MeshObject::rGetMatrixBuffer()
@@ -151,7 +177,10 @@ ID3D11Buffer ** MeshObject::rGetMatrixBuffer()
 
 ID3D11Buffer ** MeshObject::rGetMaterialBuffer(int index)
 {
-	return &this->mpMaterialBuffers[index];
+	if (index < this->mNumberOfMaterialBuffers)
+		return &this->mpMaterialBuffers[index];
+	else
+		return nullptr;
 }
 
 ID3D11ShaderResourceView ** MeshObject::rGetTextureView()
@@ -195,5 +224,9 @@ MaterialHandler * MeshObject::pGetMaterialHandler()
 
 int MeshObject::GetMaterialIndexForIndexBuffer(unsigned int indexBufferIndex) const
 {
-	return this->mMesh->GetSubmeshMaterialIndex(indexBufferIndex);
+	if (this->mMesh)
+	{
+		return this->mMesh->GetSubmeshMaterialIndex(indexBufferIndex);
+	}
+	return 0;
 }

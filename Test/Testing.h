@@ -35,10 +35,10 @@ namespace Testing
 		//Test_Panel2D();
 		//Todo This test crashes
 		//Test_Panel3D();
-		//Test_BoatOnScreen();
+		Test_BoatOnScreen();
 
-		Test_Panel2DTextBoxes();
-		Test_Material_Handler();
+		//Test_Panel2DTextBoxes();
+		//Test_Material_Handler();
 		return true;
 	}
 

@@ -3,12 +3,19 @@
 MaterialHandler::MaterialHandler(const aiScene * scene)
 {
 	this->mpScene = scene;
-	this->mNumberOfMaterials = scene->mNumMaterials;
-	for (unsigned int i = 0; i < this->mNumberOfMaterials; i++)
+	if (scene != nullptr)
 	{
-		this->mMaterialStructVector.push_back(
-			this->mCreateMaterialStruct(i));
-		// Populate vector with ready made structs
+		this->mNumberOfMaterials = scene->mNumMaterials;
+		for (unsigned int i = 0; i < this->mNumberOfMaterials; i++)
+		{
+			this->mMaterialStructVector.push_back(
+				this->mCreateMaterialStruct(i));
+			// Populate vector with ready made structs
+		}
+	}
+	else
+	{
+		this->mNumberOfMaterials = 0;
 	}
 }
 
