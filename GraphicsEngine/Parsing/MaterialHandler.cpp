@@ -145,11 +145,23 @@ MaterialStruct MaterialHandler::mCreateMaterialStruct(const unsigned int materia
 	aiColor3D ambientC = this->GetAmbientColor(materialIndex);
 	float exp = this->GetShininess(materialIndex);
 	float opacity = this->GetOpacity(materialIndex);
+	ColorStruct difReturn =
+	{
+		diffuseC.r, diffuseC.g, diffuseC.b
+	};
+	ColorStruct specReturn =
+	{
+		specularC.r, specularC.g, specularC.b
+	};
+	ColorStruct ambientReturn =
+	{
+		ambientC.r, ambientC.g, ambientC.b
+	};
 	to_return =
 	{
-		diffuseC.r, diffuseC.g, diffuseC.b,
-		ambientC.r, ambientC.g, ambientC.b,
-		specularC.r, specularC.g, specularC.b,
+		difReturn,
+		ambientReturn,
+		specReturn,
 		exp, opacity
 	};
 	return to_return;

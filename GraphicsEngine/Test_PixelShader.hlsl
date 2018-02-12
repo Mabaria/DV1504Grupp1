@@ -38,9 +38,9 @@ float3 GetEvent(int event);
 float3 GetBoatShading(PS_IN input);
 float4 main(PS_IN input) : SV_TARGET
 {
-	float alpha = 1.0f;
-float3 ambient = 0.15f;
-float3 diffuse = 0.0f;
+float alpha = 1.0f;
+float3 ambient = Ambient;
+float3 diffuse = Diffuse;
 
 bool use_texture = input.tex.xy != -1.0f ?
 true : false;
@@ -63,7 +63,7 @@ if (use_texture) // When blending is needed
 }
 else // Everything else
 {
-	diffuse = GetBoatShading(input);
+	diffuse += GetBoatShading(input);
 }
 
 // If events are active for a bounding box
@@ -92,6 +92,10 @@ if (Are_there_active_events)
 			break;
 		}
 	}
+}
+else
+{
+	ambient = 0.0f;
 }
 
 
@@ -166,4 +170,5 @@ float3 GetBoatShading(PS_IN input)
 	}
 
 	return shading;
+	
 }

@@ -565,6 +565,10 @@ const void Panel3D::Draw()
 				DXGI_FORMAT_R32_UINT,	// Format.
 				offset);				// Offset.
 
+			this->mDirect3D.GetContext()->PSSetConstantBuffers(
+				0, 1, this->mpMeshObjects[i]->rGetEventBuffer(j)
+			);
+
 			// Setting the material buffer to the pixel shader.
 			this->mDirect3D.GetContext()->PSSetConstantBuffers(
 				1,
@@ -572,9 +576,7 @@ const void Panel3D::Draw()
 				&material_buffer
 			);
 
-			this->mDirect3D.GetContext()->PSSetConstantBuffers(
-				0, 1, this->mpMeshObjects[i]->rGetEventBuffer(j)
-			);
+
 
 			numIndices = (UINT)this->mpMeshObjects[i]->GetIndices()[j].size();
 			this->mDirect3D.GetContext()->DrawIndexed(
