@@ -139,9 +139,9 @@ const void Panel3D::AddMeshObject(
 	{
 		// Add a default material if no material exists
 		MaterialStruct defaultMat =
-		{ 1.0f, 1.0f, 1.0f,
-			1.0f, 1.0f, 1.0f,
-			1.0f, 1.0f, 1.0f,
+		{ 0.5f, 0.5f, 0.5f,
+			0.0f, 0.0f, 0.0f,
+			0.0f, 0.0f, 0.0f,
 			1.0f,
 			1.0f };
 		this->mCreateMaterialBuffer(&defaultMat);
@@ -168,11 +168,14 @@ const void Panel3D::AddMeshObject(
 		D3D11_SUBRESOURCE_DATA event_data = { 0 };
 		event_data.pSysMem = &data;
 
-		this->mDirect3D.GetDevice()->CreateBuffer(
-			&event_desc,
-			&event_data,
-			this->mpMeshObjects.back()->rGetEventBuffer()
-		);
+		for (int i = 0; i < 20; i++)
+		{
+			this->mDirect3D.GetDevice()->CreateBuffer(
+				&event_desc,
+				&event_data,
+				this->mpMeshObjects.back()->rGetEventBuffer(i)
+			);
+		}
 	}
 }
 
@@ -231,11 +234,14 @@ const void Panel3D::AddMeshObject(MeshObject * meshObject,
 			D3D11_SUBRESOURCE_DATA event_data = { 0 };
 			event_data.pSysMem = &data;
 
-			this->mDirect3D.GetDevice()->CreateBuffer(
-				&event_desc,
-				&event_data,
-				this->mpMeshObjects.back()->rGetEventBuffer()
-			);
+			for (int i = 0; i < 20; i++)
+			{
+				this->mDirect3D.GetDevice()->CreateBuffer(
+					&event_desc,
+					&event_data,
+					this->mpMeshObjects.back()->rGetEventBuffer(i)
+				);
+			}
 		}
 }
 
@@ -524,9 +530,7 @@ const void Panel3D::Draw()
 	// and draws them one by one.
 	for (int i = 0; i < (int)this->mpMeshObjects.size(); i++)
 	{
-		this->mDirect3D.GetContext()->PSSetConstantBuffers(
-			0, 1, this->mpMeshObjects[i]->rGetEventBuffer()
-		);
+
 
 		matrix_buffer = *this->mpMeshObjects[i]->rGetMatrixBuffer();
 		this->mDirect3D.GetContext()->PSSetShaderResources(
@@ -566,6 +570,10 @@ const void Panel3D::Draw()
 				1,
 				1,
 				&material_buffer
+			);
+
+			this->mDirect3D.GetContext()->PSSetConstantBuffers(
+				0, 1, this->mpMeshObjects[i]->rGetEventBuffer(j)
 			);
 
 			numIndices = (UINT)this->mpMeshObjects[i]->GetIndices()[j].size();

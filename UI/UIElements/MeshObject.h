@@ -67,8 +67,10 @@ public:
 
 	XMMATRIX *rGetModelMatrix();
 
-	ID3D11Buffer **rGetEventBuffer();
-	void SetEvent(const EventData& active_events, ID3D11DeviceContext* context);
+	ID3D11Buffer **rGetEventBuffer(const unsigned int index);
+	void SetEvent(const EventData& active_events,
+		ID3D11DeviceContext* context,
+		unsigned int index);
 
 	MaterialHandler* pGetMaterialHandler();
 	int GetMaterialIndexForIndexBuffer(unsigned int indexBufferIndex) const;
@@ -93,13 +95,13 @@ private:
 	std::vector<ID3D11Buffer*> mpIndexBuffers;
 	std::vector<ID3D11Buffer*> mpVertexBuffers;
 	std::vector<ID3D11Buffer*> mpMaterialBuffers;
+	ID3D11Buffer* mpEventBuffers[20];
 	ID3D11Buffer *mpMatrixBuffer;
 
 	ID3D11ShaderResourceView *mpTextureView;
 
 	int mNumberOfIndexBuffers;
 	int mNumberOfMaterialBuffers;
-	ID3D11Buffer *mpEventBuffer;
 
 
 	XMMATRIX mModelMatrix;

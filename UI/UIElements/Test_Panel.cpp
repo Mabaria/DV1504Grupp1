@@ -209,14 +209,16 @@ void Test_Panel2D()
 
 void Test_BoatOnScreen()
 {
-	Mesh floor2("../../Models/Floor2.obj");
+	Mesh floor2("../../Models/Floor2Materials.obj");
 	Mesh floor1("../../Models/Floor1.obj");
 	Mesh floor01("../../Models/Floor01.obj");
+
+	
 
 	MeshObject floor2_object ("floor2", &floor2);
 	MeshObject floor1_object ("floor1", &floor1);
 	MeshObject floor01_object("floor01", &floor01); 
-
+	floor2_object.Rotate(0.f, 3.14f, 0.0f);
 	std::wstring window_name = L"Demo_BIS";
 
 	Window window(window_name, 1280, 720);
@@ -281,7 +283,6 @@ void Test_BoatOnScreen()
 	// --- Text On Screen ---
 
 	Quad txt(true);
-	//todo FIX 3D TEXTBOXES BECAUSE THEY ARE BROEKDN
 	top_view.AddMeshObject("Däck1", txt.GetIndices(), txt.GetVertices(), 
 		L"../../Models/Däck1.DDS", false
 	);
@@ -306,17 +307,22 @@ void Test_BoatOnScreen()
 	tv.push_back(bb2.GetVertexVectors()[1]);
 
 
-	top_view.AddMeshObject(&bb2_object,
-		L"../../Models/BlendColor.DDS", true
-	);
-	top_view.rGetMeshObject("Bound2UV")->Scale(0.1f, 0.1f, 0.1f);
-	top_view.rGetMeshObject("Bound2UV")->Rotate(0.0f, XM_PI, 0.0f);
-	top_view.rGetMeshObject("Bound2UV")->Translate(0.0f, 0.0f, 0.5f);
+	//top_view.AddMeshObject(&bb2_object,
+	//	L"../../Models/BlendColor.DDS", true
+	//);
+	//top_view.rGetMeshObject("Bound2UV")->Scale(0.1f, 0.1f, 0.1f);
+	//top_view.rGetMeshObject("Bound2UV")->Rotate(0.0f, XM_PI, 0.0f);
+	//top_view.rGetMeshObject("Bound2UV")->Translate(0.0f, 0.0f, 0.5f);
 
-	EventData data = { 1.0f, 3.0f, 0.0f, 0.0f };
-	top_view.rGetMeshObject("Bound2UV")->SetEvent(
-		data, top_view.rGetDirect3D().GetContext()
-	);
+	//EventData data = { 1.0f, 3.0f, 0.0f, 0.0f };
+	//top_view.rGetMeshObject("Bound2UV")->SetEvent(
+	//	data, top_view.rGetDirect3D().GetContext(), 1
+	//);
+
+	//data = { 3.0f, 4.0f, 0.0f, 0.0f };
+	//top_view.rGetMeshObject("Bound2UV")->SetEvent(
+	//	data, top_view.rGetDirect3D().GetContext(), 0
+	//);
 
 	//// -- side view ---
 

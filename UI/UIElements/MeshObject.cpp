@@ -16,8 +16,10 @@ MeshObject::MeshObject(std::string name,
 	this->mModelMatrix = XMMatrixIdentity();
 	this->mpMatrixBuffer	= nullptr;
 	this->mpTextureView		= nullptr;
-
-	this->mpEventBuffer = nullptr;
+	for (int i = 0; i < 20; i++)
+	{
+		this->mpEventBuffers[i] = nullptr;
+	}
 }
 
 MeshObject::MeshObject(const MeshObject & other) 
@@ -35,8 +37,10 @@ MeshObject::MeshObject(const MeshObject & other)
 	this->mpMatrixBuffer = other.mpMatrixBuffer;
 	this->mpMaterialBuffers = other.mpMaterialBuffers;
 	this->mpTextureView = other.mpTextureView;
-
-	this->mpEventBuffer = other.mpEventBuffer;
+	for (int i = 0; i < 20; i++)
+	{
+		this->mpEventBuffers[i] = other.mpEventBuffers[i];
+	}
 }
 
 MeshObject::MeshObject(const std::string name,
@@ -56,7 +60,11 @@ MeshObject::MeshObject(const std::string name,
 	this->mpMatrixBuffer = nullptr;
 	this->mpTextureView = nullptr;
 
-	this->mpEventBuffer = nullptr;
+	for (int i = 0; i < 20; i++)
+	{
+		this->mpEventBuffers[i] = nullptr;
+	}
+
 }
 
 MeshObject::~MeshObject()
@@ -94,10 +102,13 @@ MeshObject::~MeshObject()
 		this->mpTextureView = nullptr;
 	}
 
-	if (this->mpEventBuffer)
+	for (int i = 0; i < 20; i++)
 	{
-		this->mpEventBuffer->Release();
-		this->mpEventBuffer = nullptr;
+		if (this->mpEventBuffers[i] != nullptr)
+		{
+			this->mpEventBuffers[i]->Release();
+			this->mpEventBuffers[i] = nullptr;
+		}
 	}
 }
 
@@ -198,23 +209,25 @@ XMMATRIX* MeshObject::rGetModelMatrix()
 	return &this->mModelMatrix;
 }
 
-ID3D11Buffer ** MeshObject::rGetEventBuffer()
+ID3D11Buffer ** MeshObject::rGetEventBuffer(const unsigned int index)
 {
-	return &this->mpEventBuffer;
+	return &this->mpEventBuffers[index];
 }
 
-void MeshObject::SetEvent(const EventData & active_events, ID3D11DeviceContext* context)
+void MeshObject::SetEvent(const EventData & active_events,
+	ID3D11DeviceContext* context,
+	unsigned int index)
 {
 	D3D11_MAPPED_SUBRESOURCE data_ptr{};
 	context->Map(
-		this->mpEventBuffer,
+		this->mpEventBuffers[index],
 		0,
 		D3D11_MAP_WRITE_DISCARD,
 		0,
 		&data_ptr);
 
 	memcpy(data_ptr.pData, &active_events, sizeof(EventData));
-	context->Unmap(this->mpEventBuffer, 0);
+	context->Unmap(this->mpEventBuffers[index], 0);
 }
 
 MaterialHandler * MeshObject::pGetMaterialHandler()
