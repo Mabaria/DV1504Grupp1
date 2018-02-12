@@ -1,14 +1,21 @@
 #pragma once
 #include "Mesh.h"
+struct ColorStruct
+{
+	float r, g, b;
+};
+
 struct MaterialStruct
 {
-	float diffuseR, diffuseG, diffuseB;
-	float ambientR, ambientG, ambientB;
-	float specularR, specularG, specularB;
+	ColorStruct diffuse;
+	ColorStruct ambient;
+	ColorStruct specular;
 	float specExponent;
 	float opacity;
 	float pad0, pad1, pad2, pad3, pad4;
 };
+
+
 
 class MaterialHandler
 {
@@ -16,6 +23,9 @@ public:
 	MaterialHandler(const aiScene *scene);
 
 	~MaterialHandler();
+
+	bool SetMaterialStruct(const MaterialStruct &newStruct,
+		const unsigned int materialIndex);
 
 
 	std::string GetMaterialName(const unsigned int materialIndex) const;

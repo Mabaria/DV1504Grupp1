@@ -16,6 +16,18 @@ MaterialHandler::~MaterialHandler()
 {
 }
 
+bool MaterialHandler::SetMaterialStruct(const MaterialStruct & newStruct, const unsigned int materialIndex)
+{
+	if (materialIndex >= this->mNumberOfMaterials)
+	{
+		this->mMaterialStructVector.push_back(newStruct); // Add new material
+	}
+	else
+	{
+		this->mMaterialStructVector[materialIndex] = newStruct; // Replace old material
+	}
+}
+
 std::string MaterialHandler::GetMaterialName(const unsigned int materialIndex) const
 {
 	aiString name;
