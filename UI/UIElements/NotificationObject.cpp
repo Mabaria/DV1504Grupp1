@@ -21,14 +21,14 @@ NotificationObject::NotificationObject(
 	object_size.top = 0;
 	object_size.left = 0;
 	object_size.right = render_target_size.width;
-	object_size.bottom = render_target_size.height / 9;
+	object_size.bottom = render_target_size.height / 20;
 
 	// 40x40 pixel icon.
 	D2D1_RECT_F icon_size;
-	icon_size.top = render_target_size.height / 36;
+	icon_size.top = 5;
 	icon_size.left = render_target_size.width / 20;
 	icon_size.right = render_target_size.width / 4;
-	icon_size.bottom = icon_size.top + icon_size.right - icon_size.left;
+	icon_size.bottom = object_size.bottom - 5;
 
 	// 150x80 text box.
 	D2D1_RECT_F textbox_size;
@@ -124,6 +124,18 @@ const std::string NotificationObject::GetNotificationString() const
 	return_string += this->mElapsedTime;
 
 	return return_string;
+}
+
+const int NotificationObject::GetWidth() const
+{
+	return this->mButton.GetButtonsize().right 
+		- this->mButton.GetButtonsize().left;
+}
+
+const int NotificationObject::GetHeight() const
+{
+	return this->mButton.GetButtonsize().bottom
+		- this->mButton.GetButtonsize().top;
 }
 
 const void NotificationObject::SetPosition(int x, int y)
