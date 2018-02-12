@@ -115,7 +115,7 @@ ID2D1Bitmap* Button::getBitmapPointer()
 	return this->mpBitMap;
 }
 
-const D2D1_RECT_F Button::GetButtonsize() const
+const D2D1_RECT_F Button::GetButtonSize() const
 {
 	return this->mButtonSize;
 }
@@ -130,7 +130,7 @@ const D2D1_RECT_F Button::GetBoundingBoxPercentage() const
 	return this->mBoundingBoxPercentage;
 }
 
-void Button::SetButtonsize(int left, int top, int right, int bottom)
+void Button::SetButtonSize(int left, int top, int right, int bottom)
 {
 	this->mButtonSize = D2D1::RectF(
 		(float)left, 
@@ -139,7 +139,7 @@ void Button::SetButtonsize(int left, int top, int right, int bottom)
 		(float)bottom);
 }
 
-void Button::SetBitmapRendersize(int left, int top, int right, int bottom)
+void Button::SetBitmapRenderSize(int left, int top, int right, int bottom)
 {
 	this->mBitmapRenderSize = D2D1::RectF(
 		(float)left, 
