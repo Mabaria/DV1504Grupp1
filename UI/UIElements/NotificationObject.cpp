@@ -141,6 +141,7 @@ const void NotificationObject::SetText(std::string text)
 void NotificationObject::Update()
 {
 	this->mElapsedTime = this->mTimer->GetTimeAsStr();
+	this->SetText(this->GetNotificationString());
 }
 
 void NotificationObject::Draw()

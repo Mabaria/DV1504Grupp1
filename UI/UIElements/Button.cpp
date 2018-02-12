@@ -67,14 +67,7 @@ void Button::CreateButton(
 			this->mpBitMap->GetSize().width,
 			this->mpBitMap->GetSize().height);
 		this->mWidth = this->mpBitMap->GetSize().width / 3;
-		this->mBoundingBoxPercentage.right = (long)this->mButtonSize.right /
-			this->D2D1Panel->GetpRenderTarget()->GetSize().width;
-		this->mBoundingBoxPercentage.top = this->mButtonSize.top /
-			this->D2D1Panel->GetpRenderTarget()->GetSize().height;
-		this->mBoundingBoxPercentage.left = this->mButtonSize.left /
-			this->D2D1Panel->GetpRenderTarget()->GetSize().width;
-		this->mBoundingBoxPercentage.bottom = this->mButtonSize.bottom /
-			this->D2D1Panel->GetpRenderTarget()->GetSize().height;
+
 		this->mUpdateBoundingBox();
 	}
 	else
@@ -255,7 +248,7 @@ void Button::ReleaseCOM(IUnknown *object)
 
 void Button::mUpdateBoundingBox()
 {
-	this->mBoundingBoxPercentage.right = (long)this->mButtonSize.right /
+	this->mBoundingBoxPercentage.right = this->mButtonSize.right /
 		this->D2D1Panel->GetpRenderTarget()->GetSize().width;
 	this->mBoundingBoxPercentage.top = this->mButtonSize.top /
 		this->D2D1Panel->GetpRenderTarget()->GetSize().height;
