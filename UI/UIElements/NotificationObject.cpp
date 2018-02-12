@@ -14,17 +14,15 @@ NotificationObject::NotificationObject(
 	this->mElapsedTime = this->mTimer->GetTimeAsStr();
 	this->mEventType = event->GetType();
 	
-	D2D1_SIZE_F render_target_size = direct2d->GetpRenderTarget()->GetSize();
-	
-	
+	direct2d->SetFontSize(16);
+	D2D1_SIZE_F render_target_size = direct2d->GetpRenderTarget()->GetSize();	
 
 	// 200x80 notification object.
 	D2D1_RECT_F object_size;
 	object_size.top = 0;
 	object_size.left = 0;
-	object_size.right = render_target_size.width;
+	object_size.right = render_target_size.width - 4;
 	object_size.bottom = render_target_size.height / 11;
-	direct2d->SetFontSize(12.5f);
 
 	// 40x40 pixel icon.
 	D2D1_RECT_F icon_size;
@@ -35,7 +33,7 @@ NotificationObject::NotificationObject(
 
 	// 150x80 text box.
 	D2D1_RECT_F textbox_size;
-	textbox_size.top = icon_size.top + 13;
+	textbox_size.top = icon_size.top;
 	textbox_size.left = icon_size.right + 5;
 	textbox_size.right = 19 * render_target_size.width / 20;
 	textbox_size.bottom = object_size.bottom;
@@ -117,32 +115,30 @@ const std::string NotificationObject::GetStartTime() const
 const std::string NotificationObject::GetNotificationString() const
 {
 	std::string return_string = "";
-	return_string += Event::GetString(this->mEventType);
-	return_string += " ";
-	return_string += this->mElapsedTime;
+	return_string += this->mRoomName;
 	return_string += "\n";
 	return_string += this->mDeckName;
-	return_string += " ";
-	return_string += this->mRoomName;
+	return_string += "\n";
+	return_string += this->mElapsedTime;
 	
 	return return_string;
 }
 
+Button * NotificationObject::GetButton()
+{
+	return &this->mButton;
+}
+
 const int NotificationObject::GetWidth() const
 {
-	return this->mButton.GetButtonsize().right 
-		- this->mButton.GetButtonsize().left;
+	return (int)this->mButton.GetButtonsize().right 
+		-  (int)this->mButton.GetButtonsize().left;
 }
 
 const int NotificationObject::GetHeight() const
 {
-	return this->mButton.GetButtonsize().bottom
-		- this->mButton.GetButtonsize().top;
-}
-
-const void NotificationObject::SetPosition(int x, int y)
-{
-		
+	return (int)this->mButton.GetButtonsize().bottom
+		-  (int)this->mButton.GetButtonsize().top;
 }
 
 const void NotificationObject::Move(int x, int y)

@@ -50,6 +50,8 @@ public:
 	void AddNotification(Room *room, LogEvent *event);
 	bool RemoveNotification(Room *room, LogEvent *event);
 
+
+	void ScrollActiveLog();
 	void Update();
 	void Draw();
 
@@ -58,6 +60,7 @@ private:
 	bool mIsMouseInsidePanel();
 	
 	void mUpdateButtons();
+
 	std::vector<Button*> mButtonVector;
 	std::vector<std::string> mButtonNames;
 

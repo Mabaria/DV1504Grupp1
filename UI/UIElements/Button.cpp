@@ -54,7 +54,7 @@ void Button::CreateButton(
 	int bottom)
 {
 	this->D2D1Panel->GetpRenderTarget()->CreateSolidColorBrush(
-		D2D1::ColorF(D2D1::ColorF::Black),
+		D2D1::ColorF(D2D1::ColorF(0.75f, 0.75f, 0.75f, 1.0f)),
 		&this->mpRectBrush);
 	this->mButtonSize = D2D1::RectF(
 		(float)left, 
@@ -106,8 +106,8 @@ void Button::DrawRect()
 {
 	this->D2D1Panel->GetpRenderTarget()->DrawRectangle(
 		this->mButtonSize,
-		this->mpRectBrush
-	);
+		this->mpRectBrush,
+		2.0f);
 }
 
 ID2D1Bitmap* Button::getBitmapPointer()
@@ -204,14 +204,26 @@ void Button::SetRectStatus(BUTTON_STATE rectState)
 		switch (rectState)
 		{
 		case BUTTON_STATE::HOVER:
-			this->mpRectBrush->SetColor(D2D1::ColorF(D2D1::ColorF::LightGray));
+			this->mpRectBrush->SetColor(D2D1::ColorF(D2D1::ColorF(
+				0.50f, 
+				0.50f, 
+				0.50f, 
+				1.0f)));
 			break;
 		case BUTTON_STATE::CLICKED:
-			this->mpRectBrush->SetColor(D2D1::ColorF
-			(D2D1::ColorF::DarkOrchid));
+			this->mpRectBrush->SetColor(D2D1::ColorF(D2D1::ColorF(
+				0.00f,
+				0.00f,
+				0.00f,
+				1.0f)));
 			this->NotifyObservers(this);
+			break;
 		default:
-			this->mpRectBrush->SetColor(D2D1::ColorF(D2D1::ColorF::Black));
+			this->mpRectBrush->SetColor(D2D1::ColorF(D2D1::ColorF(
+				0.75f, 
+				0.75f, 
+				0.75f, 
+				1.0f)));
 			break;
 		}
 	}

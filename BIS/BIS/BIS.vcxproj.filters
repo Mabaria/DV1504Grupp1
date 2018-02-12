@@ -213,7 +213,7 @@
     <ClInclude Include="..\..\UI\UIElements\NotificationObject.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
-    <ClInclude Include="NotificationList.h">
+    <ClInclude Include="..\..\UI\UIElements\NotificationList.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
   </ItemGroup>
@@ -372,7 +372,7 @@
       <Filter>Source Files\UI</Filter>
     </ClCompile>
     <ClCompile Include="..\..\UI\UIElements\NotificationList.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

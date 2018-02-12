@@ -95,6 +95,7 @@
     <ClInclude Include="..\..\Test\Testing.h" />
     <ClInclude Include="..\..\UI\UIElements\Button.h" />
     <ClInclude Include="..\..\UI\UIElements\MeshObject.h" />
+    <ClInclude Include="..\..\UI\UIElements\NotificationList.h" />
     <ClInclude Include="..\..\UI\UIElements\NotificationObject.h" />
     <ClInclude Include="..\..\UI\UIElements\Panel.h" />
     <ClInclude Include="..\..\UI\UIElements\Panel2D.h" />
@@ -102,7 +103,6 @@
     <ClInclude Include="..\..\UI\UIElements\Test_Panel.h" />
     <ClInclude Include="..\..\UI\UIElements\Test_TextBox.h" />
     <ClInclude Include="..\..\UI\UIElements\TextBox.h" />
-    <ClInclude Include="NotificationList.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\..\GraphicsEngine\Test_PixelShader.hlsl">
