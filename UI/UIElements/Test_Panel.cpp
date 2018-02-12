@@ -166,7 +166,7 @@ void Test_Panel2D()
 	testHeadPanel.AddButton(200, 200, 20, 700, "../../Models/feelsrain.gif", "FernButton");
 	window.Open();
 	testPanel.GetButtonByIndex(1); // Expected: FireButton2
-	testPanel.GetButtonByName("FireButton3")->SetButtonsize(-220, 320, 140, 420);
+	testPanel.GetButtonByName("FireButton3")->SetButtonSize(-220, 320, 140, 420);
 	/* Expected: Button 3 is displaced and stretches a bit*/
 	testPanel.GetButtonByIndex(-1); // Expected: nullptr
 	testPanel.GetButtonByIndex(3285); // Expected: nullptr

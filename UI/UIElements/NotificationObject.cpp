@@ -130,14 +130,14 @@ const std::string NotificationObject::GetNotificationString() const
 
 const int NotificationObject::GetWidth() const
 {
-	return this->mButton.GetButtonsize().right 
-		- this->mButton.GetButtonsize().left;
+	return this->mButton.GetButtonSize().right 
+		- this->mButton.GetButtonSize().left;
 }
 
 const int NotificationObject::GetHeight() const
 {
-	return this->mButton.GetButtonsize().bottom
-		- this->mButton.GetButtonsize().top;
+	return this->mButton.GetButtonSize().bottom
+		- this->mButton.GetButtonSize().top;
 }
 
 const void NotificationObject::SetPosition(int x, int y)
