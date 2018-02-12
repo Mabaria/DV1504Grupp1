@@ -29,7 +29,7 @@ void Picking::GetWorldRay(
 
 	// 1. Walk to nearplane
 	frontVec = DirectX::XMVectorScale(
-		pCamera->GetLookVector(),
+		pCamera->GetLookToVector(),
 		nearZ);
 
 	rRay.origin = DirectX::XMVectorAdd(
@@ -39,7 +39,7 @@ void Picking::GetWorldRay(
 	// 2. Walk left/right
 	rightVec = DirectX::XMVector3Cross(
 		pCamera->GetUpVector(),
-		pCamera->GetLookVector());
+		pCamera->GetLookToVector());
 
 	rRay.origin = DirectX::XMVectorAdd(
 		rRay.origin,
@@ -71,7 +71,7 @@ void Picking::GetWorldRay(
 	}
 	else // ORTHOGRAFIC
 	{
-		rRay.direction = pCamera->GetLookVector();
+		rRay.direction = pCamera->GetLookToVector();
 	}
 
 	// Normalize the direction of the ray
