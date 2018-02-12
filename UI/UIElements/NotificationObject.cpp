@@ -1,8 +1,8 @@
 #include "NotificationObject.h"
 
 NotificationObject::NotificationObject(
-	Room * room, 
-	LogEvent * event, 
+	Room *room, 
+	LogEvent *event, 
 	Direct2D *direct2d) 
 	: mButton(direct2d, "", 0, 0, 0, 0)
 	, mTextBox(direct2d, 0, 0, 0, 0)
@@ -14,26 +14,28 @@ NotificationObject::NotificationObject(
 	this->mElapsedTime = this->mTimer->GetTimeAsStr();
 	this->mEventType = event->GetType();
 	
+	D2D1_SIZE_F render_target_size = direct2d->GetpRenderTarget()->GetSize();
+	
 	// 200x80 notification object.
 	D2D1_RECT_F object_size;
 	object_size.top = 0;
 	object_size.left = 0;
-	object_size.right = 200;
-	object_size.bottom = 80;
+	object_size.right = render_target_size.width;
+	object_size.bottom = render_target_size.height / 9;
 
 	// 40x40 pixel icon.
 	D2D1_RECT_F icon_size;
-	icon_size.top = 20;
-	icon_size.left = 10;
-	icon_size.right = 50;
-	icon_size.bottom = 60;
+	icon_size.top = render_target_size.height / 36;
+	icon_size.left = render_target_size.width / 20;
+	icon_size.right = render_target_size.width / 4;
+	icon_size.bottom = icon_size.top + icon_size.right - icon_size.left;
 
 	// 150x80 text box.
 	D2D1_RECT_F textbox_size;
-	textbox_size.top = 20;
-	textbox_size.left = 50;
-	textbox_size.right = 190;
-	textbox_size.bottom = 60;
+	textbox_size.top = icon_size.top;
+	textbox_size.left = icon_size.right;
+	textbox_size.right = 19 * render_target_size.width / 20;
+	textbox_size.bottom = object_size.bottom * 3 / 4;
 
 	std::string file_path = "../../Models/";
 	switch (this->mEventType)
@@ -77,6 +79,8 @@ NotificationObject::NotificationObject(
 		(int)textbox_size.bottom);
 
 	this->mTextBox.SetText(this->GetNotificationString());
+	this->mButton.SetButtonStatus(BUTTON_STATE::IDLE);
+
 }
 
 NotificationObject::~NotificationObject()
@@ -141,6 +145,7 @@ const void NotificationObject::SetText(std::string text)
 void NotificationObject::Update()
 {
 	this->mElapsedTime = this->mTimer->GetTimeAsStr();
+	this->mButton.SetButtonStatus(BUTTON_STATE::IDLE);
 }
 
 void NotificationObject::Draw()
