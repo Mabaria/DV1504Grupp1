@@ -110,30 +110,12 @@ D3D11 & Panel3D::rGetDirect3D()
 	return this->mDirect3D;
 }
 
-//const void Panel3D::AddMeshObject(
-//	std::string name,
-//	std::vector<std::vector<unsigned int>> indices, 
-//	std::vector<std::vector<Vertex>> vertices,
-//	std::wstring texturePath)
-//{
-//	MeshObject *mesh_object = new MeshObject(name, indices, vertices);
-//	this->mpMeshObjects.push_back(mesh_object);
-//
-//	for (int i = 0; i < this->mpMeshObjects.back()->GetNumberOfIndexBuffers(); i++)
-//	{
-//		this->CreateIndexBuffer(indices[i]);
-//		this->CreateVertexBuffer(vertices[i]);
-//	}
-//	this->CreateConstantBuffer(
-//		this->mpMeshObjects.back()->rGetModelMatrix(), 
-//		this->mpMeshObjects.back()->rGetConstantBuffer());
-//	if (texturePath != L"")
-//	{
-//		this->CreateTexture(texturePath);
-//	}
-//}
-
-const void Panel3D::AddMeshObject(MeshObject * meshObject)
+const void Panel3D::AddMeshObject(
+	std::string name,
+	std::vector<std::vector<unsigned int>> indices, 
+	std::vector<std::vector<Vertex>> vertices,
+	std::wstring texturePath,
+	bool use_event)
 {
 	MeshObject *mesh_object = new MeshObject(*meshObject);
 	this->mpMeshObjects.push_back(mesh_object);
@@ -143,9 +125,39 @@ const void Panel3D::AddMeshObject(MeshObject * meshObject)
 		this->CreateIndexBuffer(meshObject->GetIndices()[i]);
 		this->CreateVertexBuffer(meshObject->GetVertices()[i]);
 	}
-	this->mCreateMatrixBuffer(
-		this->mpMeshObjects.back()->rGetModelMatrix(),
-		this->mpMeshObjects.back()->rGetMatrixBuffer());
+	this->CreateConstantBuffer(
+		this->mpMeshObjects.back()->rGetModelMatrix(), 
+		this->mpMeshObjects.back()->rGetConstantBuffer());
+
+	if (texturePath != L"")
+	{
+		this->CreateTexture(texturePath);
+	}
+
+	if (use_event)
+	{
+		EventData data = { 0 };
+
+		D3D11_BUFFER_DESC event_desc = { 0 };
+		event_desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		event_desc.ByteWidth = sizeof(EventData);
+		event_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		event_desc.Usage = D3D11_USAGE_DYNAMIC;
+
+		D3D11_SUBRESOURCE_DATA event_data = { 0 };
+		event_data.pSysMem = &data;
+
+		this->mDirect3D.GetDevice()->CreateBuffer(
+			&event_desc,
+			&event_data,
+			this->mpMeshObjects.back()->rGetEventBuffer()
+		);
+	}
+}
+
+const void Panel3D::AddMeshObject(MeshObject * meshObject)
+{
+	this->mpMeshObjects.push_back(meshObject);
 
 	for (int i = 0; i < this->mpMeshObjects.back()->GetNumberOfMaterialBuffers(); i++)
 	{
@@ -439,6 +451,10 @@ const void Panel3D::Draw()
 	// and draws them one by one.
 	for (int i = 0; i < (int)this->mpMeshObjects.size(); i++)
 	{
+		this->mDirect3D.GetContext()->PSSetConstantBuffers(
+			0, 1, this->mpMeshObjects[i]->rGetEventBuffer()
+		);
+
 		matrix_buffer = *this->mpMeshObjects[i]->rGetMatrixBuffer();
 		this->mDirect3D.GetContext()->PSSetShaderResources(
 			0, 1, this->mpMeshObjects[i]->rGetTextureView()

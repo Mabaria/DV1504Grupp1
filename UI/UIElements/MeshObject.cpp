@@ -16,6 +16,8 @@ MeshObject::MeshObject(std::string name,
 	this->mModelMatrix = XMMatrixIdentity();
 	this->mpMatrixBuffer	= nullptr;
 	this->mpTextureView		= nullptr;
+
+	this->mpEventBuffer = nullptr;
 }
 
 MeshObject::MeshObject(const MeshObject & other) 
@@ -70,6 +72,11 @@ MeshObject::~MeshObject()
 		this->mpTextureView = nullptr;
 	}
 
+	if (this->mpEventBuffer)
+	{
+		this->mpEventBuffer->Release();
+		this->mpEventBuffer = nullptr;
+	}
 }
 
 const void MeshObject::Translate(float x, float y, float z)
@@ -160,6 +167,25 @@ const void MeshObject::SetMatrixBuffer(ID3D11Buffer ** matrixBuffer)
 XMMATRIX* MeshObject::rGetModelMatrix()
 {
 	return &this->mModelMatrix;
+}
+
+ID3D11Buffer ** MeshObject::rGetEventBuffer()
+{
+	return &this->mpEventBuffer;
+}
+
+void MeshObject::SetEvent(const EventData & active_events, ID3D11DeviceContext* context)
+{
+	D3D11_MAPPED_SUBRESOURCE data_ptr{};
+	context->Map(
+		this->mpEventBuffer,
+		0,
+		D3D11_MAP_WRITE_DISCARD,
+		0,
+		&data_ptr);
+
+	memcpy(data_ptr.pData, &active_events, sizeof(EventData));
+	context->Unmap(this->mpEventBuffer, 0);
 }
 
 MaterialHandler * MeshObject::pGetMaterialHandler()

@@ -8,6 +8,16 @@
 
 using namespace DirectX;
 
+// Fire				= 1
+// Dead person		= 2
+// Water			= 3
+// Contamination	= 4
+
+struct EventData
+{
+	float slots[4];
+};
+
 class MeshObject
 {
 public:
@@ -52,6 +62,9 @@ public:
 
 	XMMATRIX *rGetModelMatrix();
 
+	ID3D11Buffer **rGetEventBuffer();
+	void SetEvent(const EventData& active_events, ID3D11DeviceContext* context);
+
 	MaterialHandler* pGetMaterialHandler();
 	int GetMaterialIndexForIndexBuffer(unsigned int indexBufferIndex) const;
 
@@ -81,6 +94,8 @@ private:
 
 	int mNumberOfIndexBuffers;
 	int mNumberOfMaterialBuffers;
+	ID3D11Buffer *mpEventBuffer;
+
 
 	XMMATRIX mModelMatrix;
 };
