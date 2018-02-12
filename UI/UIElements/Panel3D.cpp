@@ -61,6 +61,10 @@ Panel3D::Panel3D(int width, int height, int top, int left, HWND handle, LPCTSTR 
 	this->mpCamera		= nullptr;
 	this->mpViewBuffer	= nullptr;
 	this->mpProjBuffer	= nullptr;
+
+
+	this->mShowCursor = true;
+	this->mRadius = 1.0f;
 }
 
 Panel3D::~Panel3D()
@@ -373,7 +377,63 @@ const void Panel3D::Update()
 	// Camera movement
 	if (this->mIsMouseInsidePanel())
 	{
+		bool show_cursor = true;
 
+		// If panel has orthographic view
+		if (this->mpCamera->GetProjectionMode() == ORTHOGRAPHIC)
+		{
+			float speed = 0.06f;
+
+			// Scroll - Zoom
+			float scroll = Mouse::GetScroll();
+
+			if (scroll != 0)
+			{
+				this->mpCamera->SetViewWidth(this->mpCamera->GetViewWidth() - (speed * scroll));
+				this->mpCamera->SetViewHeight(this->mpCamera->GetViewHeight() - (speed * scroll));
+			}
+
+			if (Mouse::IsButtonPressed(Buttons::Left))
+			{
+				POINT mouse_pos;
+				GetCursorPos(&mouse_pos);
+				this->mMouseOrigin.x = mouse_pos.x;
+				this->mMouseOrigin.y = mouse_pos.y;
+			}
+
+			// Mouse movement - Pan
+			if (Mouse::IsButtonDown(Buttons::Left))
+			{
+				show_cursor = false;
+
+				POINT mouse_pos;
+				GetCursorPos(&mouse_pos);
+
+				Position diff;
+				diff.x = mouse_pos.x - this->mMouseOrigin.x;
+				diff.y = mouse_pos.y - this->mMouseOrigin.y;
+
+				SetCursorPos(
+					this->mMouseOrigin.x,
+					this->mMouseOrigin.y
+				);
+
+				int dead_zone = 1;
+
+				if (abs(diff.x) < dead_zone)
+					diff.x = 0;
+				if (abs(diff.y) < dead_zone)
+					diff.y = 0;
+
+				this->mpCamera->MoveCamera({ diff.x * -0.008f, diff.y }, speed);
+			}
+		}
+
+		if (this->mShowCursor != show_cursor)
+		{
+			this->mShowCursor = show_cursor;
+			ShowCursor(this->mShowCursor);
+		}
 	}
 }
 

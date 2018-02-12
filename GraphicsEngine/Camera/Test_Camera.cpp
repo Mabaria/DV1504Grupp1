@@ -1,6 +1,8 @@
 #include "Test_Camera.h"
 #include "Camera.h"
 #include "../../UI/UIElements/Panel3D.h"
+#include "../../IO/Keyboard.h"
+#include <iostream>
 
 void TestCamera()
 {
@@ -111,21 +113,24 @@ void TestCameraMovementOrtographic()
 		L"",
 		L"../../GraphicsEngine/Test_PixelShader.hlsl");
 
+	float width		= 2.0f;
+	float height	= 2.0f;
+
 	Camera camera2(
-		{ 0.0f, 4.0f, 0.0f, 0.0f },
+		{ 0.0f, 80.0f, -1.0f, 0.0f },
 		{ 0.0f, 1.0f, 0.0f, 0.0f },
-		{ 0.0f, -1.01f, 0.0f, 0.0f },
-		2.0f, 2.0f,
-		0.1f, 100.0f, LOOK_TO, ORTHOGRAPHIC);
+		{ 0.0f, -80.0f, 1.0f, 0.0f },
+		width,  height,
+		0.01f, 1000.0f, LOOK_TO, ORTHOGRAPHIC);
 
 	Camera camera(
-		{ 0.0f, 5.0f, 3.5f, 0.0f },
+		{ 2.0f, 5.0f, 3.5f, 0.0f },
 		{ 0.0f, 1.0f, 0.0f, 0.0f },
 		{ 0.0f, 0.0f, 0.0f, 0.0f },
-		XM_PI / 8.0f, 16.0f / 9.0f,
+		XM_PI / 15.0f, 16.0f / 9.0f,
 		0.1f, 25.0f, LOOK_AT, PERSPECTIVE);
 
-	side_view.SetCamera(&camera2);
+	side_view.SetCamera(&camera);
 	top_view.SetCamera(&camera2);
 
 	float speed = 0.1f;
@@ -134,6 +139,42 @@ void TestCameraMovementOrtographic()
 	while (window.IsOpen())
 	{
 		window.Update();
+
+		if (Keyboard::IsKeyDown(Keys::W))
+		{
+			camera2.MoveCamera(0.0f, 0.0f, 1.0f, speed);
+		}
+		else if (Keyboard::IsKeyDown(Keys::S))
+		{
+			camera2.MoveCamera(0.0f, 0.0f, -1.0f, speed);
+		}
+		else if (Keyboard::IsKeyDown(Keys::D))
+		{
+			camera2.MoveCamera(1.0f, 0.0f, 0.0f, speed);
+		}
+		else if (Keyboard::IsKeyDown(Keys::A))
+		{
+			camera2.MoveCamera(-1.0f, 0.0f, 0.0f, speed);
+		}
+		else if (Keyboard::IsKeyDown(Keys::Space))
+		{
+			width += speed;
+			height += speed;
+			camera2.SetViewWidth(width);
+			camera2.SetViewHeight(height);
+		}
+		else if (Keyboard::IsKeyDown(Keys::Shift))
+		{
+			width -= speed;
+			height -= speed;
+			camera2.SetViewWidth(width);
+			camera2.SetViewHeight(height);
+		}
+
+		if (Keyboard::IsKeyPressed(Keys::Esc))
+		{
+			window.Close();
+		}
 
 		side_view.Update();
 		top_view.Update();

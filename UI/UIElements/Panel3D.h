@@ -83,4 +83,10 @@ private:
 
 	const void CreateTexture(std::wstring texturePath);
 
+	// --- TEMP ---
+	Position mMouseOrigin;
+	bool mShowCursor;
+
+	float mRadius;
+
 };
