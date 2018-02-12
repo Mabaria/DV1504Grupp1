@@ -7,6 +7,16 @@
 
 using namespace DirectX;
 
+// Fire				= 1
+// Dead person		= 2
+// Water			= 3
+// Contamination	= 4
+
+struct EventData
+{
+	float slots[4];
+};
+
 class MeshObject
 {
 public:
@@ -43,6 +53,9 @@ public:
 	const void SetConstantBuffer(ID3D11Buffer **constantBuffer);
 	XMMATRIX *rGetModelMatrix();
 
+	ID3D11Buffer **rGetEventBuffer();
+	void SetEvent(const EventData& active_events, ID3D11DeviceContext* context);
+
 private:
 	std::string mName;
 	std::vector<std::vector<unsigned int>> mIndices;
@@ -53,6 +66,7 @@ private:
 	ID3D11Buffer *mpConstantBuffer;
 	ID3D11ShaderResourceView *mpTextureView;
 
+	ID3D11Buffer *mpEventBuffer;
 
 	int mNumberOfBuffers;
 

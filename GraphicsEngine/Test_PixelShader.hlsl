@@ -1,5 +1,10 @@
-Texture2D texture2d		: register(t0);
-sampler ss				: register(s0);
+Texture2D texture2d			: register(t0);
+SamplerState ss				: register(s0);
+
+cbuffer event_data : register(b0)
+{
+	float4 events;
+}
 
 struct PS_IN
 {
@@ -15,6 +20,10 @@ struct Light
 	float3 color;		// Color of light
 	float illu;			// Amount to light up
 };
+
+int GetNrOfEvents();
+float3 GetEvent(int event);
+float3 GetBoatShading(PS_IN input);
 
 float4 main(PS_IN input) : SV_TARGET
 {
@@ -36,45 +45,43 @@ float4 main(PS_IN input) : SV_TARGET
 
 		diffuse -= 0.2f; // Simple fix for ugly edges
 
-		if (alpha != 1.0f)
+		if (alpha != 1.0f) // If it's going to blend, write it red
 		{
-			ambient = float3(1.0f, 0.0f, 0.0f);
+			ambient = float3(0.5f, 0.5f, 0.5f);
 		}
 	}
 	else // Everything else
 	{
-		Light lights[4];
-
-		// Top light
-		lights[0].dir = float3(0.0f, 1.0f, 0.0f);
-		lights[0].color = float3(0.45f, 0.45f, 0.45f);
-		lights[0].illu = 1.0f;
-
-
-		// Front light
-		lights[2].dir = float3(0.0f, 0.0f, 1.0f);
-		lights[2].color = float3(0.15f, 0.1f, 0.05f);
-		lights[2].illu = 1.0f;
-
-
-		// Left light
-		lights[1].dir = float3(1.0f, 0.0f, 0.0f);
-		lights[1].color = float3(0.11f, 0.09f, 0.08f);
-		lights[1].illu = 1.0f;
-
-
-		// Back light
-		lights[3].dir = float3(0.0f, 0.0f, -1.0f);
-		lights[3].color = float3(0.05f, 0.06f, 0.1f);
-		lights[3].illu = 1.0f;
-
-		for (int i = 0; i < 4; i++)
-		{
-			lights[i].illu = saturate(dot(lights[i].dir, input.nor));
-			diffuse += lights[i].color * lights[i].illu * 0.65f;
-		}
+		diffuse = GetBoatShading(input);
 	}
 
+	// If events are active for a bounding box
+	bool Are_there_active_events = events.r > 0.0f ?
+		true : false;
+
+	if (Are_there_active_events)
+	{
+		int nr_of_events = GetNrOfEvents();
+
+		for (int i = 0; i < nr_of_events; i++)
+		{
+			if (
+				((input.tex.x + input.tex.y) / 2.0f)
+				< 
+				(1.0f / nr_of_events) * (i + 1)
+				)
+			{
+				ambient = GetEvent(events[i]);
+				if (input.tex.x < 0.05f || input.tex.y < 0.05f
+					|| input.tex.x > 0.95f || input.tex.y > 0.95f)
+				{
+					ambient = ambient * 0.0f;
+					alpha = 0.75f;
+				}
+				break;
+			}
+		}
+	}
 	
 
 	// FOG
@@ -85,4 +92,67 @@ float4 main(PS_IN input) : SV_TARGET
 		depthValue = limit;
 
 	return float4(saturate(diffuse + ambient + depthValue.xxx), alpha);
+}
+
+float3 GetEvent(int event)
+{
+	float3 color[4];
+	color[0] = float3(1.0f, 0.0f, 0.0f);	// FIRE
+	color[1] = float3(0.0f, 1.0f, 0.0f);	// DEATH
+	color[2] = float3(0.0f, 0.0f, 1.0f);	// WATER
+	color[3] = float3(1.0f, 1.0f, 0.0f);	// CONTAMINATION
+
+	return color[event - 1];
+}
+
+int GetNrOfEvents()
+{
+	int count = 0;
+
+	for (int i = 0; i < 4; i++)
+	{
+		if (events[i] > 0.0f)
+			count++;
+	}
+
+	return count;
+}
+
+
+float3 GetBoatShading(PS_IN input)
+{
+	float3 shading = (float3)0;
+
+	Light lights[4];
+
+	// Top light
+	lights[0].dir = float3(0.0f, 1.0f, 0.0f);
+	lights[0].color = float3(0.45f, 0.45f, 0.45f);
+	lights[0].illu = 1.0f;
+
+
+	// Front light
+	lights[2].dir = float3(0.0f, 0.0f, 1.0f);
+	lights[2].color = float3(0.15f, 0.1f, 0.05f);
+	lights[2].illu = 1.0f;
+
+
+	// Left light
+	lights[1].dir = float3(1.0f, 0.0f, 0.0f);
+	lights[1].color = float3(0.11f, 0.09f, 0.08f);
+	lights[1].illu = 1.0f;
+
+
+	// Back light
+	lights[3].dir = float3(0.0f, 0.0f, -1.0f);
+	lights[3].color = float3(0.05f, 0.06f, 0.1f);
+	lights[3].illu = 1.0f;
+
+	for (int i = 0; i < 4; i++)
+	{
+		lights[i].illu = saturate(dot(lights[i].dir, input.nor));
+		shading += lights[i].color * lights[i].illu * 0.65f;
+	}
+
+	return shading;
 }
