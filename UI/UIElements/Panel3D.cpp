@@ -153,7 +153,7 @@ const void Panel3D::AddMeshObject(
 
 const void Panel3D::AddMeshObject(MeshObject * meshObject)
 {
-	this->mpMeshObjects.push_back(meshObject);
+	this->mpMeshObjects.push_back(new MeshObject(*meshObject));
 
 	for (int i = 0; i < this->mpMeshObjects.back()->GetNumberOfBuffers(); i++)
 	{
