@@ -196,6 +196,27 @@ void Button::SetButtonStatus(BUTTON_STATE buttState)
 	}
 }
 
+void Button::SetRectStatus(BUTTON_STATE rectState)
+{
+	if (!(this->mCurrState == rectState))
+	{
+		this->mCurrState = rectState;
+		switch (rectState)
+		{
+		case BUTTON_STATE::HOVER:
+			this->mpRectBrush->SetColor(D2D1::ColorF(D2D1::ColorF::LightGray));
+			break;
+		case BUTTON_STATE::CLICKED:
+			this->mpRectBrush->SetColor(D2D1::ColorF
+			(D2D1::ColorF::DarkOrchid));
+			this->NotifyObservers(this);
+		default:
+			this->mpRectBrush->SetColor(D2D1::ColorF(D2D1::ColorF::Black));
+			break;
+		}
+	}
+}
+
 void Button::LoadImageToBitmap(
 	std::string imageFilePath)
 {

@@ -42,6 +42,7 @@ public:
 	void MoveButton(int x, int y);
 	void MoveIcon(int x, int y);
 	void SetButtonStatus(BUTTON_STATE buttState);
+	void SetRectStatus(BUTTON_STATE rectState);
 	void LoadImageToBitmap(std::string imageFilePath);
 	BUTTON_STATE GetButtState() const;
 
