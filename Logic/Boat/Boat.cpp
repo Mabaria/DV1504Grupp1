@@ -113,7 +113,8 @@ void Boat::AddRoom(std::string roomName,
 
 Room* Boat::GetPickedRoom(Ray ray)
 {
-	float hitIndex, tMain, t;
+	float tMain, t;
+	int hitIndex;
 
 	tMain = -1; // Assume miss and prove collision
 	hitIndex = -1;
@@ -121,7 +122,6 @@ Room* Boat::GetPickedRoom(Ray ray)
 	// Check all rooms for collision
 	for (int i = 0; i < (int)this->mBoundingAABB.size(); i++)
 	{
-		//t = this->mRooms[i].CheckRayCollision(ray);
 		t = Picking::IsRayIntersectingAABB(ray, this->mBoundingAABB[i]);
 
 		if (
@@ -443,14 +443,14 @@ bool Boat::LoadBoundingBoxes()
 {
 	//? Is there any point in not hardcode the files?
 	//Todo Need to try-catch this
-	this->mBoundingMesh.push_back(
-		Mesh("../../Models/Bounding/Bound01UV.obj"));
-	this->mBoundingMesh.push_back(
-		Mesh("../../Models/Bounding/Bound1UV.obj"));
+	//this->mBoundingMesh.push_back(
+	//	Mesh("../../Models/Bounding/Bound01UV.obj"));
+	//this->mBoundingMesh.push_back(
+	//	Mesh("../../Models/Bounding/Bound1UV.obj"));
 	this->mBoundingMesh.push_back(
 		Mesh("../../Models/Bounding/Bound2UV.obj"));
 
-	this->mBoundingMeshObjects.push_back(MeshObject(
+	/*this->mBoundingMeshObjects.push_back(MeshObject(
 		"Bound01",
 		this->mBoundingMesh[0].GetIndexVectors(),
 		this->mBoundingMesh[0].GetVertexVectors()
@@ -459,11 +459,11 @@ bool Boat::LoadBoundingBoxes()
 		"Bound1",
 		this->mBoundingMesh[1].GetIndexVectors(),
 		this->mBoundingMesh[1].GetVertexVectors()
-	));
+	));*/
 	this->mBoundingMeshObjects.push_back(MeshObject(
 		"Bound2",
-		this->mBoundingMesh[2].GetIndexVectors(),
-		this->mBoundingMesh[2].GetVertexVectors()
+		this->mBoundingMesh[0].GetIndexVectors(),
+		this->mBoundingMesh[0].GetVertexVectors()
 	));
 
 	for (int i = 0; i < this->mBoundingMesh.size(); i++)

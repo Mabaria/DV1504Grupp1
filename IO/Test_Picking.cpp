@@ -406,3 +406,56 @@ DirectX::XMVECTOR ComputePosition(Camera *pCamera, float posX, float posY)
 
 	return position;
 }
+
+bool TestPickingOnBoat()
+{
+	//! ADD YOUR OWN TESTS HERE
+	Boat boat;
+	boat.ReadFile("../../Savefiles/Testboat1.boat");
+	boat.LoadBoatMesh();
+	boat.LoadBoundingBoxes();
+
+	Window window(L"HELLO", 1920, 1080);
+
+	Panel3D panel(1920, 1080, 0, 0, window.GetWindow(), L"HELLO");
+
+	//panel.AddMeshObject(boat.GetDeckMeshObject(0));
+	//panel.AddMeshObject(boat.GetDeckMeshObject(1));
+	panel.AddMeshObject(boat.GetDeckMeshObject(2));
+
+	panel.CreateShadersAndSetup(L"../../GraphicsEngine/Test_VertexShader.hlsl", L"", L"../../GraphicsEngine/Test_PixelShader.hlsl");
+
+	Camera camera(
+		0.0f, 4.0f, 0.0f,
+		0.f, 0.f, 1.f,
+		0.0f, 0.0f, 0.0f,
+		90.f, 1.33f,
+		//19.2f, 10.8f,
+		0.1f, 1000.f/*,
+					LOOK_MODE::LOOK_AT,
+					PROJECTION_MODE::ORTHOGRAPHIC*/);
+
+	panel.SetCamera(&camera);
+
+	window.Open();
+	while (window.IsOpen())
+	{
+		window.Update();
+		panel.Update();
+		panel.Draw();
+		Ray ray;
+		//std::cout << "x: " << Mouse::GetXPercentage() << ", y: " << Mouse::GetYPercentage();
+		Picking::GetWorldRay(&camera, Mouse::GetXPercentage(), Mouse::GetYPercentage(), ray);
+		//std::cout << ", Direction (x, y, z): ("
+		//	<< DirectX::XMVectorGetX(ray.direction) << ", "
+		//	<< DirectX::XMVectorGetY(ray.direction) << ", "
+		//	<< DirectX::XMVectorGetZ(ray.direction) << ")"
+		//	<< std::endl;
+		Room *room = boat.GetPickedRoom(ray);
+		if (room != nullptr)
+			std::cout << "HIT ROOM: " << room->GetName() << std::endl;
+		else
+			std::cout << std::endl;
+	}
+	return true;
+}
