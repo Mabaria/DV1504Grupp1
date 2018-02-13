@@ -590,7 +590,8 @@ const bool Panel3D::UpdateCamera()
 		{
 			flag = true;
 			this->mpCamera->MoveCamera(
-				{ this->mMouseDiff.x * -0.008f, this->mMouseDiff.y }, this->mSpeed
+				{ this->mMouseDiff.x * -0.008f, this->mMouseDiff.y }, 
+				this->mSpeed
 			);
 		}
 		break;
