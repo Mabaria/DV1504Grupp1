@@ -1,11 +1,12 @@
 #pragma once
 
-#include "../GraphicsEngine/Parsing/Test_AssImp.h"
-#include "../GraphicsEngine/Parsing/Test_Boat.h"
-#include "../GraphicsEngine/Test_Button.h"
-#include "../GraphicsEngine/Camera/Test_Camera.h"
-#include "../GraphicsEngine/Test_Graphics.h"
-#include "../GraphicsEngine/Parsing/Test_Mesh.h"
+#include "../../GraphicsEngine/Parsing/Test_AssImp.h"
+#include "../../GraphicsEngine/Parsing/Test_Boat.h"
+#include "../../GraphicsEngine/Test_Button.h"
+#include "../../GraphicsEngine/Camera/Test_Camera.h"
+#include "../../GraphicsEngine/Test_Graphics.h"
+#include "../../GraphicsEngine/Parsing/Test_Mesh.h"
+#include "../../GraphicsEngine/Parsing/Test_MaterialHandler.h"
 
 #include "../IO/Test_Input.h"
 #include "../IO/ObserverPattern/Test_Obs.h"
@@ -34,18 +35,16 @@ namespace Testing
 		//Test_Panel2D();
 		//Todo This test crashes
 		//Test_Panel3D();
-		//Test_BoatOnScreen();
+		Test_BoatOnScreen();
 
-		Test_Panel2DTextBoxes();
+		//Test_Panel2DTextBoxes();
+		//Test_Material_Handler();
 		return true;
 	}
 
 	bool testOne()
 	{
-		//! ADD YOUR OWN TESTS HERE
-		
-		TestCameraMovementOrtographic();
-
+		Test_Material_Handler();
 		return true;
 	}
 }

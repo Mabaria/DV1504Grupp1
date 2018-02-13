@@ -4,7 +4,7 @@ Mesh::Mesh(const std::string &filePath)
 {
 	if (this->ReadFile(filePath))
 	{
-		for (unsigned int i = 0; i < this->mScene->mNumMeshes; i++)
+		for (unsigned int i = 0; i < this->mpScene->mNumMeshes; i++)
 		{
 			this->mIndexVectors.push_back(std::vector<unsigned int>());
 			this->mVertexVectors.push_back(std::vector<Vertex>());
@@ -37,19 +37,24 @@ std::vector<std::vector<unsigned int>>& Mesh::GetIndexVectors()
 
 unsigned int Mesh::GetNumMeshes() const
 {
-	return this->mScene->mNumMeshes;
+	return this->mpScene->mNumMeshes;
 }
 
 unsigned int Mesh::GetNumMaterials() const
 {
-	return this->mScene->mNumMaterials;
+	return this->mpScene->mNumMaterials;
+}
+
+const aiScene * Mesh::GetScenePointer()
+{
+	return this->mpScene;
 }
 
 aiMaterial* Mesh::GetMaterialPtr(unsigned int materialIndex)
 {
-	if (materialIndex < this->mScene->mNumMaterials)
+	if (materialIndex < this->mpScene->mNumMaterials)
 	{
-		return this->mScene->mMaterials[materialIndex];
+		return this->mpScene->mMaterials[materialIndex];
 	}
 	else
 	{
@@ -59,23 +64,23 @@ aiMaterial* Mesh::GetMaterialPtr(unsigned int materialIndex)
 
 unsigned int Mesh::GetSubmeshMaterialIndex(unsigned int submeshIndex)
 {
-	if (submeshIndex > this->mScene->mNumMeshes) {
-		return this->mSubmeshMaterialIndexVector[submeshIndex];
-	}
-	else
+	if (this->mpScene != nullptr)
 	{
-		return -1;
+		if (submeshIndex < this->mpScene->mNumMeshes) {
+			return this->mSubmeshMaterialIndexVector[submeshIndex];
 	}
+}
+	return -1;
 }
 
 bool Mesh::HasNormals() const
 {
-	return this->mScene->mMeshes[0]->HasNormals();
+	return this->mpScene->mMeshes[0]->HasNormals();
 }
 
 bool Mesh::HasTextureCoords() const
 {
-	return this->mScene->mMeshes[0]->HasTextureCoords(0); //Check channel 0
+	return this->mpScene->mMeshes[0]->HasTextureCoords(0); //Check channel 0
 }
 
 bool Mesh::ReadFile(const std::string &filePath)
@@ -86,15 +91,16 @@ bool Mesh::ReadFile(const std::string &filePath)
 
 	
 
-	this->mScene = this->mImporter.ReadFile(filePath,
+	this->mpScene = this->mImporter.ReadFile(filePath,
 		aiProcess_Triangulate | // Converts all faces to triangles
 		aiProcess_JoinIdenticalVertices | // Removes duplicate vertices in the mesh
 		aiProcess_SortByPType | // Removes potential useless lines and points from mesh
 		aiProcess_OptimizeMeshes | // Reduces total mesh count by combining
+		aiProcess_SplitLargeMeshes | // Splits large meshes
 		aiProcess_ConvertToLeftHanded); // Flips UVs, flips winding order and 
 										// converts all right handed matrices
 										// to left handed
-	return this->mScene; // True if successfull, false if not
+	return this->mpScene; // True if successfull, false if not
 }
 
 void Mesh::PopulateVectors()
@@ -103,32 +109,36 @@ void Mesh::PopulateVectors()
 	bool has_uvs = true;
 	float temp_norm_x, temp_norm_y, temp_norm_z;
 	float temp_tex_u, temp_tex_v;
-	if (this->mScene->HasMeshes()) {
+	if (this->mpScene->HasMeshes()) {
 
-		for (unsigned int m = 0; m < this->mScene->mNumMeshes; m++)
+		for (unsigned int m = 0; m < this->mpScene->mNumMeshes; m++)
 		{
-			for (unsigned int f = 0; f < this->mScene->mMeshes[m]->mNumFaces; f++)
+			this->mSubmeshMaterialIndexVector.push_back(
+				this->mpScene->mMeshes[m]->mMaterialIndex); /* Add the material
+															index to storage
+															vector */
+			for (unsigned int f = 0; f < this->mpScene->mMeshes[m]->mNumFaces; f++)
 			{
 				for (unsigned int i = 0;
-					i < this->mScene->mMeshes[m]->mFaces[f].mNumIndices;
+					i < this->mpScene->mMeshes[m]->mFaces[f].mNumIndices;
 					i++)
 				{
 					this->mIndexVectors[m].push_back(
-							this->mScene->mMeshes[m]->mFaces[f].mIndices[i]);
+							this->mpScene->mMeshes[m]->mFaces[f].mIndices[i]);
 					// For every mesh, for every face, for every index, add that
 					// to the vector with indices for that mesh for later use as
 					// index buffer data
 				}
 			}
-			has_normals = this->mScene->mMeshes[m]->HasNormals();
-			has_uvs = this->mScene->mMeshes[m]->HasTextureCoords(0);
-			for (unsigned int v = 0; v < this->mScene->mMeshes[m]->mNumVertices; v++)
+			has_normals = this->mpScene->mMeshes[m]->HasNormals();
+			has_uvs = this->mpScene->mMeshes[m]->HasTextureCoords(0);
+			for (unsigned int v = 0; v < this->mpScene->mMeshes[m]->mNumVertices; v++)
 			{
 				if (has_normals)
 				{
-					temp_norm_x = this->mScene->mMeshes[m]->mNormals[v].x;
-					temp_norm_y = this->mScene->mMeshes[m]->mNormals[v].y;
-					temp_norm_z = this->mScene->mMeshes[m]->mNormals[v].z;
+					temp_norm_x = this->mpScene->mMeshes[m]->mNormals[v].x;
+					temp_norm_y = this->mpScene->mMeshes[m]->mNormals[v].y;
+					temp_norm_z = this->mpScene->mMeshes[m]->mNormals[v].z;
 				}
 				else
 				{
@@ -138,8 +148,8 @@ void Mesh::PopulateVectors()
 				}
 				if (has_uvs)
 				{
-					temp_tex_u = this->mScene->mMeshes[m]->mTextureCoords[0][v].x;
-					temp_tex_v = this->mScene->mMeshes[m]->mTextureCoords[0][v].y;
+					temp_tex_u = this->mpScene->mMeshes[m]->mTextureCoords[0][v].x;
+					temp_tex_v = this->mpScene->mMeshes[m]->mTextureCoords[0][v].y;
 					// Bit confused as to exactly how mTextureCoords is laid out
 					// but I think it is separated into channels.
 					// I am only saving channel 0, which I assume is the regular
@@ -153,9 +163,9 @@ void Mesh::PopulateVectors()
 				}
 				Vertex new_vert =
 				{
-					this->mScene->mMeshes[m]->mVertices[v].x,
-					this->mScene->mMeshes[m]->mVertices[v].y,
-					this->mScene->mMeshes[m]->mVertices[v].z,
+					this->mpScene->mMeshes[m]->mVertices[v].x,
+					this->mpScene->mMeshes[m]->mVertices[v].y,
+					this->mpScene->mMeshes[m]->mVertices[v].z,
 
 					temp_norm_x,
 					temp_norm_y,
