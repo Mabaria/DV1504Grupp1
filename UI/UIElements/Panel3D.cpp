@@ -70,6 +70,8 @@ Panel3D::Panel3D(int width, int height, int top, int left, HWND handle, LPCTSTR 
 	this->mMouseDiff.x	= 0.0f;
 	this->mMouseDiff.y	= 0.0f;
 	this->mBtnToPan		= Buttons::ScrollPress;
+
+	this->mOrthographicMaxView = 2.0f;
 }
 
 Panel3D::~Panel3D()
@@ -448,11 +450,11 @@ const bool Panel3D::UpdateCamera()
 				this->mpCamera->GetViewHeight() - (this->mSpeed * scroll)
 			);
 
-			if (this->mpCamera->GetViewWidth() > this->mRadius)
-				this->mpCamera->SetViewWidth(this->mRadius);
+			if (this->mpCamera->GetViewWidth() > this->mOrthographicMaxView)
+				this->mpCamera->SetViewWidth(this->mOrthographicMaxView);
 
-			if (this->mpCamera->GetViewHeight() > this->mRadius)
-				this->mpCamera->SetViewHeight(this->mRadius);
+			if (this->mpCamera->GetViewHeight() > this->mOrthographicMaxView)
+				this->mpCamera->SetViewHeight(this->mOrthographicMaxView);
 
 			
 		}

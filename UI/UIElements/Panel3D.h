@@ -93,6 +93,8 @@ private:
 	Position mMouseDiff;
 	bool mShowCursor;
 
+	float mOrthographicMaxView;
+
 	float mSpeed;
 	float mRadius;
 

@@ -117,9 +117,9 @@ void TestCameraMovementOrtographic()
 	float height	= 2.0f;
 
 	Camera camera2(
-		{ 0.0f, 80.0f, -1.0f, 0.0f },
+		{ 0.0f, 80.0f, -2.0f, 0.0f },
 		{ 0.0f, 1.0f, 0.0f, 0.0f },
-		{ 0.0f, -80.0f, 1.0f, 0.0f },
+		{ 0.0f, -80.0f, 2.0f, 0.0f },
 		width,  height,
 		0.01f, 1000.0f, LOOK_TO, ORTHOGRAPHIC);
 
