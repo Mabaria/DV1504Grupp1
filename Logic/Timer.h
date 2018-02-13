@@ -18,7 +18,7 @@ public:
 	const std::string GetSecondsAsStr();
 	const std::string GetMinutesAsStr();
 	const std::string GetHoursAsStr();
-	const std::string GetDaysAsStr();
+	//const std::string GetDaysAsStr();
 
 private:
 	time_t mStartTime;

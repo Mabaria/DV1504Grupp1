@@ -35,15 +35,16 @@ namespace Testing
 		//Todo This test crashes
 		//Test_Panel3D();
 		//Test_BoatOnScreen();
-
 		Test_Panel2DTextBoxes();
+
+		
 		return true;
 	}
 
 	bool testOne()
 	{
 		//! ADD YOUR OWN TESTS HERE
-		try
+	/*	try
 		{
 			Test_Picking();
 		}
@@ -54,7 +55,8 @@ namespace Testing
 
 		getchar();
 		
-		Test_Text();
+		Test_Text();*/
+		
 		return true;
 	}
 }
