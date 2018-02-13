@@ -139,9 +139,9 @@ const void Panel3D::AddMeshObject(
 	{
 		// Add a default material if no material exists
 		MaterialStruct defaultMat =
-		{ 1.0f, 1.0f, 1.0f,
+		{ 0.5f, 0.5f, 0.5f,
 			1.0f, 1.0f, 1.0f,
-			0.0f, 0.0f, 0.0f,
+			1.0f, 1.0f, 1.0f,
 			1.0f,
 			1.0f };
 		this->mCreateMaterialBuffer(&defaultMat);

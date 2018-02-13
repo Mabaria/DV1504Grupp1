@@ -9,7 +9,7 @@ cbuffer MATERIAL_BUFFER : register(b1)
 	float3 Ambient;
 	float3 Specular;
 	float SpecExp;
-	float Opacity; // Doesn't seem to work, is always 1.0f
+	float Opacity;
 }
 
 
@@ -48,6 +48,10 @@ true : false;
 ambient = use_texture ?
 texture2d.Sample(ss, input.tex.xy) : ambient;
 
+// If events are active for a bounding box
+bool Are_there_active_events = events.r > 0.0f ?
+true : false;
+
 
 if (use_texture) // When blending is needed
 {
@@ -60,15 +64,15 @@ if (use_texture) // When blending is needed
 	{
 		ambient = float3(0.5f, 0.5f, 0.5f);
 	}
+
 }
 else // Everything else
 {
 	diffuse += GetBoatShading(input);
+	ambient = 0.0f;
 }
 
-// If events are active for a bounding box
-bool Are_there_active_events = events.r > 0.0f ?
-true : false;
+
 
 if (Are_there_active_events)
 {
@@ -83,12 +87,12 @@ if (Are_there_active_events)
 			)
 		{
 			ambient = GetEvent(events[i]);
+			diffuse = diffuse * 0.0f;
 			if (input.tex.x < 0.05f || input.tex.y < 0.05f
 				|| input.tex.x > 0.95f || input.tex.y > 0.95f)
 			{
 				ambient = ambient * 0.2f;
-				diffuse = diffuse * 0.0f;
-				alpha = 1.0f;
+				alpha = 0.8f;
 			}
 			break;
 		}
@@ -96,7 +100,7 @@ if (Are_there_active_events)
 }
 else
 {
-	ambient = 0.0f;
+	//ambient = 0.0f;
 }
 
 

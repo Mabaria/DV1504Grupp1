@@ -217,8 +217,10 @@ void Test_BoatOnScreen()
 
 	MeshObject floor2_object ("floor2", &floor2);
 	MeshObject floor1_object ("floor1", &floor1);
-	MeshObject floor01_object("floor01", &floor01); 
+	MeshObject floor01_object("floor01", &floor01);
+
 	floor2_object.Rotate(0.f, 3.14f, 0.0f);
+
 	std::wstring window_name = L"Demo_BIS";
 
 	Window window(window_name, 1280, 720);
@@ -263,7 +265,7 @@ void Test_BoatOnScreen()
 		L"../../GraphicsEngine/Test_PixelShader.hlsl");
 
 	Camera camera2(
-		{ 0.0f, 0.0f, -0.2f, 0.0f }, 
+		{ 0.0f, 0.0f, -10.2f, 0.0f }, 
 		{ 0.0f, 1.0f, 0.0f, 0.0f }, 
 		{ 0.0f, 0.0f, 0.0f, 0.0f },
 		2.0f, 2.0f,
@@ -283,21 +285,18 @@ void Test_BoatOnScreen()
 	// --- Text On Screen ---
 
 	Quad txt(true);
-	top_view.AddMeshObject("Däck1", txt.GetIndices(), txt.GetVertices(), 
+	top_view.AddMeshObject("Däck1Text", txt.GetIndices(), txt.GetVertices(), 
 		L"../../Models/Däck1.DDS", false
 	);
 
-	top_view.rGetMeshObject("Däck1")->Scale		(0.4f, 0.15f, 0.15f);
-	top_view.rGetMeshObject("Däck1")->Rotate	(XM_PI / 2.0f, XM_PI / 2.0f, 0.0f);
-	top_view.rGetMeshObject("Däck1")->Translate	(0.2f, 0.0f, 0.2f);
+	top_view.rGetMeshObject("Däck1Text")->Scale		(0.4f, 0.15f, 0.15f);
+	top_view.rGetMeshObject("Däck1Text")->Rotate	(XM_PI / 2.0f, XM_PI / 2.0f, 0.0f);
+	top_view.rGetMeshObject("Däck1Text")->Translate	(0.2f, 0.0f, 0.2f);
 
 	// --- END ---
 	
 
 	//// --- Transparent Boxes ---
-
-
-
 
 	Mesh bb2("../../Models/Bound2UV.obj");
 	MeshObject bb2_object("Bound2UV", &bb2);
@@ -323,55 +322,55 @@ void Test_BoatOnScreen()
 	top_view.rGetMeshObject("Bound2UV")->SetEvent(
 		data, top_view.rGetDirect3D().GetContext(), 0
 	);
+	top_view.rGetMeshObject("Bound2UV")->SetEvent(
+		data, top_view.rGetDirect3D().GetContext(), 2
+	);
+	top_view.rGetMeshObject("Bound2UV")->SetEvent(
+		data, top_view.rGetDirect3D().GetContext(), 3
+	);
+	top_view.rGetMeshObject("Bound2UV")->SetEvent(
+		data, top_view.rGetDirect3D().GetContext(), 4
+	);
+	top_view.rGetMeshObject("Bound2UV")->SetEvent(
+		data, top_view.rGetDirect3D().GetContext(), 5
+	);
+	top_view.rGetMeshObject("Bound2UV")->SetEvent(
+		data, top_view.rGetDirect3D().GetContext(), 6
+	);
 
 	//// -- side view ---
 
 	side_view.AddMeshObject(&bb2_object,
 		L"../../Models/BlendColor.DDS", true
 	);
-	side_view.rGetMeshObject("Bound2UV")->Scale(0.15f, 0.4f, 0.1f);
+	side_view.rGetMeshObject("Bound2UV")->Scale(0.15f, 0.3f, 0.1f);
 	side_view.rGetMeshObject("Bound2UV")->Rotate(0.0f, XM_PI, 0.0f);
-	side_view.rGetMeshObject("Bound2UV")->Translate(0.0f, -0.2f, 0.07f);
+	side_view.rGetMeshObject("Bound2UV")->Translate(0.055f, -0.18f, -0.8f);
 
 	data = { 1.0f, 3.0f, 0.0f, 0.0f };
-	side_view.rGetMeshObject("Bound2UV")->SetEvent(
-		data, side_view.rGetDirect3D().GetContext(), 2
-	);
-
 	side_view.rGetMeshObject("Bound2UV")->SetEvent(
 		data, side_view.rGetDirect3D().GetContext(), 1
 	);
 
-	//// --- new event in different room
-
-	//ti.push_back(bb2.GetIndexVectors()[0]);
-	//tv.push_back(bb2.GetVertexVectors()[0]);
-
-
-	//top_view.AddMeshObject("Bound3UV", ti, tv,
-	//	L"../../Models/BlendColor.DDS", true
-	//);
-	//top_view.rGetMeshObject("Bound3UV")->Scale(0.1f, 0.1f, 0.1f);
-	//top_view.rGetMeshObject("Bound3UV")->Rotate(0.0f, XM_PI, 0.0f);
-	//top_view.rGetMeshObject("Bound3UV")->Translate(0.0f, 0.0f, 0.5f);
-
-	//data = { 1.0f, 3.0f, 0.0f, 0.0f };
-	//top_view.rGetMeshObject("Bound3UV")->SetEvent(
-	//	data, top_view.rGetDirect3D().GetContext()
-	//);
-
-	//side_view.AddMeshObject("Bound3UV", ti, tv,
-	//	L"../../Models/BlendColor.DDS", true
-	//);
-	//side_view.rGetMeshObject("Bound3UV")->Scale(0.15f, 0.4f, 0.1f);
-	//side_view.rGetMeshObject("Bound3UV")->Rotate(0.0f, XM_PI, 0.0f);
-	//side_view.rGetMeshObject("Bound3UV")->Translate(0.0f, -0.2f, 0.07f);
-
-	//data = { 3.0f, 0.0f, 0.0f, 0.0f };
-	//side_view.rGetMeshObject("Bound3UV")->SetEvent(
-	//	data, side_view.rGetDirect3D().GetContext()
-	//);
-	// --- END ---
+	data = { 3.0f, 4.0f, 2.0f, 1.0f };
+	side_view.rGetMeshObject("Bound2UV")->SetEvent(
+		data, side_view.rGetDirect3D().GetContext(), 0
+	);
+	side_view.rGetMeshObject("Bound2UV")->SetEvent(
+		data, side_view.rGetDirect3D().GetContext(), 2
+	);
+	side_view.rGetMeshObject("Bound2UV")->SetEvent(
+		data, side_view.rGetDirect3D().GetContext(), 3
+	);
+	side_view.rGetMeshObject("Bound2UV")->SetEvent(
+		data, side_view.rGetDirect3D().GetContext(), 4
+	);
+	side_view.rGetMeshObject("Bound2UV")->SetEvent(
+		data, side_view.rGetDirect3D().GetContext(), 5
+	);
+	side_view.rGetMeshObject("Bound2UV")->SetEvent(
+		data, side_view.rGetDirect3D().GetContext(), 6
+	);
 
 	float speed = 0.1f;
 
