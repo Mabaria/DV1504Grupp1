@@ -37,7 +37,9 @@ private:
 
 	int mSpace;
 
+	TextBox mTitle;
+
 	// Render target pointer for size purposes.
-	ID2D1HwndRenderTarget *mRenderTarget;
+	ID2D1HwndRenderTarget *mpRenderTarget;
 	std::vector<NotificationObject*> mObjects;
 };

@@ -1,13 +1,22 @@
 #include "NotificationList.h"
 
 NotificationList::NotificationList(Direct2D *direct2d, int posX, int posY)
+	:mTitle(direct2d, 0, 0, 0, 0)
 {
 	this->mPosX = posX;
 	this->mPosY = posY;
 	this->mListTop		= this->mPosY;
 	this->mListBottom	= this->mPosY;
-	this->mRenderTarget = direct2d->GetpRenderTarget();
+	this->mpRenderTarget = direct2d->GetpRenderTarget();
 	this->mSpace = 4;
+	this->mTitle.SetTextBoxSize(
+		this->mPosX, 
+		this->mPosY, 
+		direct2d->GetpRenderTarget()->GetSize().width,
+		direct2d->GetpRenderTarget()->GetSize().height / 18);
+
+	// 
+	this->mTitle.SetText("Aktiv Logg\nAntal: 0");
 }
 
 NotificationList::~NotificationList()
@@ -23,12 +32,26 @@ void NotificationList::AddNotification(
 	Room * room, 
 	LogEvent * event)
 {
-	this->mObjects.push_back(new NotificationObject(room, event, direct2d));
+	// Creates a new notification object and pushes it to the vector along
+	// with the number of objects in the vector for indexing.
+	this->mObjects.push_back(new NotificationObject(
+		room, 
+		event, 
+		direct2d, 
+		(int)this->mObjects.size() + 1));
+
+	// Moves the object 2 pixels in x for looks, and in y based on the
+	// number of objects in the list plus an offset for looks plus the
+	// height of the title text box.
 	this->mObjects.back()->Move(
 		2, 
 		((int)this->mObjects.size() - 1)
-		*
-		(this->mObjects[0]->GetHeight() + this->mSpace) + this->mSpace);
+		* (this->mObjects[0]->GetHeight() + this->mSpace) 
+		+ this->mTitle.GetTextBoxSize().bottom);
+
+	// Updates the number of events in the title.
+	this->mTitle.SetText(
+		"Aktiv Logg\nAntal: " + std::to_string(this->mObjects.size()));
 }
 
 bool NotificationList::RemoveNotification(Room * room, LogEvent * event)
@@ -61,12 +84,17 @@ bool NotificationList::RemoveNotification(Room * room, LogEvent * event)
 				this->mObjects[j]->Move(
 					0,
 					-this->mObjects[0]->GetHeight() - this->mSpace);
+				this->mObjects[j]->SetIndex(this->mObjects[j]->GetIndex() - 1);
 			}
 
 			// Deleting the last object of the vector
 			// as that will be a duplicate of the second
 			// to last object at this point.
 			this->mObjects.pop_back();
+
+			// Updates the number of events in the title.
+			this->mTitle.SetText(
+				"Aktiv Logg\nAntal: " + std::to_string(this->mObjects.size()));
 		}
 	}
 	return result;
@@ -114,12 +142,12 @@ void NotificationList::MoveLog(float speed)
 			this->mObjects[i]->Move(0, this->mSpace - this->mListTop);
 		}
 	}
-	else if (this->mListBottom < this->mRenderTarget->GetSize().height)
+	else if (this->mListBottom < this->mpRenderTarget->GetSize().height)
 	{
 		for (int i = 0; i < (int)this->mObjects.size(); i++)
 		{
 			this->mObjects[i]->Move(0, 
-				(int)this->mRenderTarget->GetSize().height
+				(int)this->mpRenderTarget->GetSize().height
 				- this->mListBottom - this->mSpace);
 		}
 	}
@@ -128,20 +156,25 @@ void NotificationList::MoveLog(float speed)
 
 void NotificationList::Update()
 {
+	// Updating time for the notification objects.
 	for (int i = 0; i < (int)this->mObjects.size(); i++)
 	{
 		this->mObjects[i]->Update();
 	}
+
+	// List top and list bottom
 	this->UpdateBorders();
 }
 
 void NotificationList::UpdateBorders()
 {
+	// Top y value for the first object of the list.
 	this->mListTop = (int)
 		this->mObjects.front()->
 		GetButton()->
 		GetButtonSize().
 		top;
+	// Bottom y value for the last object of the list.
 	this->mListBottom = (int)
 		this->mObjects.back()->
 		GetButton()->
@@ -151,6 +184,7 @@ void NotificationList::UpdateBorders()
 
 void NotificationList::Draw()
 {
+	this->mTitle.DrawTextBox();
 	for (int i = 0; i < (int)this->mObjects.size(); i++)
 	{
 		this->mObjects[i]->Draw();

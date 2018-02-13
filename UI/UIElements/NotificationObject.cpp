@@ -3,7 +3,8 @@
 NotificationObject::NotificationObject(
 	Room *room, 
 	LogEvent *event, 
-	Direct2D *direct2d) 
+	Direct2D *direct2d,
+	int index) 
 	: mButton(direct2d, "", 0, 0, 0, 0)
 	, mTextBox(direct2d, 0, 0, 0, 0)
 {
@@ -13,8 +14,9 @@ NotificationObject::NotificationObject(
 	this->mStartTime = this->mTimer->WhenTimerStarted();
 	this->mElapsedTime = this->mTimer->GetTimeAsStr();
 	this->mEventType = event->GetType();
+	this->mIndex = index;
 	
-	direct2d->SetFontSize(16);
+	direct2d->SetFontSize(12);
 	D2D1_SIZE_F render_target_size = direct2d->GetpRenderTarget()->GetSize();	
 
 	// 200x80 notification object.
@@ -114,7 +116,9 @@ const std::string NotificationObject::GetStartTime() const
 
 const std::string NotificationObject::GetNotificationString() const
 {
-	std::string return_string = "";
+	std::string return_string = "Händelse ";
+	return_string += std::to_string(this->mIndex);
+	return_string += "\n";
 	return_string += this->mRoomName;
 	return_string += "\n";
 	return_string += this->mDeckName;
@@ -139,6 +143,16 @@ const int NotificationObject::GetHeight() const
 {
 	return (int)this->mButton.GetButtonSize().bottom
 		-  (int)this->mButton.GetButtonSize().top;
+}
+
+const int NotificationObject::GetIndex() const
+{
+	return this->mIndex;
+}
+
+const void NotificationObject::SetIndex(int index)
+{
+	this->mIndex = index;
 }
 
 const void NotificationObject::Move(int x, int y)

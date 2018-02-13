@@ -11,7 +11,11 @@
 class NotificationObject
 {
 public:
-	NotificationObject(Room *room, LogEvent *event, Direct2D *direct2d);
+	NotificationObject(
+		Room *room, 
+		LogEvent *event,
+		Direct2D *direct2d, 
+		int index);
 	~NotificationObject();
 	
 	const Event::Type GetEventType() const;
@@ -26,6 +30,10 @@ public:
 
 	const int GetWidth() const;
 	const int GetHeight() const;
+
+	// For changing the index upon deletion.
+	const int GetIndex() const;
+	const void SetIndex(int index);
 
 	const void Move(int x, int y);
 	const void SetText(std::string text);
@@ -43,6 +51,8 @@ private:
 
 	std::string mStartTime;
 	std::string mElapsedTime;
+
+	int mIndex;
 
 	Event::Type mEventType;
 };

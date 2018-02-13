@@ -550,14 +550,14 @@ void Test_Panel2DTextBoxes()
 	LogEvent test_event4;
 	test_event4.SetType(Event::Injury);
 
-	log_panel.SetNotificationList(30, 0);
+	log_panel.SetNotificationList(2, 0);
 	
 	log_panel.AddNotification(&test_room, &test_event);
 	log_panel.AddNotification(&test_room2, &test_event2);
 	log_panel.AddNotification(&test_room3, &test_event3);
 	log_panel.AddNotification(&test_room4, &test_event4);
 	
-
+	log_panel.RemoveNotification(&test_room2, &test_event2);
 
 	float speed = 0.1f;
 
