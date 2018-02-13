@@ -54,12 +54,16 @@ private:
 	int GetRoomIndex(std::string roomName, std::string deckName);
 	int GetDeckIndex(std::string deckName);
 
+	RoomDesc FillRoomDescFromLine(std::string line);
+	DeckDesc FillDeckDescFromLine(std::string line);
+	std::string GetNameFromLine(std::string line, char until = NULL);
+
 	std::string GetDeckNameByRoomIndex(int index);
 
 	std::string mModelName;
 
-	std::vector<Deck> mDecks;
-	std::vector<Room> mRooms;
+	std::vector<Deck*> mpDecks;
+	std::vector<Room*> mpRooms;
 
 	EventLog *mpEventLog;
 

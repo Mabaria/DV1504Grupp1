@@ -45,7 +45,7 @@ namespace Testing
 		//! ADD YOUR OWN TESTS HERE
 		try
 		{
-			BoatTester::WriteTest();
+			BoatTester::TestBoat();
 		}
 		catch (const char *e)
 		{

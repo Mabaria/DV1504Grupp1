@@ -5,6 +5,11 @@ Room::Room()
 	this->mIndex = -1;
 }
 
+Room::Room(RoomDesc desc)
+{
+	this->InitFromDesc(desc);
+}
+
 Room::~Room()
 {
 
@@ -32,6 +37,17 @@ std::string Room::GetName() const
 	return this->mName;
 }
 
+void Room::InitFromDesc(RoomDesc desc)
+{
+	this->mName = desc.name;
+	this->mIndex = desc.index;
+	this->mDeckName = desc.deckName;
+	this->mSensor.SetRoomIndex(desc.index);
+	this->mSensor.SetEventLog(desc.pEventLog);
+	this->mSensor.SetInputTypes(desc.inputTypes);
+	this->mSensor.SetActiveEventIndex(desc.activeIndex);
+}
+
 
 
 /**
@@ -51,7 +67,7 @@ void Room::SetDeckName(std::string name)
 
 void Room::SetActiveEventIndex(int index)
 {
-	this->mActiveEventIndex = index;
+	//this->mActiveEventIndex = index;
 	this->mSensor.SetActiveEventIndex(index);
 }
 
@@ -83,7 +99,8 @@ void Room::AddInputType(Event::Type type)
 
 int Room::GetActiveEventIndex() const
 {
-	return this->mActiveEventIndex;
+	//return this->mActiveEventIndex;
+	return this->mSensor.GetActiveEventIndex();
 }
 
 
@@ -97,8 +114,6 @@ std::string Room::WriteString() const
 	std::string print = "";
 
 	print += "r ";
-	print += this->mDeckName;
-	print += " / ";
 	print += this->mName;
 	print += " / ";
 	print += this->mSensor.WriteString();

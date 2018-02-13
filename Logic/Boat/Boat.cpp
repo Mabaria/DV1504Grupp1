@@ -1,10 +1,5 @@
 #include "Boat.h"
 
-/**
-*	TODO
-*		Varje deck läses in för sig, där deras rum raddas upp efter däcknamnet. Fixa ReadFile för room-line.
-*/
-
 Boat::Boat()
 {
 	this->mpEventLog = nullptr;
@@ -12,6 +7,15 @@ Boat::Boat()
 
 Boat::~Boat()
 {
+	for (int i = 0; i < (int)this->mpDecks.size(); i++)
+	{
+		delete this->mpDecks[i];
+	}
+
+	for (int i = 0; i < (int)this->mpRooms.size(); i++)
+	{
+		delete this->mpRooms[i];
+	}
 }
 
 
@@ -38,15 +42,15 @@ void Boat::SetModelName(std::string name)
 
 void Boat::AddDeck(std::string name)
 {
-	Deck newDeck;
+	Deck *newDeck = new Deck;
 
-	newDeck.SetName(name);
-	newDeck.SetIndex(this->mDecks.size());
+	newDeck->SetName(name);
+	newDeck->SetIndex(this->mpDecks.size());
 
-	// Offset will be assigned end of list
-	newDeck.SetRoomOffset((int)this->mRooms.size());
+	// Offset will be assigned.back() of list
+	newDeck->SetRoomOffset((int)this->mpRooms.size());
 
-	this->mDecks.push_back(newDeck);
+	this->mpDecks.push_back(newDeck);
 }
 
 Deck* Boat::GetDeckPointer(std::string name)
@@ -54,7 +58,7 @@ Deck* Boat::GetDeckPointer(std::string name)
 	int index = this->GetDeckIndex(name);
 
 	if (index != -1)
-		return &this->mDecks[index];
+		return this->mpDecks[index];
 
 	return nullptr;
 }
@@ -75,31 +79,31 @@ void Boat::AddRoom(std::string roomName,
 
 	bool deckFound = false;
 
-	for (int i = 0; i < (int)this->mDecks.size() && !deckFound; i++)
+	for (int i = 0; i < (int)this->mpDecks.size() && !deckFound; i++)
 	{
-		if (this->mDecks[i].GetName() == deckName)
+		if (this->mpDecks[i]->GetName() == deckName)
 		{
-			Room newRoom;
+			Room *newRoom = new Room();
 
-			newRoom.SetIndex((int)this->mRooms.size());
-			newRoom.SetName(roomName);
-			newRoom.SetDeckName(deckName);
+			newRoom->SetIndex((int)this->mpRooms.size());
+			newRoom->SetName(roomName);
+			newRoom->SetDeckName(deckName);
 			
 			for (int j = 0; j < (int)inputs.size(); j++)
 			{
-				newRoom.AddInputType(inputs[j]);
+				newRoom->AddInputType(inputs[j]);
 			}
 
-			int offset = this->mDecks[i].GetRoomOffset() +
-						 this->mDecks[i].GetRoomCount();
+			int offset = this->mpDecks[i]->GetRoomOffset() +
+						 this->mpDecks[i]->GetRoomCount();
 
 			if (this->mpEventLog != nullptr)
 			{
-				newRoom.SetEventLog(this->mpEventLog);
+				newRoom->SetEventLog(this->mpEventLog);
 			}
 
-			this->mRooms.insert(this->mRooms.begin() + offset, newRoom);
-			this->mDecks[i].AddRoom(&this->mRooms[offset]);
+			this->mpRooms.insert(this->mpRooms.begin() + offset, newRoom);
+			this->mpDecks[i]->AddRoom(this->mpRooms[offset]);
 
 			return;
 		}
@@ -113,7 +117,7 @@ Room* Boat::GetRoomPointer(std::string roomName, std::string deckName)
 	int index = this->GetRoomIndex(roomName, deckName);
 
 	if (index != -1)
-		return &this->mRooms[index];
+		return this->mpRooms[index];
 
 	return nullptr;
 }
@@ -128,9 +132,9 @@ void Boat::SetEventLog(EventLog *pEventLog)
 {
 	this->mpEventLog = pEventLog;
 
-	for (int i = 0; i < (int)this->mRooms.size(); i++)
+	for (int i = 0; i < (int)this->mpRooms.size(); i++)
 	{
-		this->mRooms[i].SetEventLog(pEventLog);
+		this->mpRooms[i]->SetEventLog(pEventLog);
 	}
 }
 
@@ -141,13 +145,13 @@ void Boat::SetEventLog(EventLog *pEventLog)
 void Boat::CreateAutoEvent(Event::Type type, std::string roomName, std::string deckName)
 {
 	int index = this->GetRoomIndex(roomName, deckName);
-	this->mRooms[index].AddAutoEvent(type);
+	this->mpRooms[index]->AddAutoEvent(type);
 }
 
 void Boat::CreatePlotEvent(Event::Type type, std::string roomName, std::string deckName)
 {
 	int index = this->GetRoomIndex(roomName, deckName);
-	this->mRooms[index].AddPlotEvent(type);
+	this->mpRooms[index]->AddPlotEvent(type);
 }
 
 void Boat::ClearEvent(Event::Type type, std::string roomName, std::string deckName)
@@ -181,16 +185,16 @@ void Boat::WriteFile(std::string filePath)
 	file << "// d <<deck name>> <<offset>> <<count>>" << "\n";
 	file << "// r <<room name>> / sensor <<room event index>>" << "\n\n";
 
-	for (int i = 0; i < (int)this->mDecks.size(); i++)
+	for (int i = 0; i < (int)this->mpDecks.size(); i++)
 	{
-		Deck *pDeck = &this->mDecks[i];
+		Deck *pDeck = this->mpDecks[i];
 		file << pDeck->GetString() << "\n";
 
 		for (int j = pDeck->GetRoomOffset();
 			j < pDeck->GetRoomOffset() + pDeck->GetRoomCount();
 			j++)
 		{
-			file << this->mRooms[j].WriteString() << "\n";
+			file << this->mpRooms[j]->WriteString() << "\n";
 		}
 
 		file << "\n"; // Space
@@ -202,15 +206,17 @@ void Boat::WriteFile(std::string filePath)
 bool Boat::ReadFile(std::string filePath)
 {
 	// Clear current lists
-	this->mDecks.clear();
-	this->mRooms.clear();
+	this->mpDecks.clear();
+	this->mpRooms.clear();
 
 	std::ifstream file(filePath);
 
 	std::stringstream buffer;
 	std::string line;
 	std::string word;
-	int number;
+
+	DeckDesc dDesc;
+	RoomDesc rDesc;
 
 	if (file.is_open())
 	{
@@ -222,178 +228,49 @@ bool Boat::ReadFile(std::string filePath)
 			switch (line[0])
 			{
 				case 'b': // Boat specific line
-					buffer.str(line);	// Fill buffer with line
+					this->mModelName = this->GetNameFromLine(line);
 
-					buffer >> word;
-					if (word == "boatmodel")
-					{
-						if (buffer >> word)
-							this->mModelName = word;
-						else // No following word
-							throw ("Boatmodel missing after 'boatmodel'.");
-					}
 					break; // End case 'b'
 
 
 
 				case 'd': // Deck specific line
-					buffer.str(line);	// Fill buffer with line
+					dDesc = this->FillDeckDescFromLine(line);
+					dDesc.index = (int)this->mpDecks.size();
+					dDesc.roomOffset = (int)this->mpRooms.size();
 
-					buffer >> word; // Get first word
-					if (word[1] == '#') // deck line
-					{
-						Deck newDeck;
+					/**
+					*	Create a new deck and insert into the list
+					*/
+					this->mpDecks.push_back(new Deck(dDesc));
 
-						/**
-						*	Get index
-						*/
-						std::stringstream intParse;
-						for (int i = 2; i < (int)word.size(); i++)
-						{
-							intParse << word[i];
-						}
-						intParse >> number;
-						newDeck.SetIndex(number);
-
-						/**
-						*	Get deck name
-						*/
-						buffer >> word;
-						newDeck.SetName(word);
-
-						/**
-						*	Get room offset
-						*/
-						buffer >> number;
-						newDeck.SetRoomOffset(number);
-
-						/**
-						*	Get room count
-						*/
-						buffer >> number;
-						newDeck.SetRoomCount(number);
-						
-						/**
-						*	Insert deck into list
-						*/
-						this->mDecks.push_back(newDeck);
-					}
-
-					else if (word[1] == 'e')	// deckcount
-					{
-						if (buffer >> number)
-							this->mDecks.reserve(number);
-						else // No following number
-							throw ("Number missing after 'deckcount'.");
-					}
 					break; // End case 'd'
 
 
 
 				case 'r': // Room specific line
-					buffer.str(line);	// Fill buffer with line
-					buffer >> word;
+				{
+					rDesc = this->FillRoomDescFromLine(line);
 
-					Room newRoom;
-
-					std::string roomName;
-					std::string deckName;
-
-					/**
-					*	Get index
-					*/
-					std::stringstream intParse;
-					for (int i = 2; i < (int)word.size(); i++)
-					{
-					intParse << word[i];
-					}
-					intParse >> number;
-
-					newRoom.SetIndex(number);
-					
-					/**
-					*	Get deck name
-					*/
-					buffer >> word; // Deck name
-					newRoom.SetDeckName(word);
-					deckName = word;
-					
-					int deckIndex = this->GetDeckIndex(word);
-
-					// (Reads in automaticaly from file)
-					//this->mDecks[deckIndex].AddRoom();
-					//for (int i = deckIndex; i < this->mDecks.size(); i++)
-					//{
-					//	this->mDecks[i].PushRoomOffset();
-					//}
+					rDesc.index = (int)this->mpRooms.size();
+					rDesc.deckName = this->mpDecks.back()->GetName();
+					rDesc.pEventLog = this->mpEventLog;
 
 					/**
-					*	Get room name
+					*	Create a new room and insert into list
 					*/
-					buffer >> word;	// Get rid of '/'
-
-					std::string tempName = "";
-
-					buffer >> word;
-
-					while (word != "/")
-					{
-					if (tempName != "")
-					tempName += " ";
-					tempName +=	word;
-
-					buffer >> word;
-					}
-
-					newRoom.SetName(tempName);
-					roomName = tempName;
-
-					/**
-					*	Get sensor data
-					*/
-					buffer >> word; // 'sensor'
-					buffer >> number;	// roomEventIndex
-					newRoom.SetActiveEventIndex(number);
-
-					buffer >> word; // Get rid of '{'
-
-					while (buffer >> word)
-					{
-					if (word != "}")
-					{
-					number = std::stoi(word);
-					newRoom.AddInputType((Event::Type)number); // Cast int to enum
-					}
-					else	// word == '}'
-					break;
-					}
-
-					/**
-					*	Give the room an eventlog pointer, if possible
-					*/
-					if (this->mpEventLog != nullptr)
-					newRoom.SetEventLog(this->mpEventLog);
-
-					/**
-					*	Insert room into list
-					*/
-					this->mRooms.push_back(newRoom);
-
-					/**
-					*	Send room pointer to deck
-					*/
-					Deck* deck = &this->mDecks[deckIndex];
-					// TODO
-					int roomDeckIndex = deck->GetRoomCount();
+					this->mpRooms.push_back(new Room(rDesc));
+					this->mpDecks.back()->AddRoom(this->mpRooms.back());
 
 					break; // End case 'r'
+				}
 
 				default: // Comments
 					break;
 			}
 		}
 
-		// When end of file appears, close file and return from function
+		// When.back() of file appears, close file and return from function
 		file.close();
 	}
 	else
@@ -419,12 +296,12 @@ int Boat::GetRoomIndex(std::string roomName, std::string deckName)
 	if (deckIndex == -1)
 		return -1;
 
-	int from = this->mDecks[deckIndex].GetRoomOffset();
-	int to = from + this->mDecks[deckIndex].GetRoomCount();
+	int from = this->mpDecks[deckIndex]->GetRoomOffset();
+	int to = from + this->mpDecks[deckIndex]->GetRoomCount();
 
 	for (int i = from; i < to; i++)
 	{
-		if (this->mRooms[i].GetName() == roomName)
+		if (this->mpRooms[i]->GetName() == roomName)
 			return i;
 	}
 
@@ -433,13 +310,101 @@ int Boat::GetRoomIndex(std::string roomName, std::string deckName)
 
 int Boat::GetDeckIndex(std::string deckName)
 {
-	for (int i = 0; i < (int)this->mDecks.size(); i++)
+	for (int i = 0; i < (int)this->mpDecks.size(); i++)
 	{
-		if (this->mDecks[i].GetName() == deckName)
+		if (this->mpDecks[i]->GetName() == deckName)
 			return i;
 	}
 
 	return -1;
+}
+
+RoomDesc Boat::FillRoomDescFromLine(std::string line)
+{
+	RoomDesc desc;
+
+	std::stringstream buffer;
+	std::string roomName, word;
+	int number;
+
+	buffer.str(line);
+
+	/**
+	*	Get room name
+	*/
+	roomName = "";
+	buffer >> word; // Get 'r'
+	buffer >> word;
+
+	while (word != "/")
+	{
+		if (roomName != "")
+		roomName += " ";
+		roomName +=	word;
+
+		buffer >> word;
+	}
+	desc.name = roomName;
+
+	/**
+	*	Get sensor data
+	*/
+	buffer >> word; // Get 'sensor'
+	buffer >> number;	// roomEventIndex
+	desc.activeIndex = number;
+
+	buffer >> word; // Get rid of '{'
+
+	while (buffer >> word)
+	{
+		if (word != "}")
+		{
+			number = std::stoi(word);
+			desc.inputTypes.push_back((Event::Type)number); // Cast int to enum
+		}
+		else	// word == '}'
+			break;
+	}
+	
+	return desc;
+}
+
+DeckDesc Boat::FillDeckDescFromLine(std::string line)
+{
+	DeckDesc desc;
+	desc.name = this->GetNameFromLine(line);
+
+	return desc;
+}
+
+std::string Boat::GetNameFromLine(std::string line, char until)
+{
+	std::stringstream buffer;
+	std::string name, word;
+	bool done;
+
+	name = "";
+	done = false;
+	buffer.str(line);
+
+	buffer >> word; // Get line prefix
+	buffer >> word; // Get first part of name (could be only word of name)
+
+	while (!done)
+	{
+		if (name != "")
+			name += " ";
+		name +=	word;
+
+		buffer >> word;
+		
+		if (until == NULL && buffer.eof())
+			done = true;
+		else if (word[0] == until)
+			done = true;
+	}
+
+	return name;
 }
 
 std::string Boat::GetDeckNameByRoomIndex(int index)
@@ -447,13 +412,13 @@ std::string Boat::GetDeckNameByRoomIndex(int index)
 	int count;
 	int offset;
 
-	for (int i = 0; i < (int)this->mDecks.size(); i++)
+	for (int i = 0; i < (int)this->mpDecks.size(); i++)
 	{
-		count = this->mDecks[i].GetRoomCount();
-		offset = this->mDecks[i].GetRoomOffset();
+		count = this->mpDecks[i]->GetRoomCount();
+		offset = this->mpDecks[i]->GetRoomOffset();
 
 		if (index >= offset && index <= (offset+count)) 
-			return this->mDecks[i].GetName();
+			return this->mpDecks[i]->GetName();
 	}
 
 	return "DeckNotFound";

@@ -39,6 +39,11 @@ void Sensor::RemoveInputType(Event::Type type)
 	}
 }
 
+void Sensor::SetInputTypes(std::vector<Event::Type> list)
+{
+	this->mInputTypes = list;
+}
+
 bool Sensor::CanDetect(Event::Type type) const
 {
 	for (int i = 0; i < (int)this->mInputTypes.size(); i++)
@@ -87,6 +92,11 @@ void Sensor::SetEventLog(EventLog *pEventLog)
 void Sensor::SetActiveEventIndex(int index)
 {
 	this->mActiveEventIndex = index;
+}
+
+int Sensor::GetActiveEventIndex() const
+{
+	return this->mActiveEventIndex;
 }
 
 
