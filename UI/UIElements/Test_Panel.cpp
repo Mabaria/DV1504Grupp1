@@ -516,7 +516,7 @@ void Test_Panel2DTextBoxes()
 
 
 	//! BUTTONS HERE
-	control_panel.AddButton(70, 70, 30, 20, "../../Models/Button01.png", "Dead");
+	control_panel.AddButton(70, 70, 30, 20, "../../Models/Button01.png", "Injury");
 	control_panel.AddButton(70, 70, 30, 90, "../../Models/Button02.png", "Gas");
 	control_panel.AddButton(70, 70, 30, 160, "../../Models/Button03.png", "Water");
 	control_panel.AddButton(70, 70, 30, 230, "../../Models/Button04.png", "Fire");

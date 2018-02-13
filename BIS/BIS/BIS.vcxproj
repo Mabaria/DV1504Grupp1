@@ -61,6 +61,7 @@
     <ClCompile Include="..\..\UI\UIElements\Test_TextBox.cpp" />
     <ClCompile Include="..\..\UI\UIElements\TextBox.cpp" />
     <ClCompile Include="BIS.cpp" />
+    <ClCompile Include="System\System.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\GraphicsEngine\Camera\Camera.h" />
@@ -107,6 +108,7 @@
     <ClInclude Include="..\..\UI\UIElements\Test_Panel.h" />
     <ClInclude Include="..\..\UI\UIElements\Test_TextBox.h" />
     <ClInclude Include="..\..\UI\UIElements\TextBox.h" />
+    <ClInclude Include="System\System.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\..\GraphicsEngine\Test_PixelShader.hlsl">

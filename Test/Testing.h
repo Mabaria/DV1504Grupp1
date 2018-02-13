@@ -19,6 +19,7 @@
 
 #include "../Logic/BoatTester.h"
 
+
 namespace Testing
 {
 	bool testAll()
