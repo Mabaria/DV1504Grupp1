@@ -43,7 +43,6 @@ public:
 
 	TextBox* GetTextBoxByName(std::string name);
 	TextBox* GetTextBoxByIndex(unsigned int index);
-	void SetTextBoxFontSize(int fontSize);
 
 	// Notification object/list stuff.
 	void SetNotificationList(int posX, int posY);

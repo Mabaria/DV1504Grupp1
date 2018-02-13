@@ -148,11 +148,6 @@ TextBox * Panel2D::GetTextBoxByIndex(unsigned int index)
 	return to_return;
 }
 
-void Panel2D::SetTextBoxFontSize(int fontSize)
-{
-	this->mDirect2D->SetFontSize(fontSize);
-}
-
 void Panel2D::SetNotificationList(int posX, int posY)
 {
 	this->mNotificationList = new NotificationList(
