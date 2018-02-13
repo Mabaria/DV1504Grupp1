@@ -17,8 +17,8 @@ NotificationList::NotificationList(Direct2D *direct2d, int posX, int posY)
 
 	this->mTitle.SetText("Aktiv Logg\nAntal: 0");
 	this->mTitleFrame.SetButtonSize(
-		this->mTitle.GetTextBoxSize().left,
-		this->mTitle.GetTextBoxSize().top,
+		0,
+		0,
 		this->mTitle.GetTextBoxSize().right,
 		this->mTitle.GetTextBoxSize().bottom);
 }
@@ -186,7 +186,8 @@ void NotificationList::Draw()
 	for (int i = 0; i < (int)this->mObjects.size(); i++)
 	{
 		//! O P T I M I Z A T I O N
-		if (((int)this->mObjects[i]->GetButton()->GetButtonSize().bottom > 0)
+		if (((int)this->mObjects[i]->GetButton()->GetButtonSize().bottom 
+			> this->mTitle.GetTextBoxSize().bottom)
 			&& (int)this->mObjects[i]->GetButton()->GetButtonSize().top
 			< (int)this->mpRenderTarget->GetSize().height)
 		{
