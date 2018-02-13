@@ -29,7 +29,7 @@ public:
 		std::vector<std::vector<unsigned int>> indices, 
 		std::vector<std::vector<Vertex>> vertices,
 		std::wstring texturePath,
-		bool use_event);
+		bool use_event = false);
 
 	const void AddMeshObject(MeshObject *meshObject,
 		std::wstring texturePath = L"",

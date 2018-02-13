@@ -576,15 +576,14 @@ const bool Panel3D::UpdateCamera()
 			this->mpCamera->SetViewHeight(
 				this->mpCamera->GetViewHeight() - (this->mSpeed * scroll)
 			);
-
-			if (this->mpCamera->GetViewWidth() > this->mOrthographicMaxView)
-				this->mpCamera->SetViewWidth(this->mOrthographicMaxView);
-
-			if (this->mpCamera->GetViewHeight() > this->mOrthographicMaxView)
-				this->mpCamera->SetViewHeight(this->mOrthographicMaxView);
-
-			
 		}
+
+		// Restrict zoom out
+		if (this->mpCamera->GetViewWidth() > this->mOrthographicMaxView)
+			this->mpCamera->SetViewWidth(this->mOrthographicMaxView);
+
+		if (this->mpCamera->GetViewHeight() > this->mOrthographicMaxView)
+			this->mpCamera->SetViewHeight(this->mOrthographicMaxView);
 
 		// Mouse movement - Pan
 		if (Mouse::IsButtonDown(this->mBtnToPan))
