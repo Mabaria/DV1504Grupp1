@@ -16,6 +16,11 @@ NotificationList::NotificationList(Direct2D *direct2d, int posX, int posY)
 		direct2d->GetpRenderTarget()->GetSize().height / 18);
 
 	this->mTitle.SetText("Aktiv Logg\nAntal: 0");
+	this->mTitleFrame.SetButtonSize(
+		this->mTitle.GetTextBoxSize().left,
+		this->mTitle.GetTextBoxSize().top,
+		this->mTitle.GetTextBoxSize().right,
+		this->mTitle.GetTextBoxSize().bottom);
 }
 
 NotificationList::~NotificationList()
@@ -119,14 +124,7 @@ const int NotificationList::GetListHeight() const
 }
 
 void NotificationList::MoveLog(float speed)
-{
-	
-	for (int i = 0; i < (int)this->mObjects.size(); i++)
-	{
-		this->mObjects[i]->Move(0, (int)speed);
-	}
-	
-	
+{	
 	for (int i = 0; i < (int)this->mObjects.size(); i++)
 	{
 		this->mObjects[i]->Move(0, (int)speed);
@@ -134,11 +132,14 @@ void NotificationList::MoveLog(float speed)
 	
 	this->UpdateBorders();
 
-	if (this->mListTop > this->mSpace)
+	if (this->mListTop > this->mSpace + this->mTitle.GetTextBoxSize().bottom)
 	{
 		for (int i = 0; i < (int)this->mObjects.size(); i++)
 		{
-			this->mObjects[i]->Move(0, this->mSpace - this->mListTop);
+			this->mObjects[i]->Move(0, 
+				this->mSpace 
+				- this->mListTop 
+				+ this->mTitle.GetTextBoxSize().bottom);
 		}
 	}
 	else if (this->mListBottom < this->mpRenderTarget->GetSize().height)
@@ -150,7 +151,6 @@ void NotificationList::MoveLog(float speed)
 				- this->mListBottom - this->mSpace);
 		}
 	}
-
 }
 
 void NotificationList::Update()
@@ -183,7 +183,6 @@ void NotificationList::UpdateBorders()
 
 void NotificationList::Draw()
 {
-	this->mTitle.DrawTextBox();
 	for (int i = 0; i < (int)this->mObjects.size(); i++)
 	{
 		//! O P T I M I Z A T I O N
@@ -194,4 +193,6 @@ void NotificationList::Draw()
 			this->mObjects[i]->Draw();
 		}
 	}
+	this->mTitleFrame.DrawFilledRect(0.9f, 0.9f, 0.9f, 1.0f);
+	this->mTitle.DrawTextBox();
 }

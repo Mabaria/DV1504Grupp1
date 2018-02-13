@@ -61,7 +61,7 @@ void Button::CreateButton(
 		&this->mpRectBrush);
 	this->D2D1Panel->GetpRenderTarget()->CreateSolidColorBrush(
 		D2D1::ColorF(D2D1::ColorF(1.f, 1.f, 1.f, 1.0f)),
-		&this->mpRectBrush);
+		&this->mpFillBrush);
 	this->mButtonSize = D2D1::RectF(
 		(float)left, 
 		(float)top, 
