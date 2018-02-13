@@ -19,6 +19,7 @@ Button::Button(
 	this->mBmpLoaded = false;
 	this->mpFailBrush = nullptr;
 	this->mpRectBrush = nullptr;
+	this->mpFillBrush = nullptr;
 	this->D2D1Panel = D2D1Panel;
 	this->mCurrState = BUTTON_STATE::RESET;
 	
@@ -35,6 +36,8 @@ Button::~Button()
 {
 	this->ReleaseCOM(this->mpBitMap);
 	this->ReleaseCOM(this->mpFailBrush);
+	this->ReleaseCOM(this->mpRectBrush);
+	this->ReleaseCOM(this->mpFillBrush);
 }
 
 const std::wstring Button::StrToWstr(std::string str)
@@ -55,6 +58,9 @@ void Button::CreateButton(
 {
 	this->D2D1Panel->GetpRenderTarget()->CreateSolidColorBrush(
 		D2D1::ColorF(D2D1::ColorF(0.75f, 0.75f, 0.75f, 1.0f)),
+		&this->mpRectBrush);
+	this->D2D1Panel->GetpRenderTarget()->CreateSolidColorBrush(
+		D2D1::ColorF(D2D1::ColorF(1.f, 1.f, 1.f, 1.0f)),
 		&this->mpRectBrush);
 	this->mButtonSize = D2D1::RectF(
 		(float)left, 
@@ -108,6 +114,14 @@ void Button::DrawRect()
 		this->mButtonSize,
 		this->mpRectBrush,
 		2.0f);
+}
+
+void Button::DrawFilledRect(float r, float g, float b, float a)
+{
+	this->mpFillBrush->SetColor(D2D1::ColorF(r,g,b,a));
+	this->D2D1Panel->GetpRenderTarget()->FillRectangle(
+		this->mButtonSize,
+		this->mpFillBrush);
 }
 
 ID2D1Bitmap* Button::getBitmapPointer()
