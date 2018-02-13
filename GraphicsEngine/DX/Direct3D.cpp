@@ -39,9 +39,9 @@ D3D11::D3D11(
 	this->mViewport.MinDepth = 0.1f;
 	this->mViewport.MaxDepth = 1.0f;
 
-	this->mClearColor[0] = 0.88f;
-	this->mClearColor[1] = 0.87f;
-	this->mClearColor[2] = 0.85f;
+	this->mClearColor[0] = 0.1f;
+	this->mClearColor[1] = 0.1f;
+	this->mClearColor[2] = 0.1f;
 	this->mClearColor[3] = 1.0f;
 }
 

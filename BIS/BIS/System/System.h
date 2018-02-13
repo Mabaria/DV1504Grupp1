@@ -24,6 +24,7 @@ private:
 	Panel3D *mpTopViewPanel;
 
 	std::vector<Mesh*> mFloors;
+	std::vector<Mesh*> mBounds;
 
 	Camera *mpCamera;
 	Window *mpWindow;
