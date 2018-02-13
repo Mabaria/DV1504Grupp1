@@ -27,6 +27,7 @@ enum Buttons
 {
 	Left,
 	Right,
+	ScrollPress,
 };
 
 struct Position
@@ -43,8 +44,8 @@ public:
 	static void SetKey(const Keys key, const bool is_pressed);
 
 	// Mouse input
-	static bool buttonsActive[2];
-	static bool buttonsPressed[2];
+	static bool buttonsActive[3];
+	static bool buttonsPressed[3];
 
 	static Position mousePosition;
 	static Position mousePositionPercentage;

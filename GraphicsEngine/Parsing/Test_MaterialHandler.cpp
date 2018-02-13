@@ -18,7 +18,7 @@ void Test_Material_Handler()
 	mixbag_object.Scale(0.2f, 0.2f, 0.2f);
 	mixbag_object.Translate(-30.0f, -10.0f, 0.0f);
 
-	mat_test_boat_object.Scale(50.5, 50.5, 50.5);
+	mat_test_boat_object.Scale(0.1, 0.1, 0.1);
 	//mat_test_boat_object.Rotate(0.0f, 0.00f, 3.14f);
 
 	mat_test_boat_object.pGetMaterialHandler()->GetDiffuseColor(0);
@@ -72,9 +72,9 @@ void Test_Material_Handler()
 	Camera camera(
 		{ 0.0f, 100.0f, 0.00001f, 0.0f },
 		{ 0.0f, 1.0f, 0.0f, 0.0f },
-		{ 0.0f, 0.0f, 0.0f, 0.0f },
+		{ 0.0f, -100.0f, 0.1f, 0.0f },
 		192 * 5, 108 * 5,
-		0.000000000001f, 1000.0f, LOOK_AT, ORTHOGRAPHIC);
+		0.000000000001f, 1000.0f, LOOK_TO, ORTHOGRAPHIC);
 
 	side_view.SetCamera(&camera2);
 	top_view.SetCamera(&camera);

@@ -117,9 +117,9 @@ void TestCameraMovementOrtographic()
 	float height	= 2.0f;
 
 	Camera camera2(
-		{ 0.0f, 80.0f, -1.0f, 0.0f },
+		{ 0.0f, 80.0f, -2.0f, 0.0f },
 		{ 0.0f, 1.0f, 0.0f, 0.0f },
-		{ 0.0f, -80.0f, 1.0f, 0.0f },
+		{ 0.0f, -80.0f, 2.0f, 0.0f },
 		width,  height,
 		0.01f, 1000.0f, LOOK_TO, ORTHOGRAPHIC);
 
@@ -142,33 +142,7 @@ void TestCameraMovementOrtographic()
 
 		if (Keyboard::IsKeyDown(Keys::W))
 		{
-			camera2.MoveCamera(0.0f, 0.0f, 1.0f, speed);
-		}
-		else if (Keyboard::IsKeyDown(Keys::S))
-		{
-			camera2.MoveCamera(0.0f, 0.0f, -1.0f, speed);
-		}
-		else if (Keyboard::IsKeyDown(Keys::D))
-		{
-			camera2.MoveCamera(1.0f, 0.0f, 0.0f, speed);
-		}
-		else if (Keyboard::IsKeyDown(Keys::A))
-		{
-			camera2.MoveCamera(-1.0f, 0.0f, 0.0f, speed);
-		}
-		else if (Keyboard::IsKeyDown(Keys::Space))
-		{
-			width += speed;
-			height += speed;
-			camera2.SetViewWidth(width);
-			camera2.SetViewHeight(height);
-		}
-		else if (Keyboard::IsKeyDown(Keys::Shift))
-		{
-			width -= speed;
-			height -= speed;
-			camera2.SetViewWidth(width);
-			camera2.SetViewHeight(height);
+			top_view.SetCamera(&camera);
 		}
 
 		if (Keyboard::IsKeyPressed(Keys::Esc))

@@ -29,7 +29,7 @@ public:
 		std::vector<std::vector<unsigned int>> indices, 
 		std::vector<std::vector<Vertex>> vertices,
 		std::wstring texturePath,
-		bool use_event);
+		bool use_event = false);
 
 	const void AddMeshObject(MeshObject *meshObject,
 		std::wstring texturePath = L"",
@@ -91,10 +91,21 @@ private:
 
 	const void CreateTexture(std::wstring texturePath);
 
+
 	// --- TEMP ---
+
+	Buttons mBtnToPan;
+
+	XMVECTOR mDirection;
 	Position mMouseOrigin;
+	Position mMouseDiff;
 	bool mShowCursor;
 
+	float mOrthographicMaxView;
+
+	float mSpeed;
 	float mRadius;
 
+	const void UpdateMouse();
+	const bool UpdateCamera();
 };
