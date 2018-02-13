@@ -14,7 +14,6 @@ TextBox::TextBox(
 	this->mpTextWchar = nullptr;
 	std::wstring mTextWString;
 	std::string mTextString;
-	const wchar_t *mpTestWchar;
 	this->mCreateColor();
 	this->SetColor(D2D1::ColorF::Black);
 	this->SetText(this->mTextString);

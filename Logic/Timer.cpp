@@ -134,18 +134,6 @@ const std::string Timer::GetHoursAsStr()
 	return std::string(buffer);
 }
 
-//const std::string Timer::GetDaysAsStr()
-//{
-//	this->UpdateTime();
-//	time_t diff = this->mTimeNow - this->mStartTime;
-//	tm *pdiff_struct = localtime(&diff);
-//	pdiff_struct->tm_mday = pdiff_struct->tm_mday - 1;
-//	char buffer[30];
-//	strftime(buffer, 30, "%j", pdiff_struct);
-//	buffer[2] = buffer[2] - 1;
-//	return std::string(buffer);
-//}
-
 void Timer::UpdateTime()
 {
 	this->mTimeNow = time(0);
