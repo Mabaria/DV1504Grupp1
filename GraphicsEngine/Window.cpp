@@ -1,4 +1,5 @@
 #include "../GraphicsEngine/Window.h"
+#include <iostream>
 
 // Necessary for window
 LRESULT CALLBACK WindowProcedure(
@@ -212,6 +213,14 @@ LRESULT CALLBACK WindowProcedure(
 
 	case WM_MOUSEWHEEL:
 		InputDevice::SetMouseScroll(GET_WHEEL_DELTA_WPARAM(wParam) / 120.0f);
+		break;
+
+	case 519:
+		InputDevice::SetMouseButton(Buttons::ScrollPress, true);
+		break;
+
+	case 520:
+		InputDevice::SetMouseButton(Buttons::ScrollPress, false);
 		break;
 
 	default:

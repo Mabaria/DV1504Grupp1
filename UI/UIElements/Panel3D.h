@@ -83,10 +83,19 @@ private:
 
 	const void CreateTexture(std::wstring texturePath);
 
+
 	// --- TEMP ---
+
+	Buttons mBtnToPan;
+
+	XMVECTOR mDirection;
 	Position mMouseOrigin;
+	Position mMouseDiff;
 	bool mShowCursor;
 
+	float mSpeed;
 	float mRadius;
 
+	const void UpdateMouse();
+	const bool UpdateCamera();
 };
