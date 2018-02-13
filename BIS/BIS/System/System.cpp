@@ -182,6 +182,8 @@ void System::BuildGraphicalUserInterface(
 	this->mpSideViewPanel->rGetMeshObject("bound1") ->Translate(0.05f,  0.0f, 0.0f);
 	this->mpSideViewPanel->rGetMeshObject("bound01")->Translate(0.05f,  0.2f, 0.0f);
 
+	this->mpControlPanel->AddTextbox(200, 60, 0, 105, "Kontrollpanel", "title");
+	this->mpControlPanel->SetTextBoxFontSize(20);
 	this->mpControlPanel->AddButton(70, 70, 30, 20, "../../Models/Button01.png", "Injury");
 	this->mpControlPanel->AddButton(70,	70, 30, 90, "../../Models/Button02.png", "Gas");
 	this->mpControlPanel->AddButton(70, 70, 30,	160, "../../Models/Button03.png", "Water");

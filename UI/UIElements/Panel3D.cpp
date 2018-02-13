@@ -21,6 +21,20 @@ Panel3D::Panel3D(int width, int height, int top, int left, HWND handle, LPCTSTR 
 	ShowWindow(this->mPanelWindow, SW_NORMAL);*/
 	this->mDirect3D.Init(this->mPanelWindow);
 
+	D3D11_RASTERIZER_DESC rast_desc{};
+	rast_desc.CullMode = D3D11_CULL_NONE;
+	rast_desc.FillMode = D3D11_FILL_SOLID;
+
+	ID3D11RasterizerState *rs_state = nullptr;
+
+	HRESULT hr = this->mDirect3D.GetDevice()->CreateRasterizerState(&rast_desc, &rs_state);
+	if (FAILED(hr))
+	{
+		MessageBoxA(NULL, "sadljklkjdsakjldas", NULL, MB_OK);
+	}
+	this->mDirect3D.GetContext()->RSSetState(rs_state);
+	rs_state->Release();
+
 	this->mpVertexShader	= nullptr;
 	this->mpGeometryShader	= nullptr;
 	this->mpPixelShader		= nullptr;
@@ -633,11 +647,11 @@ const bool Panel3D::UpdateCamera()
 			);
 
 			float y = DirectX::XMVectorGetY(dir);
-			if (y < 0.0f)
-			{
-				y = 0.0f;
-				dir = DirectX::XMVectorSetY(dir, y);
-			}
+			//if (y < 0.0f)
+			//{
+			//	y = 0.0f;
+			//	dir = DirectX::XMVectorSetY(dir, y);
+			//}
 
 			this->mDirection = dir;
 		}
