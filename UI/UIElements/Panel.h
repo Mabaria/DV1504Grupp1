@@ -2,6 +2,7 @@
 
 #include <Windows.h>
 #include <math.h>
+#include "../../IO/Mouse.h"
 
 struct Fraction
 {
@@ -57,6 +58,9 @@ protected:
 	HWND mParentWindow;
 	HWND mPanelWindow;
 	LPCTSTR mTitle;
+
+
+	bool mIsMouseInsidePanel();
 
 private:
 };

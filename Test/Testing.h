@@ -1,11 +1,12 @@
 #pragma once
 
-#include "../GraphicsEngine/Parsing/Test_AssImp.h"
-#include "../GraphicsEngine/Parsing/Test_Boat.h"
-#include "../GraphicsEngine/Test_Button.h"
-#include "../GraphicsEngine/Camera/Test_Camera.h"
-#include "../GraphicsEngine/Test_Graphics.h"
-#include "../GraphicsEngine/Parsing/Test_Mesh.h"
+#include "../../GraphicsEngine/Parsing/Test_AssImp.h"
+#include "../../GraphicsEngine/Parsing/Test_Boat.h"
+#include "../../GraphicsEngine/Test_Button.h"
+#include "../../GraphicsEngine/Camera/Test_Camera.h"
+#include "../../GraphicsEngine/Test_Graphics.h"
+#include "../../GraphicsEngine/Parsing/Test_Mesh.h"
+#include "../../GraphicsEngine/Parsing/Test_MaterialHandler.h"
 
 #include "../IO/Test_Input.h"
 #include "../IO/ObserverPattern/Test_Obs.h"
@@ -43,20 +44,7 @@ namespace Testing
 
 	bool testOne()
 	{
-		//! ADD YOUR OWN TESTS HERE
-	/*	try
-		{
-			Test_Picking();
-		}
-		catch (const char *e)
-		{
-			std::cout << e << std::endl;
-		}
-
-		getchar();
-		
-		Test_Text();*/
-		
+		Test_Material_Handler();
 		return true;
 	}
 }

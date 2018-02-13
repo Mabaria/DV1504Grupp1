@@ -48,6 +48,8 @@ public:
 	unsigned int GetNumMeshes() const; // Returns number of submeshes
 	unsigned int GetNumMaterials() const; // Returns number of materials
 
+	const aiScene *GetScenePointer();
+
 
 
 private:
@@ -55,7 +57,7 @@ private:
 	void PopulateVectors();
 
 	Assimp::Importer mImporter;
-	const aiScene *mScene;
+	const aiScene *mpScene;
 	std::vector<std::vector<Vertex>> mVertexVectors;
 	std::vector<std::vector<unsigned int>> mIndexVectors;
 	std::vector<unsigned int> mSubmeshMaterialIndexVector;
