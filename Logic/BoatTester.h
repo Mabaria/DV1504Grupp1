@@ -8,6 +8,7 @@
 
 namespace BoatTester
 {
+	void WriteTest();
 	void TestBoat();
 	
 	Boat* CreateBoat(EventLog *pEventLog);

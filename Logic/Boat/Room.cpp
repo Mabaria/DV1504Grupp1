@@ -5,6 +5,11 @@ Room::Room()
 	this->mIndex = -1;
 }
 
+Room::Room(RoomDesc desc)
+{
+	this->InitFromDesc(desc);
+}
+
 Room::~Room()
 {
 
@@ -32,19 +37,16 @@ std::string Room::GetName() const
 	return this->mName;
 }
 
-/*float Room::CheckRayCollision(Ray ray)
+void Room::InitFromDesc(RoomDesc desc)
 {
-	// TODO 1: in the near future in the conceptual image of time as we know it:
-	// UNCOMMENT THIS LINE BELOW! :D (mBoundingAABB didn't exist when this
-	// function was created, feelsbadman).
-	
-	//return Picking::IsRayIntersectingAABB(this->mBoundingAABB);
-
-
-	// TODO 2: Delete lines below in this function. They may never exist from now
-	// on. Rip in pieces deer bear.
-	return -1; // (Note that -1 indicates that there is now collision)
-}*/
+	this->mName = desc.name;
+	this->mIndex = desc.index;
+	this->mDeckName = desc.deckName;
+	this->mSensor.SetRoomIndex(desc.index);
+	this->mSensor.SetEventLog(desc.pEventLog);
+	this->mSensor.SetInputTypes(desc.inputTypes);
+	this->mSensor.SetActiveEventIndex(desc.activeIndex);
+}
 
 
 
@@ -65,7 +67,7 @@ void Room::SetDeckName(std::string name)
 
 void Room::SetActiveEventIndex(int index)
 {
-	this->mActiveEventIndex = index;
+	//this->mActiveEventIndex = index;
 	this->mSensor.SetActiveEventIndex(index);
 }
 
@@ -97,7 +99,8 @@ void Room::AddInputType(Event::Type type)
 
 int Room::GetActiveEventIndex() const
 {
-	return this->mActiveEventIndex;
+	//return this->mActiveEventIndex;
+	return this->mSensor.GetActiveEventIndex();
 }
 
 
@@ -109,9 +112,8 @@ int Room::GetActiveEventIndex() const
 std::string Room::WriteString() const
 {
 	std::string print = "";
-	print += "r#" + std::to_string(this->mIndex) + " ";
-	print += this->mDeckName;
-	print += " / ";
+
+	print += "r ";
 	print += this->mName;
 	print += " / ";
 	print += this->mSensor.WriteString();

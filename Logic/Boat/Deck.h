@@ -9,20 +9,29 @@
 * the Boat room list.
 */
 
+struct DeckDesc
+{
+	int index;
+	int roomOffset;
+	std::string name;
+};
+
 class Deck
 {
 public:
 
 	Deck();
+	Deck(DeckDesc desc);
 	~Deck();
 	
 	// Deck specific
 	void SetIndex(int index);
 	void SetName(std::string name);
+	void InitFromDesc(DeckDesc desc);
 	std::string GetName() const;
 
 	// Room specific
-	void AddRoom(); // Increases room counter
+	void AddRoom(Room *pRoom, int index = -1);
 	void SetRoomCount(int count);
 	void SetRoomOffset(int index);
 	void PushRoomOffset(int value = 1);
@@ -41,4 +50,5 @@ private:
 	// Room specific
 	int mRoomCount;
 	int mRoomOffset;
+	std::vector<Room*> mpRooms;
 };

@@ -5,19 +5,30 @@
 #include "../Event/Event.h"
 #include "Sensor.h"
 
-//#include "../../IO/Picking.h"
+struct RoomDesc
+{
+	int index;
+	int activeIndex;
+	std::string name;
+	std::string deckName;
+	std::vector<Event::Type> inputTypes;
+	EventLog *pEventLog;
+};
+
 
 class Room
 {
 public:
 
 	Room();
+	Room(RoomDesc desc);
 	~Room();
 
 	// Room specific
 	void SetIndex(int index);
 	void SetName(std::string name);
 	std::string GetName() const;
+	void InitFromDesc(RoomDesc desc);
 
 	//float CheckRayCollision(Ray ray);
 
@@ -47,7 +58,7 @@ private:
 	std::string mDeckName;
 
 	// Log specific
-	int mActiveEventIndex;
+	//int mActiveEventIndex;
 
 	// Sensor specific
 	Sensor mSensor;

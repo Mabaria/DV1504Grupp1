@@ -26,15 +26,16 @@ public:
 
 	// Deck specific
 	void AddDeck(std::string name);
-	Deck* GetDeckPointerAt(int index);
+	Deck* GetDeckPointer(std::string name);
 
 	// Room specific
 	//void AddRoom(std::string roomName, std::string deckName);
 	void AddRoom(std::string roomName,
 		std::string deckName,
 		std::vector<Event::Type> inputs);
+	Room* GetRoomPointer(std::string roomName, std::string deckName);
 	Room* GetPickedRoom(Ray ray);
-	Room* GetRoomPointerAt(int index);
+
 
 	// Log specific
 	void SetEventLog(EventLog *pEventLog);
@@ -70,12 +71,16 @@ private:
 	int GetRoomIndex(std::string roomName, std::string deckName);
 	int GetDeckIndex(std::string deckName);
 
+	RoomDesc FillRoomDescFromLine(std::string line);
+	DeckDesc FillDeckDescFromLine(std::string line);
+	std::string GetNameFromLine(std::string line, char until = NULL);
+
 	std::string GetDeckNameByRoomIndex(int index);
 
 	std::string mModelName;
 
-	std::vector<Deck> mDecks;
-	std::vector<Room> mRooms;
+	std::vector<Deck*> mpDecks;
+	std::vector<Room*> mpRooms;
 
 	//std::vector<Mesh> mBoundingMesh;
 	//std::vector<MeshObject> mBoundingMeshObjects;
