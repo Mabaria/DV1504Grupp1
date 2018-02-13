@@ -44,7 +44,7 @@ namespace Testing
 
 	bool testOne()
 	{
-		Test_Material_Handler();
+		TestCameraMovementOrtographic();
 		return true;
 	}
 }
