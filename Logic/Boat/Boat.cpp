@@ -439,7 +439,10 @@ bool Boat::ReadFile(std::string filePath)
 	return true;
 }
 
-bool Boat::LoadBoundingBoxes()
+bool Boat::LoadBoundingBoxes(
+	Mesh *meshList,
+	DirectX::XMMATRIX **matrixList,
+	int amount)
 {
 	//? Is there any point in not hardcode the files?
 	//Todo Need to try-catch this
@@ -447,8 +450,8 @@ bool Boat::LoadBoundingBoxes()
 	//	Mesh("../../Models/Bounding/Bound01UV.obj"));
 	//this->mBoundingMesh.push_back(
 	//	Mesh("../../Models/Bounding/Bound1UV.obj"));
-	this->mBoundingMesh.push_back(
-		Mesh("../../Models/Bounding/Bound2UV.obj"));
+	//this->mBoundingMesh.push_back(
+	//	Mesh("../../Models/Bounding/Bound2UV.obj"));
 
 	/*this->mBoundingMeshObjects.push_back(MeshObject(
 		"Bound01",
@@ -460,16 +463,25 @@ bool Boat::LoadBoundingBoxes()
 		this->mBoundingMesh[1].GetIndexVectors(),
 		this->mBoundingMesh[1].GetVertexVectors()
 	));*/
+
+	/*
 	this->mBoundingMeshObjects.push_back(MeshObject(
 		"Bound2",
 		this->mBoundingMesh[0].GetIndexVectors(),
 		this->mBoundingMesh[0].GetVertexVectors()
 	));
+	*/
 
-	for (int i = 0; i < this->mBoundingMesh.size(); i++)
+	for (int i = 0; i < amount; i++)
 	{
+		this->mFloorMatrix.push_back(
+			*matrixList[i]
+		);
+		this->mInverseFloorMatrix.push_back(
+			DirectX::XMMatrixInverse(NULL, *matrixList[i]));
+
 		std::vector<std::vector<Vertex>> &submeshList =
-			this->mBoundingMesh[i].GetVertexVectors();
+			meshList[i].GetVertexVectors();
 		for (int j = 0; j < submeshList.size(); j++)
 		{
 			this->mBoundingAABB.push_back(
@@ -480,13 +492,14 @@ bool Boat::LoadBoundingBoxes()
 	return true;
 }
 
-MeshObject *Boat::GetBoundingMeshObject(int index)
-{
-	if (index < 0 || index >= this->mBoundingMeshObjects.size())
-		return nullptr;
-	return &this->mBoundingMeshObjects[index];
-}
+//MeshObject *Boat::GetBoundingMeshObject(int index)
+//{
+//	if (index < 0 || index >= this->mBoundingMeshObjects.size())
+//		return nullptr;
+//	return &this->mBoundingMeshObjects[index];
+//}
 
+/*
 bool Boat::LoadBoatMesh()
 {
 	this->mDeckMesh.push_back(Mesh("../../Models/DeckMesh/Floor01.obj"));
@@ -510,13 +523,14 @@ bool Boat::LoadBoatMesh()
 	));
 	return true;
 }
+*/
 
-MeshObject *Boat::GetDeckMeshObject(int index)
-{
-	if (index < 0 || index >= this->mDeckMeshObject.size())
-		return nullptr;
-	return &this->mDeckMeshObject[index];
-}
+//MeshObject *Boat::GetDeckMeshObject(int index)
+//{
+//	if (index < 0 || index >= this->mDeckMeshObject.size())
+//		return nullptr;
+//	return &this->mDeckMeshObject[index];
+//}
 
 
 

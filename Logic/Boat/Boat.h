@@ -51,12 +51,15 @@ public:
 	bool ReadFile(std::string filePath);
 
 	// Room data specific
-	bool LoadBoundingBoxes();
-	MeshObject *GetBoundingMeshObject(int index);
+	bool LoadBoundingBoxes(
+		Mesh *meshList,
+		DirectX::XMMATRIX **matrixList,
+		int amount);
+	//MeshObject *GetBoundingMeshObject(int index);
 
 	// Boat mesh specific
-	bool LoadBoatMesh();
-	MeshObject *GetDeckMeshObject(int index);
+	//x bool LoadBoatMesh();
+	//MeshObject *GetDeckMeshObject(int index);
 
 	// Bounding volumes
 	//void StoreBoundings(std::vector<AABB> boundings);
@@ -74,11 +77,13 @@ private:
 	std::vector<Deck> mDecks;
 	std::vector<Room> mRooms;
 
-	std::vector<Mesh> mBoundingMesh;
-	std::vector<MeshObject> mBoundingMeshObjects;
+	//std::vector<Mesh> mBoundingMesh;
+	//std::vector<MeshObject> mBoundingMeshObjects;
 	std::vector<AABB> mBoundingAABB;
-	std::vector<Mesh> mDeckMesh;
-	std::vector<MeshObject> mDeckMeshObject;
+	std::vector<DirectX::XMMATRIX> mFloorMatrix;
+	std::vector<DirectX::XMMATRIX> mInverseFloorMatrix;
+	//std::vector<Mesh> mDeckMesh;
+	//std::vector<MeshObject> mDeckMeshObject;
 	//! World matrices are inside the MeshObject class
 	//std::vector<DirectX::XMMATRIX> mDeckWorldMatrix;
 
