@@ -38,6 +38,7 @@ private:
 	int mSpace;
 
 	TextBox mTitle;
+	Button mTitleFrame;
 
 	// Render target pointer for size purposes.
 	ID2D1HwndRenderTarget *mpRenderTarget;

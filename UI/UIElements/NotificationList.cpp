@@ -1,7 +1,7 @@
 #include "NotificationList.h"
 
 NotificationList::NotificationList(Direct2D *direct2d, int posX, int posY)
-	:mTitle(direct2d, 0, 0, 0, 0)
+	:mTitle(direct2d, 0, 0, 0, 0), mTitleFrame(direct2d, "", 0, 0, 0, 0)
 {
 	this->mPosX = posX;
 	this->mPosY = posY;
@@ -15,7 +15,6 @@ NotificationList::NotificationList(Direct2D *direct2d, int posX, int posY)
 		direct2d->GetpRenderTarget()->GetSize().width,
 		direct2d->GetpRenderTarget()->GetSize().height / 18);
 
-	// 
 	this->mTitle.SetText("Aktiv Logg\nAntal: 0");
 }
 
@@ -187,6 +186,12 @@ void NotificationList::Draw()
 	this->mTitle.DrawTextBox();
 	for (int i = 0; i < (int)this->mObjects.size(); i++)
 	{
-		this->mObjects[i]->Draw();
+		//! O P T I M I Z A T I O N
+		if (((int)this->mObjects[i]->GetButton()->GetButtonSize().bottom > 0)
+			&& (int)this->mObjects[i]->GetButton()->GetButtonSize().top
+			< (int)this->mpRenderTarget->GetSize().height)
+		{
+			this->mObjects[i]->Draw();
+		}
 	}
 }
