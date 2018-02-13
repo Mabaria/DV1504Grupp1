@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Event/Event.h"
+#include "../../Logic/Timer.h"
 
 /* An event in the log will be able to describe:
 	*	Type (Fire, Water, Gas)
@@ -25,12 +26,16 @@ public:
 	int GetActiveEventIndex() const;
 
 	// Time
-	//const TimeObject getStartTime() const;
-	//const TimeObject getElapsedTime() const;
+	const int GetElapsedTime();
+	const std::string GetStartTimeAsString();
+	const std::string GetElapsedTimeAsString();
+	
+	Timer *GetTimer();
+
 
 private:
 
-	//TimeType mTime;
+	Timer mTimer;
 	int mActiveEventIndex;
 	Event::Type mType;
 };

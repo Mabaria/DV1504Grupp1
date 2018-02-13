@@ -18,6 +18,8 @@ Button::Button(
 	this->mOpacity = 1.0f;
 	this->mBmpLoaded = false;
 	this->mpFailBrush = nullptr;
+	this->mpRectBrush = nullptr;
+	this->mpFillBrush = nullptr;
 	this->D2D1Panel = D2D1Panel;
 	this->mCurrState = BUTTON_STATE::RESET;
 	
@@ -34,6 +36,8 @@ Button::~Button()
 {
 	this->ReleaseCOM(this->mpBitMap);
 	this->ReleaseCOM(this->mpFailBrush);
+	this->ReleaseCOM(this->mpRectBrush);
+	this->ReleaseCOM(this->mpFillBrush);
 }
 
 const std::wstring Button::StrToWstr(std::string str)
@@ -52,7 +56,18 @@ void Button::CreateButton(
 	int right, 
 	int bottom)
 {
-	this->mButtonSize = D2D1::RectF(left, top, right, bottom);
+	this->D2D1Panel->GetpRenderTarget()->CreateSolidColorBrush(
+		D2D1::ColorF(D2D1::ColorF(0.75f, 0.75f, 0.75f, 1.0f)),
+		&this->mpRectBrush);
+	this->D2D1Panel->GetpRenderTarget()->CreateSolidColorBrush(
+		D2D1::ColorF(D2D1::ColorF(1.f, 1.f, 1.f, 1.0f)),
+		&this->mpFillBrush);
+	this->mButtonSize = D2D1::RectF(
+		(float)left, 
+		(float)top, 
+		(float)right, 
+		(float)bottom);
+	this->mIconSize = this->mButtonSize;
 	this->LoadImageToBitmap(imageFilePath);
 	if (this->mBmpLoaded)
 	{	
@@ -62,14 +77,7 @@ void Button::CreateButton(
 			this->mpBitMap->GetSize().width,
 			this->mpBitMap->GetSize().height);
 		this->mWidth = this->mpBitMap->GetSize().width / 3;
-		this->mBoundingBoxPercentage.right = (long)this->mButtonSize.right /
-			this->D2D1Panel->GetpRenderTarget()->GetSize().width;
-		this->mBoundingBoxPercentage.top = this->mButtonSize.top /
-			this->D2D1Panel->GetpRenderTarget()->GetSize().height;
-		this->mBoundingBoxPercentage.left = this->mButtonSize.left /
-			this->D2D1Panel->GetpRenderTarget()->GetSize().width;
-		this->mBoundingBoxPercentage.bottom = this->mButtonSize.bottom /
-			this->D2D1Panel->GetpRenderTarget()->GetSize().height;
+
 		this->mUpdateBoundingBox();
 	}
 	else
@@ -86,7 +94,7 @@ void Button::DrawButton()
 	{
 		this->D2D1Panel->GetpRenderTarget()->DrawBitmap(
 			this->mpBitMap,
-			this->mButtonSize,
+			this->mIconSize,
 			this->mOpacity,
 			D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,
 			this->mBitmapRenderSize);
@@ -96,9 +104,24 @@ void Button::DrawButton()
 	{
 		this->D2D1Panel->GetpRenderTarget()->FillRectangle(
 			this->mButtonSize,
-			mpFailBrush
-		);
+			mpFailBrush);
 	}
+}
+
+void Button::DrawRect()
+{
+	this->D2D1Panel->GetpRenderTarget()->DrawRectangle(
+		this->mButtonSize,
+		this->mpRectBrush,
+		2.0f);
+}
+
+void Button::DrawFilledRect(float r, float g, float b, float a)
+{
+	this->mpFillBrush->SetColor(D2D1::ColorF(r,g,b,a));
+	this->D2D1Panel->GetpRenderTarget()->FillRectangle(
+		this->mButtonSize,
+		this->mpFillBrush);
 }
 
 ID2D1Bitmap* Button::getBitmapPointer()
@@ -106,7 +129,7 @@ ID2D1Bitmap* Button::getBitmapPointer()
 	return this->mpBitMap;
 }
 
-const D2D1_RECT_F Button::GetButtonsize() const
+const D2D1_RECT_F Button::GetButtonSize() const
 {
 	return this->mButtonSize;
 }
@@ -121,14 +144,50 @@ const D2D1_RECT_F Button::GetBoundingBoxPercentage() const
 	return this->mBoundingBoxPercentage;
 }
 
-void Button::SetButtonsize(int left, int top, int right, int bottom)
+void Button::SetButtonSize(int left, int top, int right, int bottom)
 {
-	this->mButtonSize = D2D1::RectF(left, top, right, bottom);
+	this->mButtonSize = D2D1::RectF(
+		(float)left, 
+		(float)top, 
+		(float)right, 
+		(float)bottom);
 }
 
-void Button::SetBitmapRendersize(int left, int top, int right, int bottom)
+void Button::SetBitmapRenderSize(int left, int top, int right, int bottom)
 {
-	this->mBitmapRenderSize = D2D1::RectF(left, top, right, bottom);
+	this->mBitmapRenderSize = D2D1::RectF(
+		(float)left, 
+		(float)top, 
+		(float)right, 
+		(float)bottom);
+}
+
+void Button::SetIconSize(int left, int top, int right, int bottom)
+{
+	this->mIconSize = D2D1::RectF(
+		(float)left,
+		(float)top, 
+		(float)right, 
+		(float)bottom);
+}
+
+void Button::MoveButton(int x, int y)
+{
+	this->mButtonSize = D2D1::RectF(
+		this->mButtonSize.left + x,
+		this->mButtonSize.top + y,
+		this->mButtonSize.right + x,
+		this->mButtonSize.bottom + y);
+	this->MoveIcon(x, y);
+}
+
+void Button::MoveIcon(int x, int y)
+{
+	this->mIconSize = D2D1::RectF(
+		this->mIconSize.left + x,
+		this->mIconSize.top + y,
+		this->mIconSize.right + x,
+		this->mIconSize.bottom + y);
 }
 
 void Button::SetButtonStatus(BUTTON_STATE buttState)
@@ -147,6 +206,39 @@ void Button::SetButtonStatus(BUTTON_STATE buttState)
 			{
 				this->NotifyObservers(this);
 			}
+		}
+	}
+}
+
+void Button::SetRectStatus(BUTTON_STATE rectState)
+{
+	if (!(this->mCurrState == rectState))
+	{
+		this->mCurrState = rectState;
+		switch (rectState)
+		{
+		case BUTTON_STATE::HOVER:
+			this->mpRectBrush->SetColor(D2D1::ColorF(D2D1::ColorF(
+				0.50f, 
+				0.50f, 
+				0.50f, 
+				1.0f)));
+			break;
+		case BUTTON_STATE::CLICKED:
+			this->mpRectBrush->SetColor(D2D1::ColorF(D2D1::ColorF(
+				0.00f,
+				0.00f,
+				0.00f,
+				1.0f)));
+			this->NotifyObservers(this);
+			break;
+		default:
+			this->mpRectBrush->SetColor(D2D1::ColorF(D2D1::ColorF(
+				0.75f, 
+				0.75f, 
+				0.75f, 
+				1.0f)));
+			break;
 		}
 	}
 }
@@ -215,7 +307,7 @@ void Button::ReleaseCOM(IUnknown *object)
 
 void Button::mUpdateBoundingBox()
 {
-	this->mBoundingBoxPercentage.right = (long)this->mButtonSize.right /
+	this->mBoundingBoxPercentage.right = this->mButtonSize.right /
 		this->D2D1Panel->GetpRenderTarget()->GetSize().width;
 	this->mBoundingBoxPercentage.top = this->mButtonSize.top /
 		this->D2D1Panel->GetpRenderTarget()->GetSize().height;

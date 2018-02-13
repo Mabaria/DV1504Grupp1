@@ -43,6 +43,11 @@ void Room::SetDeckName(std::string name)
 	this->mDeckName = name;
 }
 
+std::string Room::GetDeckName() const
+{
+	return this->mDeckName;
+}
+
 
 
 /**

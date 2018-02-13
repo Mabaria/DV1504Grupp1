@@ -14,7 +14,6 @@ TextBox::TextBox(
 	this->mpTextWchar = nullptr;
 	std::wstring mTextWString;
 	std::string mTextString;
-	const wchar_t *mpTestWchar;
 	this->mCreateColor();
 	this->SetColor(D2D1::ColorF::Black);
 	this->SetText(this->mTextString);
@@ -57,6 +56,15 @@ void TextBox::DrawTextBox()
 void TextBox::SetColor(D2D1::ColorF color)
 {
 	this->mpColor->SetColor(&color);
+}
+
+void TextBox::MoveTextBox(int x, int y)
+{
+	this->mLayoutRect = D2D1::RectF(
+		this->mLayoutRect.left + x,
+		this->mLayoutRect.top + y,
+		this->mLayoutRect.right + x,
+		this->mLayoutRect.bottom + y);
 }
 
 void TextBox::mCreateColor()

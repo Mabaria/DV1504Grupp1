@@ -194,8 +194,7 @@ const void Panel3D::AddMeshObject(MeshObject * meshObject,
 	std::wstring texturePath,
 	bool use_event)
 {
-	MeshObject *mesh_object = new MeshObject(*meshObject);
-	this->mpMeshObjects.push_back(mesh_object);
+	this->mpMeshObjects.push_back(new MeshObject(*meshObject));
 
 	for (int i = 0; i < this->mpMeshObjects.back()->GetNumberOfIndexBuffers(); i++)
 	{

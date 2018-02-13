@@ -166,7 +166,7 @@ void Test_Panel2D()
 	testHeadPanel.AddButton(200, 200, 20, 700, "../../Models/feelsrain.gif", "FernButton");
 	window.Open();
 	testPanel.GetButtonByIndex(1); // Expected: FireButton2
-	testPanel.GetButtonByName("FireButton3")->SetButtonsize(-220, 320, 140, 420);
+	testPanel.GetButtonByName("FireButton3")->SetButtonSize(-220, 320, 140, 420);
 	/* Expected: Button 3 is displaced and stretches a bit*/
 	testPanel.GetButtonByIndex(-1); // Expected: nullptr
 	testPanel.GetButtonByIndex(3285); // Expected: nullptr
@@ -514,6 +514,8 @@ void Test_Panel2DTextBoxes()
 		window.GetWindow(),
 		L"Button_Test");
 
+
+	//! BUTTONS HERE
 	control_panel.AddButton(70, 70, 30, 20, "../../Models/Button01.png", "Dead");
 	control_panel.AddButton(70, 70, 30, 90, "../../Models/Button02.png", "Gas");
 	control_panel.AddButton(70, 70, 30, 160, "../../Models/Button03.png", "Water");
@@ -523,15 +525,62 @@ void Test_Panel2DTextBoxes()
 	control_panel.GetButtonByName("Nofitication")->SetOpacity(0.0f);
 
 	//! TEXTBOXES HERE
-	log_panel.AddTextbox(window_width / 6, 20, 0, 0, "Log Panel", "Title");
-	int n_events = 1000;
+	/*log_panel.AddTextbox(window_width / 6, 20, 0, 0, "Log Panel", "Title");
+	int n_events = 20;
 	for (int i = 0; i < n_events; i++)
 	{
-		log_panel.AddTextbox(window_width / 6 - 20, 20, i * 20 + 50, 20, "Crew member " + std::to_string(i + 1) + " is ded! :(", "Event" + std::to_string(i + 1));
-	}
+		log_panel.AddTextbox(window_width / 6 - 20, 20, i * 20 + 50, 20, "Event number: " + std::to_string(i + 1), "Event" + std::to_string(i + 1));
+	}*/
 	control_panel.AddTextbox(window_width / 2, 20, 0, 0, "Control Panel", "Title");
 
 	control_panel.SetTextBoxFontSize(20);
+
+	//! ACTIVE LOG HERE
+	Room test_room;
+	test_room.SetName("Hjälpmaskinrum");
+	test_room.SetDeckName("Trossdäck");
+
+	LogEvent test_event;
+	test_event.SetType(Event::Fire);
+	
+	Room test_room2;
+	test_room2.SetName("SkyC");
+	test_room2.SetDeckName("Bryggdäck");
+
+	LogEvent test_event2;
+	test_event2.SetType(Event::Water);
+	
+	Room test_room3;
+	test_room3.SetName("Omformarrum");
+	test_room3.SetDeckName("Huvuddäck");
+
+	LogEvent test_event3;
+	test_event3.SetType(Event::Gas);
+
+	Room test_room4;
+	test_room4.SetName("Ammdurk");
+	test_room4.SetDeckName("Trossdäck");
+
+	LogEvent test_event4;
+	test_event4.SetType(Event::Injury);
+
+	log_panel.SetNotificationList(0, 0);
+	
+	log_panel.AddNotification(&test_room, &test_event);
+	log_panel.AddNotification(&test_room2, &test_event2);
+	log_panel.AddNotification(&test_room3, &test_event3);
+	log_panel.AddNotification(&test_room4, &test_event4);
+	log_panel.AddNotification(&test_room, &test_event);
+	log_panel.AddNotification(&test_room2, &test_event2);
+	log_panel.AddNotification(&test_room3, &test_event3);
+	log_panel.AddNotification(&test_room4, &test_event4);
+	log_panel.AddNotification(&test_room, &test_event);
+	log_panel.AddNotification(&test_room2, &test_event2);
+	log_panel.AddNotification(&test_room3, &test_event3);
+	log_panel.AddNotification(&test_room4, &test_event4);
+	
+
+
 	float speed = 0.1f;
 
 	window.Open();
@@ -569,20 +618,25 @@ void Test_Panel2DTextBoxes()
 			window.Close();
 		}
 
-		if (Mouse::GetScroll() != 0.0f)
+		/*if (Mouse::GetScroll() != 0.0f)
 		{
-			for (int i = 0; i < n_events; i++)
+			if (log_panel.GetTextBoxByIndex(1)->GetTextBoxSize().top > 0 &&
+				log_panel.GetTextBoxByIndex(n_events)->GetTextBoxSize().bottom
+				< (log_panel.GetTop() + log_panel.GetHeight()))
 			{
-				float scroll_speed = Mouse::GetScroll() * 10.0f;
-				TextBox *text_box = log_panel.GetTextBoxByIndex(i + 1);
-				text_box->SetTextBoxSize(
-					text_box->GetTextBoxSize().left,
-					text_box->GetTextBoxSize().top + round(scroll_speed),
-					text_box->GetTextBoxSize().right,
-					text_box->GetTextBoxSize().bottom + round(scroll_speed));
+				for (int i = 0; i < n_events; i++)
+				{
+					float scroll_speed = Mouse::GetScroll() * 10.0f;
+					TextBox *text_box = log_panel.GetTextBoxByIndex(i + 1);
+					text_box->SetTextBoxSize(
+						text_box->GetTextBoxSize().left,
+						text_box->GetTextBoxSize().top + round(scroll_speed),
+						text_box->GetTextBoxSize().right,
+						text_box->GetTextBoxSize().bottom + round(scroll_speed));
 
+				}
 			}
-		}
+		}*/
 
 		side_view.Update();
 		top_view.Update();
