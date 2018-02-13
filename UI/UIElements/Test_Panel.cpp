@@ -556,8 +556,16 @@ void Test_Panel2DTextBoxes()
 	log_panel.AddNotification(&test_room2, &test_event2);
 	log_panel.AddNotification(&test_room3, &test_event3);
 	log_panel.AddNotification(&test_room4, &test_event4);
+	log_panel.AddNotification(&test_room, &test_event);
+	log_panel.AddNotification(&test_room2, &test_event2);
+	log_panel.AddNotification(&test_room3, &test_event3);
+	log_panel.AddNotification(&test_room4, &test_event4);
+	log_panel.AddNotification(&test_room, &test_event);
+	log_panel.AddNotification(&test_room2, &test_event2);
+	log_panel.AddNotification(&test_room3, &test_event3);
+	log_panel.AddNotification(&test_room4, &test_event4);
 	
-	log_panel.RemoveNotification(&test_room2, &test_event2);
+	//log_panel.RemoveNotification(&test_room2, &test_event2);
 
 	float speed = 0.1f;
 
