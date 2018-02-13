@@ -447,6 +447,14 @@ const bool Panel3D::UpdateCamera()
 			this->mpCamera->SetViewHeight(
 				this->mpCamera->GetViewHeight() - (this->mSpeed * scroll)
 			);
+
+			if (this->mpCamera->GetViewWidth() > this->mRadius)
+				this->mpCamera->SetViewWidth(this->mRadius);
+
+			if (this->mpCamera->GetViewHeight() > this->mRadius)
+				this->mpCamera->SetViewHeight(this->mRadius);
+
+			
 		}
 
 		// Mouse movement - Pan
