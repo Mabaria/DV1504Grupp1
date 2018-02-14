@@ -514,7 +514,7 @@ const void Panel3D::Update()
 	}
 	this->UpdateWindowSize();
 
-	if (this->mIsMouseInsidePanel())
+	if (this->IsMouseInsidePanel())
 	{
 		this->UpdateMouse();
 		show_cursor = this->mpCamera ? this->UpdateCamera() : true;

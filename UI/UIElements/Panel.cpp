@@ -170,7 +170,7 @@ const bool Panel::UpdateWindowSize()
 	return updated;
 }
 
-bool Panel::mIsMouseInsidePanel()
+bool Panel::IsMouseInsidePanel()
 {
 	if (Mouse::IsButtonDown(Buttons::Left))
 		int i = 0;

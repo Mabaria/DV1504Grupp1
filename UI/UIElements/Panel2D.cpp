@@ -175,7 +175,7 @@ void Panel2D::ScrollActiveLog()
 	if (Mouse::GetScroll() != 0 
 		&& this->mNotificationList->GetListHeight() 
 		> this->mDirect2D->GetpRenderTarget()->GetSize().height 
-		&& this->mIsMouseInsidePanel())
+		&& this->IsMouseInsidePanel())
 	{
 		this->mNotificationList->MoveLog(Mouse::GetScroll() * 10.0f);
 	}
@@ -237,7 +237,7 @@ void Panel2D::mUpdateButtons()
 {
 	 // For notification list.
 	Button *button = nullptr;
-	if (this->mIsMouseInsidePanel()) /* Check if mouse is inside panel,
+	if (this->IsMouseInsidePanel()) /* Check if mouse is inside panel,
 									 if not there is no chance of any buttons
 									 being pressed. */
 	{

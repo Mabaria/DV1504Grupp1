@@ -158,18 +158,24 @@ void System::mHandleInput()
 {
 	if (Mouse::IsButtonPressed(Buttons::Left))
 	{
-		Picking::GetWorldRay(
-		this->mpTopViewCamera,
-		Mouse::GetXPercentage(),
-		Mouse::GetYPercentage(),
-		this->mRay);		
-
-		Room *picked_room = this->mBoat.GetPickedRoom(this->mRay);
-
-		LogEvent *temp = new LogEvent(Event::Fire);
-		if (picked_room)
+		if (this->mpTopViewPanel->IsMouseInsidePanel())
 		{
-			this->mpActiveLogPanel->AddNotification(picked_room, temp);
+			POINT mouse_pos;
+			GetCursorPos(&mouse_pos);
+			Picking::GetWorldRay(
+				this->mpTopViewCamera,
+				Mouse::GetXPercentage(),
+				Mouse::GetYPercentage(),
+				this->mRay);
+
+			Room *picked_room = this->mBoat.GetPickedRoom(this->mRay);
+			if (picked_room)
+			{
+				LogEvent *temp = new LogEvent(Event::Fire);
+				this->mEventLog.AddEvent(temp->GetType(), picked_room->GetIndexInBoat());
+				this->mpActiveLogPanel->AddNotification(picked_room, temp);
+
+			}
 		}
 	}
 }
@@ -194,7 +200,6 @@ void System::mSetupPanels()
 		{ 0.0f, 0.0f, 0.0f, 0.0f },
 		XM_PI / 15.0f, 16.0f / 9.0f,
 		0.1f, 25.0f, LOOK_AT, PERSPECTIVE);
-	this->mpTopViewPanel->SetCamera(this->mpTopViewCamera);
 
 	this->mpSideViewCamera = new Camera(
 		{ 0.0f, 80.0f, -2.0f, 0.0f },
@@ -202,7 +207,9 @@ void System::mSetupPanels()
 		{ 0.0f, -80.0f, 2.0f, 0.0f },
 		2.0f, 2.0f,
 		0.01f, 1000.0f, LOOK_TO, ORTHOGRAPHIC);
+
 	this->mpSideViewPanel->SetCamera(this->mpSideViewCamera);
+	this->mpTopViewPanel->SetCamera(this->mpTopViewCamera);
 
 	// Creating and setting the shaders.
 	this->mpSideViewPanel->CreateShadersAndSetup(
@@ -265,9 +272,9 @@ void System::mSetupModels()
 	this->mpTopViewPanel->AddMeshObject(&floor_brygg);
 	this->mpTopViewPanel->AddMeshObject(&floor_huvud);
 	this->mpTopViewPanel->AddMeshObject(&floor_tross);
-	this->mpTopViewPanel->AddMeshObject(&bound_brygg, L"../../Models/BlendColor.dds", true);
-	this->mpTopViewPanel->AddMeshObject(&bound_huvud, L"../../Models/BlendColor.dds", true);
-	this->mpTopViewPanel->AddMeshObject(&bound_tross, L"../../Models/BlendColor.dds", true);
+	this->mpTopViewPanel->AddMeshObject(&bound_brygg);//, L"../../Models/BlendColor.dds", false);											 /
+	this->mpTopViewPanel->AddMeshObject(&bound_huvud);//, L"../../Models/BlendColor.dds", false);											 /
+	this->mpTopViewPanel->AddMeshObject(&bound_tross);//, L"../../Models/BlendColor.dds", false);
 	
 
 	this->mpTopViewPanel->AddMeshObject(
