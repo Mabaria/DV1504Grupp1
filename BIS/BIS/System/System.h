@@ -40,7 +40,8 @@ private:
 	std::vector<Mesh*> mFloors;
 	std::vector<Mesh*> mBounds;
 
-	Camera *mpCamera;
+	Camera *mpTopViewCamera;
+	Camera *mpSideViewCamera;
 	Window *mpWindow;
 
 	Boat mBoat;
