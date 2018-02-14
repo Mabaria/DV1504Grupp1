@@ -24,7 +24,8 @@ public:
 private:
 	void mUpdate();
 	void mDraw();
-	void mAddEvent(Room *room, LogEvent *event);
+	void mAddEvent(Room *room, LogEvent *logEvent);
+	void mRemoveEvent(Room *room, LogEvent *logEvent);
 
 	void mSetupPanels();
 	void mSetupModels();

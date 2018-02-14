@@ -160,6 +160,11 @@ void System::mAddEvent(Room * room, LogEvent * logEvent)
 	this->mpTopViewPanel->rGetMeshObject(room->GetDeckName());
 }
 
+void System::mRemoveEvent(Room * room, LogEvent * logEvent)
+{
+	this->mpActiveLogPanel->RemoveNotification(room, logEvent);
+}
+
 void System::mSetupPanels()
 {
 	// Creating and setting the cameras.
