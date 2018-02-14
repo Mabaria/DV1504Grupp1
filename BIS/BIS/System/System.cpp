@@ -153,6 +153,20 @@ void System::mDraw()
 	this->mpSideViewPanel->Draw();
 }
 
+void System::mHandleInput()
+{
+	if (Mouse::IsButtonPressed(Buttons::Left))
+	{
+		Picking::GetWorldRay(
+		this->mpTopViewCamera,
+		Mouse::GetXPercentage(),
+		Mouse::GetYPercentage(),
+		this->mRay);		
+
+		Room *picked_room = this->mBoat.GetPickedRoom(this->mRay);
+	}
+}
+
 void System::mAddEvent(Room * room, LogEvent * logEvent)
 {
 	this->mpActiveLogPanel->AddNotification(room, logEvent);
@@ -345,6 +359,61 @@ void System::mSetupModels()
 
 void System::mSetupBoat()
 {
-	this->mBoat.ReadFile("");
+	this->mBoat.SetModelName("båtnamnplaceholder");
+	std::vector<Event::Type> inputs = { 
+		Event::Fire, 
+		Event::Injury, 
+		Event::Water, 
+		Event::Gas };
 
+	this->mBoat.AddDeck("Bryggdäck");
+	this->mBoat.AddRoom("slC", "Bryggdäck", inputs);
+	this->mBoat.AddRoom("SkyC", "Bryggdäck", inputs);	
+	this->mBoat.AddRoom("Brygga", "Bryggdäck", inputs);
+
+	this->mBoat.AddDeck("Huvuddäck");	
+	this->mBoat.AddRoom("Skyddäck", "Huvuddäck", inputs);	
+	this->mBoat.AddRoom("Maskinrum", "Huvuddäck", inputs);	
+	this->mBoat.AddRoom("Gång3", "Huvuddäck", inputs);
+	this->mBoat.AddRoom("Tambur", "Huvuddäck", inputs);	
+	this->mBoat.AddRoom("Omformarrum", "Huvuddäck", inputs);
+	this->mBoat.AddRoom("CBRN", "Huvuddäck", inputs);	
+
+	this->mBoat.AddDeck("Trossdäck");	
+	this->mBoat.AddRoom("Ammdurk", "Trossdäck", inputs);	
+	this->mBoat.AddRoom("Lastrum", "Trossdäck", inputs);	
+	this->mBoat.AddRoom("Maskinrum", "Trossdäck", inputs);	
+	this->mBoat.AddRoom("MC", "Trossdäck", inputs);	
+	this->mBoat.AddRoom("Gång1", "Trossdäck", inputs);	
+	this->mBoat.AddRoom("Apparatrum", "Trossdäck", inputs);	
+	this->mBoat.AddRoom("Gång2", "Trossdäck", inputs);	
+	this->mBoat.AddRoom("Hjälpmaskinrum", "Trossdäck", inputs);	
+	this->mBoat.AddRoom("Byssa", "Trossdäck", inputs);	
+	this->mBoat.AddRoom("SB Mäss", "Trossdäck", inputs);	
+	this->mBoat.AddRoom("Skyddsrum", "Trossdäck", inputs);
+
+	// Creating the mesh list that 
+	Mesh mesh_list[] =
+	{
+		*this->mBounds[0],
+		*this->mBounds[1],
+		*this->mBounds[2],
+		*this->mFloors[0],
+		*this->mFloors[1],
+		*this->mFloors[2]
+	};
+
+	XMMATRIX *floor_matrix_list[] =
+	{
+		this->mpTopViewPanel->rGetMeshObject("Bryggdäck")->rGetModelMatrix(),
+		this->mpTopViewPanel->rGetMeshObject("Huvuddäck")->rGetModelMatrix(),
+		this->mpTopViewPanel->rGetMeshObject("Trossdäck")->rGetModelMatrix()
+	};
+
+	this->mBoat.LoadBoundingBoxes(mesh_list, floor_matrix_list, 3);
+
+	/**
+	*	Send corresponding pointers
+	*/
+	this->mBoat.SetEventLog(&this->mEventLog);
 }

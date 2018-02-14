@@ -4,11 +4,12 @@
 #include "../../../UI/UIElements/Panel3D.h"
 #include "../../../Logic/Boat/Boat.h"
 #include "../../../GraphicsEngine/Quad.h"
+#include "../../../IO/Picking.h"
 
 /* TODO:
 *Picking
 *Kontrollknappar
-*
+*Båtgrejer
 */
 
 
@@ -25,6 +26,8 @@ public:
 private:
 	void mUpdate();
 	void mDraw();
+	void mHandleInput();
+
 	void mAddEvent(Room *room, LogEvent *logEvent);
 	void mRemoveEvent(Room *room, LogEvent *logEvent);
 
@@ -49,4 +52,5 @@ private:
 
 	EventLog mEventLog;
 	Boat mBoat;
+	Ray mRay;
 };
