@@ -15,10 +15,6 @@ struct AABB {
 	Extrema x, y, z;
 };
 
-
-
-bool FillAABBVectorFromFile(const std::string &path, std::vector<AABB> &rList);
-
 namespace Picking
 {
 	void GetWorldRay (
@@ -31,5 +27,5 @@ namespace Picking
 		const Ray &ray,
 		const AABB &box);
 
-	AABB FromMeshToAABB(const std::vector<Vertex> &vertex);
+	AABB FromVerticesToAABB(const std::vector<Vertex> &vertex);
 }

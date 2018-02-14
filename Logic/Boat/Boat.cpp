@@ -442,7 +442,7 @@ bool Boat::LoadBoundingBoxes(
 			//this->mBoundingAABB.push_back(
 			//	Picking::FromMeshToAABB(submeshList[j]));
 			this->mpRooms[this->mpDecks[i]->GetRoomOffset() + j]->SetAABB(
-				Picking::FromMeshToAABB(submeshList[j]));
+				Picking::FromVerticesToAABB(submeshList[j]));
 			
 		}
 	}

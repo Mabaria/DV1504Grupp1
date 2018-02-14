@@ -167,7 +167,7 @@ float Picking::IsRayIntersectingAABB(
 	return tmin;
 }
 
-AABB Picking::FromMeshToAABB(const std::vector<Vertex> &vertex)
+AABB Picking::FromVerticesToAABB(const std::vector<Vertex> &vertex)
 {
 	AABB retAABB;
 	retAABB.x.max = retAABB.x.min = vertex[0].x;
@@ -192,27 +192,4 @@ AABB Picking::FromMeshToAABB(const std::vector<Vertex> &vertex)
 			retAABB.z.min = vertex[i].z;
 	}
 	return retAABB;
-}
-
-bool FillAABBVectorFromFile(const std::string &path, std::vector<AABB> &rList)
-{
-	AABB *pList;
-	int listSize = 0;
-
-	std::ifstream infile(path, std::ifstream::binary);
-	if (!infile.is_open())
-		return false;
-
-	infile.read((char*)&listSize, sizeof(int));
-	pList = new AABB[listSize];
-
-	infile.read((char*)pList, sizeof(AABB)*listSize);
-
-	for (int i = 0; i < listSize; i++)
-	{
-		rList.push_back(pList[i]);
-	}
-
-	delete[] pList;
-	return true;
 }
