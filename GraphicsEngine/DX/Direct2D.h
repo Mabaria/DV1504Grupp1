@@ -23,13 +23,12 @@ public:
 	ID2D1Factory *GetpFactory();
 	ID2D1HwndRenderTarget *GetpRenderTarget();
 	IDWriteFactory *GetpTextFactory();
-	IDWriteTextFormat *GetpTextFormat();
+	const DWRITE_TRIMMING GetTrimmer();
 
 	void SetpFormatConverter(IWICFormatConverter* pConverter);
 	void SetpImagingFactory(IWICImagingFactory *pWicFactory);
 	void SetpBitmapDecoder(IWICBitmapDecoder *pDecoder);
 	void SetpBitmapSrc(IWICBitmapFrameDecode *pBitmapSrc);
-	void SetFontSize(int size);
 private:
 
 	IWICFormatConverter *mpConverter;
@@ -39,14 +38,11 @@ private:
 	ID2D1HwndRenderTarget *mpRenderTarget;
 	ID2D1Factory *mpFactory;
 	IDWriteFactory *mpTextFactory;
-	IDWriteTextFormat *mpTextFormat;
 	DWRITE_TRIMMING mTrimmer;
-	unsigned int mFontSize;
 
 	void mCreateFactory();
 	void mCreateWicFactory();
 	void mCreateTextFactory();
-	void mCreateTextFormat();
 	void mInit();
 	void ReleaseCOM(IUnknown *object);
 };
