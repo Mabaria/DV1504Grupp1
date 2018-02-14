@@ -198,7 +198,6 @@ void System::BuildGraphicalUserInterface(
 
 	// Setting up the control panel.
 	this->mpControlPanel->AddTextbox(200, 60, 0, 105, "Kontrollpanel", "title");
-	this->mpControlPanel->SetTextBoxFontSize(20);
 	this->mpControlPanel->AddButton(70, 70, 30, 20, "../../Models/Button01.png", "Injury");
 	this->mpControlPanel->AddButton(70,	70, 30, 90, "../../Models/Button02.png", "Gas");
 	this->mpControlPanel->AddButton(70, 70, 30,	160, "../../Models/Button03.png", "Water");
