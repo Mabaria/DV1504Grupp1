@@ -65,6 +65,12 @@ void Deck::SetRoomCount(int count)
 	this->mRoomCount = count;
 }
 
+Room *Deck::GetRoomPointerAt(int index)
+{
+	if (index < 0 || index >= (int)this->mpRooms.size())
+		return nullptr;
+	return this->mpRooms[index];
+}
 void Deck::SetRoomOffset(int index)
 {
 	this->mRoomOffset = index;

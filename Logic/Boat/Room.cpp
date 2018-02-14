@@ -32,6 +32,16 @@ void Room::SetName(std::string name)
 	this->mName = name;
 }
 
+void Room::SetAABB(const AABB &boundingBox)
+{
+	this->mBoundingBox = boundingBox;
+}
+
+float Room::CheckRayCollision(const Ray & rRay)
+{
+	return Picking::IsRayIntersectingAABB(rRay, this->mBoundingBox);
+}
+
 std::string Room::GetName() const
 {
 	return this->mName;

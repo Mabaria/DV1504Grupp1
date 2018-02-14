@@ -123,37 +123,43 @@ Room* Boat::GetRoomPointer(std::string roomName, std::string deckName)
 Room* Boat::GetPickedRoom(Ray ray)
 {
 	float tMain, t;
-	int hitIndex;
+	//int hitIndex;
+	Room* hitRoom = nullptr;
 
 	tMain = -1; // Assume miss and prove collision
-	hitIndex = -1;
+	//hitIndex = -1;
 
 	// Check all rooms for collision
-	for (int i = 0; i < (int)this->mBoundingAABB.size(); i++)
+	for (int i = 0; i < (int)this->mpDecks.size(); i++)
 	{
-		t = Picking::IsRayIntersectingAABB(ray, this->mBoundingAABB[i]);
-
-
-		if (
-			(tMain == -1 && t >= 0) ||	// First hit
-			(t >= 0 && t < tMain))	// Hit and closer to the "eye" than previous room
+		Ray wRay;
+		wRay.origin = DirectX::XMVector3TransformCoord(ray.origin, this->mInverseFloorMatrix[i]);
+		wRay.direction = DirectX::XMVector3TransformNormal(ray.direction, this->mInverseFloorMatrix[i]);
+		for (int j = 0; j < this->mpDecks[i]->GetRoomCount(); j++)
 		{
-			tMain = t;
-			hitIndex = i;
+			t = this->mpDecks[i]->GetRoomPointerAt(j)->CheckRayCollision(wRay);
+
+
+			if (
+				(tMain == -1 && t >= 0) ||	// First hit
+				(t >= 0 && t < tMain))	// Hit and closer to the "eye" than previous room
+			{
+				tMain = t;
+				hitRoom = this->mpDecks[i]->GetRoomPointerAt(j);
+			}
+
 		}
 	}
 
+	return hitRoom;
 
+	//if (hitIndex != -1) // Hit found
+	//{
+	//	return this->mpRooms[hitIndex];
+	//}
 
-
-
-	if (hitIndex != -1) // Hit found
-	{
-		return this->mRooms[hitIndex];
-	}
-
-	// No hit = return nullptr
-	return nullptr;
+	//// No hit = return nullptr
+	//return nullptr;
 }
 
 
@@ -419,34 +425,6 @@ bool Boat::LoadBoundingBoxes(
 	DirectX::XMMATRIX **matrixList,
 	int amount)
 {
-	//? Is there any point in not hardcode the files?
-	//Todo Need to try-catch this
-	//this->mBoundingMesh.push_back(
-	//	Mesh("../../Models/Bounding/Bound01UV.obj"));
-	//this->mBoundingMesh.push_back(
-	//	Mesh("../../Models/Bounding/Bound1UV.obj"));
-	//this->mBoundingMesh.push_back(
-	//	Mesh("../../Models/Bounding/Bound2UV.obj"));
-
-	/*this->mBoundingMeshObjects.push_back(MeshObject(
-		"Bound01",
-		this->mBoundingMesh[0].GetIndexVectors(),
-		this->mBoundingMesh[0].GetVertexVectors()
-	));
-	this->mBoundingMeshObjects.push_back(MeshObject(
-		"Bound1",
-		this->mBoundingMesh[1].GetIndexVectors(),
-		this->mBoundingMesh[1].GetVertexVectors()
-	));*/
-
-	/*
-	this->mBoundingMeshObjects.push_back(MeshObject(
-		"Bound2",
-		this->mBoundingMesh[0].GetIndexVectors(),
-		this->mBoundingMesh[0].GetVertexVectors()
-	));
-	*/
-
 	for (int i = 0; i < amount; i++)
 	{
 		this->mFloorMatrix.push_back(
@@ -459,7 +437,11 @@ bool Boat::LoadBoundingBoxes(
 			meshList[i].GetVertexVectors();
 		for (int j = 0; j < submeshList.size(); j++)
 		{
-			this->mBoundingAABB.push_back(
+			// TODO: submeshList.size may be bigger than mpRooms size
+			// PLZ FIX
+			//this->mBoundingAABB.push_back(
+			//	Picking::FromMeshToAABB(submeshList[j]));
+			this->mpRooms[this->mpDecks[i]->GetRoomOffset() + j]->SetAABB(
 				Picking::FromMeshToAABB(submeshList[j]));
 			
 		}

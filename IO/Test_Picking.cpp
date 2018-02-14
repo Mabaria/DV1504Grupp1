@@ -411,7 +411,7 @@ bool TestPickingOnBoat()
 {
 	//! ADD YOUR OWN TESTS HERE
 	Boat boat;
-	boat.ReadFile("../../Savefiles/Testboat1.boat");
+	boat.ReadFile("../../Savefiles/data.boat");
 	//x boat.LoadBoatMesh();
 	//x boat.LoadBoundingBoxes();
 
@@ -506,19 +506,22 @@ bool TestPickingOnBoat()
 		window.Update();
 		panel.Update();
 		panel.Draw();
-		Ray ray;
-		//std::cout << "x: " << Mouse::GetXPercentage() << ", y: " << Mouse::GetYPercentage();
-		Picking::GetWorldRay(&camera, Mouse::GetXPercentage(), Mouse::GetYPercentage(), ray);
-		//std::cout << ", Direction (x, y, z): ("
-		//	<< DirectX::XMVectorGetX(ray.direction) << ", "
-		//	<< DirectX::XMVectorGetY(ray.direction) << ", "
-		//	<< DirectX::XMVectorGetZ(ray.direction) << ")"
-		//	<< std::endl;
-		Room *room = boat.GetPickedRoom(ray);
-		if (room != nullptr)
-			std::cout << "HIT ROOM: " << room->GetName() << std::endl;
-		else
-			std::cout << std::endl;
+		//if (Mouse::IsButtonPressed(Buttons::Left))
+		//{
+			Ray ray;
+			//std::cout << "x: " << Mouse::GetXPercentage() << ", y: " << Mouse::GetYPercentage();
+			Picking::GetWorldRay(&camera, Mouse::GetXPercentage(), Mouse::GetYPercentage(), ray);
+			//std::cout << ", Direction (x, y, z): ("
+			//	<< DirectX::XMVectorGetX(ray.direction) << ", "
+			//	<< DirectX::XMVectorGetY(ray.direction) << ", "
+			//	<< DirectX::XMVectorGetZ(ray.direction) << ")"
+			//	<< std::endl;
+			Room *room = boat.GetPickedRoom(ray);
+			if (room != nullptr)
+				std::cout << "HIT ROOM: " << room->GetName() << std::endl;
+			else
+				std::cout << std::endl;
+		//}
 	}
 	return true;
 }

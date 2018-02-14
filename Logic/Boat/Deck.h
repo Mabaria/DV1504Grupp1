@@ -37,6 +37,7 @@ public:
 	void PushRoomOffset(int value = 1);
 	int GetRoomCount() const;
 	int GetRoomOffset() const;
+	Room* GetRoomPointerAt(int index);
 
 	// Disk specific
 	std::string GetString() const;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include "../../IO/Picking.h"
 #include "../Eventlog/EventLog.h"
 #include "../Event/Event.h"
 #include "Sensor.h"
@@ -27,10 +28,11 @@ public:
 	// Room specific
 	void SetIndex(int index);
 	void SetName(std::string name);
+	void SetAABB(const AABB &boundingBox);
 	std::string GetName() const;
 	void InitFromDesc(RoomDesc desc);
 
-	//float CheckRayCollision(Ray ray);
+	float CheckRayCollision(const Ray &rRay);
 
 	// Deck specific
 	void SetDeckName(std::string name);
@@ -53,6 +55,7 @@ private:
 	// Room specific
 	int mIndex;
 	std::string mName;
+	AABB mBoundingBox;
 
 	// Deck specific
 	std::string mDeckName;

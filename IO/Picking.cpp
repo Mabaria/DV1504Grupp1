@@ -160,7 +160,7 @@ float Picking::IsRayIntersectingAABB(
 	const AABB &box)
 {
 	// Initializing variables
-	float tmin = -1.0f;
+	float tmin = -100000.0f;
 	float tmax = 100000.f;
 	float t1, t2, factor;
 
