@@ -1,0 +1,30 @@
+boatmodel Testskepp
+
+// d <<deck name>> <<offset>> <<count>>
+// r <<room name>> / sensor <<room event index>>
+
+d Bryggdäck
+r slC / sensor -1 { 0 1 2 }
+r SkyC / sensor -1 { 0 1 2 }
+r Brygga / sensor -1 { 0 1 2 }
+
+d Huvuddäck
+r Skyddäck / sensor -1 { 0 1 2 }
+r Tvärskepp / sensor -1 { 0 1 2 }
+r Gång3 / sensor -1 { 0 1 2 }
+r Tambur / sensor -1 { 0 1 2 }
+r Omformarrum / sensor -1 { 0 2 }
+// r CBRN / sensor -1 { 0 1 2 } // Har missat denna i meshen
+
+d Trossdäck
+r Ammdurk / sensor -1 { 0 1 2 }
+r Lastrum / sensor -1 { 0 1 2 }
+r Maskinrum / sensor -1 { 0 2 }
+r Gång2 / sensor -1 { 0 1 2 }
+r Hjälpmaskinrum / sensor -1 { 0 1 2 }
+r MC / sensor -1 { 0 1 2 }
+r Apparatrum / sensor -1 { 0 1 2 }
+r Gång1 / sensor -1 { 0 1 2 }
+r SB Mäss / sensor -1 { 0 1 2 }
+r Byssa / sensor -1 { 0 1 2 }
+r Skyddsrum / sensor -1 { 0 1 2 }
