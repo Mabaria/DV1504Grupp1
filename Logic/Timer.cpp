@@ -76,7 +76,7 @@ const int Timer::GetDays()
 const std::string Timer::GetTimeAsStr()
 {
 	this->UpdateTime();
-	time_t diff = this->mTimeNow - this->mStartTime; 
+	time_t diff = this->mTimeNow - this->mStartTime;
 	tm *pdiff_struct = localtime(&diff);
 	if (pdiff_struct->tm_hour > 0)
 	{
@@ -88,7 +88,12 @@ const std::string Timer::GetTimeAsStr()
 	}
 	char buffer[40];
 	strftime(buffer, 40, "%X", pdiff_struct);
-	return std::string(buffer);
+	std::string day_string = std::to_string(this->GetDays()) + ":";
+	if (this->GetDays() < 10)
+	{
+		day_string = "0" + day_string;
+	}
+	return day_string + std::string(buffer);
 }
 
 const std::string Timer::GetSecondsAsStr()
@@ -126,18 +131,6 @@ const std::string Timer::GetHoursAsStr()
 	}
 	char buffer[30];
 	strftime(buffer, 30, "%H", pdiff_struct);
-	return std::string(buffer);
-}
-
-const std::string Timer::GetDaysAsStr()
-{
-	this->UpdateTime();
-	time_t diff = this->mTimeNow - this->mStartTime;
-	tm *pdiff_struct = localtime(&diff);
-	pdiff_struct->tm_mday = pdiff_struct->tm_mday - 1;
-	char buffer[30];
-	strftime(buffer, 30, "%j", pdiff_struct);
-	buffer[2] = buffer[2] - 1;
 	return std::string(buffer);
 }
 

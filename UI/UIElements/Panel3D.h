@@ -28,8 +28,12 @@ public:
 		std::string name,
 		std::vector<std::vector<unsigned int>> indices, 
 		std::vector<std::vector<Vertex>> vertices,
-		std::wstring texturePath);
-	const void AddMeshObject(MeshObject *meshObject);
+		std::wstring texturePath,
+		bool use_event = false);
+
+	const void AddMeshObject(MeshObject *meshObject,
+		std::wstring texturePath = L"",
+		bool use_event = false);
 
 	// Pass through for the create shader function in D3D11,
 	// setting shaders and setting up the input assembler.
@@ -49,9 +53,9 @@ public:
 	MeshObject* rGetMeshObject(std::string name);
 
 	// Updates constant buffers with matrices.
-	const void UpdateConstantBuffer(std::string name);
-	const void UpdateConstantBuffer(XMMATRIX *matrix, ID3D11Buffer **buffer);
-	const void UpdateConstantBuffer(int index);
+	const void UpdateMatrixBuffer(std::string name);
+	const void UpdateMatrixBuffer(XMMATRIX *matrix, ID3D11Buffer **buffer);
+	const void UpdateMatrixBuffer(int index);
 
 	const void SetCamera(Camera *camera);
 
@@ -77,10 +81,31 @@ private:
 	const void CreateIndexBuffer(std::vector<unsigned int> indices);
 
 	// Creates the constant buffer for the last added mesh object.
-	const void CreateConstantBuffer(
+	const void mCreateMatrixBuffer(
 		XMMATRIX *matrix, 
 		ID3D11Buffer **constantBuffer);
 
+	const void mCreateMaterialBuffer(
+		MaterialStruct *matStruct);
+
+
 	const void CreateTexture(std::wstring texturePath);
 
+
+	// --- TEMP ---
+
+	Buttons mBtnToPan;
+
+	XMVECTOR mDirection;
+	Position mMouseOrigin;
+	Position mMouseDiff;
+	bool mShowCursor;
+
+	float mOrthographicMaxView;
+
+	float mSpeed;
+	float mRadius;
+
+	const void UpdateMouse();
+	const bool UpdateCamera();
 };

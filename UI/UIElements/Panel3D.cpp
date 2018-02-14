@@ -61,6 +61,17 @@ Panel3D::Panel3D(int width, int height, int top, int left, HWND handle, LPCTSTR 
 	this->mpCamera		= nullptr;
 	this->mpViewBuffer	= nullptr;
 	this->mpProjBuffer	= nullptr;
+
+
+	this->mShowCursor	= true;
+	this->mRadius		= 10.0f;
+	this->mDirection	= DirectX::XMVector3Normalize({ 0.5f, 0.3f, 0.5f });
+	this->mSpeed		= 0.06f;
+	this->mMouseDiff.x	= 0.0f;
+	this->mMouseDiff.y	= 0.0f;
+	this->mBtnToPan		= Buttons::ScrollPress;
+
+	this->mOrthographicMaxView = 2.0f;
 }
 
 Panel3D::~Panel3D()
@@ -97,7 +108,11 @@ Panel3D::~Panel3D()
 	}
 	for (int i = 0; i < (int)this->mpMeshObjects.size(); i++)
 	{
-		delete this->mpMeshObjects[i];
+		if (this->mpMeshObjects[i] != nullptr)
+		{
+			delete this->mpMeshObjects[i];
+			this->mpMeshObjects[i] = nullptr;
+		}
 	}
 }
 
@@ -108,39 +123,136 @@ D3D11 & Panel3D::rGetDirect3D()
 
 const void Panel3D::AddMeshObject(
 	std::string name,
-	std::vector<std::vector<unsigned int>> indices, 
+	std::vector<std::vector<unsigned int>> indices,
 	std::vector<std::vector<Vertex>> vertices,
-	std::wstring texturePath)
+	std::wstring texturePath,
+	bool use_event)
 {
 	MeshObject *mesh_object = new MeshObject(name, indices, vertices);
 	this->mpMeshObjects.push_back(mesh_object);
 
-	for (int i = 0; i < this->mpMeshObjects.back()->GetNumberOfBuffers(); i++)
+	for (int i = 0; i < this->mpMeshObjects.back()->GetNumberOfIndexBuffers(); i++)
 	{
 		this->CreateIndexBuffer(indices[i]);
 		this->CreateVertexBuffer(vertices[i]);
 	}
-	this->CreateConstantBuffer(
-		this->mpMeshObjects.back()->rGetModelMatrix(), 
-		this->mpMeshObjects.back()->rGetConstantBuffer());
+	this->mCreateMatrixBuffer(
+		this->mpMeshObjects.back()->rGetModelMatrix(),
+		this->mpMeshObjects.back()->rGetMatrixBuffer());
+
+	for (int i = 0; i < this->mpMeshObjects.back()->GetNumberOfMaterialBuffers(); i++)
+	{
+		this->mCreateMaterialBuffer(
+			&mesh_object->pGetMaterialHandler()->GetMaterialStruct(i));
+	}
+
+	if (this->mpMeshObjects.back()->GetNumberOfMaterialBuffers() == 0)
+	{
+		// Add a default material if no material exists
+		MaterialStruct defaultMat =
+		{ 0.5f, 0.5f, 0.5f,
+			1.0f, 1.0f, 1.0f,
+			1.0f, 1.0f, 1.0f,
+			1.0f,
+			1.0f };
+		this->mCreateMaterialBuffer(&defaultMat);
+
+
+	}
+
+
 	if (texturePath != L"")
 	{
 		this->CreateTexture(texturePath);
 	}
+
+	if (use_event)
+	{
+		EventData data = { 0 };
+
+		D3D11_BUFFER_DESC event_desc = { 0 };
+		event_desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		event_desc.ByteWidth = sizeof(EventData);
+		event_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		event_desc.Usage = D3D11_USAGE_DYNAMIC;
+
+		D3D11_SUBRESOURCE_DATA event_data = { 0 };
+		event_data.pSysMem = &data;
+
+		for (int i = 0; i < 20; i++)
+		{
+			this->mDirect3D.GetDevice()->CreateBuffer(
+				&event_desc,
+				&event_data,
+				this->mpMeshObjects.back()->rGetEventBuffer(i)
+			);
+		}
+	}
 }
 
-const void Panel3D::AddMeshObject(MeshObject * meshObject)
+const void Panel3D::AddMeshObject(MeshObject * meshObject,
+	std::wstring texturePath,
+	bool use_event)
 {
-	this->mpMeshObjects.push_back(meshObject);
+	this->mpMeshObjects.push_back(new MeshObject(*meshObject));
 
-	for (int i = 0; i < this->mpMeshObjects.back()->GetNumberOfBuffers(); i++)
+	for (int i = 0; i < this->mpMeshObjects.back()->GetNumberOfIndexBuffers(); i++)
 	{
 		this->CreateIndexBuffer(meshObject->GetIndices()[i]);
 		this->CreateVertexBuffer(meshObject->GetVertices()[i]);
 	}
-	this->CreateConstantBuffer(
+
+	this->mCreateMatrixBuffer(
 		this->mpMeshObjects.back()->rGetModelMatrix(),
-		this->mpMeshObjects.back()->rGetConstantBuffer());
+		this->mpMeshObjects.back()->rGetMatrixBuffer());
+
+	for (int i = 0; i < this->mpMeshObjects.back()->GetNumberOfMaterialBuffers(); i++)
+	{
+		this->mCreateMaterialBuffer(
+			&meshObject->pGetMaterialHandler()->GetMaterialStruct(i));
+	}
+
+	if (this->mpMeshObjects.back()->GetNumberOfMaterialBuffers() == 0)
+	{
+		// Add a default material if no material exists
+		MaterialStruct defaultMat =
+		{ 1.0f, 1.0f, 1.0f,
+		  1.0f, 1.0f, 1.0f,
+		  1.0f, 1.0f, 1.0f,
+		  1.0f,
+		  1.0f };
+		this->mCreateMaterialBuffer(&defaultMat);
+			
+		
+	}
+
+		if (texturePath != L"")
+		{
+			this->CreateTexture(texturePath);
+		}
+	
+		if (use_event)
+		{
+			EventData data = { 0 };
+
+			D3D11_BUFFER_DESC event_desc = { 0 };
+			event_desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+			event_desc.ByteWidth = sizeof(EventData);
+			event_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+			event_desc.Usage = D3D11_USAGE_DYNAMIC;
+
+			D3D11_SUBRESOURCE_DATA event_data = { 0 };
+			event_data.pSysMem = &data;
+
+			for (int i = 0; i < 20; i++)
+			{
+				this->mDirect3D.GetDevice()->CreateBuffer(
+					&event_desc,
+					&event_data,
+					this->mpMeshObjects.back()->rGetEventBuffer(i)
+				);
+			}
+		}
 }
 
 bool Panel3D::CreateShadersAndSetup(
@@ -229,7 +341,7 @@ const void Panel3D::CreateIndexBuffer(std::vector<unsigned int> indices)
 	this->mpMeshObjects.back()->AddIndexBuffer(&index_buffer);
 }
 
-const void Panel3D::CreateConstantBuffer(
+const void Panel3D::mCreateMatrixBuffer(
 	XMMATRIX *matrix, 
 	ID3D11Buffer **constantBuffer)
 {
@@ -248,9 +360,34 @@ const void Panel3D::CreateConstantBuffer(
 		&buffer_data, 
 		constantBuffer)))
 	{
-		MessageBoxA(NULL, "Error creating constant buffer.", NULL, MB_OK);
+		MessageBoxA(NULL, "Error creating matrix buffer.", NULL, MB_OK);
 		exit(-1);
 	}
+}
+
+const void Panel3D::mCreateMaterialBuffer(
+	MaterialStruct * matStruct)
+{
+	ID3D11Buffer *material_buffer = nullptr;
+	D3D11_BUFFER_DESC buffer_desc{};
+	buffer_desc.BindFlags		= D3D11_BIND_CONSTANT_BUFFER;
+	buffer_desc.Usage			= D3D11_USAGE_DYNAMIC;
+	buffer_desc.CPUAccessFlags	= D3D11_CPU_ACCESS_WRITE;
+	buffer_desc.ByteWidth		= sizeof(MaterialStruct);
+
+	D3D11_SUBRESOURCE_DATA buffer_data{};
+	buffer_data.pSysMem = matStruct;
+
+	// Create buffer
+	if (FAILED(this->mDirect3D.GetDevice()->CreateBuffer(
+		&buffer_desc,
+		&buffer_data,
+		&material_buffer)))
+	{
+		MessageBoxA(NULL, "Error creating material buffer.", NULL, MB_OK);
+		exit(-1);
+	}
+	this->mpMeshObjects.back()->AddMaterialBuffer(&material_buffer);
 }
 
 const void Panel3D::CreateTexture(std::wstring texturePath)
@@ -266,7 +403,7 @@ const void Panel3D::CreateTexture(std::wstring texturePath)
 	}
 }
 
-const void Panel3D::UpdateConstantBuffer(std::string name)
+const void Panel3D::UpdateMatrixBuffer(std::string name)
 {
 	// Getting the mesh object of the given name.
 	MeshObject *mesh_object = this->rGetMeshObject(name);
@@ -274,25 +411,25 @@ const void Panel3D::UpdateConstantBuffer(std::string name)
 	if (mesh_object)
 	{
 		// Getting the constant buffer and model matrix from that mesh object.
-		ID3D11Buffer *constant_buffer = *mesh_object->rGetConstantBuffer();
+		ID3D11Buffer *matrix_buffer = *mesh_object->rGetMatrixBuffer();
 		const XMMATRIX *model_matrix = mesh_object->rGetModelMatrix();
 
 		// Mapping the buffer data to the CPU in order to change it,
 		// then unmapping it again, which updates the buffer contents.
 		D3D11_MAPPED_SUBRESOURCE data_ptr;
 		this->mDirect3D.GetContext()->Map(
-			constant_buffer,
+			matrix_buffer,
 			0,
 			D3D11_MAP_WRITE_DISCARD,
 			0,
 			&data_ptr);
 
 		memcpy(data_ptr.pData, model_matrix, sizeof(XMMATRIX));
-		this->mDirect3D.GetContext()->Unmap(constant_buffer, 0);
+		this->mDirect3D.GetContext()->Unmap(matrix_buffer, 0);
 	}
 }
 
-const void Panel3D::UpdateConstantBuffer(
+const void Panel3D::UpdateMatrixBuffer(
 	XMMATRIX * matrix, 
 	ID3D11Buffer ** buffer)
 {
@@ -313,7 +450,7 @@ const void Panel3D::UpdateConstantBuffer(
 	}
 }
 
-const void Panel3D::UpdateConstantBuffer(int index)
+const void Panel3D::UpdateMatrixBuffer(int index)
 {
 	if (index > -1 && index < (int)this->mpMeshObjects.size())
 	{
@@ -321,21 +458,21 @@ const void Panel3D::UpdateConstantBuffer(int index)
 		MeshObject *mesh_object = this->mpMeshObjects[index];
 
 		// Getting the constant buffer and model matrix from that mesh object.
-		ID3D11Buffer *constant_buffer = *mesh_object->rGetConstantBuffer();
+		ID3D11Buffer *matrix_buffer = *mesh_object->rGetMatrixBuffer();
 		const XMMATRIX *model_matrix = mesh_object->rGetModelMatrix();
 
 		// Mapping the buffer data to the CPU in order to change it,
 		// then unmapping it again, which updates the buffer contents.
 		D3D11_MAPPED_SUBRESOURCE data_ptr{};
 		this->mDirect3D.GetContext()->Map(
-			constant_buffer,
+			matrix_buffer,
 			0,
 			D3D11_MAP_WRITE_DISCARD,
 			0,
 			&data_ptr);
 
 		memcpy(data_ptr.pData, model_matrix, sizeof(XMMATRIX));
-		this->mDirect3D.GetContext()->Unmap(constant_buffer, 0);
+		this->mDirect3D.GetContext()->Unmap(matrix_buffer, 0);
 	}
 }
 
@@ -343,32 +480,180 @@ const void Panel3D::SetCamera(Camera * camera)
 {
 	this->mpCamera = camera;
 
-	this->CreateConstantBuffer(
+	this->mCreateMatrixBuffer(
 		&this->mpCamera->GetViewMatrix(), 
 		&this->mpViewBuffer);
-	this->CreateConstantBuffer(
+	this->mCreateMatrixBuffer(
 		&this->mpCamera->GetProjectionMatrix(), 
 		&this->mpProjBuffer);
+
+	this->UpdateCamera();
 }
 
 const void Panel3D::Update()
 {
+	bool show_cursor = true;
+
 	// Updating the constant buffers of the mesh objects.
 	for (int i = 0; i < (int)this->mpMeshObjects.size(); i++)
 	{
-		UpdateConstantBuffer(i);
+		UpdateMatrixBuffer(i);
 	}
 	if (this->mpCamera)
 	{
 		// Updating the camera buffers.
-		UpdateConstantBuffer(
+		UpdateMatrixBuffer(
 			&this->mpCamera->GetViewMatrix(),
 			&this->mpViewBuffer);
-		UpdateConstantBuffer(
+		UpdateMatrixBuffer(
 			&this->mpCamera->GetProjectionMatrix(),
 			&this->mpProjBuffer);
 	}
 	this->UpdateWindowSize();
+
+	if (this->mIsMouseInsidePanel())
+	{
+		this->UpdateMouse();
+		show_cursor = this->mpCamera ? this->UpdateCamera() : true;
+	}
+
+	if (this->mShowCursor != show_cursor)
+	{
+		this->mShowCursor = show_cursor;
+		ShowCursor(this->mShowCursor);
+	}
+}
+
+const void Panel3D::UpdateMouse()
+{
+	if (Mouse::IsButtonPressed(this->mBtnToPan))
+	{
+		POINT mouse_pos;
+		GetCursorPos(&mouse_pos);
+		this->mMouseOrigin.x = mouse_pos.x;
+		this->mMouseOrigin.y = mouse_pos.y;
+	}
+
+	if (Mouse::IsButtonDown(this->mBtnToPan))
+	{
+		POINT mouse_pos;
+		GetCursorPos(&mouse_pos);
+
+		this->mMouseDiff.x = mouse_pos.x - this->mMouseOrigin.x;
+		this->mMouseDiff.y = mouse_pos.y - this->mMouseOrigin.y;
+
+		SetCursorPos(
+			this->mMouseOrigin.x,
+			this->mMouseOrigin.y
+		);
+
+		int dead_zone = 1;
+
+		if (abs(this->mMouseDiff.x) < dead_zone)
+			this->mMouseDiff.x = 0;
+		if (abs(this->mMouseDiff.y) < dead_zone)
+			this->mMouseDiff.y = 0;
+	}
+}
+
+const bool Panel3D::UpdateCamera()
+{
+	bool flag = false;
+	float scroll = Mouse::GetScroll();
+	
+	switch (this->mpCamera->GetProjectionMode())
+	{
+	case ORTHOGRAPHIC:
+	{
+		// Scroll - Zoom
+		if (scroll != 0)
+		{
+			this->mpCamera->SetViewWidth(
+				this->mpCamera->GetViewWidth() - (this->mSpeed * scroll)
+			);
+
+			this->mpCamera->SetViewHeight(
+				this->mpCamera->GetViewHeight() - (this->mSpeed * scroll)
+			);
+		}
+
+		// Restrict zoom out
+		if (this->mpCamera->GetViewWidth() > this->mOrthographicMaxView)
+			this->mpCamera->SetViewWidth(this->mOrthographicMaxView);
+
+		if (this->mpCamera->GetViewHeight() > this->mOrthographicMaxView)
+			this->mpCamera->SetViewHeight(this->mOrthographicMaxView);
+
+		// Mouse movement - Pan
+		if (Mouse::IsButtonDown(this->mBtnToPan))
+		{
+			flag = true;
+			this->mpCamera->MoveCamera(
+				{ this->mMouseDiff.x * -0.008f, this->mMouseDiff.y }, 
+				this->mSpeed
+			);
+		}
+		break;
+	}
+
+	case PERSPECTIVE:
+	{
+		// Scroll - Zoom
+		if (scroll != 0)
+		{
+			this->mRadius -= this->mSpeed * scroll * 4.0f;
+
+			if (this->mRadius < 1.0f)
+				this->mRadius = 1.0f;
+
+			if (this->mRadius > this->mpCamera->GetFarZ() - 1.0f)
+				this->mRadius = this->mpCamera->GetFarZ() - 1.0f;
+		}
+
+		// Mouse movement - Pan
+		if (Mouse::IsButtonDown(this->mBtnToPan))
+		{
+			flag = true;
+			DirectX::XMVECTOR right = DirectX::XMVector3Cross(
+				this->mpCamera->GetLookVector() - this->mpCamera->GetPosition(),
+				this->mpCamera->GetUpVector()
+			);
+
+			DirectX::XMVECTOR up = DirectX::XMVector3Cross(
+				this->mpCamera->GetLookVector() - this->mpCamera->GetPosition(),
+				right
+			);
+
+			DirectX::XMVECTOR newPos = this->mpCamera->GetPosition()
+				+ up * this->mMouseDiff.y * -0.0008f
+				+ right * this->mMouseDiff.x * 0.005f;
+
+			DirectX::XMVECTOR dir = DirectX::XMVector3Normalize(
+				newPos - this->mpCamera->GetLookVector()
+			);
+
+			float y = DirectX::XMVectorGetY(dir);
+			if (y < 0.0f)
+			{
+				y = 0.0f;
+				dir = DirectX::XMVectorSetY(dir, y);
+			}
+
+			this->mDirection = dir;
+		}
+
+		// Update Camera
+		this->mpCamera->SetCameraPosition(0.0f, 0.0001f, 0.0f);
+		this->mpCamera->MoveCamera(this->mDirection, this->mRadius);
+		break;
+	}
+
+	default:
+		break;
+
+	}
+
+	return !flag; // If mouse is down then don't show cursor
 }
 
 const void Panel3D::Draw()
@@ -383,7 +668,8 @@ const void Panel3D::Draw()
 	// For readability.
 	ID3D11Buffer* vertex_buffer		= nullptr;
 	ID3D11Buffer* index_buffer		= nullptr;
-	ID3D11Buffer* constant_buffer	= nullptr;
+	ID3D11Buffer* matrix_buffer	= nullptr;
+	ID3D11Buffer* material_buffer = nullptr;
 	UINT numIndices = 0;
 
 	this->mDirect3D.GetContext()->VSSetConstantBuffers(
@@ -402,22 +688,26 @@ const void Panel3D::Draw()
 	// and draws them one by one.
 	for (int i = 0; i < (int)this->mpMeshObjects.size(); i++)
 	{
+
+
+		matrix_buffer = *this->mpMeshObjects[i]->rGetMatrixBuffer();
 		this->mDirect3D.GetContext()->PSSetShaderResources(
 			0, 1, this->mpMeshObjects[i]->rGetTextureView()
 		);
 
-		constant_buffer = *this->mpMeshObjects[i]->rGetConstantBuffer();
 
 		// Setting the constant buffer to the vertex shader.
 		this->mDirect3D.GetContext()->VSSetConstantBuffers(
 			0,					// Start slot.
 			1,					// Number of buffers
-			&constant_buffer);	// Constant buffer.
+			&matrix_buffer);	// Constant buffer.
 
-		for (int j = 0; j < this->mpMeshObjects[i]->GetNumberOfBuffers(); j++)
+		for (int j = 0; j < this->mpMeshObjects[i]->GetNumberOfIndexBuffers(); j++)
 		{
 			index_buffer	= *this->mpMeshObjects[i]->pGetIndexBuffer(j);
 			vertex_buffer	= *this->mpMeshObjects[i]->pGetVertexBuffer(j);
+			material_buffer = *this->mpMeshObjects[i]->rGetMaterialBuffer(
+				this->mpMeshObjects[i]->GetMaterialIndexForIndexBuffer(j));
 
 			// Setting the index buffer to the input assembler.
 			this->mDirect3D.GetContext()->IASetVertexBuffers(
@@ -432,6 +722,19 @@ const void Panel3D::Draw()
 				index_buffer,			// Index buffer.
 				DXGI_FORMAT_R32_UINT,	// Format.
 				offset);				// Offset.
+
+			this->mDirect3D.GetContext()->PSSetConstantBuffers(
+				0, 1, this->mpMeshObjects[i]->rGetEventBuffer(j)
+			);
+
+			// Setting the material buffer to the pixel shader.
+			this->mDirect3D.GetContext()->PSSetConstantBuffers(
+				1,
+				1,
+				&material_buffer
+			);
+
+
 
 			numIndices = (UINT)this->mpMeshObjects[i]->GetIndices()[j].size();
 			this->mDirect3D.GetContext()->DrawIndexed(

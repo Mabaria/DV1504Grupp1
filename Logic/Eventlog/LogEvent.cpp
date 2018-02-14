@@ -16,11 +16,6 @@ LogEvent::~LogEvent()
 
 }
 
-//const TimeObject LogEvent::getStartTime() const;
-//const TimeObject LogEvent::getElapsedTime() const;
-
-
-
 /**
 *	Event specific
 */
@@ -50,3 +45,27 @@ int LogEvent::GetActiveEventIndex() const
 {
 	return this->mActiveEventIndex;
 }
+
+const int LogEvent::GetElapsedTime()
+{
+	return this->mTimer.GetSeconds();
+}
+
+const std::string LogEvent::GetStartTimeAsString()
+{
+	return this->mTimer.WhenTimerStarted();
+}
+
+const std::string LogEvent::GetElapsedTimeAsString()
+{
+	return this->mTimer.GetTimeAsStr();
+}
+
+Timer * LogEvent::GetTimer()
+{
+	return &this->mTimer;
+}
+
+
+
+

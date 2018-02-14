@@ -2,10 +2,20 @@
 #include "../../IO/Mouse.h"
 #include <string>
 
-Panel2D::Panel2D(int width, int height, int top, int left, HWND handle, LPCTSTR title)
+Panel2D::Panel2D(
+	int width, 
+	int height, 
+	int top, 
+	int left, 
+	HWND handle, 
+	LPCTSTR title)
 	:Panel(width, height, top, left, handle, title)
 {
 	this->mDirect2D = new Direct2D(mPanelWindow, width, height);
+
+	// Assumes the panel does not have a notification list.
+	this->mNotificationList = nullptr;
+	this->mNotificationListIsActive = false;
 }
 
 Panel2D::~Panel2D()
@@ -25,6 +35,13 @@ Panel2D::~Panel2D()
 		}
 	}
 	delete this->mDirect2D;
+
+	// Deleting the notification list only if 
+	// there is one to delete.
+	if (this->mNotificationListIsActive)
+	{
+		delete this->mNotificationList;
+	}
 }
 
 void Panel2D::AddButton(
@@ -131,9 +148,38 @@ TextBox * Panel2D::GetTextBoxByIndex(unsigned int index)
 	return to_return;
 }
 
-void Panel2D::SetTextBoxFontSize(int fontSize)
+void Panel2D::SetNotificationList(int posX, int posY)
 {
-	this->mDirect2D->SetFontSize(fontSize);
+	this->mNotificationList = new NotificationList(
+		this->mDirect2D, 
+		posX, 
+		posY);
+	this->mNotificationListIsActive = true;
+}
+
+void Panel2D::AddNotification(Room * room, LogEvent * event)
+{
+	this->mNotificationList->AddNotification(
+		this->mDirect2D, 
+		room, 
+		event);
+}
+
+bool Panel2D::RemoveNotification(Room * room, LogEvent * event)
+{
+	return this->mNotificationList->RemoveNotification(room, event);
+}
+
+void Panel2D::ScrollActiveLog()
+{
+	if (Mouse::GetScroll() != 0 
+		&& this->mNotificationList->GetListHeight() 
+		> this->mDirect2D->GetpRenderTarget()->GetSize().height 
+		&& this->mIsMouseInsidePanel())
+	{
+		this->mNotificationList->MoveLog(Mouse::GetScroll() * 10.0f);
+	}
+	
 }
 
 void Panel2D::Update()
@@ -141,13 +187,26 @@ void Panel2D::Update()
 	this->UpdateWindowSize();
 	this->mUpdateButtons();
 	this->mUpdateTextBoxes();
+
+	// Updating the notification list only if
+	// the panel has one.
+	if (this->mNotificationListIsActive 
+		&& this->mNotificationList->GetNumberOfNotificationObjects())
+	{
+		ScrollActiveLog();
+		this->mNotificationList->Update();
+	}
 }
 
 void Panel2D::Draw()
 {
 	this->mDirect2D->GetpRenderTarget()->BeginDraw();
 	this->mDirect2D->GetpRenderTarget()->Clear(
-		D2D1::ColorF(D2D1::ColorF::CornflowerBlue));
+		D2D1::ColorF(D2D1::ColorF(
+			0.9f,
+			0.9f,
+			0.9f,
+			1.0f)));
 	// Draw all the buttons in the panel
 	for (std::vector<Button*>::iterator it = 
 		this->mButtonVector.begin(); 
@@ -164,11 +223,20 @@ void Panel2D::Draw()
 	{
 		(*it)->DrawTextBox();
 	}
+	// Draw all the notification objects if there is a list.
+	if (this->mNotificationListIsActive)
+	{
+		this->mNotificationList->Draw();
+	}
+
+
 	this->mDirect2D->GetpRenderTarget()->EndDraw();
 }
 
 void Panel2D::mUpdateButtons()
 {
+	 // For notification list.
+	Button *button = nullptr;
 	if (this->mIsMouseInsidePanel()) /* Check if mouse is inside panel,
 									 if not there is no chance of any buttons
 									 being pressed. */
@@ -177,9 +245,6 @@ void Panel2D::mUpdateButtons()
 			it != this->mButtonVector.end();
 			it++)
 		{
-			if (Mouse::IsButtonDown(Buttons::Left))
-				int i = 0;
-
 			if (Mouse::GetPositionPercentage().x <
 				(*it)->GetBoundingBoxPercentage().right &&
 				Mouse::GetPositionPercentage().x >
@@ -202,6 +267,41 @@ void Panel2D::mUpdateButtons()
 			}
 
 		}
+		//! Notification list sets rect status instead of button status.
+		if (this->mNotificationListIsActive)
+		{
+			for (int i = 0;
+				i < this->mNotificationList->GetNumberOfNotificationObjects();
+				i++)
+			{
+				button = this->mNotificationList->
+					GetNotificationObjectByIndex(i)->
+					GetButton();
+
+				if (Mouse::GetPositionPercentage().x <
+					button->GetBoundingBoxPercentage().right &&
+					Mouse::GetPositionPercentage().x >
+					button->GetBoundingBoxPercentage().left &&
+					Mouse::GetPositionPercentage().y <
+					button->GetBoundingBoxPercentage().bottom &&
+					Mouse::GetPositionPercentage().y >
+					button->GetBoundingBoxPercentage().top)
+					/* Classic bounds check */
+				{
+					if (Mouse::IsButtonDown(Buttons::Left))
+					{
+						button->SetRectStatus(BUTTON_STATE::CLICKED);
+					}
+					else
+						button->SetRectStatus(BUTTON_STATE::HOVER);
+				}
+				else
+				{
+					button->SetRectStatus(BUTTON_STATE::IDLE);
+				}
+
+			}
+		}
 	}
 	else // Mouse outside panel, make sure buttons are idle
 	{
@@ -211,19 +311,19 @@ void Panel2D::mUpdateButtons()
 		{
 			(*it)->SetButtonStatus(BUTTON_STATE::IDLE);
 		}
+		if (this->mNotificationListIsActive)
+		{
+			for (int i = 0;
+				i < this->mNotificationList->GetNumberOfNotificationObjects();
+				i++)
+			{
+				this->mNotificationList->
+					GetNotificationObjectByIndex(i)->
+					GetButton()->
+					SetRectStatus(BUTTON_STATE::IDLE);
+			}
+		}
 	}
-}
-
-bool Panel2D::mIsMouseInsidePanel()
-{
-	if (Mouse::IsButtonDown(Buttons::Left))
-		int i = 0;
-	RECT window_rect;
-	GetWindowRect(this->mPanelWindow, &window_rect);
-	POINT mouse_pos;
-	GetCursorPos(&mouse_pos);
-	return PtInRect(&window_rect, mouse_pos); // if mouse is inside panel
-
 }
 
 void Panel2D::mUpdateTextBoxes()

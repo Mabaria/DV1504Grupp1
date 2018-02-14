@@ -124,7 +124,6 @@ public:
 	bool SetFarZ(const float new_far_z);
 
 	void SetProjectionMode(const PROJECTION_MODE new_projection_mode);
-	
 
 private:
 	DirectX::XMVECTOR mCameraPosition;

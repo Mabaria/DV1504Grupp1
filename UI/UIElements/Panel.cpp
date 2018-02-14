@@ -169,3 +169,15 @@ const bool Panel::UpdateWindowSize()
 	}
 	return updated;
 }
+
+bool Panel::mIsMouseInsidePanel()
+{
+	if (Mouse::IsButtonDown(Buttons::Left))
+		int i = 0;
+	RECT window_rect;
+	GetWindowRect(this->mPanelWindow, &window_rect);
+	POINT mouse_pos;
+	GetCursorPos(&mouse_pos);
+	return PtInRect(&window_rect, mouse_pos); // if mouse is inside panel
+
+}

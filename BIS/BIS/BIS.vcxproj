@@ -23,9 +23,11 @@
     <ClCompile Include="..\..\GraphicsEngine\Camera\Test_Camera.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\DX\Direct2D.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\DX\Direct3D.cpp" />
+    <ClCompile Include="..\..\GraphicsEngine\Parsing\MaterialHandler.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\Parsing\Mesh.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\Parsing\Test_AssImp.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\Parsing\Test_Boat.cpp" />
+    <ClCompile Include="..\..\GraphicsEngine\Parsing\Test_MaterialHandler.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\Parsing\Test_Mesh.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\Quad.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\Test_Button.cpp" />
@@ -50,6 +52,8 @@
     <ClCompile Include="..\..\Logic\Timer.cpp" />
     <ClCompile Include="..\..\UI\UIElements\Button.cpp" />
     <ClCompile Include="..\..\UI\UIElements\MeshObject.cpp" />
+    <ClCompile Include="..\..\UI\UIElements\NotificationList.cpp" />
+    <ClCompile Include="..\..\UI\UIElements\NotificationObject.cpp" />
     <ClCompile Include="..\..\UI\UIElements\Panel.cpp" />
     <ClCompile Include="..\..\UI\UIElements\Panel2D.cpp" />
     <ClCompile Include="..\..\UI\UIElements\Panel3D.cpp" />
@@ -63,9 +67,11 @@
     <ClInclude Include="..\..\GraphicsEngine\Camera\Test_Camera.h" />
     <ClInclude Include="..\..\GraphicsEngine\DX\Direct2D.h" />
     <ClInclude Include="..\..\GraphicsEngine\DX\Direct3D.h" />
+    <ClInclude Include="..\..\GraphicsEngine\Parsing\MaterialHandler.h" />
     <ClInclude Include="..\..\GraphicsEngine\Parsing\Mesh.h" />
     <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_AssImp.h" />
     <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_Boat.h" />
+    <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_MaterialHandler.h" />
     <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_Mesh.h" />
     <ClInclude Include="..\..\GraphicsEngine\Quad.h" />
     <ClInclude Include="..\..\GraphicsEngine\Test_Button.h" />
@@ -93,6 +99,8 @@
     <ClInclude Include="..\..\Test\Testing.h" />
     <ClInclude Include="..\..\UI\UIElements\Button.h" />
     <ClInclude Include="..\..\UI\UIElements\MeshObject.h" />
+    <ClInclude Include="..\..\UI\UIElements\NotificationList.h" />
+    <ClInclude Include="..\..\UI\UIElements\NotificationObject.h" />
     <ClInclude Include="..\..\UI\UIElements\Panel.h" />
     <ClInclude Include="..\..\UI\UIElements\Panel2D.h" />
     <ClInclude Include="..\..\UI\UIElements\Panel3D.h" />

@@ -166,7 +166,7 @@ void Test_Panel2D()
 	testHeadPanel.AddButton(200, 200, 20, 700, "../../Models/feelsrain.gif", "FernButton");
 	window.Open();
 	testPanel.GetButtonByIndex(1); // Expected: FireButton2
-	testPanel.GetButtonByName("FireButton3")->SetButtonsize(-220, 320, 140, 420);
+	testPanel.GetButtonByName("FireButton3")->SetButtonSize(-220, 320, 140, 420);
 	/* Expected: Button 3 is displaced and stretches a bit*/
 	testPanel.GetButtonByIndex(-1); // Expected: nullptr
 	testPanel.GetButtonByIndex(3285); // Expected: nullptr
@@ -175,15 +175,17 @@ void Test_Panel2D()
 
 
 	Mesh testMesh("../../Models/OBJTEST2.obj");
+	MeshObject testMeshObject("Test", &testMesh);
 	test3DPanel.CreateShadersAndSetup(L"../../GraphicsEngine/Test_VertexShader.hlsl", L"", L"../../GraphicsEngine/Test_PixelShader.hlsl");
-	test3DPanel.AddMeshObject("Test", testMesh.GetIndexVectors(), testMesh.GetVertexVectors(), L"");
+	test3DPanel.AddMeshObject(&testMeshObject);
 	test3DPanel.rGetMeshObject("Test")->Scale(1.0f, 1.0f, 1.0f);
 	Camera testCamera(0.0f, 50.0f, -50.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 90.0f, 1920.0f / 1080.0f, 0.1f, 1000.0f);
 	test3DPanel.SetCamera(&testCamera);
 
 	Mesh testMesh2("../../Models/OBJTEST2.obj");
+	MeshObject testMeshObject2("Test", &testMesh2);
 	testHead3DPanel.CreateShadersAndSetup(L"../../GraphicsEngine/Test_VertexShader.hlsl", L"", L"../../GraphicsEngine/Test_PixelShader.hlsl");
-	testHead3DPanel.AddMeshObject("Test2", testMesh2.GetIndexVectors(), testMesh2.GetVertexVectors(), L"");
+	testHead3DPanel.AddMeshObject(&testMeshObject2);
 	Camera testCamera2(0.0f, 50.0f, -50.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 90.0f, 1920.0f / 1080.0f, 0.1f, 1000.0f);
 	testHead3DPanel.SetCamera(&testCamera2);
 	// testHeadPanel.GetButtonByName("FernButton")->AddObserver(&window);
@@ -207,13 +209,17 @@ void Test_Panel2D()
 
 void Test_BoatOnScreen()
 {
-	Mesh floor2("../../Models/Floor2.obj");
+	Mesh floor2("../../Models/Floor2Materials.obj");
 	Mesh floor1("../../Models/Floor1.obj");
 	Mesh floor01("../../Models/Floor01.obj");
 
-	MeshObject floor2_object ("floor2", floor2.GetIndexVectors(), floor2.GetVertexVectors());
-	MeshObject floor1_object ("floor1", floor1.GetIndexVectors(), floor1.GetVertexVectors());
-	MeshObject floor01_object("floor01", floor01.GetIndexVectors(), floor01.GetVertexVectors()); 
+	
+
+	MeshObject floor2_object ("floor2", &floor2);
+	MeshObject floor1_object ("floor1", &floor1);
+	MeshObject floor01_object("floor01", &floor01);
+
+	floor2_object.Rotate(0.f, 3.14f, 0.0f);
 
 	std::wstring window_name = L"Demo_BIS";
 
@@ -223,13 +229,13 @@ void Test_BoatOnScreen()
 	Panel3D top_view(2 * 1280 / 3, 2 * 720 / 3, 720 / 3, 0, window.GetWindow(), window_name.c_str());
 
 	// Hela båten tjoff in i panelerna och sen mixtras matriserna med.
-	side_view.AddMeshObject("floor2", floor2.GetIndexVectors(), floor2.GetVertexVectors(), L"");
-	side_view.AddMeshObject("floor1", floor1.GetIndexVectors(), floor1.GetVertexVectors(), L"");
-	side_view.AddMeshObject("floor01", floor01.GetIndexVectors(), floor01.GetVertexVectors(), L"");
+	side_view.AddMeshObject(&floor2_object);
+	side_view.AddMeshObject(&floor1_object);
+	side_view.AddMeshObject(&floor01_object);
 
-	top_view.AddMeshObject("floor2", floor2.GetIndexVectors(), floor2.GetVertexVectors(), L"");
-	top_view.AddMeshObject("floor1", floor1.GetIndexVectors(), floor1.GetVertexVectors(), L"");
-	top_view.AddMeshObject("floor01", floor01.GetIndexVectors(), floor01.GetVertexVectors(), L"");
+	top_view.AddMeshObject(&floor2_object);
+	top_view.AddMeshObject(&floor1_object);
+	top_view.AddMeshObject(&floor01_object);
 
 	float scale = 0.1f;
 	top_view.rGetMeshObject("floor2")->Scale	(scale, scale, scale);
@@ -259,7 +265,7 @@ void Test_BoatOnScreen()
 		L"../../GraphicsEngine/Test_PixelShader.hlsl");
 
 	Camera camera2(
-		{ 0.0f, 0.0f, -0.2f, 0.0f }, 
+		{ 0.0f, 0.0f, -10.2f, 0.0f }, 
 		{ 0.0f, 1.0f, 0.0f, 0.0f }, 
 		{ 0.0f, 0.0f, 0.0f, 0.0f },
 		2.0f, 2.0f,
@@ -279,44 +285,92 @@ void Test_BoatOnScreen()
 	// --- Text On Screen ---
 
 	Quad txt(true);
-
-	top_view.AddMeshObject("Däck1", txt.GetIndices(), txt.GetVertices(), 
-		L"../../Models/Däck1.DDS"
+	top_view.AddMeshObject("Däck1Text", txt.GetIndices(), txt.GetVertices(), 
+		L"../../Models/Däck1.DDS", false
 	);
 
-	top_view.rGetMeshObject("Däck1")->Scale		(0.4f, 0.15f, 0.15f);
-	top_view.rGetMeshObject("Däck1")->Rotate	(XM_PI / 2.0f, XM_PI / 2.0f, 0.0f);
-	top_view.rGetMeshObject("Däck1")->Translate	(0.2f, 0.0f, 0.2f);
+	top_view.rGetMeshObject("Däck1Text")->Scale		(0.4f, 0.15f, 0.15f);
+	top_view.rGetMeshObject("Däck1Text")->Rotate	(XM_PI / 2.0f, XM_PI / 2.0f, 0.0f);
+	top_view.rGetMeshObject("Däck1Text")->Translate	(0.2f, 0.0f, 0.2f);
 
 	// --- END ---
 	
 
-	// --- Transparent Boxes ---
+	//// --- Transparent Boxes ---
 
 	Mesh bb2("../../Models/Bound2UV.obj");
-
+	MeshObject bb2_object("Bound2UV", &bb2);
 	std::vector<std::vector<Vertex>> tv;
 	std::vector<std::vector<unsigned int>> ti;
 	ti.push_back(bb2.GetIndexVectors()[1]);
 	tv.push_back(bb2.GetVertexVectors()[1]);
 
 
-	top_view.AddMeshObject("Bound2UV", ti, tv,
-		L"../../Models/BlendColor.DDS"
+	top_view.AddMeshObject(&bb2_object,
+		L"../../Models/BlendColor.DDS", true
 	);
-	top_view.rGetMeshObject("Bound2UV")->Scale		(0.1f, 0.1f, 0.1f);
-	top_view.rGetMeshObject("Bound2UV")->Rotate		(0.0f, XM_PI, 0.0f);
-	top_view.rGetMeshObject("Bound2UV")->Translate	(0.0f, 0.0f, 0.5f);
+	top_view.rGetMeshObject("Bound2UV")->Scale(0.1f, 0.1f, 0.1f);
+	top_view.rGetMeshObject("Bound2UV")->Rotate(0.0f, XM_PI, 0.0f);
+	top_view.rGetMeshObject("Bound2UV")->Translate(0.0f, 0.0f, 0.5f);
 
-
-	side_view.AddMeshObject("Bound2UV", ti, tv,
-		L"../../Models/BlendColor.DDS"
+	EventData data = { 1.0f, 3.0f, 0.0f, 0.0f };
+	top_view.rGetMeshObject("Bound2UV")->SetEvent(
+		data, top_view.rGetDirect3D().GetContext(), 1
 	);
-	side_view.rGetMeshObject("Bound2UV")->Scale(0.15f, 0.4f, 0.1f);
+
+	data = { 3.0f, 4.0f, 2.0f, 1.0f };
+	top_view.rGetMeshObject("Bound2UV")->SetEvent(
+		data, top_view.rGetDirect3D().GetContext(), 0
+	);
+	top_view.rGetMeshObject("Bound2UV")->SetEvent(
+		data, top_view.rGetDirect3D().GetContext(), 2
+	);
+	top_view.rGetMeshObject("Bound2UV")->SetEvent(
+		data, top_view.rGetDirect3D().GetContext(), 3
+	);
+	top_view.rGetMeshObject("Bound2UV")->SetEvent(
+		data, top_view.rGetDirect3D().GetContext(), 4
+	);
+	top_view.rGetMeshObject("Bound2UV")->SetEvent(
+		data, top_view.rGetDirect3D().GetContext(), 5
+	);
+	top_view.rGetMeshObject("Bound2UV")->SetEvent(
+		data, top_view.rGetDirect3D().GetContext(), 6
+	);
+
+	//// -- side view ---
+
+	side_view.AddMeshObject(&bb2_object,
+		L"../../Models/BlendColor.DDS", true
+	);
+	side_view.rGetMeshObject("Bound2UV")->Scale(0.15f, 0.3f, 0.1f);
 	side_view.rGetMeshObject("Bound2UV")->Rotate(0.0f, XM_PI, 0.0f);
-	side_view.rGetMeshObject("Bound2UV")->Translate(0.0f, -0.2f, 0.07f);
+	side_view.rGetMeshObject("Bound2UV")->Translate(0.055f, -0.18f, -0.8f);
 
-	// --- END ---
+	data = { 1.0f, 3.0f, 0.0f, 0.0f };
+	side_view.rGetMeshObject("Bound2UV")->SetEvent(
+		data, side_view.rGetDirect3D().GetContext(), 1
+	);
+
+	data = { 3.0f, 4.0f, 2.0f, 1.0f };
+	side_view.rGetMeshObject("Bound2UV")->SetEvent(
+		data, side_view.rGetDirect3D().GetContext(), 0
+	);
+	side_view.rGetMeshObject("Bound2UV")->SetEvent(
+		data, side_view.rGetDirect3D().GetContext(), 2
+	);
+	side_view.rGetMeshObject("Bound2UV")->SetEvent(
+		data, side_view.rGetDirect3D().GetContext(), 3
+	);
+	side_view.rGetMeshObject("Bound2UV")->SetEvent(
+		data, side_view.rGetDirect3D().GetContext(), 4
+	);
+	side_view.rGetMeshObject("Bound2UV")->SetEvent(
+		data, side_view.rGetDirect3D().GetContext(), 5
+	);
+	side_view.rGetMeshObject("Bound2UV")->SetEvent(
+		data, side_view.rGetDirect3D().GetContext(), 6
+	);
 
 	float speed = 0.1f;
 
@@ -369,9 +423,9 @@ void Test_Panel2DTextBoxes()
 	Mesh floor1("../../Models/Floor1.obj");
 	Mesh floor01("../../Models/Floor01.obj");
 
-	MeshObject floor2_object("floor2", floor2.GetIndexVectors(), floor2.GetVertexVectors());
-	MeshObject floor1_object("floor1", floor1.GetIndexVectors(), floor1.GetVertexVectors());
-	MeshObject floor01_object("floor01", floor01.GetIndexVectors(), floor01.GetVertexVectors());
+	MeshObject floor2_object("floor2", &floor2);
+	MeshObject floor1_object("floor1", &floor1);
+	MeshObject floor01_object("floor01", &floor01);
 
 	std::wstring window_name = L"Testboi";
 	int window_height = 720;
@@ -394,13 +448,13 @@ void Test_Panel2DTextBoxes()
 		window.GetWindow(), L"Button_Test");
 
 	// Hela båten tjoff in i panelerna och sen mixtras matriserna med.
-	side_view.AddMeshObject("floor2", floor2.GetIndexVectors(), floor2.GetVertexVectors(), L"");
-	side_view.AddMeshObject("floor1", floor1.GetIndexVectors(), floor1.GetVertexVectors(), L"");
-	side_view.AddMeshObject("floor01", floor01.GetIndexVectors(), floor01.GetVertexVectors(), L"");
+	side_view.AddMeshObject(&floor2_object);
+	side_view.AddMeshObject(&floor1_object);
+	side_view.AddMeshObject(&floor01_object);
 
-	top_view.AddMeshObject("floor2", floor2.GetIndexVectors(), floor2.GetVertexVectors(), L"");
-	top_view.AddMeshObject("floor1", floor1.GetIndexVectors(), floor1.GetVertexVectors(), L"");
-	top_view.AddMeshObject("floor01", floor01.GetIndexVectors(), floor01.GetVertexVectors(), L"");
+	top_view.AddMeshObject(&floor2_object);
+	top_view.AddMeshObject(&floor1_object);
+	top_view.AddMeshObject(&floor01_object);
 
 	top_view.rGetMeshObject("floor2")->Scale(0.1f, 0.1f, 0.1f);
 	top_view.rGetMeshObject("floor1")->Scale(0.1f, 0.1f, 0.1f);
@@ -460,6 +514,8 @@ void Test_Panel2DTextBoxes()
 		window.GetWindow(),
 		L"Button_Test");
 
+
+	//! BUTTONS HERE
 	control_panel.AddButton(70, 70, 30, 20, "../../Models/Button01.png", "Dead");
 	control_panel.AddButton(70, 70, 30, 90, "../../Models/Button02.png", "Gas");
 	control_panel.AddButton(70, 70, 30, 160, "../../Models/Button03.png", "Water");
@@ -469,15 +525,62 @@ void Test_Panel2DTextBoxes()
 	control_panel.GetButtonByName("Nofitication")->SetOpacity(0.0f);
 
 	//! TEXTBOXES HERE
-	log_panel.AddTextbox(window_width / 6, 20, 0, 0, "Log Panel", "Title");
-	int n_events = 1000;
+	/*log_panel.AddTextbox(window_width / 6, 20, 0, 0, "Log Panel", "Title");
+	int n_events = 20;
 	for (int i = 0; i < n_events; i++)
 	{
-		log_panel.AddTextbox(window_width / 6 - 20, 20, i * 20 + 50, 20, "Crew member " + std::to_string(i + 1) + " is ded! :(", "Event" + std::to_string(i + 1));
-	}
+		log_panel.AddTextbox(window_width / 6 - 20, 20, i * 20 + 50, 20, "Event number: " + std::to_string(i + 1), "Event" + std::to_string(i + 1));
+	}*/
 	control_panel.AddTextbox(window_width / 2, 20, 0, 0, "Control Panel", "Title");
 
-	control_panel.SetTextBoxFontSize(20);
+	//control_panel.SetTextBoxFontSize(20);//THIS IS DONE IN TEXTBOX CLASS NOW
+
+	//! ACTIVE LOG HERE
+	Room test_room;
+	test_room.SetName("Hjälpmaskinrum");
+	test_room.SetDeckName("Trossdäck");
+
+	LogEvent test_event;
+	test_event.SetType(Event::Fire);
+	
+	Room test_room2;
+	test_room2.SetName("SkyC");
+	test_room2.SetDeckName("Bryggdäck");
+
+	LogEvent test_event2;
+	test_event2.SetType(Event::Water);
+	
+	Room test_room3;
+	test_room3.SetName("Omformarrum");
+	test_room3.SetDeckName("Huvuddäck");
+
+	LogEvent test_event3;
+	test_event3.SetType(Event::Gas);
+
+	Room test_room4;
+	test_room4.SetName("Ammdurk");
+	test_room4.SetDeckName("Trossdäck");
+
+	LogEvent test_event4;
+	test_event4.SetType(Event::Injury);
+
+	log_panel.SetNotificationList(0, 0);
+	
+	log_panel.AddNotification(&test_room, &test_event);
+	log_panel.AddNotification(&test_room2, &test_event2);
+	log_panel.AddNotification(&test_room3, &test_event3);
+	log_panel.AddNotification(&test_room4, &test_event4);
+	log_panel.AddNotification(&test_room, &test_event);
+	log_panel.AddNotification(&test_room2, &test_event2);
+	log_panel.AddNotification(&test_room3, &test_event3);
+	log_panel.AddNotification(&test_room4, &test_event4);
+	log_panel.AddNotification(&test_room, &test_event);
+	log_panel.AddNotification(&test_room2, &test_event2);
+	log_panel.AddNotification(&test_room3, &test_event3);
+	log_panel.AddNotification(&test_room4, &test_event4);
+	
+
+
 	float speed = 0.1f;
 
 	window.Open();
@@ -515,20 +618,25 @@ void Test_Panel2DTextBoxes()
 			window.Close();
 		}
 
-		if (Mouse::GetScroll() != 0.0f)
+		/*if (Mouse::GetScroll() != 0.0f)
 		{
-			for (int i = 0; i < n_events; i++)
+			if (log_panel.GetTextBoxByIndex(1)->GetTextBoxSize().top > 0 &&
+				log_panel.GetTextBoxByIndex(n_events)->GetTextBoxSize().bottom
+				< (log_panel.GetTop() + log_panel.GetHeight()))
 			{
-				float scroll_speed = Mouse::GetScroll() * 10.0f;
-				TextBox *text_box = log_panel.GetTextBoxByIndex(i + 1);
-				text_box->SetTextBoxSize(
-					text_box->GetTextBoxSize().left,
-					text_box->GetTextBoxSize().top + round(scroll_speed),
-					text_box->GetTextBoxSize().right,
-					text_box->GetTextBoxSize().bottom + round(scroll_speed));
+				for (int i = 0; i < n_events; i++)
+				{
+					float scroll_speed = Mouse::GetScroll() * 10.0f;
+					TextBox *text_box = log_panel.GetTextBoxByIndex(i + 1);
+					text_box->SetTextBoxSize(
+						text_box->GetTextBoxSize().left,
+						text_box->GetTextBoxSize().top + round(scroll_speed),
+						text_box->GetTextBoxSize().right,
+						text_box->GetTextBoxSize().bottom + round(scroll_speed));
 
+				}
 			}
-		}
+		}*/
 
 		side_view.Update();
 		top_view.Update();

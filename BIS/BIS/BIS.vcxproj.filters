@@ -210,6 +210,18 @@
     <ClInclude Include="..\..\IO\Test_Picking.h">
       <Filter>Header Files\IO\Test</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\GraphicsEngine\Parsing\MaterialHandler.h">
+      <Filter>Header Files\GraphicsEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\GraphicsEngine\Parsing\Test_MaterialHandler.h">
+      <Filter>Header Files\GraphicsEngine\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UI\UIElements\NotificationObject.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UI\UIElements\NotificationList.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BIS.cpp">
@@ -361,6 +373,18 @@
     </ClCompile>
     <ClCompile Include="..\..\IO\ObserverPattern\Test_Obs.cpp">
       <Filter>Source Files\IO\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\GraphicsEngine\Parsing\MaterialHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\GraphicsEngine\Parsing\Test_MaterialHandler.cpp">
+      <Filter>Source Files\UI\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UI\UIElements\NotificationObject.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UI\UIElements\NotificationList.cpp">
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -36,6 +36,7 @@ public:
 
 	// Deck specific
 	void SetDeckName(std::string name);
+	std::string GetDeckName() const;
 
 	// Log specific
 	void SetActiveEventIndex(int index);

@@ -11,9 +11,7 @@ Direct2D::Direct2D(HWND window,
 	this->mpDecoder = nullptr;
 	this->mpBitmapSrc = nullptr;
 	this->mpTextFactory = nullptr;
-	this->mpTextFormat = nullptr;
 	this->mTrimmer = {};
-	this->mFontSize = 12;
 	this->mTrimmer.granularity = DWRITE_TRIMMING_GRANULARITY_CHARACTER;
 
 	this->mInit();
@@ -29,7 +27,6 @@ Direct2D::~Direct2D()
 	this->ReleaseCOM(this->mpDecoder);
 	this->ReleaseCOM(this->mpBitmapSrc);
 	this->ReleaseCOM(this->mpTextFactory);
-	this->ReleaseCOM(this->mpTextFormat);
 }
 
 void Direct2D::mCreateFactory()
@@ -43,7 +40,6 @@ void Direct2D::mInit()
 	this->mCreateFactory();
 	this->mCreateWicFactory();
 	this->mCreateTextFactory();
-	this->mCreateTextFormat();	
 }
 
 void Direct2D::ReleaseCOM(IUnknown * object)
@@ -66,6 +62,8 @@ void Direct2D::CreateRenderTarget(
 			window,
 			D2D1::SizeU(width, height)),
 		&this->mpRenderTarget);
+	this->mpRenderTarget->SetAntialiasMode
+	(D2D1_ANTIALIAS_MODE_ALIASED);
 }
 
 IWICFormatConverter *Direct2D::GetpFormatConverter()
@@ -103,9 +101,9 @@ IDWriteFactory *Direct2D::GetpTextFactory()
 	return this->mpTextFactory;
 }
 
-IDWriteTextFormat *Direct2D::GetpTextFormat()
+const DWRITE_TRIMMING Direct2D::GetTrimmer()
 {
-	return this->mpTextFormat;
+	return this->mTrimmer;
 }
 
 void Direct2D::SetpFormatConverter(IWICFormatConverter* pConverter)
@@ -128,13 +126,6 @@ void Direct2D::SetpBitmapSrc(IWICBitmapFrameDecode * pBitmapSrc)
 	this->mpBitmapSrc = pBitmapSrc;
 }
 
-void Direct2D::SetFontSize(int size)
-{
-	this->mFontSize = size;
-	this->mpTextFormat->Release();	
-	this->mCreateTextFormat();
-}
-
 void Direct2D::mCreateWicFactory()
 {
 	CoInitialize(nullptr);
@@ -151,20 +142,3 @@ void Direct2D::mCreateTextFactory()
 		__uuidof(IDWriteFactory),
 		reinterpret_cast<IUnknown**>(&this->mpTextFactory));
 }
-
-void Direct2D::mCreateTextFormat()
-{
-	HRESULT hr = this->mpTextFactory->CreateTextFormat(
-		L"Times new roman",
-		NULL,
-		DWRITE_FONT_WEIGHT_NORMAL,
-		DWRITE_FONT_STYLE_NORMAL,
-		DWRITE_FONT_STRETCH_NORMAL,
-		this->mFontSize,
-		L"sv-SE",
-		&this->mpTextFormat
-	);
-	this->mpTextFormat->SetTrimming(&this->mTrimmer, NULL);
-	this->mpTextFormat->SetWordWrapping(DWRITE_WORD_WRAPPING_EMERGENCY_BREAK);
-}
-
