@@ -124,16 +124,6 @@ void System::BuildGraphicalUserInterface(
 	this->mSetupPanels();
 	this->mSetupModels();
 	this->mSetupBoat();
-
-	/*EventData data = {
-	1.0,
-	2.0,
-	4.0,
-	3.0
-	};
-	this->mpTopViewPanel->rGetMeshObject("bound2")->SetEvent(data, this->mpTopViewPanel->rGetDirect3D().GetContext(), 3);*/
-
-	
 }
 
 void System::Run()
@@ -254,17 +244,11 @@ void System::mSetupModels()
 	this->mpTopViewPanel->AddMeshObject(&floor_brygg);
 	this->mpTopViewPanel->AddMeshObject(&floor_huvud);
 	this->mpTopViewPanel->AddMeshObject(&floor_tross);
-	this->mpTopViewPanel->AddMeshObject
-	(&bound_brygg, L"../../Models/BlendColor.dds", true);
-	this->mpTopViewPanel->AddMeshObject
-	(&bound_huvud, L"../../Models/BlendColor.dds", true);
-	this->mpTopViewPanel->AddMeshObject
-	(&bound_tross, L"../../Models/BlendColor.dds", true);
-
 	this->mpTopViewPanel->AddMeshObject(&bound_brygg, L"../../Models/BlendColor.dds", true);
 	this->mpTopViewPanel->AddMeshObject(&bound_huvud, L"../../Models/BlendColor.dds", true);
 	this->mpTopViewPanel->AddMeshObject(&bound_tross, L"../../Models/BlendColor.dds", true);
 	
+
 	this->mpTopViewPanel->AddMeshObject(
 		"Text3D_Floor01",
 		this->mTexts[0]->GetIndices(),
@@ -286,6 +270,7 @@ void System::mSetupModels()
 		L"../../Models/däck2.dds"
 	);
 
+
 	this->mpSideViewPanel->AddMeshObject(&floor_brygg);
 	this->mpSideViewPanel->AddMeshObject(&floor_huvud);
 	this->mpSideViewPanel->AddMeshObject(&floor_tross);
@@ -293,25 +278,10 @@ void System::mSetupModels()
 	this->mpSideViewPanel->AddMeshObject(&bound_huvud, L"../../Models/BlendColor.dds", true);
 	this->mpSideViewPanel->AddMeshObject(&bound_tross, L"../../Models/BlendColor.dds", true);
 
-	/*EventData data = {
-	1.0,
-	2.0,
-	4.0,
-	3.0
-	};
-	this->mpTopViewPanel->rGetMeshObject("bound2")->SetEvent(data, this->mpTopViewPanel->rGetDirect3D().GetContext(), 3);*/
-	this->mpSideViewPanel->AddMeshObject
-	(&bound_brygg, L"../../Models/BlendColor.dds", true);
-	this->mpSideViewPanel->AddMeshObject
-	(&bound_huvud, L"../../Models/BlendColor.dds", true);
-	this->mpSideViewPanel->AddMeshObject
-	(&bound_tross, L"../../Models/BlendColor.dds", true);
 
 	// Scaling and translating the mesh objects in the panels.
 	float scale = 0.1f;
-	this->mpTopViewPanel->rGetMeshObject("Bryggdäck")->Scale(scale, scale, scale);
-	this->mpTopViewPanel->rGetMeshObject("Huvuddäck")->Scale(scale, scale, scale);
-	this->mpTopViewPanel->rGetMeshObject("Trossdäck")->Scale(scale, scale, scale);
+
 
 	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor01")->
 		Scale(scale * 2.8f, scale * 1.2f, scale * 3.5f);
@@ -371,43 +341,6 @@ void System::mSetupModels()
 	this->mpSideViewPanel->rGetMeshObject("Bryggbounds")->Translate(0.05f, 0.2f, 0.0f);
 	this->mpSideViewPanel->rGetMeshObject("Huvudbounds")->Translate(0.05f, 0.0f, 0.0f);
 	this->mpSideViewPanel->rGetMeshObject("Trossbounds")->Translate(0.05f, -0.2f, 0.0f);
-
-	// Setting up the control panel.
-	this->mpControlPanel->AddTextbox(200, 60, 0, 105, "Kontrollpanel", "title");
-	this->mpControlPanel->AddButton(70, 70, 30, 20, "../../Models/Button01.png", "Injury");
-	this->mpControlPanel->AddButton(70,	70, 30, 90, "../../Models/Button02.png", "Gas");
-	this->mpControlPanel->AddButton(70, 70, 30,	160, "../../Models/Button03.png", "Water");
-	this->mpControlPanel->AddButton(70, 70, 30, 230, "../../Models/Button04.png", "Fire");
-
-	// Setting up the active log panel.
-	this->mpActiveLogPanel->SetNotificationList(0, 0);	
-}
-
-void System::Run()
-{
-	this->mpWindow->Open();
-	while (this->mpWindow->IsOpen())
-	{
-		this->mUpdate();
-		this->mDraw();
-	}
-}
-
-void System::mUpdate()
-{
-	this->mpWindow->Update();
-	this->mpActiveLogPanel->Update();
-	this->mpControlPanel->Update();
-	this->mpTopViewPanel->Update();
-	this->mpSideViewPanel->Update();	
-}
-
-void System::mDraw()
-{
-	this->mpActiveLogPanel->Draw();
-	this->mpControlPanel->Draw();
-	this->mpTopViewPanel->Draw();
-	this->mpSideViewPanel->Draw();
 }
 
 void System::mSetupBoat()
