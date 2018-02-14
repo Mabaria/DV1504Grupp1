@@ -29,7 +29,6 @@ public:
 	Deck* GetDeckPointer(std::string name);
 
 	// Room specific
-	//void AddRoom(std::string roomName, std::string deckName);
 	void AddRoom(std::string roomName,
 		std::string deckName,
 		std::vector<Event::Type> inputs);
@@ -39,7 +38,6 @@ public:
 
 	// Log specific
 	void SetEventLog(EventLog *pEventLog);
-	//void SetActiveEventIndex(std::string roomName, std::string deckName, int index);
 
 	// Event specific
 	void CreateAutoEvent(Event::Type type, std::string roomName, std::string deckName);
@@ -56,14 +54,6 @@ public:
 		Mesh *meshList,
 		DirectX::XMMATRIX **matrixList,
 		int amount);
-	//MeshObject *GetBoundingMeshObject(int index);
-
-	// Boat mesh specific
-	//x bool LoadBoatMesh();
-	//MeshObject *GetDeckMeshObject(int index);
-
-	// Bounding volumes
-	//void StoreBoundings(std::vector<AABB> boundings);
 
 private:
 	
@@ -82,17 +72,9 @@ private:
 	std::vector<Deck*> mpDecks;
 	std::vector<Room*> mpRooms;
 
-	//std::vector<Mesh> mBoundingMesh;
-	//std::vector<MeshObject> mBoundingMeshObjects;
 	std::vector<AABB> mBoundingAABB;
 	std::vector<DirectX::XMMATRIX> mFloorMatrix;
 	std::vector<DirectX::XMMATRIX> mInverseFloorMatrix;
-	//std::vector<Mesh> mDeckMesh;
-	//std::vector<MeshObject> mDeckMeshObject;
-	//! World matrices are inside the MeshObject class
-	//std::vector<DirectX::XMMATRIX> mDeckWorldMatrix;
 
 	EventLog *mpEventLog;
-
-	//std::vector<AABB> mBoundings;
 };

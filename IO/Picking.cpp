@@ -44,7 +44,9 @@ void Picking::GetWorldRay(
 		DirectX::XMVECTOR rayDirection = { xView, yView, 1.0f, 0.0f };
 
 		// Map ray to World space using the inverse of the view matrix
-		DirectX::XMMATRIX invView = DirectX::XMMatrixInverse(NULL, pCamera->GetViewMatrix());
+		DirectX::XMMATRIX invView = DirectX::XMMatrixInverse(
+			NULL,
+			pCamera->GetViewMatrix());
 		rayOrigin = DirectX::XMVector4Transform(rayOrigin, invView);
 		rayDirection = DirectX::XMVector4Transform(rayDirection, invView);
 
@@ -68,8 +70,8 @@ void Picking::GetWorldRay(
 
 		/**
 		*	Calculate ray origin
-		*		The pick is happening on the screen, so the ray should start from the near
-		*		plane and not from the cameras position.
+		*		The pick is happening on the screen, so the ray should start
+		*		from the near plane and not from the cameras position.
 		*/
 
 		DirectX::XMVECTOR frontVec, rightVec;

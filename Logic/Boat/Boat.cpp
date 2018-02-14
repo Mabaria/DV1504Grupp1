@@ -133,8 +133,12 @@ Room* Boat::GetPickedRoom(Ray ray)
 	for (int i = 0; i < (int)this->mpDecks.size(); i++)
 	{
 		Ray wRay;
-		wRay.origin = DirectX::XMVector3TransformCoord(ray.origin, this->mInverseFloorMatrix[i]);
-		wRay.direction = DirectX::XMVector3TransformNormal(ray.direction, this->mInverseFloorMatrix[i]);
+		wRay.origin = DirectX::XMVector3TransformCoord(
+			ray.origin,
+			this->mInverseFloorMatrix[i]);
+		wRay.direction = DirectX::XMVector3TransformNormal(
+			ray.direction,
+			this->mInverseFloorMatrix[i]);
 		for (int j = 0; j < this->mpDecks[i]->GetRoomCount(); j++)
 		{
 			t = this->mpDecks[i]->GetRoomPointerAt(j)->CheckRayCollision(wRay);
@@ -142,7 +146,7 @@ Room* Boat::GetPickedRoom(Ray ray)
 
 			if (
 				(tMain == -1 && t >= 0) ||	// First hit
-				(t >= 0 && t < tMain))	// Hit and closer to the "eye" than previous room
+				(t >= 0 && t < tMain))	// Hit and closer than previous
 			{
 				tMain = t;
 				hitRoom = this->mpDecks[i]->GetRoomPointerAt(j);
@@ -185,25 +189,32 @@ void Boat::SetEventLog(EventLog *pEventLog)
 *	Event specific
 */
 
-void Boat::CreateAutoEvent(Event::Type type, std::string roomName, std::string deckName)
+void Boat::CreateAutoEvent(Event::Type type,
+	std::string roomName,
+	std::string deckName)
 {
 	int index = this->GetRoomIndex(roomName, deckName);
 	this->mpRooms[index]->AddAutoEvent(type);
 }
 
-void Boat::CreatePlotEvent(Event::Type type, std::string roomName, std::string deckName)
+void Boat::CreatePlotEvent(Event::Type type,
+	std::string roomName,
+	std::string deckName)
 {
 	int index = this->GetRoomIndex(roomName, deckName);
 	this->mpRooms[index]->AddPlotEvent(type);
 }
 
-void Boat::ClearEvent(Event::Type type, std::string roomName, std::string deckName)
+void Boat::ClearEvent(Event::Type type,
+	std::string roomName,
+	std::string deckName)
 {
 	int roomIndex = this->GetRoomIndex(roomName, deckName);
 	this->mpEventLog->ClearEvent(type, roomIndex);
 }
 
-std::vector<Event::Type> Boat::GetEventsInRoom(std::string roomName, std::string deckName)
+std::vector<Event::Type> Boat::GetEventsInRoom(std::string roomName,
+	std::string deckName)
 {
 	int roomIndex = this->GetRoomIndex(roomName, deckName);
 	return this->mpEventLog->GetEvents(roomIndex);
@@ -425,6 +436,12 @@ bool Boat::LoadBoundingBoxes(
 	DirectX::XMMATRIX **matrixList,
 	int amount)
 {
+	// Sanity check, avoids out of bounds
+	if (amount > (int)this->mpDecks.size())
+		return false;
+
+	int size;
+
 	for (int i = 0; i < amount; i++)
 	{
 		this->mFloorMatrix.push_back(
@@ -435,15 +452,20 @@ bool Boat::LoadBoundingBoxes(
 
 		std::vector<std::vector<Vertex>> &submeshList =
 			meshList[i].GetVertexVectors();
-		for (int j = 0; j < submeshList.size(); j++)
+
+		size = (int)submeshList.size();
+
+		// Sanity check, avoids out of bounds
+		if (this->mpDecks[i]->GetRoomOffset() + size >
+			(int)this->mpRooms.size())
 		{
-			// TODO: submeshList.size may be bigger than mpRooms size
-			// PLZ FIX
-			//this->mBoundingAABB.push_back(
-			//	Picking::FromMeshToAABB(submeshList[j]));
+			return false;
+		}
+
+		for (int j = 0; j < size; j++)
+		{
 			this->mpRooms[this->mpDecks[i]->GetRoomOffset() + j]->SetAABB(
-				Picking::FromVerticesToAABB(submeshList[j]));
-			
+				Picking::FromVerticesToAABB(submeshList[j]));			
 		}
 	}
 	return true;

@@ -82,7 +82,6 @@ std::string Room::GetDeckName() const
 
 void Room::SetActiveEventIndex(int index)
 {
-	//this->mActiveEventIndex = index;
 	this->mSensor.SetActiveEventIndex(index);
 }
 
@@ -114,7 +113,6 @@ void Room::AddInputType(Event::Type type)
 
 int Room::GetActiveEventIndex() const
 {
-	//return this->mActiveEventIndex;
 	return this->mSensor.GetActiveEventIndex();
 }
 

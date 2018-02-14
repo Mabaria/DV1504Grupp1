@@ -61,9 +61,6 @@ private:
 	// Deck specific
 	std::string mDeckName;
 
-	// Log specific
-	//int mActiveEventIndex;
-
 	// Sensor specific
 	Sensor mSensor;
 };
