@@ -36,7 +36,7 @@ namespace Testing
 		//Todo This test crashes
 		//Test_Panel3D();
 		//Test_BoatOnScreen();
-		Test_Panel2DTextBoxes();
+		//Test_Panel2DTextBoxes();
 
 		
 		return true;
@@ -44,7 +44,15 @@ namespace Testing
 
 	bool testOne()
 	{
-		TestCameraMovementOrtographic();
+		int window_width = 1280;
+		int window_height = 720;
+		Window window(L"EventMenu", window_width, window_height);
+		/*Panel2D eventMenu(
+			window_width,
+			window_height,
+			0,
+
+		);*/
 		return true;
 	}
 }
