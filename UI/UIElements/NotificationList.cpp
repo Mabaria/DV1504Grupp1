@@ -13,15 +13,15 @@ NotificationList::NotificationList(Direct2D *direct2d, int posX, int posY)
 		this->mPosX, 
 		this->mPosY, 
 		direct2d->GetpRenderTarget()->GetSize().width,
-		direct2d->GetpRenderTarget()->GetSize().height / 18);
+		direct2d->GetpRenderTarget()->GetSize().height / 30);
 
-	this->mTitle.SetText("Aktiv Logg\nAntal: 0");
+	this->mTitle.SetText("Aktiv Logg | Antal: 0");
 	this->mTitleFrame.SetButtonSize(
 		0,
 		0,
 		this->mTitle.GetTextBoxSize().right,
 		this->mTitle.GetTextBoxSize().bottom);
-	this->mTitle.SetFontSize(17);
+	this->mTitle.SetFontSize(30);
 	this->mTitle.SetFontWeight(DWRITE_FONT_WEIGHT_ULTRA_BLACK);
 	this->mTitle.SetFontName(L"Times new roman");
 	this->mTitle.SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);

@@ -179,8 +179,18 @@ void System::mSetupPanels()
 		L"../../GraphicsEngine/Test_PixelShader.hlsl");
 
 	// Setting up the control panel.
-	this->mpControlPanel->AddTextbox(200, 60, 0, 105, "Kontrollpanel", "title");
-	this->mpControlPanel->GetTextBoxByName("title")->SetFontSize(20);
+	this->mpControlPanel->AddTextbox(
+		this->mpControlPanel->GetWidth(), 
+		60,
+		0, 
+		0, 
+		"Kontrollpanel", 
+		"title");
+	this->mpControlPanel->GetTextBoxByName("title")->SetFontSize(40);
+	this->mpControlPanel->GetTextBoxByName("title")->SetFontWeight
+	(DWRITE_FONT_WEIGHT_ULTRA_BLACK);
+	this->mpControlPanel->GetTextBoxByName("title")->SetTextAlignment
+	(DWRITE_TEXT_ALIGNMENT_CENTER);
 	this->mpControlPanel->AddButton(70, 70, 30, 20, "../../Models/Button01.png", "Injury");
 	this->mpControlPanel->AddButton(70, 70, 30, 90, "../../Models/Button02.png", "Gas");
 	this->mpControlPanel->AddButton(70, 70, 30, 160, "../../Models/Button03.png", "Water");
