@@ -19,47 +19,20 @@ bool TestPickingOnBoat()
 		Mesh("../../Models/DeckMesh/Floor1.obj"),
 		Mesh("../../Models/DeckMesh/Floor2.obj")
 	};
+	
+	std::string meshNames[6] = {
+		"Bound01",
+		"Bound1",
+		"Bound2",
+		"Floor01",
+		"Floor1",
+		"Floor2" };
 
-	// Creates MeshObjects from the meshes
-	MeshObject meshObjectList[6] = {
-		MeshObject(
-			"Bound01",
-			meshList[0].GetIndexVectors(),
-			meshList[0].GetVertexVectors()
-		),
-		MeshObject(
-			"Bound1",
-			meshList[1].GetIndexVectors(),
-			meshList[1].GetVertexVectors()
-		),
-		MeshObject(
-			"Bound2",
-			meshList[2].GetIndexVectors(),
-			meshList[2].GetVertexVectors()
-		),
-		MeshObject(
-			"Floor01",
-			meshList[3].GetIndexVectors(),
-			meshList[3].GetVertexVectors()
-		),
-		MeshObject(
-			"Floor1",
-			meshList[4].GetIndexVectors(),
-			meshList[4].GetVertexVectors()
-		),
-		MeshObject(
-			"Floor2",
-			meshList[5].GetIndexVectors(),
-			meshList[5].GetVertexVectors()
-		)
-	};
-
-	panel.AddMeshObject(&meshObjectList[0]);
-	panel.AddMeshObject(&meshObjectList[1]);
-	panel.AddMeshObject(&meshObjectList[2]);
-	panel.AddMeshObject(&meshObjectList[3]);
-	panel.AddMeshObject(&meshObjectList[4]);
-	panel.AddMeshObject(&meshObjectList[5]);
+	// Creates MeshObjects from the meshes add adds them to panel
+	for (int i = 0; i < 6; i++)
+	{
+		panel.AddMeshObject(&MeshObject(meshNames[i], &meshList[i]));
+	}
 
 	panel.rGetMeshObject("Bound01")->Translate(0.0f, 0.0f, 3.5f);
 	panel.rGetMeshObject("Floor01")->Translate(0.0f, 0.0f, 3.5f);
@@ -82,9 +55,9 @@ bool TestPickingOnBoat()
 		L"../../GraphicsEngine/Test_PixelShader.hlsl");
 
 	Camera camera(
-		0.0f, 4.0f, 0.0f,
-		0.f, 0.f, 1.f,
 		0.0f, 0.0f, 0.0f,
+		0.f, 1.f, 0.f,
+		0.0f, 1.0f, 0.0f,
 		90.f, 1.33f,
 		//19.2f, 10.8f,
 		0.1f, 1000.f/*,
