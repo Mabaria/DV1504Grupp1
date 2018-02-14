@@ -197,11 +197,11 @@ void System::mSetupPanels()
 {
 	// Creating and setting the cameras.
 	this->mpTopViewCamera = new Camera (
-		{ 0.0f, 80.0f, -2.0f, 0.0f },
+		{ -0.02f, 6.19f, -2.99f, 0.0f },
 		{ 0.0f, 1.0f, 0.0f, 0.0f },
-		{ 0.0f, -80.0f, 2.0f, 0.0f },
-		2.0f, 2.0f,
-		0.01f, 1000.0f, LOOK_TO, ORTHOGRAPHIC);
+		{ 0.000001f, 0.0f, 0.0f, 0.0f },
+		XM_PI / 15.0f, 16.0f / 9.0f,
+		0.1f, 25.0f, LOOK_AT, PERSPECTIVE);
 	this->mpTopViewPanel->SetCamera(this->mpTopViewCamera);
 
 	this->mpSideViewCamera = new Camera(
