@@ -162,22 +162,22 @@ void System::mAddEvent(Room * room, LogEvent * logEvent)
 
 void System::mSetupPanels()
 {
-	// Creating and setting the camera.
+	// Creating and setting the cameras.
 	this->mpTopViewCamera = new Camera(
 		{ 2.0f, 5.0f, 3.5f, 0.0f },
 		{ 0.0f, 1.0f, 0.0f, 0.0f },
 		{ 0.0f, 0.0f, 0.0f, 0.0f },
 		XM_PI / 15.0f, 16.0f / 9.0f,
 		0.1f, 25.0f, LOOK_AT, PERSPECTIVE);
+	this->mpTopViewPanel->SetCamera(this->mpTopViewCamera);
+
 	this->mpSideViewCamera = new Camera(
 		{ 0.0f, 80.0f, -2.0f, 0.0f },
 		{ 0.0f, 1.0f, 0.0f, 0.0f },
 		{ 0.0f, -80.0f, 2.0f, 0.0f },
 		2.0f, 2.0f,
 		0.01f, 1000.0f, LOOK_TO, ORTHOGRAPHIC);
-
 	this->mpSideViewPanel->SetCamera(this->mpSideViewCamera);
-	this->mpTopViewPanel->SetCamera(this->mpTopViewCamera);
 
 	// Creating and setting the shaders.
 	this->mpSideViewPanel->CreateShadersAndSetup(
