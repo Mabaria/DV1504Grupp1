@@ -536,7 +536,7 @@ void Test_Panel2DTextBoxes()
 	}*/
 	control_panel.AddTextbox(window_width / 2, 20, 0, 0, "Control Panel", "Title");
 
-	control_panel.SetTextBoxFontSize(20);
+	//control_panel.SetTextBoxFontSize(20);//THIS IS DONE IN TEXTBOX CLASS NOW
 
 	//! ACTIVE LOG HERE
 	Room test_room;
