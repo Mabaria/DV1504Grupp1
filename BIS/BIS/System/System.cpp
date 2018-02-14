@@ -142,10 +142,17 @@ void System::BuildGraphicalUserInterface(
 	this->mpTopViewPanel->AddMeshObject(&floor01);
 	this->mpTopViewPanel->AddMeshObject(&floor1);
 	this->mpTopViewPanel->AddMeshObject(&floor2);
-	this->mpTopViewPanel->AddMeshObject(&bound01);
-	this->mpTopViewPanel->AddMeshObject(&bound1);
-	this->mpTopViewPanel->AddMeshObject(&bound2);
+	this->mpTopViewPanel->AddMeshObject(&bound01, L"../../Models/BlendColor.dds", true);
+	this->mpTopViewPanel->AddMeshObject(&bound1, L"../../Models/BlendColor.dds", true);
+	this->mpTopViewPanel->AddMeshObject(&bound2, L"../../Models/BlendColor.dds", true);
 
+	EventData data = {
+	1.0,
+	2.0,
+	4.0,
+	3.0
+	};
+	this->mpTopViewPanel->rGetMeshObject("bound2")->SetEvent(data, this->mpTopViewPanel->rGetDirect3D().GetContext(), 3);
 	this->mpSideViewPanel->AddMeshObject(&floor01);
 	this->mpSideViewPanel->AddMeshObject(&floor1);
 	this->mpSideViewPanel->AddMeshObject(&floor2);

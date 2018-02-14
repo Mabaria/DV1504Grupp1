@@ -6,13 +6,13 @@ Panel3D::Panel3D(int width, int height, int top, int left, HWND handle, LPCTSTR 
 	this->mDirect3D.Init(this->mPanelWindow);
 
 	// bfcull test
-	D3D11_RASTERIZER_DESC rast_desc{};
-	rast_desc.CullMode = D3D11_CULL_NONE;
-	rast_desc.FillMode = D3D11_FILL_SOLID;
-	ID3D11RasterizerState *rs_state = nullptr;
-	this->mDirect3D.GetDevice()->CreateRasterizerState(&rast_desc, &rs_state);
-	this->mDirect3D.GetContext()->RSSetState(rs_state);
-	rs_state->Release();
+	//D3D11_RASTERIZER_DESC rast_desc{};
+	//rast_desc.CullMode = D3D11_CULL_NONE;
+	//rast_desc.FillMode = D3D11_FILL_SOLID;
+	//ID3D11RasterizerState *rs_state = nullptr;
+	//this->mDirect3D.GetDevice()->CreateRasterizerState(&rast_desc, &rs_state);
+	//this->mDirect3D.GetContext()->RSSetState(rs_state);
+	//rs_state->Release();
 	// ----------
 
 	this->mpVertexShader	= nullptr;
