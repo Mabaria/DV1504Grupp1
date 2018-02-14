@@ -4,7 +4,8 @@ System::System()
 {
 	this->mpActiveLogPanel	= nullptr;
 	this->mpControlPanel	= nullptr;
-	this->mpCamera			= nullptr;
+	this->mpTopViewCamera	= nullptr;
+	this->mpSideViewCamera	= nullptr;
 	this->mpPopUpPanel		= nullptr;
 	this->mpSideViewPanel	= nullptr;
 	this->mpTopViewPanel	= nullptr;
@@ -33,10 +34,15 @@ System::~System()
 		delete this->mpTopViewPanel;
 		this->mpTopViewPanel = nullptr;
 	}
-	if (this->mpCamera)
+	if (this->mpTopViewCamera)
 	{
-		delete this->mpCamera;
-		this->mpCamera = nullptr;
+		delete this->mpTopViewCamera;
+		this->mpTopViewCamera = nullptr;
+	}
+	if (this->mpSideViewCamera)
+	{
+		delete this->mpSideViewCamera;
+		this->mpSideViewCamera = nullptr;
 	}
 	if (this->mpPopUpPanel)
 	{
@@ -154,18 +160,29 @@ void System::mAddEvent(Room * room, LogEvent * logEvent)
 	this->mpTopViewPanel->rGetMeshObject(room->GetDeckName());
 }
 
+void System::mRemoveEvent(Room * room, LogEvent * logEvent)
+{
+	this->mpActiveLogPanel->RemoveNotification(room, logEvent);
+}
+
 void System::mSetupPanels()
 {
-	// Creating and setting the camera.
-	this->mpCamera = new Camera(
+	// Creating and setting the cameras.
+	this->mpTopViewCamera = new Camera(
 		{ 2.0f, 5.0f, 3.5f, 0.0f },
 		{ 0.0f, 1.0f, 0.0f, 0.0f },
 		{ 0.0f, 0.0f, 0.0f, 0.0f },
 		XM_PI / 15.0f, 16.0f / 9.0f,
 		0.1f, 25.0f, LOOK_AT, PERSPECTIVE);
+	this->mpTopViewPanel->SetCamera(this->mpTopViewCamera);
 
-	this->mpSideViewPanel->SetCamera(this->mpCamera);
-	this->mpTopViewPanel->SetCamera(this->mpCamera);
+	this->mpSideViewCamera = new Camera(
+		{ 0.0f, 80.0f, -2.0f, 0.0f },
+		{ 0.0f, 1.0f, 0.0f, 0.0f },
+		{ 0.0f, -80.0f, 2.0f, 0.0f },
+		2.0f, 2.0f,
+		0.01f, 1000.0f, LOOK_TO, ORTHOGRAPHIC);
+	this->mpSideViewPanel->SetCamera(this->mpSideViewCamera);
 
 	// Creating and setting the shaders.
 	this->mpSideViewPanel->CreateShadersAndSetup(
