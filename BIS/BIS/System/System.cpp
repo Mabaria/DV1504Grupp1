@@ -132,6 +132,7 @@ void System::Run()
 	while (this->mpWindow->IsOpen())
 	{
 		this->mUpdate();
+		this->mHandleInput();
 		this->mDraw();
 	}
 }
@@ -142,7 +143,7 @@ void System::mUpdate()
 	this->mpActiveLogPanel->Update();
 	this->mpControlPanel->Update();
 	this->mpTopViewPanel->Update();
-	this->mpSideViewPanel->Update();	
+	this->mpSideViewPanel->Update();
 }
 
 void System::mDraw()
@@ -164,6 +165,10 @@ void System::mHandleInput()
 		this->mRay);		
 
 		Room *picked_room = this->mBoat.GetPickedRoom(this->mRay);
+		if (picked_room)
+		{
+			bool works = true;
+		}
 	}
 }
 
@@ -359,7 +364,7 @@ void System::mSetupModels()
 
 void System::mSetupBoat()
 {
-	this->mBoat.SetModelName("båtnamnplaceholder");
+	/*this->mBoat.SetModelName("båtnamnplaceholder");
 	std::vector<Event::Type> inputs = { 
 		Event::Fire, 
 		Event::Injury, 
@@ -390,7 +395,8 @@ void System::mSetupBoat()
 	this->mBoat.AddRoom("Hjälpmaskinrum", "Trossdäck", inputs);	
 	this->mBoat.AddRoom("Byssa", "Trossdäck", inputs);	
 	this->mBoat.AddRoom("SB Mäss", "Trossdäck", inputs);	
-	this->mBoat.AddRoom("Skyddsrum", "Trossdäck", inputs);
+	this->mBoat.AddRoom("Skyddsrum", "Trossdäck", inputs);*/
+	this->mBoat.ReadFile("../../SaveFiles/data.boat");
 
 	// Creating the mesh list that 
 	Mesh mesh_list[] =

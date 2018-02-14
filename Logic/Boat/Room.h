@@ -8,7 +8,9 @@
 
 struct RoomDesc
 {
-	int index;
+	int indexInBoat;
+	int indexInDeck;
+	int deckIndex;
 	int activeIndex;
 	std::string name;
 	std::string deckName;
@@ -31,12 +33,15 @@ public:
 	void SetAABB(const AABB &boundingBox);
 	std::string GetName() const;
 	void InitFromDesc(RoomDesc desc);
+	int GetIndexInBoat() const;
+	int GetIndexInDeck() const;
 
 	float CheckRayCollision(const Ray &rRay);
 
 	// Deck specific
 	void SetDeckName(std::string name);
 	std::string GetDeckName() const;
+	int GetDeckIndex() const;
 
 	// Log specific
 	void SetActiveEventIndex(int index);
@@ -54,7 +59,9 @@ public:
 private:
 
 	// Room specific
-	int mIndex;
+	int mIndexInBoat;
+	int mIndexInDeck;
+	int mDeckIndex;
 	std::string mName;
 	AABB mBoundingBox;
 
