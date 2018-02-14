@@ -195,6 +195,9 @@ void System::mSetupPanels()
 	this->mpControlPanel->AddButton(70, 70, 30, 90, "../../Models/Button02.png", "Gas");
 	this->mpControlPanel->AddButton(70, 70, 30, 160, "../../Models/Button03.png", "Water");
 	this->mpControlPanel->AddButton(70, 70, 30, 230, "../../Models/Button04.png", "Fire");
+	this->mpControlPanel->AddButton(140, 140, 20, 600, "../../Models/Button05.png", "Reset");
+
+	this->mpControlPanel->GetButtonByName("Reset")->AddObserver(this->mpTopViewPanel);
 
 	// Setting up the active log panel.
 	this->mpActiveLogPanel->SetNotificationList(0, 0);

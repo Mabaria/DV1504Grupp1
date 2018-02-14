@@ -17,9 +17,9 @@ class EventReporter : public Observer<int>
 public:
 	EventReporter() {}
 	~EventReporter() {}
-	void Update(const int& attribute)
+	void Update(const int* attribute)
 	{
-		if (attribute == 5)
+		if (*attribute == 5)
 		{
 			std::cout << "THE ELD HAS BRYTIT UT" << std::endl;
 			system("pause");
@@ -33,12 +33,12 @@ void Test_Observer()
 	TestRoom observable1;
 
 	observable1.AddObserver(&observer1); // Add observer1 to observable1's sub list
-	observable1.NotifyObservers(5);
+	//observable1.NotifyObservers(5);
 
 	observable1.RemoveObserver(&observer1);
-	observable1.NotifyObservers(3);
+	//observable1.NotifyObservers(3);
 
 	observable1.AddObserver(&observer1);
-	observable1.NotifyObservers(2);
+	//observable1.NotifyObservers(2);
 	// Send event to all subscribers of observable
 }
