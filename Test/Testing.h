@@ -1,12 +1,11 @@
 #pragma once
 
-#include "../../GraphicsEngine/Parsing/Test_AssImp.h"
-#include "../../GraphicsEngine/Parsing/Test_Boat.h"
-#include "../../GraphicsEngine/Test_Button.h"
-#include "../../GraphicsEngine/Camera/Test_Camera.h"
-#include "../../GraphicsEngine/Test_Graphics.h"
-#include "../../GraphicsEngine/Parsing/Test_Mesh.h"
-#include "../../GraphicsEngine/Parsing/Test_MaterialHandler.h"
+#include "../GraphicsEngine/Parsing/Test_AssImp.h"
+#include "../GraphicsEngine/Parsing/Test_Boat.h"
+#include "../GraphicsEngine/Test_Button.h"
+#include "../GraphicsEngine/Camera/Test_Camera.h"
+#include "../GraphicsEngine/Test_Graphics.h"
+#include "../GraphicsEngine/Parsing/Test_Mesh.h"
 
 #include "../IO/Test_Input.h"
 #include "../IO/ObserverPattern/Test_Obs.h"
@@ -18,6 +17,7 @@
 #include "../UI/UIElements/Test_TextBox.h"
 
 #include "../Logic/BoatTester.h"
+#include "../../Logic/Boat/Boat.h"
 
 
 namespace Testing
@@ -37,15 +37,16 @@ namespace Testing
 		//Todo This test crashes
 		//Test_Panel3D();
 		//Test_BoatOnScreen();
-		Test_Panel2DTextBoxes();
+		//TestPickingOnBoat();
 
-		
+		Test_Panel2DTextBoxes();
 		return true;
 	}
 
 	bool testOne()
 	{
-		TestCameraMovementOrtographic();
+		////! ADD YOUR OWN TESTS HERE
+		TestPickingOnBoat();
 		return true;
 	}
 }
