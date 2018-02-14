@@ -7,8 +7,9 @@
 #include "../../GraphicsEngine/DX/Direct3D.h"
 #include "MeshObject.h"
 #include "../../GraphicsEngine/Camera/Camera.h"
+#include "../../IO/ObserverPattern/Observer.h"
 
-class Panel3D : public Panel
+class Panel3D : public Panel, public Observer<Button>
 {
 public:
 	Panel3D(
@@ -58,6 +59,7 @@ public:
 	const void UpdateMatrixBuffer(int index);
 
 	const void SetCamera(Camera *camera);
+	void Update(const Button* attribute) override;
 
 private:
 	D3D11 mDirect3D;

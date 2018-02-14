@@ -484,6 +484,15 @@ const void Panel3D::SetCamera(Camera * camera)
 	this->UpdateCamera();
 }
 
+void Panel3D::Update(const Button * attribute)
+{
+	this->mRadius = 10.0f;
+	this->mDirection = DirectX::XMVector3Normalize({ 0.5f, 0.3f, 0.5f });
+	this->mMouseDiff.x = 0.0f;
+	this->mMouseDiff.y = 0.0f;
+	this->UpdateCamera();
+}
+
 const void Panel3D::Update()
 {
 	bool show_cursor = true;
