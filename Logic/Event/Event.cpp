@@ -6,12 +6,12 @@ std::string Event::GetString(Event::Type type)
 	{
 		case Fire:
 			return "Eldsvåda";
+		case Injury:
+			return "Personskada";
 		case Water:
 			return "Vattenläcka";
 		case Gas:
 			return "Kontaminering";
-		case Injury:
-			return "Personskada";
 		default:
 			return "unkownEventType";
 	}
@@ -23,11 +23,11 @@ int Event::GetID(Event::Type type)
 	{
 		case Fire:
 			return 0;
-		case Water:
-			return 1;
-		case Gas:
-			return 2;
 		case Injury:
+			return 1;
+		case Water:
+			return 2;
+		case Gas:
 			return 3;
 		default:
 			return (-1);
