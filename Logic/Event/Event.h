@@ -11,9 +11,9 @@ namespace Event
 	 enum Type
 	 {
 	 	Fire,
+		Injury,
 	 	Water,
-	 	Gas,
-		Injury
+	 	Gas
 	 };
 
 	 std::string GetString(Type type);

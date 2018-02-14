@@ -2,6 +2,7 @@
 #include <d3d11.h>
 #include <d3dcompiler.h>
 #include <DirectXMath.h>
+#include "../../UI/UIElements/Button.h"
 
 #define PI 3.1415926535897
 
@@ -14,6 +15,13 @@ enum PROJECTION_MODE {
 	PERSPECTIVE = 0,
 	ORTHOGRAPHIC = 1
 };
+
+struct CAMERA_DEFAULT_VALUES {
+	DirectX::XMVECTOR pos, up, look;
+	float widthOrFov, heightOrRatio, nearZ, farZ;
+	LOOK_MODE cameraMode;
+	PROJECTION_MODE projMode;
+};
 /*
 Camera contains everything you (should) need regarding view and projection matrices.
 LOOK_MODE determines if you want the look vector to represent look AT or look TO.
@@ -22,7 +30,7 @@ after swapping you have to set the related variables for the type you are swappi
 or else you are gonna have a bad time.
 */
 
-class Camera {
+class Camera : public Observer<Button> {
 public:
 	Camera(const DirectX::XMVECTOR &r_position,
 		const DirectX::XMVECTOR &r_up_vector,
@@ -67,6 +75,16 @@ public:
 	void SetCameraPosition(const float new_x,
 		const float new_y,
 		const float new_z);
+
+	void * operator new(size_t i) // To make sure it is 16 bit aligned
+	{
+		return _aligned_malloc(i, 16);
+	}
+
+	void operator delete(void *p)
+	{
+		_aligned_free(p);
+	}
 
 	// MoveCamera takes a direction vector and a magnitude to move along that vector.
 	// The function does not normalize the vector, so if the vector is wonky that's
@@ -124,6 +142,8 @@ public:
 
 	void SetProjectionMode(const PROJECTION_MODE new_projection_mode);
 
+	void Update(const Button* attribute) override;
+
 private:
 	DirectX::XMVECTOR mCameraPosition;
 	DirectX::XMVECTOR mUpVector;
@@ -140,7 +160,9 @@ private:
 	DirectX::XMMATRIX mViewMatrix;
 	DirectX::XMMATRIX mProjMatrix;
 
+	CAMERA_DEFAULT_VALUES mDefaultValues;
 
+	void mReset();
 	void mInit(const DirectX::XMVECTOR &r_position,
 		const DirectX::XMVECTOR &r_up_vector,
 		const DirectX::XMVECTOR &r_look_vector,
@@ -149,7 +171,7 @@ private:
 		const float near_z,
 		const float far_z,
 		const LOOK_MODE camera_mode,
-		const PROJECTION_MODE projection_mode);
+		const PROJECTION_MODE projection_mode);	
 	void mUpdateViewMatrix();
 	void mUpdateProjMatrix();
 	void mRotateViewMatrix(const DirectX::XMMATRIX &camRotationMatrix); 

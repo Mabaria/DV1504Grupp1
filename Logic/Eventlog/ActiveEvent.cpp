@@ -17,7 +17,7 @@ ActiveEvent::~ActiveEvent()
 
 bool ActiveEvent::AddEvent(int index)
 {
-	for (int i = 0; i < this->mEventIndices.size(); i++)
+	for (unsigned int i = 0; i < this->mEventIndices.size(); i++)
 	{
 		if (this->mEventIndices[i] == index)
 			return false; // Event already exists
@@ -29,7 +29,7 @@ bool ActiveEvent::AddEvent(int index)
 
 bool ActiveEvent::ClearEvent(int index)
 {
-	for (int i = 0; i < this->mEventIndices.size(); i++)
+	for (unsigned int i = 0; i < this->mEventIndices.size(); i++)
 	{
 		if (this->mEventIndices[i] == index)
 		{

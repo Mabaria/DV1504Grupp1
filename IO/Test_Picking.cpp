@@ -39,7 +39,7 @@ void Test_Picking_ClickToRay_Perspective()
 	height = 100;
 	nearZ = 50;
 	farZ = 500;
-	fov = 2 * std::atanf(width / (2 * nearZ)) * 180 / PI;
+	fov = (float)(2 * std::atanf(width / (2 * nearZ)) * 180 / PI);
 	aspect = width / height;
 
 	std::cout << printPrefix << "Build camera...";

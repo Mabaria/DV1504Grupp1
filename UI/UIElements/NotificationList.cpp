@@ -12,16 +12,16 @@ NotificationList::NotificationList(Direct2D *direct2d, int posX, int posY)
 	this->mTitle.SetTextBoxSize(
 		this->mPosX, 
 		this->mPosY, 
-		direct2d->GetpRenderTarget()->GetSize().width,
-		direct2d->GetpRenderTarget()->GetSize().height / 18);
+		(int)direct2d->GetpRenderTarget()->GetSize().width,
+		(int)direct2d->GetpRenderTarget()->GetSize().height / 30);
 
-	this->mTitle.SetText("Aktiv Logg\nAntal: 0");
+	this->mTitle.SetText("Aktiv Logg | Antal: 0");
 	this->mTitleFrame.SetButtonSize(
 		0,
 		0,
-		this->mTitle.GetTextBoxSize().right,
-		this->mTitle.GetTextBoxSize().bottom);
-	this->mTitle.SetFontSize(17);
+		(int)this->mTitle.GetTextBoxSize().right,
+		(int)this->mTitle.GetTextBoxSize().bottom);
+	this->mTitle.SetFontSize(30);
 	this->mTitle.SetFontWeight(DWRITE_FONT_WEIGHT_ULTRA_BLACK);
 	this->mTitle.SetFontName(L"Times new roman");
 	this->mTitle.SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
@@ -55,7 +55,7 @@ void NotificationList::AddNotification(
 		2, 
 		((int)this->mObjects.size() - 1)
 		* (this->mObjects[0]->GetHeight() + this->mSpace) 
-		+ this->mTitle.GetTextBoxSize().bottom);
+		+ (int)this->mTitle.GetTextBoxSize().bottom);
 
 	// Updates the number of events in the title.
 	this->mTitle.SetText(
@@ -143,7 +143,7 @@ void NotificationList::MoveLog(float speed)
 			this->mObjects[i]->Move(0, 
 				this->mSpace 
 				- this->mListTop 
-				+ this->mTitle.GetTextBoxSize().bottom);
+				+ (int)this->mTitle.GetTextBoxSize().bottom);
 		}
 	}
 	else if (this->mListBottom < this->mpRenderTarget->GetSize().height)

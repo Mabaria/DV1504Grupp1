@@ -74,6 +74,20 @@ Camera::~Camera()
 
 }
 
+void Camera::mReset()
+{
+	this->mInit(
+		this->mDefaultValues.pos,
+		this->mDefaultValues.up,
+		this->mDefaultValues.look,
+		this->mDefaultValues.widthOrFov,
+		this->mDefaultValues.heightOrRatio,
+		this->mDefaultValues.nearZ,
+		this->mDefaultValues.farZ,
+		this->mDefaultValues.cameraMode,
+		this->mDefaultValues.projMode);
+}
+
 void Camera::mInit(const DirectX::XMVECTOR &r_position,
 	const DirectX::XMVECTOR &r_up_vector,
 	const DirectX::XMVECTOR &r_look_vector,
@@ -84,6 +98,20 @@ void Camera::mInit(const DirectX::XMVECTOR &r_position,
 	const LOOK_MODE camera_mode,
 	const PROJECTION_MODE projection_mode)
 {
+	if (this->mDefaultValues.widthOrFov != view_width_or_fov_angle) {
+		// This is the first time running init
+		this->mDefaultValues = {
+			r_position,
+			r_up_vector,
+			r_look_vector,
+			view_width_or_fov_angle,
+			view_height_or_aspect_ratio,
+			near_z,
+			far_z,
+			camera_mode,
+			projection_mode
+		};
+	}
 	this->mCameraPosition = r_position;
 	this->mUpVector = r_up_vector;
 	this->mLookVector = r_look_vector;
@@ -273,7 +301,8 @@ void Camera::RotateCameraPitchYawRoll(const DirectX::XMVECTOR & pitch_yaw_roll)
 float Camera::GetViewWidth() const
 {
 	if (this->mProjectionMode == PERSPECTIVE)
-		return 2 * this->mNearZ * tan( (this->mFovAngle * PI) / (2 * 180));
+		return (float)(2 * this->mNearZ * 
+			tan( (this->mFovAngle * PI) / (2 * 180)));
 
 	// Else return Orthografic
 	return this->mViewWidth;
@@ -431,4 +460,10 @@ void Camera::SetProjectionMode(const PROJECTION_MODE new_projection_mode)
 {
 	this->mProjectionMode = new_projection_mode;
 	this->mUpdateProjMatrix();
+}
+
+void Camera::Update(const Button * attribute)
+{
+	// Reset the camera when prompted by button
+	this->mReset();
 }

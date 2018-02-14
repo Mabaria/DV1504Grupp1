@@ -2,6 +2,7 @@
 
 #include "../../../UI/UIElements/Panel2D.h"
 #include "../../../UI/UIElements/Panel3D.h"
+#include "../../../Logic/Boat/Boat.h"
 #include "../../../GraphicsEngine/Quad.h"
 
 /* TODO:
@@ -24,7 +25,12 @@ public:
 private:
 	void mUpdate();
 	void mDraw();
-	void mAddEvent(Room *room, LogEvent *event);
+	void mAddEvent(Room *room, LogEvent *logEvent);
+	void mRemoveEvent(Room *room, LogEvent *logEvent);
+
+	void mSetupPanels();
+	void mSetupModels();
+	void mSetupBoat();
 
 	Panel2D *mpControlPanel;
 	Panel2D *mpActiveLogPanel;
@@ -37,7 +43,9 @@ private:
 	std::vector<Mesh*> mBounds;
 	std::vector<Quad*> mTexts;
 
-	Camera *mpCamera;
+	Camera *mpTopViewCamera;
+	Camera *mpSideViewCamera;
 	Window *mpWindow;
 
+	Boat mBoat;
 };
