@@ -165,9 +165,11 @@ void System::mHandleInput()
 		this->mRay);		
 
 		Room *picked_room = this->mBoat.GetPickedRoom(this->mRay);
+
+		LogEvent *temp = new LogEvent(Event::Fire);
 		if (picked_room)
 		{
-			bool works = true;
+			this->mpActiveLogPanel->AddNotification(picked_room, temp);
 		}
 	}
 }
