@@ -61,6 +61,17 @@ public:
 	const void SetCamera(Camera *camera);
 	void Update(const Button* attribute) override;
 
+	void * operator new(size_t i) // To make sure it is 16 bit aligned
+	{
+		return _aligned_malloc(i, 16);
+	}
+
+	void operator delete(void *p)
+	{
+		_aligned_free(p);
+	}
+
+
 private:
 	D3D11 mDirect3D;
 	std::vector<MeshObject*> mpMeshObjects;

@@ -54,8 +54,8 @@ void Test_D3D11()
 
 	D3D11 direct3D(
 		/*child_window,*/
-		window.GetClientSize().width * width,
-		window.GetClientSize().height * height
+		int(window.GetClientSize().width * width),
+		int(window.GetClientSize().height * height)
 	);
 	direct3D.Init(child_window);
 

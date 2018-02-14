@@ -301,7 +301,8 @@ void Camera::RotateCameraPitchYawRoll(const DirectX::XMVECTOR & pitch_yaw_roll)
 float Camera::GetViewWidth() const
 {
 	if (this->mProjectionMode == PERSPECTIVE)
-		return 2 * this->mNearZ * tan( (this->mFovAngle * PI) / (2 * 180));
+		return (float)(2 * this->mNearZ * 
+			tan( (this->mFovAngle * PI) / (2 * 180)));
 
 	// Else return Orthografic
 	return this->mViewWidth;

@@ -76,6 +76,16 @@ public:
 		const float new_y,
 		const float new_z);
 
+	void * operator new(size_t i) // To make sure it is 16 bit aligned
+	{
+		return _aligned_malloc(i, 16);
+	}
+
+	void operator delete(void *p)
+	{
+		_aligned_free(p);
+	}
+
 	// MoveCamera takes a direction vector and a magnitude to move along that vector.
 	// The function does not normalize the vector, so if the vector is wonky that's
 	// on you.

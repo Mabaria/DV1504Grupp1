@@ -533,8 +533,8 @@ const void Panel3D::UpdateMouse()
 	{
 		POINT mouse_pos;
 		GetCursorPos(&mouse_pos);
-		this->mMouseOrigin.x = mouse_pos.x;
-		this->mMouseOrigin.y = mouse_pos.y;
+		this->mMouseOrigin.x = (float)mouse_pos.x;
+		this->mMouseOrigin.y = (float)mouse_pos.y;
 	}
 
 	if (Mouse::IsButtonDown(this->mBtnToPan))
@@ -546,8 +546,8 @@ const void Panel3D::UpdateMouse()
 		this->mMouseDiff.y = mouse_pos.y - this->mMouseOrigin.y;
 
 		SetCursorPos(
-			this->mMouseOrigin.x,
-			this->mMouseOrigin.y
+			(int)this->mMouseOrigin.x,
+			(int)this->mMouseOrigin.y
 		);
 
 		int dead_zone = 1;
