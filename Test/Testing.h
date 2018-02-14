@@ -44,7 +44,7 @@ namespace Testing
 
 	bool testOne()
 	{
-		Test_Material_Handler();
+		Test_BoatOnScreen();
 		return true;
 	}
 }
