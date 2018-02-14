@@ -3,37 +3,17 @@
 Panel3D::Panel3D(int width, int height, int top, int left, HWND handle, LPCTSTR title)
 	:Panel(width, height, top, left, handle, title), mDirect3D(width, height)
 {
-	// Creating a child window that will be 
-	// the canvas to draw on for the panel.
-	/*this->mPanelWindow = CreateWindowEx(
-		0,
-		title, 
-		title, 
-		WS_CHILD | WS_BORDER, 
-		this->mLeft, 
-		this->mTop, 
-		this->mWidth, 
-		this->mHeight, 
-		handle, 
-		0, 
-		GetModuleHandle(0),
-		0);	
-	ShowWindow(this->mPanelWindow, SW_NORMAL);*/
 	this->mDirect3D.Init(this->mPanelWindow);
 
+	// bfcull test
 	D3D11_RASTERIZER_DESC rast_desc{};
 	rast_desc.CullMode = D3D11_CULL_NONE;
 	rast_desc.FillMode = D3D11_FILL_SOLID;
-
 	ID3D11RasterizerState *rs_state = nullptr;
-
-	HRESULT hr = this->mDirect3D.GetDevice()->CreateRasterizerState(&rast_desc, &rs_state);
-	if (FAILED(hr))
-	{
-		MessageBoxA(NULL, "sadljklkjdsakjldas", NULL, MB_OK);
-	}
+	this->mDirect3D.GetDevice()->CreateRasterizerState(&rast_desc, &rs_state);
 	this->mDirect3D.GetContext()->RSSetState(rs_state);
 	rs_state->Release();
+	// ----------
 
 	this->mpVertexShader	= nullptr;
 	this->mpGeometryShader	= nullptr;
