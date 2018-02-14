@@ -2,6 +2,7 @@
 
 #include "../../../UI/UIElements/Panel2D.h"
 #include "../../../UI/UIElements/Panel3D.h"
+#include "../../../GraphicsEngine/Quad.h"
 
 /* TODO:
 *Picking
@@ -34,6 +35,7 @@ private:
 
 	std::vector<Mesh*> mFloors;
 	std::vector<Mesh*> mBounds;
+	std::vector<Quad*> mTexts;
 
 	Camera *mpCamera;
 	Window *mpWindow;

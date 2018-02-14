@@ -64,6 +64,15 @@ System::~System()
 			this->mBounds[i] = nullptr;
 		}
 	}
+
+	for (int i = 0; i < (int)this->mTexts.size(); i++)
+	{
+		if (this->mTexts[i])
+		{
+			delete this->mTexts[i];
+			this->mTexts[i] = nullptr;
+		}
+	}
 }
 
 void System::BuildGraphicalUserInterface(
@@ -137,6 +146,9 @@ void System::BuildGraphicalUserInterface(
 	this->mBounds.push_back(new Mesh("../../Models/Bound1.obj"));
 	this->mBounds.push_back(new Mesh("../../Models/Bound2.obj"));
 
+	this->mTexts.push_back(new Quad(true));
+
+
 	// Creating temporary mesh objects to pass to the 3D panels.
 	MeshObject floor_brygg("Bryggdäck", this->mFloors[0]);
 	MeshObject floor_huvud("Huvuddäck", this->mFloors[1]);
@@ -151,6 +163,27 @@ void System::BuildGraphicalUserInterface(
 	this->mpTopViewPanel->AddMeshObject(&bound_brygg, L"../../Models/BlendColor.dds", true);
 	this->mpTopViewPanel->AddMeshObject(&bound_huvud, L"../../Models/BlendColor.dds", true);
 	this->mpTopViewPanel->AddMeshObject(&bound_tross, L"../../Models/BlendColor.dds", true);
+	
+	this->mpTopViewPanel->AddMeshObject(
+		"Text3D_Floor01",
+		this->mTexts[0]->GetIndices(),
+		this->mTexts[0]->GetVertices(),
+		L"../../Models/däck01.dds"
+	); 
+	
+	this->mpTopViewPanel->AddMeshObject(
+		"Text3D_Floor1", 
+		this->mTexts[0]->GetIndices(), 
+		this->mTexts[0]->GetVertices(), 
+		L"../../Models/Däck1.dds"
+	);
+	
+	this->mpTopViewPanel->AddMeshObject(
+		"Text3D_Floor2",
+		this->mTexts[0]->GetIndices(),
+		this->mTexts[0]->GetVertices(),
+		L"../../Models/däck2.dds"
+	);
 
 	this->mpSideViewPanel->AddMeshObject(&floor_brygg);
 	this->mpSideViewPanel->AddMeshObject(&floor_huvud);
@@ -158,6 +191,7 @@ void System::BuildGraphicalUserInterface(
 	this->mpSideViewPanel->AddMeshObject(&bound_brygg, L"../../Models/BlendColor.dds", true);
 	this->mpSideViewPanel->AddMeshObject(&bound_huvud, L"../../Models/BlendColor.dds", true);
 	this->mpSideViewPanel->AddMeshObject(&bound_tross, L"../../Models/BlendColor.dds", true);
+
 	/*EventData data = {
 	1.0,
 	2.0,
@@ -168,6 +202,38 @@ void System::BuildGraphicalUserInterface(
 
 	// Scaling and translating the mesh objects in the panels.
 	float scale = 0.1f;
+
+	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor01")->
+		Scale(scale * 2.8f, scale * 1.2f, scale * 3.5f);
+
+	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor01")->
+		Rotate(XM_PI / 2, XM_PI / 2, 0.0f);
+
+	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor01")->
+		Translate(0.7f, 0.0f, -0.35f);
+
+
+	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor1")->
+		Scale(scale * 2.8f, scale * 1.2f, scale * 3.5f);
+
+	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor1")->
+		Rotate(XM_PI / 2, XM_PI / 2, 0.0f);
+
+	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor1")->
+		Translate(0.7f, 0.0f, 0.15f);
+
+
+	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor2")->
+		Scale(scale * 2.8f, scale * 1.2f, scale * 3.5f);
+
+	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor2")->
+		Rotate(XM_PI / 2, XM_PI / 2, 0.0f);
+
+	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor2")->
+		Translate(0.7f, 0.0f, 0.65f);
+
+	
+
 	this->mpTopViewPanel->rGetMeshObject("Bryggdäck")  ->Scale(scale, scale, scale);
 	this->mpTopViewPanel->rGetMeshObject("Huvuddäck")  ->Scale(scale, scale, scale);
 	this->mpTopViewPanel->rGetMeshObject("Trossdäck")  ->Scale(scale, scale, scale);
