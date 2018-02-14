@@ -47,5 +47,6 @@ private:
 	Camera *mpSideViewCamera;
 	Window *mpWindow;
 
+	EventLog mEventLog;
 	Boat mBoat;
 };

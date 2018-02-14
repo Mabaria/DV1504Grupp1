@@ -345,5 +345,6 @@ void System::mSetupModels()
 
 void System::mSetupBoat()
 {
+	this->mBoat.ReadFile("");
 
 }
