@@ -15,9 +15,7 @@ struct AABB {
 	Extrema x, y, z;
 };
 
-//AABB FromIndexedMeshToAABB(
-//	Mesh &mesh,
-//	int index);
+
 
 bool FillAABBVectorFromFile(const std::string &path, std::vector<AABB> &rList);
 

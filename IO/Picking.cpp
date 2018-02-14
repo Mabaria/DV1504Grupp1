@@ -8,84 +8,25 @@ void Picking::GetWorldRay(
 	float nScreenY,
 	Ray &rRay)
 {
-	//float width, height, nearZ;
 
-	//// Map click location from [0.0;1.0] to [-1.0;1.0]
-	//nScreenX = nScreenX * 2.f - 1.f;
-	//nScreenY = (nScreenY * 2.f - 1.f) * (-1.f);	// Invert "up" direction
+	/**
+	*	GetWorldRay is split into two modes, depending on the cameras projection
+	*	mode.
+	*/
 
-	//// Get resourses from camera
-	//width = pCamera->GetViewWidth();
-	//height = pCamera->GetViewHeight();
-	//nearZ = pCamera->GetNearZ();
-
-	///**
-	//*	Calculate ray origin
-	//*		The pick is happening on the screen, so the ray should start from the near
-	//*		plane and not from the cameras position.
-	//*/
-
-	//DirectX::XMVECTOR frontVec, rightVec;
-
-	//// 1. Walk to nearplane
-	//frontVec = DirectX::XMVectorScale(
-	//	pCamera->GetLookToVector(),
-	//	nearZ);
-
-	//rRay.origin = DirectX::XMVectorAdd(
-	//	pCamera->GetPosition(),
-	//	frontVec);
-
-	//// 2. Walk left/right
-	//rightVec = DirectX::XMVector3Cross(
-	//	pCamera->GetUpVector(),
-	//	pCamera->GetLookToVector());
-
-	//rRay.origin = DirectX::XMVectorAdd(
-	//	rRay.origin,
-	//	DirectX::XMVectorScale(rightVec, nScreenX * (width/2.f)));
-
-	//// 3. Walk up/down
-	//rRay.origin = DirectX::XMVectorAdd(
-	//	rRay.origin,
-	//	DirectX::XMVectorScale(pCamera->GetUpVector(), nScreenY * (height/2.f)));
-
-	///**
-	//*	The ray origin is now positioned correctly on the nearplane (screen).
-	//*	Now, we need to calculate the direction of the ray, depending on the
-	//* cameras settings.
-	//*
-	//*	Calculate direction of ray
-	//*		See the nearplane as the screen. We know where on the screen the user
-	//*		has the cursor (nScreenX and nScreenY), so all we have to do is go to
-	//*		the corresponding point on the nearplane and calculating the direction
-	//*		from the position of the eye (Perspective), or the direction of the
-	//*		camera (orthografic).
-	//*/
-
-	//if (pCamera->GetProjectionMode() == PERSPECTIVE)
-	//{
-	//	rRay.direction = DirectX::XMVectorSubtract(
-	//		rRay.origin,
-	//		pCamera->GetPosition());
-	//}
-	//else // ORTHOGRAFIC
-	//{
-	//	rRay.direction = pCamera->GetLookToVector();
-	//}
-
-	//// Normalize the direction of the ray
-	//rRay.direction = DirectX::XMVector3Normalize(rRay.direction);
+	/**
+	*	Perspective camera
+	*		Since the click happens in Screen space, we need to map the ray from
+	*		Screen space to World space in this function. The steps between will be:
+	*
+	*		Screen space -> NDC -> Projection space -> View space -> World space
+	*										
+	*/
 
 	if (pCamera->GetProjectionMode() == PROJECTION_MODE::PERSPECTIVE)
 	{
 		DirectX::XMFLOAT4X4 fProjectionMatrix;
-
-		float width, height;
-		float xView, yView;
-
-		//nScreenX = nScreenX * 2.f - 1.f;
-		//nScreenY = nScreenY * 2.f - 1.f;
+		float width, height, xView, yView;
 
 		//// Get resourses from camera
 		width = pCamera->GetViewWidth();
@@ -94,23 +35,29 @@ void Picking::GetWorldRay(
 		// Get a float-matrix of projection
 		DirectX::XMStoreFloat4x4(&fProjectionMatrix, pCamera->GetProjectionMatrix());
 
-		//xView = (width/height) * ((2.f * nScreenX / width) - 1);
-		//yView = (-2.f * nScreenY / height) + 1;
+		//	The steps (Screen -> NDC -> Proj -> View) combined
 		xView = ((+2.f * nScreenX) - 1.0f) / fProjectionMatrix._11;
 		yView = ((-2.f * nScreenY) + 1.0f) / fProjectionMatrix._22;
 
+		// Create ray origin and direction in view space
 		DirectX::XMVECTOR rayOrigin = { 0.0f, 0.0f, 0.0f, 1.0f };
 		DirectX::XMVECTOR rayDirection = { xView, yView, 1.0f, 0.0f };
 
+		// Map ray to World space using the inverse of the view matrix
 		DirectX::XMMATRIX invView = DirectX::XMMatrixInverse(NULL, pCamera->GetViewMatrix());
 		rayOrigin = DirectX::XMVector4Transform(rayOrigin, invView);
 		rayDirection = DirectX::XMVector4Transform(rayDirection, invView);
 
+		// Set the values to the returning ray
 		rRay.origin = rayOrigin;
 		rRay.direction = DirectX::XMVector3Normalize(rayDirection);
 	}
+
+
+
 	else // ORTHOGRAPHIC
 	{
+		// Map x and y from [0;1] to [-1;1]
 		nScreenX = nScreenX * 2.f - 1.f;
 		nScreenY = -(nScreenY * 2.f - 1.f);	// Invert "up" direction
 
@@ -150,9 +97,9 @@ void Picking::GetWorldRay(
 			rRay.origin,
 			DirectX::XMVectorScale(pCamera->GetUpVector(), nScreenY * (height/2.f)));
 
+		// Give the ray the same direction as the camera
 		rRay.direction = pCamera->GetLookToVector();
 	}
-		
 }
 
 float Picking::IsRayIntersectingAABB(
@@ -163,6 +110,10 @@ float Picking::IsRayIntersectingAABB(
 	float tmin = -100000.0f;
 	float tmax = 100000.f;
 	float t1, t2, factor;
+
+	/**
+	*	Create arrays for easy looping
+	*/
 
 	// Storing vectors as floats instead 
 	float fOrigin[3] = {
@@ -175,32 +126,39 @@ float Picking::IsRayIntersectingAABB(
 		DirectX::XMVectorGetY(ray.direction),
 		DirectX::XMVectorGetZ(ray.direction)
 	};
-
 	AABB::Extrema slabs[3] = {
 		box.x,
 		box.y,
 		box.z
 	};
+
 	for (unsigned int i = 0; i < 3; i++)
 	{
+		// Sanity check ray parallel
 		if (std::fabs(fDirection[i]) < 0.000001f)
 		{
-			// Early exit
+			/**
+			* If parallel, the ray will never touch the walls of the slab.
+			* In this case, we check if the ray position is within the walls.
+			*/
+
 			if (fOrigin[i] < slabs[i].min || fOrigin[i] > slabs[i].max)
 				return -1.0f;
 		}
 		else
 		{
 			factor = 1.0f / fDirection[i];
-			t1 = (slabs[i].min - fOrigin[i]) * factor;
-			t2 = (slabs[i].max - fOrigin[i]) * factor;
+			t1 = (slabs[i].min - fOrigin[i]) * factor; // Slab entry
+			t2 = (slabs[i].max - fOrigin[i]) * factor; // Slab exit
 
-			if (t1 > t2)
+			if (t1 > t2) // If working with negative values
 				std::swap(t1, t2);
 
+			// Store the highest tmin, and the lowest tmax
 			tmin = (tmin < t1) ? t1 : tmin;
 			tmax = (tmax > t2) ? t2 : tmax;
 
+			// If at any time the tmin is higher than tmax, we found a miss
 			if (tmin > tmax)
 				return -1.0f;
 		}
