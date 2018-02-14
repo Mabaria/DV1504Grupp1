@@ -5,6 +5,7 @@
 
 /* TODO:
 *Picking
+*Kontrollknappar
 *
 */
 
@@ -22,6 +23,7 @@ public:
 private:
 	void mUpdate();
 	void mDraw();
+	void mAddEvent(Room *room, LogEvent *event);
 
 	Panel2D *mpControlPanel;
 	Panel2D *mpActiveLogPanel;
