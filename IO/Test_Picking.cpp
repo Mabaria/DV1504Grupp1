@@ -13,12 +13,6 @@ bool TestPickingOnBoat()
 
 	Panel3D panel(1920, 1080, 0, 0, window.GetWindow(), L"HELLO");
 
-	width = 100;
-	height = 100;
-	nearZ = 50;
-	farZ = 500;
-	fov = (float)(2 * std::atanf(width / (2 * nearZ)) * 180 / PI);
-	aspect = width / height;
 	// Create shaders
 	panel.CreateShadersAndSetup(
 		L"../../GraphicsEngine/Test_VertexShader.hlsl",
