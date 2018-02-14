@@ -2,9 +2,11 @@
 
 #include "../../../UI/UIElements/Panel2D.h"
 #include "../../../UI/UIElements/Panel3D.h"
+#include "../../../Logic/Boat/Boat.h"
 
 /* TODO:
 *Picking
+*Kontrollknappar
 *
 */
 
@@ -22,6 +24,11 @@ public:
 private:
 	void mUpdate();
 	void mDraw();
+	void mAddEvent(Room *room, LogEvent *event);
+
+	void mSetupPanels();
+	void mSetupModels();
+	void mSetupBoat();
 
 	Panel2D *mpControlPanel;
 	Panel2D *mpActiveLogPanel;
@@ -36,4 +43,5 @@ private:
 	Camera *mpCamera;
 	Window *mpWindow;
 
+	Boat mBoat;
 };

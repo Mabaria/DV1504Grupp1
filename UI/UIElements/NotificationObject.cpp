@@ -16,7 +16,8 @@ NotificationObject::NotificationObject(
 	this->mEventType = event->GetType();
 	this->mIndex = index;
 	
-	direct2d->SetFontSize(12);
+	this->mTextBox.SetFontSize(12);
+	this->mTextBox.SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
 	D2D1_SIZE_F render_target_size = direct2d->GetpRenderTarget()->GetSize();	
 
 	// 200x80 notification object.
