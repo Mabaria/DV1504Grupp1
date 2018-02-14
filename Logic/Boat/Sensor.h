@@ -16,6 +16,7 @@ public:
 	// Sensor specific
 	void AddInputType(Event::Type type);
 	void RemoveInputType(Event::Type type);
+	void SetInputTypes(std::vector<Event::Type> list);
 	bool CanDetect(Event::Type type) const;
 	
 	int AutoTrigger(Event::Type type); // Will return a ActiveEvent index
@@ -27,6 +28,7 @@ public:
 
 	// Event specific
 	void SetActiveEventIndex(int index);
+	int GetActiveEventIndex() const;
 
 	// Room specific
 	void SetRoomIndex(int index);

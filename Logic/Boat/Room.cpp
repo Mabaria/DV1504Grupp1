@@ -2,7 +2,14 @@
 
 Room::Room()
 {
-	this->mIndex = -1;
+	this->mIndexInBoat = -1;
+	this->mIndexInDeck = -1;
+	this->mDeckIndex = -1;
+}
+
+Room::Room(RoomDesc desc)
+{
+	this->InitFromDesc(desc);
 }
 
 Room::~Room()
@@ -18,8 +25,8 @@ Room::~Room()
 
 void Room::SetIndex(int index)
 {
-	this->mIndex = index;
-	this->mSensor.SetRoomIndex(this->mIndex);
+	this->mIndexInBoat = index;
+	this->mSensor.SetRoomIndex(this->mIndexInBoat);
 }
 
 void Room::SetName(std::string name)
@@ -27,10 +34,44 @@ void Room::SetName(std::string name)
 	this->mName = name;
 }
 
+void Room::SetAABB(const AABB &boundingBox)
+{
+	this->mBoundingBox = boundingBox;
+}
+
+float Room::CheckRayCollision(const Ray & rRay)
+{
+	return Picking::IsRayIntersectingAABB(rRay, this->mBoundingBox);
+}
+
 std::string Room::GetName() const
 {
 	return this->mName;
 }
+
+void Room::InitFromDesc(RoomDesc desc)
+{
+	this->mName = desc.name;
+	this->mIndexInBoat = desc.indexInBoat;
+	this->mIndexInDeck = desc.indexInDeck;
+	this->mDeckIndex = desc.deckIndex;
+	this->mDeckName = desc.deckName;
+	this->mSensor.SetRoomIndex(desc.indexInBoat);
+	this->mSensor.SetEventLog(desc.pEventLog);
+	this->mSensor.SetInputTypes(desc.inputTypes);
+	this->mSensor.SetActiveEventIndex(desc.activeIndex);
+}
+
+int Room::GetIndexInBoat() const
+{
+	return this->mIndexInBoat;
+}
+
+int Room::GetIndexInDeck() const
+{
+	return this->mIndexInDeck;
+}
+
 
 
 
@@ -48,6 +89,11 @@ std::string Room::GetDeckName() const
 	return this->mDeckName;
 }
 
+int Room::GetDeckIndex() const
+{
+	return this->mDeckIndex;
+}
+
 
 
 /**
@@ -56,7 +102,6 @@ std::string Room::GetDeckName() const
 
 void Room::SetActiveEventIndex(int index)
 {
-	this->mActiveEventIndex = index;
 	this->mSensor.SetActiveEventIndex(index);
 }
 
@@ -88,7 +133,7 @@ void Room::AddInputType(Event::Type type)
 
 int Room::GetActiveEventIndex() const
 {
-	return this->mActiveEventIndex;
+	return this->mSensor.GetActiveEventIndex();
 }
 
 
@@ -100,9 +145,8 @@ int Room::GetActiveEventIndex() const
 std::string Room::WriteString() const
 {
 	std::string print = "";
-	print += "r#" + std::to_string(this->mIndex) + " ";
-	print += this->mDeckName;
-	print += " / ";
+
+	print += "r ";
 	print += this->mName;
 	print += " / ";
 	print += this->mSensor.WriteString();

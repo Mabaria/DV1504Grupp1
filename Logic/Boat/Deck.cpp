@@ -6,6 +6,11 @@ Deck::Deck()
 	this->mRoomOffset = 0;
 }
 
+Deck::Deck(DeckDesc desc)
+{
+	this->InitFromDesc(desc);
+}
+
 Deck::~Deck()
 {
 }
@@ -26,6 +31,14 @@ void Deck::SetName(std::string name)
 	this->mName = name;
 }
 
+void Deck::InitFromDesc(DeckDesc desc)
+{
+	this->mName = desc.name;
+	this->mIndex = desc.index;
+	this->mRoomCount = 0;
+	this->mRoomOffset = desc.roomOffset;
+}
+
 std::string Deck::GetName() const
 {
 	return this->mName;
@@ -37,8 +50,13 @@ std::string Deck::GetName() const
 *	Room specific
 */
 
-void Deck::AddRoom()
+void Deck::AddRoom(Room *pRoom, int index)
 {
+	if (index == -1)
+		this->mpRooms.push_back(pRoom);
+	else
+		this->mpRooms.insert(this->mpRooms.begin() + index, pRoom);
+
 	this->mRoomCount++;
 }
 
@@ -47,6 +65,12 @@ void Deck::SetRoomCount(int count)
 	this->mRoomCount = count;
 }
 
+Room *Deck::GetRoomPointerAt(int index)
+{
+	if (index < 0 || index >= (int)this->mpRooms.size())
+		return nullptr;
+	return this->mpRooms[index];
+}
 void Deck::SetRoomOffset(int index)
 {
 	this->mRoomOffset = index;
@@ -77,10 +101,8 @@ std::string Deck::GetString() const
 {
 	std::string print = "";
 
-	print += "d#" + std::to_string(this->mIndex) + " ";
-	print += this->mName + " ";
-	print += std::to_string(this->mRoomOffset) + " ";
-	print += std::to_string(this->mRoomCount);
+	print += "d ";
+	print += this->mName;
 
 	return print;
 }

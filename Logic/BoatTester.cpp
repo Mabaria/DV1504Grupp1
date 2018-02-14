@@ -1,11 +1,34 @@
 #include "BoatTester.h"
 
+void BoatTester::WriteTest()
+{
+	EventLog *pEventLog;
+	Boat *pBoat;
+
+	pEventLog = new EventLog;
+
+	/**
+	*	Create boat
+	*/
+	pBoat = CreateBoat(pEventLog);
+
+	/**
+	*	Write boat to file
+	*/
+	WriteFile(pBoat, "../../SaveFiles/WriteTest.boat");
+
+	delete pBoat;
+	delete pEventLog;
+}
+
 void BoatTester::TestBoat()
 {
 	EventLog *pEventLog;
 	Boat *pBoat;
 
 	pEventLog = new EventLog;
+
+	std::string prefix = "  * ";
 
 	/**
 	*	Create boat
@@ -23,10 +46,10 @@ void BoatTester::TestBoat()
 	pBoat->CreateAutoEvent(Event::Fire, "Maskinrum", "Huvuddäck");
 
 	// Sensor is set not to register water
-	std::cout << "Adding Fire to 'Maskinrum' in 'Huvuddäck'" << std::endl;
+	std::cout << "Adding Water to 'Maskinrum' in 'Huvuddäck'" << std::endl;
 	pBoat->CreateAutoEvent(Event::Water, "Maskinrum", "Huvuddäck");
 
-	std::cout << "Adding Fire to 'Maskinrum' in 'Huvuddäck'" << std::endl;
+	std::cout << "Adding Gas to 'Maskinrum' in 'Huvuddäck'" << std::endl;
 	pBoat->CreateAutoEvent(Event::Gas, "Maskinrum", "Huvuddäck");
 
 
@@ -40,12 +63,12 @@ void BoatTester::TestBoat()
 	std::cout << "\nChecking events in 'Maskinrum' in 'Huvuddäck':" << std::endl;
 	std::cout << "(Should be Fire and Gas only)" << std::endl;
 
-	std::cout << "* Fire...";
+	std::cout << prefix << "Fire...";
 	if (events[0] != Event::Fire)
 		throw ("Error expected Fire");
 	std::cout << "ok!" << std::endl;
 
-	std::cout << "* Gas...";
+	std::cout << prefix << "Gas...";
 	if (events[1] != Event::Gas)
 		throw ("Error expected Gas");
 	std::cout << "ok!" << std::endl;
@@ -86,7 +109,7 @@ void BoatTester::TestBoat()
 	for (int i = 0; i < 3; i++)
 	{
 		type = Event::GetString((Event::Type)i);
-		std::cout << "* " << type << "...";
+		std::cout << prefix << "" << type << "...";
 
 		if (events[i] != (Event::Type)i)
 			throw ("Error expected " + type);
@@ -174,6 +197,8 @@ void BoatTester::TestBoat()
 }
 
 Boat* BoatTester::CreateBoat(EventLog *pEventLog) {
+	std::string prefix = "  * ";
+
 	PrintHeader("Building boat 'Testskepp'");
 
 	Boat *newBoat = new Boat;
@@ -181,79 +206,81 @@ Boat* BoatTester::CreateBoat(EventLog *pEventLog) {
 
 	std::vector<Event::Type> inputs = {Event::Fire, Event::Gas};
 
-	std::cout << "Adding deck 'Bryggdäck'...";
+	std::cout << "Creating deck 'Bryggdäck'...";
 	newBoat->AddDeck("Bryggdäck");
-	std::cout << "Adding deck 'Huvuddäck'...";
-	newBoat->AddDeck("Huvuddäck");
-	std::cout << "Adding deck 'Trossdäck'...";
-	newBoat->AddDeck("Trossdäck");
 	std::cout << "done!" << std::endl;
 
-	std::cout << "\nAdding rooms to deck 'Bryggdäck'..." << std::endl;
-	std::cout << "* slC...";
+	std::cout << "Adding rooms to deck:" << std::endl;
+	std::cout << prefix << "slC...";
 	newBoat->AddRoom("slC", "Bryggdäck", inputs);
 	std::cout << "ok" << std::endl;
-	std::cout << "* SkyC...";
+	std::cout << prefix << "SkyC...";
 	newBoat->AddRoom("SkyC", "Bryggdäck", inputs);
 	std::cout << "ok" << std::endl;
-	std::cout << "* Brygga...";
+	std::cout << prefix << "Brygga...";
 	newBoat->AddRoom("Brygga", "Bryggdäck", inputs);
 	std::cout << "ok" << std::endl;
 	std::cout << "done!" << std::endl;
 
-	std::cout << "\nAdding rooms to deck 'Huvuddäck'..." << std::endl;
-	std::cout << "* Skyddäck...";
+	std::cout << "\nCreating deck 'Huvuddäck'...";
+	newBoat->AddDeck("Huvuddäck");
+	std::cout << "done!" << std::endl;
+	std::cout << "Adding rooms to deck:" << std::endl;
+	std::cout << prefix << "Skyddäck...";
 	newBoat->AddRoom("Skyddäck", "Huvuddäck", inputs);
 	std::cout << "ok" << std::endl;
-	std::cout << "* Maskinrum...";
+	std::cout << prefix << "Maskinrum...";
 	newBoat->AddRoom("Maskinrum", "Huvuddäck", inputs);
 	std::cout << "ok" << std::endl;
-	std::cout << "* Gång3...";
+	std::cout << prefix << "Gång3...";
 	newBoat->AddRoom("Gång3", "Huvuddäck", inputs);
 	std::cout << "ok" << std::endl;
-	std::cout << "* Tambur...";
+	std::cout << prefix << "Tambur...";
 	newBoat->AddRoom("Tambur", "Huvuddäck", inputs);
 	std::cout << "ok" << std::endl;
-	std::cout << "* Omformarrum...";
+	std::cout << prefix << "Omformarrum...";
 	newBoat->AddRoom("Omformarrum", "Huvuddäck", inputs);
 	std::cout << "ok" << std::endl;
-	std::cout << "* CBRN...";
+	std::cout << prefix << "CBRN...";
 	newBoat->AddRoom("CBRN", "Huvuddäck", inputs);
 	std::cout << "ok" << std::endl;
 	std::cout << "done!" << std::endl;
 
-	std::cout << "\nAdding rooms to deck 'Trossdäck'..." << std::endl;
-	std::cout << "* Ammdurk...";
+	std::cout << "\nCreating deck 'Trossdäck'...";
+	newBoat->AddDeck("Trossdäck");
+	std::cout << "done!" << std::endl;
+	std::cout << "Adding rooms to deck:" << std::endl;
+	std::cout << prefix << "Ammdurk...";
 	newBoat->AddRoom("Ammdurk", "Trossdäck", inputs);
 	std::cout << "ok" << std::endl;
-	std::cout << "* Lastrum...";
+	std::cout << prefix << "Lastrum...";
 	newBoat->AddRoom("Lastrum", "Trossdäck", inputs);
 	std::cout << "ok" << std::endl;
-	std::cout << "* Maskinrum...";
+	std::cout << prefix << "Maskinrum...";
 	newBoat->AddRoom("Maskinrum", "Trossdäck", inputs);
 	std::cout << "ok" << std::endl;
-	std::cout << "* MC...";
+	std::cout << prefix << "MC...";
 	newBoat->AddRoom("MC", "Trossdäck", inputs);
 	std::cout << "ok" << std::endl;
-	std::cout << "* Gång1...";
+	std::cout << prefix << "Gång1...";
 	newBoat->AddRoom("Gång1", "Trossdäck", inputs);
 	std::cout << "ok" << std::endl;
-	std::cout << "* Apparatrum...";
+	std::cout << prefix << "Apparatrum...";
 	newBoat->AddRoom("Apparatrum", "Trossdäck", inputs);
 	std::cout << "ok" << std::endl;
-	std::cout << "* Gång2...";
+	std::cout << prefix << "Gång2...";
 	newBoat->AddRoom("Gång2", "Trossdäck", inputs);
 	std::cout << "ok" << std::endl;
-	std::cout << "* Hjälpmaskinrum...";
+	std::cout << prefix << "Hjälpmaskinrum...";
 	newBoat->AddRoom("Hjälpmaskinrum", "Trossdäck", inputs);
 	std::cout << "ok" << std::endl;
-	std::cout << "* Byssa...";
+	std::cout << prefix << "Byssa...";
 	newBoat->AddRoom("Byssa", "Trossdäck", inputs);
 	std::cout << "ok" << std::endl;
-	std::cout << "* SB Mäss...";
+	std::cout << prefix << "SB Mäss...";
 	newBoat->AddRoom("SB Mäss", "Trossdäck", inputs);
 	std::cout << "ok" << std::endl;
-	std::cout << "* Skyddsrum...";
+	std::cout << prefix << "Skyddsrum...";
 	newBoat->AddRoom("Skyddsrum", "Trossdäck", inputs);
 	std::cout << "ok" << std::endl;
 	std::cout << "done!" << std::endl;

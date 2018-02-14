@@ -124,6 +124,7 @@ public:
 	DirectX::XMVECTOR GetPosition() const;
 	DirectX::XMVECTOR GetUpVector() const;
 	DirectX::XMVECTOR GetLookVector() const;
+	DirectX::XMVECTOR GetLookToVector() const;
 	LOOK_MODE GetLookMode() const;
 
 	DirectX::XMMATRIX GetViewMatrix() const;

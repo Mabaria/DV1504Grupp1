@@ -653,6 +653,11 @@ const bool Panel3D::UpdateCamera()
 				y = 0.0f;
 				dir = DirectX::XMVectorSetY(dir, y);
 			}
+			else if (y > 0.9f)
+			{
+				y = 0.9f;
+				dir = DirectX::XMVectorSetY(dir, y);
+			}
 
 			this->mDirection = dir;
 		}

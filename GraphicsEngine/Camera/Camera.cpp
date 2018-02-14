@@ -342,6 +342,18 @@ DirectX::XMVECTOR Camera::GetLookVector() const
 	return this->mLookVector;
 }
 
+DirectX::XMVECTOR Camera::GetLookToVector() const
+{
+	if (this->mLookMode == LOOK_AT)
+	{
+		return DirectX::XMVector3Normalize(
+			DirectX::XMVectorSubtract(this->mLookVector, this->mCameraPosition));
+	}
+
+	// Else
+	return this->mLookVector;
+}
+
 LOOK_MODE Camera::GetLookMode() const
 {
 	return this->mLookMode;
