@@ -262,4 +262,5 @@ void System::mSetupModels()
 
 void System::mSetupBoat()
 {
+
 }

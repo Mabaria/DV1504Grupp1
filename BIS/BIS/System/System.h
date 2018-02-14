@@ -25,6 +25,7 @@ private:
 	void mUpdate();
 	void mDraw();
 	void mAddEvent(Room *room, LogEvent *event);
+
 	void mSetupPanels();
 	void mSetupModels();
 	void mSetupBoat();
