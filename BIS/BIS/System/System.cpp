@@ -230,18 +230,13 @@ void System::mSetupPanels()
 	(DWRITE_FONT_WEIGHT_ULTRA_BLACK);
 	this->mpControlPanel->GetTextBoxByName("title")->SetTextAlignment
 	(DWRITE_TEXT_ALIGNMENT_CENTER);
-	this->mpControlPanel->AddButton(70, 70, 30, 20, "../../Models/Button01.png", "Injury");
-	this->mpControlPanel->AddButton(70, 70, 30, 90, "../../Models/Button02.png", "Gas");
-	this->mpControlPanel->AddButton(70, 70, 30, 160, "../../Models/Button03.png", "Water");
-	this->mpControlPanel->AddButton(70, 70, 30, 230, "../../Models/Button04.png", "Fire");
-	for (int i = 0; i < 4; i++)
-	{
-		this->mpControlPanel->GetButtonByIndex(i)->MoveButton((this->mpControlPanel->GetWidth())/2-157, 60);
-	}
-	this->mpControlPanel->AddButton(70,
-		70,
-		5,
-		5,
+	this->mpControlPanel->AddButton(70, 70, 60, 20, "../../Models/Button01.png", "Injury");
+	this->mpControlPanel->AddButton(70, 70, 60, 95, "../../Models/Button02.png", "Gas");
+	this->mpControlPanel->AddButton(70, 70, 60, 170, "../../Models/Button03.png", "Water");
+	this->mpControlPanel->AddButton(70, 70, 60, 245, "../../Models/Button04.png", "Fire");
+	this->mpControlPanel->AddButton(70, 70, 60, 340,
+		/*(this->mpControlPanel->GetHeight() - 140) / 2,
+		this->mpControlPanel->GetWidth() - 140,*/
 		"../../Models/Button05.png", "Reset");
 
 	this->mpControlPanel->GetButtonByName("Reset")->AddObserver(this->mpSideViewPanel);
