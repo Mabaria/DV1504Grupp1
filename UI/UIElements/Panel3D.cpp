@@ -494,8 +494,10 @@ const void Panel3D::SetCamera(Camera * camera)
 
 void Panel3D::Update(const Button * attribute)
 {
-	this->mRadius = 10.0f;
-	this->mDirection = DirectX::XMVector3Normalize({ 0.5f, 0.3f, 0.5f });
+	this->mRadius = 4.0f;
+	this->mDirection = DirectX::XMVector3Normalize({
+		-0.025140788f / 4.f,
+		1.28821635f / 4.f, 3.78684092f / 4.f });
 	this->mMouseDiff.x = 0.0f;
 	this->mMouseDiff.y = 0.0f;
 	this->UpdateCamera();
@@ -660,11 +662,6 @@ const bool Panel3D::UpdateCamera()
 			}
 
 			this->mDirection = dir;
-		}
-
-		if (Mouse::IsButtonPressed(Buttons::Left))
-		{
-			int temp = 0;
 		}
 		// Update Camera
 
