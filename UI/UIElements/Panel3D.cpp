@@ -1,6 +1,7 @@
 #include "Panel3D.h"
 
-Panel3D::Panel3D(int width, int height, int top, int left, HWND handle, LPCTSTR title)
+Panel3D::Panel3D(int width, int height, int top, int left,
+	HWND handle, LPCTSTR title, bool movableCamera)
 	:Panel(width, height, top, left, handle, title), mDirect3D(width, height)
 {
 	this->mDirect3D.Init(this->mPanelWindow);
@@ -66,6 +67,7 @@ Panel3D::Panel3D(int width, int height, int top, int left, HWND handle, LPCTSTR 
 	this->mBtnToPan		= Buttons::ScrollPress;
 
 	this->mOrthographicMaxView = 2.0f;
+	this->mMovableCamera = movableCamera;
 }
 
 Panel3D::~Panel3D()
@@ -481,13 +483,21 @@ const void Panel3D::SetCamera(Camera * camera)
 		&this->mpCamera->GetProjectionMatrix(), 
 		&this->mpProjBuffer);
 
-	this->UpdateCamera();
+	this->mDirection = 
+		this->mpCamera->GetPosition() - this->mpCamera->GetLookVector();
+
+	this->mRadius = XMVectorGetX(XMVector3Length(this->mDirection));
+	this->mDirection = XMVector3Normalize(this->mDirection);
+
+	//this->UpdateCamera();
 }
 
 void Panel3D::Update(const Button * attribute)
 {
-	this->mRadius = 10.0f;
-	this->mDirection = DirectX::XMVector3Normalize({ 0.5f, 0.3f, 0.5f });
+	this->mRadius = 4.0f;
+	this->mDirection = DirectX::XMVector3Normalize({
+		-0.025140788f / 4.f,
+		1.28821635f / 4.f, 3.78684092f / 4.f });
 	this->mMouseDiff.x = 0.0f;
 	this->mMouseDiff.y = 0.0f;
 	this->UpdateCamera();
@@ -516,8 +526,12 @@ const void Panel3D::Update()
 
 	if (this->IsMouseInsidePanel())
 	{
-		this->UpdateMouse();
-		show_cursor = this->mpCamera ? this->UpdateCamera() : true;
+		
+		if (this->mMovableCamera)
+		{
+			this->UpdateMouse();
+			show_cursor = this->mpCamera ? this->UpdateCamera() : true;
+		}
 	}
 
 	if (this->mShowCursor != show_cursor)
@@ -613,7 +627,7 @@ const bool Panel3D::UpdateCamera()
 				this->mRadius = this->mpCamera->GetFarZ() - 1.0f;
 		}
 
-		// Mouse movement - Pan
+		// Mouse movement - Rotate
 		if (Mouse::IsButtonDown(this->mBtnToPan))
 		{
 			flag = true;
@@ -649,9 +663,10 @@ const bool Panel3D::UpdateCamera()
 
 			this->mDirection = dir;
 		}
-
 		// Update Camera
-		this->mpCamera->SetCameraPosition(0.0f, 0.0001f, 0.0f);
+
+		//this->mpCamera->SetCameraPosition(this->mpCamera->GetLookVector());
+		this->mpCamera->SetCameraPosition(0.0f, 0.0f, 0.0f);
 		this->mpCamera->MoveCamera(this->mDirection, this->mRadius);
 		break;
 	}

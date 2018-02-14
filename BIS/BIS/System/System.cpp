@@ -98,14 +98,16 @@ void System::BuildGraphicalUserInterface(
 		0,					// Top
 		0,					// Left
 		this->mpWindow->GetWindow(),
-		windowName.c_str());
+		windowName.c_str(),
+		true);
 	this->mpTopViewPanel = new Panel3D(
 		5 * windowWidth / 6,
 		5 * windowHeight / 6,
 		windowHeight / 6,
 		0,
 		this->mpWindow->GetWindow(),
-		windowName.c_str());
+		windowName.c_str(),
+		true);
 	this->mpActiveLogPanel = new Panel2D(
 		windowWidth / 6,
 		windowHeight,
@@ -194,20 +196,20 @@ void System::mRemoveEvent(Room * room, LogEvent * logEvent)
 void System::mSetupPanels()
 {
 	// Creating and setting the cameras.
-	this->mpTopViewCamera = new Camera(
-		{ 2.0f, 5.0f, 3.5f, 0.0f },
-		{ 0.0f, 1.0f, 0.0f, 0.0f },
-		{ 0.0f, 0.0f, 0.0f, 0.0f },
-		XM_PI / 15.0f, 16.0f / 9.0f,
-		0.1f, 25.0f, LOOK_AT, PERSPECTIVE);
-
-	this->mpSideViewCamera = new Camera(
+	this->mpTopViewCamera = new Camera (
 		{ 0.0f, 80.0f, -2.0f, 0.0f },
 		{ 0.0f, 1.0f, 0.0f, 0.0f },
 		{ 0.0f, -80.0f, 2.0f, 0.0f },
 		2.0f, 2.0f,
 		0.01f, 1000.0f, LOOK_TO, ORTHOGRAPHIC);
+	this->mpTopViewPanel->SetCamera(this->mpTopViewCamera);
 
+	this->mpSideViewCamera = new Camera(
+		{ -0.0251480788f, 1.28821635f, 3.78684092f, 0.0f },
+		{ 0.0f, 1.0f, 0.0f, 0.0f },
+		{ 0.000001f, 0.0f, 0.0f, 0.0f },
+		120.f, 32.f/9.f,
+		0.1f, 100.0f, LOOK_AT, PERSPECTIVE);
 	this->mpSideViewPanel->SetCamera(this->mpSideViewCamera);
 	this->mpTopViewPanel->SetCamera(this->mpTopViewCamera);
 
@@ -235,13 +237,16 @@ void System::mSetupPanels()
 	(DWRITE_FONT_WEIGHT_ULTRA_BLACK);
 	this->mpControlPanel->GetTextBoxByName("title")->SetTextAlignment
 	(DWRITE_TEXT_ALIGNMENT_CENTER);
-	this->mpControlPanel->AddButton(70, 70, 20, 20, "../../Models/Button01.png", "Injury");
-	this->mpControlPanel->AddButton(70, 70, 20, 95, "../../Models/Button02.png", "Gas");
-	this->mpControlPanel->AddButton(70, 70, 20, 170, "../../Models/Button03.png", "Water");
-	this->mpControlPanel->AddButton(70, 70, 20, 245, "../../Models/Button04.png", "Fire");
-	this->mpControlPanel->AddButton(70, 70, 95, 20, "../../Models/Button05.png", "Reset");
+	this->mpControlPanel->AddButton(70, 70, 60, 20, "../../Models/Button01.png", "Injury");
+	this->mpControlPanel->AddButton(70, 70, 60, 95, "../../Models/Button02.png", "Gas");
+	this->mpControlPanel->AddButton(70, 70, 60, 170, "../../Models/Button03.png", "Water");
+	this->mpControlPanel->AddButton(70, 70, 60, 245, "../../Models/Button04.png", "Fire");
+	this->mpControlPanel->AddButton(70, 70, 60, 340,
+		/*(this->mpControlPanel->GetHeight() - 140) / 2,
+		this->mpControlPanel->GetWidth() - 140,*/
+		"../../Models/Button05.png", "Reset");
 
-	this->mpControlPanel->GetButtonByName("Reset")->AddObserver(this->mpTopViewPanel);
+	this->mpControlPanel->GetButtonByName("Reset")->AddObserver(this->mpSideViewPanel);
 
 	// Setting up the active log panel.
 	this->mpActiveLogPanel->SetNotificationList(0, 0);
@@ -356,19 +361,21 @@ void System::mSetupModels()
 	this->mpTopViewPanel->rGetMeshObject("Huvudbounds")->Translate(0.0f, 0.0f, 0.0f);
 	this->mpTopViewPanel->rGetMeshObject("Trossbounds")->Translate(0.0f, 0.0f, 0.5f);
 
-	this->mpSideViewPanel->rGetMeshObject("Bryggdäck")->Scale(0.15f, 0.4f, 0.1f);
-	this->mpSideViewPanel->rGetMeshObject("Huvuddäck")->Scale(0.15f, 0.4f, 0.1f);
-	this->mpSideViewPanel->rGetMeshObject("Trossdäck")->Scale(0.15f, 0.4f, 0.1f);
-	this->mpSideViewPanel->rGetMeshObject("Bryggbounds")->Scale(0.15f, 0.4f, 0.1f);
-	this->mpSideViewPanel->rGetMeshObject("Huvudbounds")->Scale(0.15f, 0.4f, 0.1f);
-	this->mpSideViewPanel->rGetMeshObject("Trossbounds")->Scale(0.15f, 0.4f, 0.1f);
-
-	this->mpSideViewPanel->rGetMeshObject("Bryggdäck")->Translate(0.05f, 0.2f, 0.0f);
+	this->mpSideViewPanel->rGetMeshObject("Bryggdäck")->Translate(0.05f, 0.9f, 0.0f);
 	this->mpSideViewPanel->rGetMeshObject("Huvuddäck")->Translate(0.05f, 0.0f, 0.0f);
-	this->mpSideViewPanel->rGetMeshObject("Trossdäck")->Translate(0.05f, -0.2f, 0.0f);
-	this->mpSideViewPanel->rGetMeshObject("Bryggbounds")->Translate(0.05f, 0.2f, 0.0f);
+	this->mpSideViewPanel->rGetMeshObject("Trossdäck")->Translate(0.05f, -0.9f, 0.0f);
+	this->mpSideViewPanel->rGetMeshObject("Bryggbounds")->Translate(0.05f, 0.9f, 0.0f);
 	this->mpSideViewPanel->rGetMeshObject("Huvudbounds")->Translate(0.05f, 0.0f, 0.0f);
-	this->mpSideViewPanel->rGetMeshObject("Trossbounds")->Translate(0.05f, -0.2f, 0.0f);
+	this->mpSideViewPanel->rGetMeshObject("Trossbounds")->Translate(0.05f, -0.9f, 0.0f);
+
+	this->mpSideViewPanel->rGetMeshObject("Bryggdäck")->Scale(0.5f, 0.5f, 0.5f);
+	this->mpSideViewPanel->rGetMeshObject("Huvuddäck")->Scale(0.5f, 0.5f, 0.5f);
+	this->mpSideViewPanel->rGetMeshObject("Trossdäck")->Scale(0.5f, 0.5f, 0.5f);
+	this->mpSideViewPanel->rGetMeshObject("Bryggbounds")->Scale(0.5f, 0.5f, 0.5f);
+	this->mpSideViewPanel->rGetMeshObject("Huvudbounds")->Scale(0.5f, 0.5f, 0.5f);
+	this->mpSideViewPanel->rGetMeshObject("Trossbounds")->Scale(0.5f, 0.5f, 0.5f);
+
+
 }
 
 void System::mSetupBoat()

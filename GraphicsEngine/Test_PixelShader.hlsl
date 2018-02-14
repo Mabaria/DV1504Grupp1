@@ -60,10 +60,16 @@ float4 main(PS_IN input) : SV_TARGET
 
 		diffuse -= 0.2f; // Simple fix for ugly edges
 
-		if (alpha != 1.0f) // If it's going to blend, write it red
+		if (alpha != 1.0f) // If it's going to blend, turn it grey
 		{
 			ambient = float3(0.5f, 0.5f, 0.5f);
 		}
+
+
+		// Transparency in 3D text texture wont further shading (early exit)
+		float4 s = texture2d.Sample(ss, input.tex.xy);
+		if (s.a < 1.0f)
+			return s;
 
 	}
 	else // Everything else

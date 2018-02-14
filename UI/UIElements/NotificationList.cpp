@@ -23,7 +23,7 @@ NotificationList::NotificationList(Direct2D *direct2d, int posX, int posY)
 		(int)this->mTitle.GetTextBoxSize().bottom);
 	this->mTitle.SetFontSize(30);
 	this->mTitle.SetFontWeight(DWRITE_FONT_WEIGHT_ULTRA_BLACK);
-	this->mTitle.SetFontName(L"Times new roman");
+	this->mTitle.SetFontName(L"times new roman");
 	this->mTitle.SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
 }
 

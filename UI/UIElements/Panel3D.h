@@ -16,9 +16,10 @@ public:
 		int width, 
 		int height, 
 		int top, 
-		int left, 
+		int left,
 		HWND handle, 
-		LPCTSTR title);
+		LPCTSTR title,
+		bool movableCamera = false);
 	~Panel3D();
 	
 	D3D11& rGetDirect3D();
@@ -71,7 +72,7 @@ public:
 		_aligned_free(p);
 	}
 
-
+	//void SetCameraPosition()
 private:
 	D3D11 mDirect3D;
 	std::vector<MeshObject*> mpMeshObjects;
@@ -121,4 +122,5 @@ private:
 
 	const void UpdateMouse();
 	const bool UpdateCamera();
+	bool mMovableCamera;
 };
