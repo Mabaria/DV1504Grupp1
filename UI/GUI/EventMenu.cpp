@@ -181,10 +181,10 @@ void EventMenu::InitButtons()
 		this->mpPanel->GetBitmapByName("InjuryOff"),
 		"Injury");
 	this->mpPanel->AddButton(
-		this->mMenuWidth / 12,
-		this->mMenuWidth / 12,
+		this->mMenuWidth / 9,
+		this->mMenuWidth / 9,
 		0,
-		this->mMenuWidth - this->mMenuWidth / 12,
+		this->mMenuWidth - this->mMenuWidth / 9,
 		this->mpPanel->GetBitmapByName("Exit"),
 		"Exit");
 	this->mpPanel->GetButtonByName("Fire")->AddObserver(this);
