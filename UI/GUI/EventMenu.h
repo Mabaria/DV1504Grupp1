@@ -15,7 +15,7 @@ public:
 		EventLog *pEventLog,
 		LPCTSTR windowName,
 		Window *pWindow);
-	bool OpenAt(Room *pRoom, float panelX = 0.5f, float panelY = 0.5f);
+	bool OpenAt(Room *pRoom);
 	bool Update();
 	bool Draw() const;
 	virtual void Update(const Button* attribute);

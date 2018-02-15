@@ -62,9 +62,17 @@ namespace Testing
 		window.Open();
 		while (window.IsOpen())
 		{
+			if (Mouse::IsButtonPressed(Buttons::Right))
+			{
+				std::cout << "PRESSED" << std::endl;
+				eventMenu.OpenAt(nullptr);
+			}
+
 			window.Update();
 			eventMenu.Update();
 			eventMenu.Draw();
+
+			
 		}
 		return true;
 	}

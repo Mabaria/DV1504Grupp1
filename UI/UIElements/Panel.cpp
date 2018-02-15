@@ -170,6 +170,18 @@ const bool Panel::UpdateWindowSize()
 	return updated;
 }
 
+void Panel::UpdateWindowPos()
+{
+	SetWindowPos(
+		this->mPanelWindow,
+		HWND_TOP, // Z order, ignored by SWP_NOZORDER. 
+		this->mLeft,
+		this->mTop,
+		this->mWidth,
+		this->mHeight,
+		SWP_NOZORDER);
+}
+
 bool Panel::IsMouseInsidePanel()
 {
 	if (Mouse::IsButtonDown(Buttons::Left))
@@ -180,4 +192,19 @@ bool Panel::IsMouseInsidePanel()
 	GetCursorPos(&mouse_pos);
 	return PtInRect(&window_rect, mouse_pos); // if mouse is inside panel
 
+}
+
+bool Panel::IsVisible()
+{
+	return IsWindowVisible(this->mPanelWindow);
+}
+
+void Panel::Hide()
+{
+	ShowWindow(this->mPanelWindow, SW_HIDE);
+}
+
+void Panel::Show()
+{
+	ShowWindow(this->mPanelWindow, SW_SHOW);
 }
