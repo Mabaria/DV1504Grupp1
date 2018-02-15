@@ -18,6 +18,7 @@
 #include "../UI/UIElements/Test_TextBox.h"
 
 #include "../Logic/BoatTester.h"
+#include "../UI/GUI/EventMenu.h"
 
 namespace Testing
 {
@@ -47,12 +48,23 @@ namespace Testing
 		int window_width = 1280;
 		int window_height = 720;
 		Window window(L"EventMenu", window_width, window_height);
-		/*Panel2D eventMenu(
-			window_width,
-			window_height,
-			0,
+		EventLog eventLog;
 
-		);*/
+		EventMenu eventMenu;
+		eventMenu.Init(
+			window.GetClientSize().width,
+			window.GetClientSize().height,
+			&eventLog,
+			L"EventMenu",
+			&window);
+
+		window.Open();
+		while (window.IsOpen())
+		{
+			window.Update();
+			eventMenu.Update();
+			eventMenu.Draw();
+		}
 		return true;
 	}
 }
