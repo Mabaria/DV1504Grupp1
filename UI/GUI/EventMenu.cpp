@@ -38,7 +38,6 @@ bool EventMenu::Init(float parentWidth,
 		*pWindow,
 		windowName);
 
-
 	this->mpPanel->LoadImageToBitmap("../../Models/Button01.png", "InjuryOff");
 	this->mpPanel->LoadImageToBitmap("../../Models/Button02.png", "GasOff");
 	this->mpPanel->LoadImageToBitmap("../../Models/Button03.png", "WaterOff");
@@ -51,6 +50,7 @@ bool EventMenu::Init(float parentWidth,
 	
 	this->InitButtons();
 
+	//! DET GÅR INTE ATT GÖMMA FÖNSTRET I BÖRJAN.
 	this->mpPanel->Hide();
 
 	return true;
@@ -194,5 +194,4 @@ void EventMenu::InitButtons()
 	this->mpPanel->GetButtonByName("Water")->AddObserver(this);
 	this->mpPanel->GetButtonByName("Injury")->AddObserver(this);
 	this->mpPanel->GetButtonByName("Exit")->AddObserver(this);
-	//this->mpPanel->GetButtonByName("Injury")->SetOpacity(0.6f);
 }
