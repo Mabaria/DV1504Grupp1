@@ -80,6 +80,8 @@ bool EventMenu::OpenAt(Room *pRoom)
 	this->mpPanel->UpdateWindowPos();
 	this->mpPanel->Show();
 
+	this->mpActiveRoom = pRoom;
+
 	return true;
 }
 
