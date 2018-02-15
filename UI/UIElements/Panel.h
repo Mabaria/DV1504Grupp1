@@ -43,6 +43,8 @@ public:
 
 	const bool UpdateWindowSize();
 
+	bool IsMouseInsidePanel();
+
 protected:
 	int mWidth;
 	int mHeight;
@@ -60,7 +62,6 @@ protected:
 	LPCTSTR mTitle;
 
 
-	bool mIsMouseInsidePanel();
 
 private:
 };
