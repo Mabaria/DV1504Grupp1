@@ -59,7 +59,7 @@ void Room::InitFromDesc(RoomDesc desc)
 	this->mSensor.SetRoomIndex(desc.indexInBoat);
 	this->mSensor.SetEventLog(desc.pEventLog);
 	this->mSensor.SetInputTypes(desc.inputTypes);
-	this->mSensor.SetActiveEventIndex(desc.activeIndex);
+	this->mSensor.SetActiveEvent(desc.activeIndex, desc.pActiveEvent);
 }
 
 int Room::GetIndexInBoat() const
@@ -100,9 +100,9 @@ int Room::GetDeckIndex() const
 *	Log specific
 */
 
-void Room::SetActiveEventIndex(int index)
+void Room::SetActiveEvent(int index, ActiveEvent *pActiveEvent)
 {
-	this->mSensor.SetActiveEventIndex(index);
+	this->mSensor.SetActiveEvent(index, pActiveEvent);
 }
 
 void Room::SetEventLog(EventLog *pEventLog)
@@ -116,12 +116,12 @@ void Room::SetEventLog(EventLog *pEventLog)
 *	Event specific
 */
 
-void Room::AddAutoEvent(Event::Type type)
+void Room::AddSensorEvent(Event::Type type)
 {
 	this->mSensor.AutoTrigger(type);
 }
 
-void Room::AddPlotEvent(Event::Type type)
+void Room::AddPlotterEvent(Event::Type type)
 {
 	this->mSensor.PlotTrigger(type);
 }
@@ -134,6 +134,11 @@ void Room::AddInputType(Event::Type type)
 int Room::GetActiveEventIndex() const
 {
 	return this->mSensor.GetActiveEventIndex();
+}
+
+std::vector<LogEvent*> Room::GetActiveEvents() const
+{
+	return this->mSensor.GetActiveEvents();
 }
 
 

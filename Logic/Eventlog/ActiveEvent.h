@@ -1,6 +1,8 @@
 #pragma once
 
 #include <vector>
+#include "LogEvent.h"
+
 
 class ActiveEvent
 {
@@ -10,10 +12,14 @@ public:
 	~ActiveEvent();
 	
 	// Event specific
-	bool AddEvent(int index);
+	bool AddEvent(int index, LogEvent* pEvent);
 	bool ClearEvent(int index);
 	int GetEventCount() const;
-	int operator[](int index) const;
+	int GetEventIndexAt(int index) const;
+	std::vector<LogEvent*> GetActiveEvents() const;
+
+	void SetIndexInEventLog(int index);
+	int GetIndexInEventLog() const;
 
 	// Room specific
 	void SetRoomIndex(int index);
@@ -21,10 +27,17 @@ public:
 
 
 private:
+
+	struct EventInfo
+	{
+		int index;
+		LogEvent *pointer;
+	};
 	
 	// Event specific
-	std::vector<int> mEventIndices; /* Points to all events in the eventLog
-									that are active in the room */
+	std::vector<EventInfo> mEvents;
+	int mIndexInEventLog;
+
 	// Room specific
 	int mRoomIndex;
 };

@@ -62,14 +62,14 @@ int Sensor::AutoTrigger(Event::Type type)
 	if (!this->CanDetect(type))
 		return -1;
 
-	this->mActiveEventIndex = this->mpEventLog->AddEvent(type, this->mRoomIndex);
-	return this->mActiveEventIndex;
+	this->mpActiveEvent = this->mpEventLog->AddEvent(type, this->mRoomIndex);
+	return this->mpActiveEvent->GetIndexInEventLog();
 }
 
 int Sensor::PlotTrigger(Event::Type type)
 {
-	this->mActiveEventIndex = this->mpEventLog->AddEvent(type, this->mRoomIndex);
-	return this->mActiveEventIndex;
+	this->mpActiveEvent = this->mpEventLog->AddEvent(type, this->mRoomIndex);
+	return this->mpActiveEvent->GetIndexInEventLog();
 }
 
 
@@ -89,14 +89,32 @@ void Sensor::SetEventLog(EventLog *pEventLog)
 *	Event specific
 */
 
-void Sensor::SetActiveEventIndex(int index)
+void Sensor::SetActiveEvent(int index, ActiveEvent *pActiveEvent)
 {
 	this->mActiveEventIndex = index;
+	this->mpActiveEvent = pActiveEvent;
 }
 
 int Sensor::GetActiveEventIndex() const
 {
 	return this->mActiveEventIndex;
+}
+
+ActiveEvent* Sensor::GetActiveEventPointer() const
+{
+	return this->mpActiveEvent;
+}
+
+std::vector<LogEvent*> Sensor::GetActiveEvents() const
+{
+	// Sanity check
+	if (this->mpActiveEvent == nullptr)
+	{
+		std::vector<LogEvent*> emptyVector;
+		return emptyVector;
+	}
+
+	return this->mpActiveEvent->GetActiveEvents();
 }
 
 

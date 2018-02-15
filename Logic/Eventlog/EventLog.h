@@ -32,15 +32,18 @@ public:
 	~EventLog();
 
 	// Event Specific
-	int AddEvent(Event::Type type, int roomIndex);	/* Pushing an event at the
-																										 end of the list, returns
-																										 index of event in the
-																										 active log */
+	ActiveEvent* AddEvent(Event::Type type, int roomIndex);	/* Pushing an event
+																										at the end of the list,
+																										returns index of event in
+																										the active log */
 	bool ClearEvent(Event::Type type, int roomIndex);
 	std::vector<Event::Type> GetEvents(int roomIndex) const;
 	std::vector<Event::Type> GetEvents(std::string roomName) const;
 	int GetEventCount() const;
 	int GetActiveEventCount() const;
+
+	LogEvent* GetEventPointer(int index);
+	ActiveEvent* GetActiveEventPointer(int index);
 	
 	// Disk specific
 	void SaveToFile(std::string filePath);
@@ -50,6 +53,6 @@ private:
 
 	int GetRoomActiveEventIndex(int roomIndex) const;
 
-	std::vector<LogEvent> mLogEvents;	// Containing all events in the system
-	std::vector<ActiveEvent> mActiveEvents;
+	std::vector<LogEvent*> mpLogEvents;	// Containing all events in the system
+	std::vector<ActiveEvent*> mpActiveEvents;
 };

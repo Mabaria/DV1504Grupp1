@@ -27,8 +27,10 @@ public:
 	void SetEventLog(EventLog *pEventLog);
 
 	// Event specific
-	void SetActiveEventIndex(int index);
+	void SetActiveEvent(int index, ActiveEvent *pActiveEvent);
 	int GetActiveEventIndex() const;
+	ActiveEvent* GetActiveEventPointer() const;
+	std::vector<LogEvent*> GetActiveEvents() const;
 
 	// Room specific
 	void SetRoomIndex(int index);
@@ -46,6 +48,7 @@ private:
 
 	// Event specific
 	int mActiveEventIndex;
+	ActiveEvent *mpActiveEvent;
 	
 	// Room specific
 	int mRoomIndex;	// Index to the room this sensor is in

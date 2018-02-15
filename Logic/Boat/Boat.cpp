@@ -120,6 +120,14 @@ Room* Boat::GetRoomPointer(std::string roomName, std::string deckName)
 	return nullptr;
 }
 
+Room* Boat::GetRoomPointerAt(int index)
+{
+	if (index < 0 || index > (int)this->mpRooms.size())
+		return nullptr;
+
+	return this->mpRooms[index];
+}
+
 Room* Boat::GetPickedRoom(Ray ray)
 {
 	float tMain, t;
@@ -194,7 +202,7 @@ void Boat::CreateAutoEvent(Event::Type type,
 	std::string deckName)
 {
 	int index = this->GetRoomIndex(roomName, deckName);
-	this->mpRooms[index]->AddAutoEvent(type);
+	this->mpRooms[index]->AddSensorEvent(type);
 }
 
 void Boat::CreatePlotEvent(Event::Type type,
@@ -202,7 +210,7 @@ void Boat::CreatePlotEvent(Event::Type type,
 	std::string deckName)
 {
 	int index = this->GetRoomIndex(roomName, deckName);
-	this->mpRooms[index]->AddPlotEvent(type);
+	this->mpRooms[index]->AddPlotterEvent(type);
 }
 
 void Boat::ClearEvent(Event::Type type,

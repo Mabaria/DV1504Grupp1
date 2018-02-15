@@ -15,25 +15,30 @@ ActiveEvent::~ActiveEvent()
 *	Event specific
 */
 
-bool ActiveEvent::AddEvent(int index)
+bool ActiveEvent::AddEvent(int index, LogEvent* pEvent)
 {
-	for (unsigned int i = 0; i < this->mEventIndices.size(); i++)
+	for (int i = 0; i < (int)this->mEvents.size(); i++)
 	{
-		if (this->mEventIndices[i] == index)
+		if (this->mEvents[i].index == index)
 			return false; // Event already exists
 	}
 
-	this->mEventIndices.push_back(index);
+	EventInfo newEvent;
+
+	newEvent.index = index;
+	newEvent.pointer = pEvent;
+
+	this->mEvents.push_back(newEvent);
 	return true;
 }
 
 bool ActiveEvent::ClearEvent(int index)
 {
-	for (unsigned int i = 0; i < this->mEventIndices.size(); i++)
+	for (int i = 0; i < (int)this->mEvents.size(); i++)
 	{
-		if (this->mEventIndices[i] == index)
+		if (this->mEvents[i].index == index)
 		{
-			this->mEventIndices.erase(this->mEventIndices.begin() + i);
+			this->mEvents.erase(this->mEvents.begin() + i);
 			return true;
 		}
 	}
@@ -42,12 +47,34 @@ bool ActiveEvent::ClearEvent(int index)
 
 int ActiveEvent::GetEventCount() const
 {
-	return (int)this->mEventIndices.size();
+	return (int)this->mEvents.size();
 }
 
-int ActiveEvent::operator[](int index) const
+int ActiveEvent::GetEventIndexAt(int index) const
 {
-	return this->mEventIndices[index];
+	return this->mEvents[index].index;
+}
+
+std::vector<LogEvent*> ActiveEvent::GetActiveEvents() const
+{
+	std::vector<LogEvent*> activeEvents;
+
+	for (int i = 0; i < (int)this->mEvents.size(); i++)
+	{
+		activeEvents.push_back(this->mEvents[i].pointer);
+	}
+
+	return activeEvents;
+}
+
+void ActiveEvent::SetIndexInEventLog(int index)
+{
+	this->mIndexInEventLog = index;
+}
+
+int ActiveEvent::GetIndexInEventLog() const
+{
+	return this->mIndexInEventLog;
 }
 
 

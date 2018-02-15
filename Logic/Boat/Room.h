@@ -12,6 +12,7 @@ struct RoomDesc
 	int indexInDeck;
 	int deckIndex;
 	int activeIndex;
+	ActiveEvent *pActiveEvent;
 	std::string name;
 	std::string deckName;
 	std::vector<Event::Type> inputTypes;
@@ -44,14 +45,21 @@ public:
 	int GetDeckIndex() const;
 
 	// Log specific
-	void SetActiveEventIndex(int index);
+	void SetActiveEvent(int index, ActiveEvent *pActiveEvent);
 	void SetEventLog(EventLog *pEventLog);
 
 	// Event specific
-	void AddAutoEvent(Event::Type type);
-	void AddPlotEvent(Event::Type type);
+	void AddSensorEvent(Event::Type type);	/* This function will only add
+											   event if sensor is capable
+											   of detecting the event type*/
+
+	void AddPlotterEvent(Event::Type type);	/* This function will add the
+											   event without checking the
+											   sensor */
+
 	void AddInputType(Event::Type type);
 	int GetActiveEventIndex() const;
+	std::vector<LogEvent*> GetActiveEvents() const;
 
 	// Disk specific
 	std::string WriteString() const;

@@ -33,6 +33,7 @@ public:
 		std::string deckName,
 		std::vector<Event::Type> inputs);
 	Room* GetRoomPointer(std::string roomName, std::string deckName);
+	Room* GetRoomPointerAt(int index);
 	Room* GetPickedRoom(Ray ray);
 
 
