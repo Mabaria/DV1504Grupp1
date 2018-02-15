@@ -235,7 +235,7 @@ void System::mAddEvent(Room * room)
 }
 
 void System::mRemoveEvent(Room * room)
-{
+{//! Does not work yo.
 	std::vector<LogEvent*> events_in_room = room->GetActiveEvents();
 	this->mpActiveLogPanel->RemoveNotification(room, events_in_room.back());
 
@@ -472,48 +472,14 @@ void System::mSetupModels()
 
 void System::mSetupBoat()
 {
-	/*this->mBoat.SetModelName("båtnamnplaceholder");
-	std::vector<Event::Type> inputs = { 
-		Event::Fire, 
-		Event::Injury, 
-		Event::Water, 
-		Event::Gas };
-
-	this->mBoat.AddDeck("Bryggdäck");
-	this->mBoat.AddRoom("slC", "Bryggdäck", inputs);
-	this->mBoat.AddRoom("SkyC", "Bryggdäck", inputs);	
-	this->mBoat.AddRoom("Brygga", "Bryggdäck", inputs);
-
-	this->mBoat.AddDeck("Huvuddäck");	
-	this->mBoat.AddRoom("Skyddäck", "Huvuddäck", inputs);	
-	this->mBoat.AddRoom("Maskinrum", "Huvuddäck", inputs);	
-	this->mBoat.AddRoom("Gång3", "Huvuddäck", inputs);
-	this->mBoat.AddRoom("Tambur", "Huvuddäck", inputs);	
-	this->mBoat.AddRoom("Omformarrum", "Huvuddäck", inputs);
-	this->mBoat.AddRoom("CBRN", "Huvuddäck", inputs);	
-
-	this->mBoat.AddDeck("Trossdäck");	
-	this->mBoat.AddRoom("Ammdurk", "Trossdäck", inputs);	
-	this->mBoat.AddRoom("Lastrum", "Trossdäck", inputs);	
-	this->mBoat.AddRoom("Maskinrum", "Trossdäck", inputs);	
-	this->mBoat.AddRoom("MC", "Trossdäck", inputs);	
-	this->mBoat.AddRoom("Gång1", "Trossdäck", inputs);	
-	this->mBoat.AddRoom("Apparatrum", "Trossdäck", inputs);	
-	this->mBoat.AddRoom("Gång2", "Trossdäck", inputs);	
-	this->mBoat.AddRoom("Hjälpmaskinrum", "Trossdäck", inputs);	
-	this->mBoat.AddRoom("Byssa", "Trossdäck", inputs);	
-	this->mBoat.AddRoom("SB Mäss", "Trossdäck", inputs);	
-	this->mBoat.AddRoom("Skyddsrum", "Trossdäck", inputs);*/
-
 	this->mBoat.ReadFile("../../SaveFiles/data.boat");
-
 
 	// Creating the mesh list that 
 	Mesh mesh_list[] =
 	{
-		*this->mBounds[0],
-		*this->mBounds[1],
-		*this->mBounds[2],
+		*this->mBounds[0], // Bryggdäck
+		*this->mBounds[1], // Huvuddäck
+		*this->mBounds[2], // Trossdäck
 		*this->mFloors[0],
 		*this->mFloors[1],
 		*this->mFloors[2]
