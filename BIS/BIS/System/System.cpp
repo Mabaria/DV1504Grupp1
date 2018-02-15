@@ -162,8 +162,41 @@ void System::mHandleInput()
 	{
 		if (this->mpTopViewPanel->IsMouseInsidePanel())
 		{
-			POINT mouse_pos;
-			GetCursorPos(&mouse_pos);
+			Picking::GetWorldRay(
+				this->mpTopViewCamera,
+				Mouse::GetXPercentage(),
+				Mouse::GetYPercentage(),
+				this->mRay);
+
+			Room *picked_room = this->mBoat.GetPickedRoom(this->mRay);
+			if (picked_room)
+			{
+				LogEvent *temp = new LogEvent(Event::Water);
+				std::string room_name = picked_room->GetName();
+				std::string deck_name = picked_room->GetDeckName();
+				this->mBoat.CreateAutoEvent(
+					temp->GetType(), 
+					room_name,
+					deck_name);
+
+				//this->mEventLog.AddEvent(temp->GetType(), picked_room->GetIndexInBoat());
+				//this->mpActiveLogPanel->AddNotification(picked_room, temp);
+				this->mAddEvent(picked_room, temp);
+			}
+		}
+		else if (this->mpControlPanel->IsMouseInsidePanel())
+		{
+			// Todo: Handle control panel stuff.
+		}
+		else if (this->mpActiveLogPanel->IsMouseInsidePanel())
+		{
+			// Todo: Handle clicking notification object stuff.
+		}
+	}
+	if (Mouse::IsButtonPressed(Buttons::Right))
+	{
+		if (this->mpTopViewPanel->IsMouseInsidePanel())
+		{
 			Picking::GetWorldRay(
 				this->mpTopViewCamera,
 				Mouse::GetXPercentage(),
@@ -174,18 +207,38 @@ void System::mHandleInput()
 			if (picked_room)
 			{
 				LogEvent *temp = new LogEvent(Event::Fire);
-				this->mEventLog.AddEvent(temp->GetType(), picked_room->GetIndexInBoat());
-				this->mpActiveLogPanel->AddNotification(picked_room, temp);
+				std::string room_name = picked_room->GetName();
+				std::string deck_name = picked_room->GetDeckName();
+				this->mBoat.CreateAutoEvent(
+					temp->GetType(),
+					room_name,
+					deck_name);
 
+				//this->mEventLog.AddEvent(temp->GetType(), picked_room->GetIndexInBoat());
+				//this->mpActiveLogPanel->AddNotification(picked_room, temp);
+				this->mAddEvent(picked_room, temp);
 			}
 		}
 	}
+
 }
 
 void System::mAddEvent(Room * room, LogEvent * logEvent)
 {
 	this->mpActiveLogPanel->AddNotification(room, logEvent);
-	this->mpTopViewPanel->rGetMeshObject(room->GetDeckName());
+	std::string test = room->GetDeckName();
+	test.replace(test.begin() + 5, test.end(), "bounds");
+	MeshObject *picked_deck = this->mpTopViewPanel->rGetMeshObject(test);
+	int index_in_deck = room->GetIndexInDeck();
+	std::vector<Event::Type> events_in_room = this->mBoat.GetEventsInRoom(
+		room->GetName(), 
+		room->GetDeckName());
+	EventData event_data = { 0 };
+	for (int i = 0; (i < (int)events_in_room.size()) && (i < 4); i++)
+	{
+		event_data.slots[i] = events_in_room[i] + 1;
+	}
+	picked_deck->SetEvent(event_data, this->mpTopViewPanel->rGetDirect3D().GetContext(), index_in_deck);
 }
 
 void System::mRemoveEvent(Room * room, LogEvent * logEvent)
@@ -202,7 +255,6 @@ void System::mSetupPanels()
 		{ 0.000001f, 0.0f, 0.0f, 0.0f },
 		XM_PI / 15.0f, 16.0f / 9.0f,
 		0.1f, 25.0f, LOOK_AT, PERSPECTIVE);
-	this->mpTopViewPanel->SetCamera(this->mpTopViewCamera);
 
 	this->mpSideViewCamera = new Camera(
 		{ -0.0251480788f, 1.28821635f, 3.78684092f, 0.0f },
@@ -232,7 +284,7 @@ void System::mSetupPanels()
 		0, 
 		"Kontrollpanel", 
 		"title");
-	this->mpControlPanel->GetTextBoxByName("title")->SetFontSize(40);
+	this->mpControlPanel->GetTextBoxByName("title")->SetFontSize(30);
 	this->mpControlPanel->GetTextBoxByName("title")->SetFontWeight
 	(DWRITE_FONT_WEIGHT_ULTRA_BLACK);
 	this->mpControlPanel->GetTextBoxByName("title")->SetTextAlignment
@@ -277,9 +329,9 @@ void System::mSetupModels()
 	this->mpTopViewPanel->AddMeshObject(&floor_brygg);
 	this->mpTopViewPanel->AddMeshObject(&floor_huvud);
 	this->mpTopViewPanel->AddMeshObject(&floor_tross);
-	this->mpTopViewPanel->AddMeshObject(&bound_brygg);//, L"../../Models/BlendColor.dds", false);											 /
-	this->mpTopViewPanel->AddMeshObject(&bound_huvud);//, L"../../Models/BlendColor.dds", false);											 /
-	this->mpTopViewPanel->AddMeshObject(&bound_tross);//, L"../../Models/BlendColor.dds", false);
+	this->mpTopViewPanel->AddMeshObject(&bound_brygg, L"../../Models/BlendColor.dds", true);
+	this->mpTopViewPanel->AddMeshObject(&bound_huvud, L"../../Models/BlendColor.dds", true);
+	this->mpTopViewPanel->AddMeshObject(&bound_tross, L"../../Models/BlendColor.dds", true);
 	
 
 	this->mpTopViewPanel->AddMeshObject(
@@ -412,6 +464,7 @@ void System::mSetupBoat()
 	this->mBoat.AddRoom("Byssa", "Trossdäck", inputs);	
 	this->mBoat.AddRoom("SB Mäss", "Trossdäck", inputs);	
 	this->mBoat.AddRoom("Skyddsrum", "Trossdäck", inputs);*/
+
 	this->mBoat.ReadFile("../../SaveFiles/data.boat");
 
 	// Creating the mesh list that 

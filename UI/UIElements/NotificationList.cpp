@@ -59,7 +59,7 @@ void NotificationList::AddNotification(
 
 	// Updates the number of events in the title.
 	this->mTitle.SetText(
-		"Aktiv Logg\nAntal: " + std::to_string(this->mObjects.size()));
+		"Aktiv Logg | Antal: " + std::to_string(this->mObjects.size()));
 }
 
 bool NotificationList::RemoveNotification(Room * room, LogEvent * event)
@@ -102,7 +102,7 @@ bool NotificationList::RemoveNotification(Room * room, LogEvent * event)
 
 			// Updates the number of events in the title.
 			this->mTitle.SetText(
-				"Aktiv Logg\nAntal: " + std::to_string(this->mObjects.size()));
+				"Aktiv Logg | Antal: " + std::to_string(this->mObjects.size()));
 		}
 	}
 	return result;
