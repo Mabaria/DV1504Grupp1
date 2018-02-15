@@ -284,7 +284,7 @@ void System::mSetupPanels()
 {
 	// Creating and setting the cameras.
 	this->mpTopViewCamera = new Camera (
-		{ -0.02f, 6.19f, -2.99f, 0.0f },
+		{ -0.02f, 6.19f, 2.99f, 0.0f },
 		{ 0.0f, 1.0f, 0.0f, 0.0f },
 		{ 0.000001f, 0.0f, 0.0f, 0.0f },
 		XM_PI / 15.0f, 16.0f / 9.0f,
@@ -423,30 +423,30 @@ void System::mSetupModels()
 		Scale(scale * 2.0f, scale * 1.2f, scale * 3.5f);
 
 	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor01")->
-		Rotate(XM_PI / 2.0f, 0.0f, 0.0f);
+		Rotate(XM_PI / 2.0f, XM_PI, 0.0f);
 
 	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor01")->
-		Translate(0.65f, 0.0f, -0.5f);
+		Translate(0.85f, 0.0f, -0.5f);
 
 
 	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor1")->
 		Scale(scale * 1.0f, scale * 1.2f, scale * 3.5f);
 
 	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor1")->
-		Rotate(XM_PI / 2.0, 0.0f, 0.0f);
+		Rotate(XM_PI / 2.0, XM_PI, 0.0f);
 
 	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor1")->
-		Translate(0.75f, 0.0f, -0.05f);
+		Translate(0.85f, 0.0f, 0.05f);
 
 
 	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor2")->
 		Scale(scale * 1.0f, scale * 1.2f, scale * 3.5f);
 
 	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor2")->
-		Rotate(XM_PI / 2.0f, 0.0f, 0.0f);
+		Rotate(XM_PI / 2.0f, XM_PI, 0.0f);
 
 	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor2")->
-		Translate(0.75f, 0.0f, 0.45f);
+		Translate(0.85f, 0.0f, 0.55f);
 
 	
 

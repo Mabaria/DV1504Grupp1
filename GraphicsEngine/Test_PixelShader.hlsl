@@ -109,14 +109,6 @@ float4 main(PS_IN input) : SV_TARGET
 		//ambient = 0.0f;
 	}
 
-
-	// FOG
-	//float depthValue = pow(input.pos.z + 0.01f, 35.0f);
-	//
-	//float limit = 0.3f;	 // Limit brightness
-	//if (depthValue > limit)
-	//depthValue = limit;
-
 	return float4(saturate(diffuse + ambient), alpha);
 }
 
