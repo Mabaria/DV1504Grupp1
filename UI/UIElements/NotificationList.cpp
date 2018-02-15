@@ -40,26 +40,39 @@ void NotificationList::AddNotification(
 	Room * room, 
 	LogEvent * event)
 {
-	// Creates a new notification object and pushes it to the vector along
-	// with the number of objects in the vector for indexing.
-	this->mObjects.push_back(new NotificationObject(
-		room, 
-		event, 
-		direct2d, 
-		(int)this->mObjects.size() + 1));
+	bool new_event = true;
+	for (int i = 0; i < (int)this->mObjects.size() && new_event; i++)
+	{
+		if ((room->GetName() == this->mObjects[i]->GetRoomName()) &&
+			(room->GetDeckName() == this->mObjects[i]->GetDeckName()) &&
+			(event->GetType() == this->mObjects[i]->GetEventType()))
+		{
+			new_event = false;
+		}
+	}
+	if (new_event)
+	{
+		// Creates a new notification object and pushes it to the vector 
+		// along with the number of objects in the vector for indexing.
+		this->mObjects.push_back(new NotificationObject(
+			room,
+			event,
+			direct2d,
+			(int)this->mObjects.size() + 1));
 
-	// Moves the object 2 pixels in x for looks, and in y based on the
-	// number of objects in the list plus an offset for looks plus the
-	// height of the title text box.
-	this->mObjects.back()->Move(
-		2, 
-		((int)this->mObjects.size() - 1)
-		* (this->mObjects[0]->GetHeight() + this->mSpace) 
-		+ (int)this->mTitle.GetTextBoxSize().bottom);
+		// Moves the object 2 pixels in x for looks, and in y based on the
+		// number of objects in the list plus an offset for looks plus the
+		// height of the title text box.
+		this->mObjects.back()->Move(
+			2,
+			((int)this->mObjects.size() - 1)
+			* (this->mObjects[0]->GetHeight() + this->mSpace)
+			+ (int)this->mTitle.GetTextBoxSize().bottom);
 
-	// Updates the number of events in the title.
-	this->mTitle.SetText(
-		"Aktiv Logg | Antal: " + std::to_string(this->mObjects.size()));
+		// Updates the number of events in the title.
+		this->mTitle.SetText(
+			"Aktiv Logg | Antal: " + std::to_string(this->mObjects.size()));
+	}
 }
 
 bool NotificationList::RemoveNotification(Room * room, LogEvent * event)

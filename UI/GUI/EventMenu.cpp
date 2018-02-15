@@ -24,7 +24,7 @@ bool EventMenu::Init(float parentWidth,
 	float parentHeight,
 	EventLog *pEventLog,
 	LPCTSTR windowName,
-	Window *pWindow)
+	HWND *pWindow)
 {
 	this->mParentPanelWidth = parentWidth;
 	this->mParentPanelHeight = parentHeight;
@@ -35,8 +35,9 @@ bool EventMenu::Init(float parentWidth,
 		this->mMenuHeight,									// Height
 		this->mParentPanelHeight / 2 - this->mMenuHeight / 2,	// Top
 		this->mParentPanelWidth / 2 - this->mMenuWidth / 2,		// Left
-		pWindow->GetWindow(),
+		*pWindow,
 		windowName);
+	this->mpPanel->Hide();
 
 	this->mpPanel->LoadImageToBitmap("../../Models/Button01.png", "InjuryOff");
 	this->mpPanel->LoadImageToBitmap("../../Models/Button02.png", "GasOff");
@@ -49,9 +50,6 @@ bool EventMenu::Init(float parentWidth,
 	this->mpPanel->LoadImageToBitmap("../../Models/Exit.png", "Exit");
 	
 	this->InitButtons();
-
-	//! Uncomment this later
-	this->mVisible = true;
 
 	return true;
 }
@@ -93,30 +91,41 @@ bool EventMenu::Update()
 
 bool EventMenu::Draw() const
 {
-	if (this->mVisible)
-		this->mpPanel->Draw();
-	else
-		std::cout << "I'm the invisible man" << std::endl;
+	this->mpPanel->Draw();
 	return true;
 }
 
-void EventMenu::Update(const Button *attribute)
+bool EventMenu::IsMouseInsidePanel()
+{
+	return this->mpPanel->IsMouseInsidePanel();
+}
+
+bool EventMenu::IsVisible()
+{
+	return this->mpPanel->IsVisible();
+}
+
+void EventMenu::Update( Button *attribute)
 {
 	if (this->mpPanel->IsVisible())
 	{
 		std::cout << "Clicked on ";
 		std::string hello = attribute->GetName();
-		if (hello.compare("Fire") == 0)
-			std::cout << "FIRE";
-		else if (hello.compare("Gas") == 0)
-			std::cout << "Gas";
-		if (hello.compare("Water") == 0)
-			std::cout << "Water";
-		else if (hello.compare("Injury") == 0)
-			std::cout << "Injury";
-		else if (hello.compare("Exit") == 0)
+		if (hello.compare("Exit") == 0)
 		{
 			this->mpPanel->Hide();
+		}
+		else
+		{
+			if (hello.compare("Fire") == 0)
+				this->mpActiveRoom->AddPlotterEvent(Event::Fire);
+			else if (hello.compare("Gas") == 0)
+				this->mpActiveRoom->AddPlotterEvent(Event::Gas);
+			if (hello.compare("Water") == 0)
+				this->mpActiveRoom->AddPlotterEvent(Event::Water);
+			else if (hello.compare("Injury") == 0)
+				this->mpActiveRoom->AddPlotterEvent(Event::Injury);
+			this->NotifyObservers(this->mpActiveRoom);
 		}
 	}
 }

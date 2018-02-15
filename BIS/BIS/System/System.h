@@ -5,7 +5,7 @@
 #include "../../../Logic/Boat/Boat.h"
 #include "../../../GraphicsEngine/Quad.h"
 #include "../../../IO/Picking.h"
-
+#include "../../../UI/GUI/EventMenu.h"
 
 /* TODO:
 *Picking
@@ -16,13 +16,15 @@
 
 
 
-class System
+class System : public Observer<Room>
 {
 public:
 	System();
 	~System();
 	void BuildGraphicalUserInterface(const std::wstring windowName, const int windowWidth, const int windowHeight);
 	void Run();
+	virtual void Update( Room *pickedRoom);
+
 
 private:
 	void mUpdate();
@@ -38,7 +40,7 @@ private:
 
 	Panel2D *mpControlPanel;
 	Panel2D *mpActiveLogPanel;
-	Panel2D *mpMenuPanel;
+	EventMenu *mpMenuPanel;
 			
 	Panel3D *mpSideViewPanel;
 	Panel3D *mpTopViewPanel;

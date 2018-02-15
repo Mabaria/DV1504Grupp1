@@ -143,7 +143,7 @@ public:
 
 	void SetProjectionMode(const PROJECTION_MODE new_projection_mode);
 
-	void Update(Button* attribute) override;
+	void Update(Button* attribute);
 
 private:
 	DirectX::XMVECTOR mCameraPosition;

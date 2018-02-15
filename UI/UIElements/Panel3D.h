@@ -60,7 +60,7 @@ public:
 	const void UpdateMatrixBuffer(int index);
 
 	const void SetCamera(Camera *camera);
-	void Update(Button* attribute) override;
+	void Update(Button* attribute);
 
 	void * operator new(size_t i) // To make sure it is 16 bit aligned
 	{

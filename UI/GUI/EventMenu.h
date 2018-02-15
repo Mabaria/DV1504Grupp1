@@ -4,7 +4,7 @@
 #include "../../Logic/Boat/Room.h"
 #include "../../UI/UIElements/Panel2D.h"
 #include "../../IO/ObserverPattern/Observer.h"
-class EventMenu : public Observer<Button>
+class EventMenu : public Observer<Button>, public Observable<Room>
 {
 public:
 	EventMenu();
@@ -14,11 +14,15 @@ public:
 		float parentHeight,
 		EventLog *pEventLog,
 		LPCTSTR windowName,
-		Window *pWindow);
+		HWND *pWindow);
 	bool OpenAt(Room *pRoom);
 	bool Update();
 	bool Draw() const;
-	virtual void Update(const Button* attribute);
+
+	bool IsMouseInsidePanel();
+	bool IsVisible();
+
+	virtual void Update( Button* attribute);
 
 private:
 	int mMenuWidth, mMenuHeight;
