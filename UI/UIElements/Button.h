@@ -19,14 +19,16 @@ public:
 		int left,
 		int top,
 		int right,
-		int bottom);
+		int bottom,
+		std::string name = "");
 	Button(
 		Direct2D *D2D1Panel,
 		ID2D1Bitmap* bitmapPointer,
 		int left,
 		int top,
 		int right,
-		int bottom);
+		int bottom,
+		std::string name = "");
 	~Button();
 
 	const std::wstring StrToWstr(std::string str);
@@ -56,6 +58,7 @@ public:
 	BUTTON_STATE GetButtState() const;
 
 	void SetOpacity(float opacity);
+	std::string GetName() const;
 private:
 	
 	Direct2D *D2D1Panel;
@@ -80,4 +83,5 @@ private:
 	void mUpdateBoundingBox();
 
 	bool mBitmapLoadedByFilePath;
+	std::string mName;
 };

@@ -234,22 +234,34 @@ void System::mSetupPanels()
 	this->mpControlPanel->LoadImageToBitmap(
 		"../../Models/Button01.png",
 		"Injury");
+	this->mpControlPanel->LoadImageToBitmap(
+		"../../Models/Button02.png",
+		"Gas");
+	this->mpControlPanel->LoadImageToBitmap(
+		"../../Models/Button03.png",
+		"Water");
+	this->mpControlPanel->LoadImageToBitmap(
+		"../../Models/Button04.png",
+		"Fire");
+	this->mpControlPanel->LoadImageToBitmap(
+		"../../Models/Button05.png",
+		"Reset");
 
 
-	this->mpControlPanel->AddButton(70, 70, 60, 20, "../../Models/Button01.png", "Injury");
-	this->mpControlPanel->AddButton(70, 70, 60, 95, "../../Models/Button02.png", "Gas");
-	this->mpControlPanel->AddButton(70, 70, 60, 170, "../../Models/Button03.png", "Water");
+	this->mpControlPanel->AddButton(70, 70, 60, 20,
+		this->mpControlPanel->GetBitmapByName("Injury"), "Injury");
+	this->mpControlPanel->AddButton(70, 70, 60, 95,
+		this->mpControlPanel->GetBitmapByName("Gas"), "Gas");
+	this->mpControlPanel->AddButton(70, 70, 60, 170,
+		this->mpControlPanel->GetBitmapByName("Water"), "Water");
 	this->mpControlPanel->AddButton(70, 70, 60, 245,
-		this->mpControlPanel->GetBitmapByName("Injury"), "Fire");
+		this->mpControlPanel->GetBitmapByName("Fire"), "Fire");
 	this->mpControlPanel->AddButton(70, 70, 60, 340,
-		/*(this->mpControlPanel->GetHeight() - 140) / 2,
-		this->mpControlPanel->GetWidth() - 140,*/
-		"../../Models/Button05.png", "Reset");
+		this->mpControlPanel->GetBitmapByName("Reset"), "Reset");
 
-	this->mpControlPanel->GetButtonByName("Gas")->
-SetBitmap(this->mpControlPanel->GetBitmapByName("Injury"));
 
-	this->mpControlPanel->GetButtonByName("Reset")->AddObserver(this->mpSideViewPanel);
+	this->mpControlPanel->GetButtonByName("Reset")->
+		AddObserver(this->mpSideViewPanel);
 
 	// Setting up the active log panel.
 	this->mpActiveLogPanel->SetNotificationList(0, 0);

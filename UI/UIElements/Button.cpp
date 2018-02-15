@@ -6,8 +6,10 @@ Button::Button(
 	int left,
 	int top,
 	int right,
-	int bottom)
+	int bottom,
+	std::string name)
 {
+	this->mName = name;
 	this->mpBitMap = nullptr;
 	this->mFilePath = "";
 	this->mWidth = 0.0f;
@@ -39,9 +41,11 @@ Button::Button(
 	int left,
 	int top,
 	int right,
-	int bottom)
+	int bottom,
+	std::string name)
 {
 	this->mpBitMap = bitmapPointer;
+	this->mName = name;
 
 	this->mWidth = 0.0f;
 	this->mBoundingBoxPercentage.left = 0.0f;
@@ -381,6 +385,11 @@ BUTTON_STATE Button::GetButtState() const
 void Button::SetOpacity(float opacity)
 {
 	this->mOpacity = opacity;
+}
+
+std::string Button::GetName() const
+{
+	return this->mName;
 }
 
 void Button::ReleaseCOM(IUnknown *object)

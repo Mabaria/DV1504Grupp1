@@ -66,7 +66,8 @@ void Panel2D::AddButton(
 		left,
 		top,
 		left + width,
-		top + height);
+		top + height,
+		buttonName);
 	this->mButtonVector.push_back(newButton); // Add button
 }
 
@@ -78,7 +79,8 @@ void Panel2D::AddButton(int width, int height, int top, int left, ID2D1Bitmap * 
 		left,
 		top,
 		left + width,
-		top + height);
+		top + height,
+		buttonName);
 	this->mButtonVector.push_back(newButton); // Add button
 }
 
