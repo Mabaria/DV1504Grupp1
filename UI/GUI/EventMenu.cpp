@@ -110,24 +110,41 @@ void EventMenu::Update( Button *attribute)
 	if (this->mpPanel->IsVisible())
 	{
 		std::cout << "Clicked on ";
-		std::string hello = attribute->GetName();
-		if (hello.compare("Exit") == 0)
+		std::string button_name = attribute->GetName();
+		if (button_name.compare("Exit") == 0)
 		{
 			this->mpPanel->Hide();
 		}
 		else
 		{
-			if (hello.compare("Fire") == 0)
+			if (button_name.compare("Fire") == 0)
+			{
 				this->mpActiveRoom->AddPlotterEvent(Event::Fire);
-			else if (hello.compare("Gas") == 0)
+				this->mLastClicked = Event::Fire;
+			}
+			else if (button_name.compare("Gas") == 0)
+			{
 				this->mpActiveRoom->AddPlotterEvent(Event::Gas);
-			if (hello.compare("Water") == 0)
+				this->mLastClicked = Event::Gas;
+			}
+			if (button_name.compare("Water") == 0)
+			{
 				this->mpActiveRoom->AddPlotterEvent(Event::Water);
-			else if (hello.compare("Injury") == 0)
+				this->mLastClicked = Event::Water;
+			}
+			else if (button_name.compare("Injury") == 0)
+			{
 				this->mpActiveRoom->AddPlotterEvent(Event::Injury);
+				this->mLastClicked = Event::Injury;
+			}
 			this->NotifyObservers(this->mpActiveRoom);
 		}
 	}
+}
+
+Event::Type EventMenu::GetLastClicked()
+{
+	return this->mLastClicked;
 }
 
 void EventMenu::InitButtons()

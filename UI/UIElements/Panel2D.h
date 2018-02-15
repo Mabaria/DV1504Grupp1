@@ -61,8 +61,8 @@ public:
 
 	// Notification object/list stuff.
 	void SetNotificationList(int posX, int posY);
-	void AddNotification(Room *room, LogEvent *event);
-	bool RemoveNotification(Room *room, LogEvent *event);
+	bool AddNotification(Room *room, LogEvent *event);
+	bool RemoveNotification(Room *room, Event::Type type);
 
 
 	void ScrollActiveLog();

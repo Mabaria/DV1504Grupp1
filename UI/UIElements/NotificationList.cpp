@@ -21,7 +21,7 @@ NotificationList::NotificationList(Direct2D *direct2d, int posX, int posY)
 		0,
 		(int)this->mTitle.GetTextBoxSize().right,
 		(int)this->mTitle.GetTextBoxSize().bottom);
-	this->mTitle.SetFontSize(30);
+	this->mTitle.SetFontSize(28);
 	this->mTitle.SetFontWeight(DWRITE_FONT_WEIGHT_ULTRA_BLACK);
 	this->mTitle.SetFontName(L"times new roman");
 	this->mTitle.SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
@@ -35,7 +35,7 @@ NotificationList::~NotificationList()
 	}
 }
 
-void NotificationList::AddNotification(
+bool NotificationList::AddNotification(
 	Direct2D * direct2d, 
 	Room * room, 
 	LogEvent * event)
@@ -73,16 +73,16 @@ void NotificationList::AddNotification(
 		this->mTitle.SetText(
 			"Aktiv Logg | Antal: " + std::to_string(this->mObjects.size()));
 	}
+	return new_event;
 }
 
-bool NotificationList::RemoveNotification(Room * room, LogEvent * event)
+bool NotificationList::RemoveNotification(Room * room, Event::Type type)
 {
 	// Returns false if the notification object is not found.
 	bool result = false;
 
 	std::string room_name = room->GetName();
 	std::string deck_name = room->GetDeckName();
-	Event::Type event_type = event->GetType();
 
 	// Searching through the vector until 
 	// a matching notification object is found.
@@ -90,7 +90,7 @@ bool NotificationList::RemoveNotification(Room * room, LogEvent * event)
 	{
 		if ((room_name == this->mObjects[i]->GetRoomName()) &&
 			(deck_name == this->mObjects[i]->GetDeckName()) &&
-			(event_type == this->mObjects[i]->GetEventType()))
+			(type == this->mObjects[i]->GetEventType()))
 		{
 			result = true;
 

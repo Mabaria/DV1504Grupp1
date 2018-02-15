@@ -34,6 +34,8 @@ private:
 	void mAddEvent(Room *room);
 	void mRemoveEvent(Room *room);
 
+	void mUpdateEvents(Room *room);
+
 	void mSetupPanels();
 	void mSetupModels();
 	void mSetupBoat();

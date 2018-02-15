@@ -199,17 +199,17 @@ void Panel2D::SetNotificationList(int posX, int posY)
 	this->mNotificationListIsActive = true;
 }
 
-void Panel2D::AddNotification(Room * room, LogEvent * event)
+bool Panel2D::AddNotification(Room * room, LogEvent * event)
 {
-	this->mNotificationList->AddNotification(
+	return this->mNotificationList->AddNotification(
 		this->mDirect2D, 
 		room, 
 		event);
 }
 
-bool Panel2D::RemoveNotification(Room * room, LogEvent * event)
+bool Panel2D::RemoveNotification(Room * room, Event::Type type)
 {
-	return this->mNotificationList->RemoveNotification(room, event);
+	return this->mNotificationList->RemoveNotification(room, type);
 }
 
 void Panel2D::ScrollActiveLog()

@@ -15,8 +15,8 @@ public:
 	NotificationList(Direct2D *direct2d, int posX, int posY);
 	~NotificationList();
 
-	void AddNotification(Direct2D *direct2d, Room *room, LogEvent *event);
-	bool RemoveNotification(Room *room, LogEvent *event);
+	bool AddNotification(Direct2D *direct2d, Room *room, LogEvent *event);
+	bool RemoveNotification(Room *room, Event::Type type);
 	NotificationObject *GetNotificationObjectByIndex(int index);
 	const int GetNumberOfNotificationObjects() const;
 

@@ -22,7 +22,8 @@ public:
 	bool IsMouseInsidePanel();
 	bool IsVisible();
 
-	virtual void Update( Button* attribute);
+	virtual void Update(Button* attribute);
+	Event::Type GetLastClicked();
 
 private:
 	int mMenuWidth, mMenuHeight;
@@ -32,6 +33,9 @@ private:
 	Panel2D *mpPanel;
 
 	Room *mpActiveRoom;
+
+	// For removing events.
+	Event::Type mLastClicked;
 
 	void InitButtons();
 };
