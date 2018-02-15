@@ -148,9 +148,9 @@ void System::Run()
 	}
 }
 
-void System::Update( Room * pickedRoom)
+void System::Update(Room * pickedRoom)
 {
-	this->mAddEvent(pickedRoom);
+	this->mUpdateEvents(pickedRoom);
 }
 
 void System::mUpdate()
@@ -174,14 +174,6 @@ void System::mDraw()
 
 void System::mHandleInput()
 {
-	Event::Type types[] = 
-	{
-		Event::Fire,
-		Event::Water,
-		Event::Gas,
-		Event::Injury
-	};
-	int type_index = rand() % 4;
 	if (Mouse::IsButtonPressed(Buttons::Left))
 	{
 		if (
@@ -214,7 +206,6 @@ void System::mHandleInput()
 			Room *picked_room = this->mBoat.GetPickedRoom(this->mRay);
 			if (picked_room)
 			{
-				
 				this->mRemoveEvent(picked_room);
 			}
 		}
@@ -226,6 +217,41 @@ void System::mAddEvent(Room * room)
 	std::vector<LogEvent*> events_in_room = room->GetActiveEvents();
 	this->mpActiveLogPanel->AddNotification(room, events_in_room.back());
 
+	//! Temp solution.
+	std::string test = room->GetDeckName();
+	test.replace(test.begin() + 5, test.end(), "bounds");
+
+	// Saving things for readability.
+	MeshObject *top_picked_deck = this->mpTopViewPanel->rGetMeshObject(test);
+	MeshObject *side_picked_deck = this->mpSideViewPanel->rGetMeshObject(test);
+	int index_in_deck = room->GetIndexInDeck();
+
+	// Filling event data for bounding box coloring.
+	EventData event_data = { 0 };
+	for (int i = 0; (i < (int)events_in_room.size()) && (i < 4); i++)
+	{
+		event_data.slots[i] = events_in_room[i]->GetType() + 1;
+	}
+
+	top_picked_deck->SetEvent(
+		event_data,
+		this->mpTopViewPanel->rGetDirect3D().GetContext(),
+		index_in_deck);
+
+	side_picked_deck->SetEvent(
+		event_data,
+		this->mpSideViewPanel->rGetDirect3D().GetContext(),
+		index_in_deck);
+	
+}
+
+void System::mRemoveEvent(Room * room)
+{
+	std::vector<LogEvent*> events_in_room = room->GetActiveEvents();
+	
+	/*this->mpActiveLogPanel->RemoveNotification(room, events_in_room.back());
+	room->ClearEvent(this->mpMenuPanel->GetLastClicked());
+*/
 	std::string test = room->GetDeckName();
 	test.replace(test.begin() + 5, test.end(), "bounds");
 
@@ -236,33 +262,41 @@ void System::mAddEvent(Room * room)
 	EventData event_data = { 0 };
 	for (int i = 0; (i < (int)events_in_room.size()) && (i < 4); i++)
 	{
-		event_data.slots[i] = events_in_room[i]->GetType() + 1;		
+		event_data.slots[i] = events_in_room[i]->GetType() + 1;
 	}
 
 	top_picked_deck->SetEvent(
-		event_data, 
-		this->mpTopViewPanel->rGetDirect3D().GetContext(), 
+		event_data,
+		this->mpTopViewPanel->rGetDirect3D().GetContext(),
 		index_in_deck);
 
 	side_picked_deck->SetEvent(
-		event_data, 
-		this->mpSideViewPanel->rGetDirect3D().GetContext(), 
+		event_data,
+		this->mpSideViewPanel->rGetDirect3D().GetContext(),
 		index_in_deck);
-	
 }
 
-void System::mRemoveEvent(Room * room)
-{//! Does not work yo.
+void System::mUpdateEvents(Room * room)
+{
 	std::vector<LogEvent*> events_in_room = room->GetActiveEvents();
-	this->mpActiveLogPanel->RemoveNotification(room, events_in_room.back());
+	if (!this->mpActiveLogPanel->AddNotification(room, events_in_room.back()))
+	{
+		Event::Type to_remove = this->mpMenuPanel->GetLastClicked();
+		this->mpActiveLogPanel->RemoveNotification(room, to_remove);
+		room->ClearEvent(to_remove);
+		events_in_room = room->GetActiveEvents();
+	}
 
+	// Temp solution. Sorry
 	std::string test = room->GetDeckName();
 	test.replace(test.begin() + 5, test.end(), "bounds");
 
+	// Saving things for readability.
 	MeshObject *top_picked_deck = this->mpTopViewPanel->rGetMeshObject(test);
 	MeshObject *side_picked_deck = this->mpSideViewPanel->rGetMeshObject(test);
 	int index_in_deck = room->GetIndexInDeck();
 
+	// Filling event data for bounding box coloring.
 	EventData event_data = { 0 };
 	for (int i = 0; (i < (int)events_in_room.size()) && (i < 4); i++)
 	{
