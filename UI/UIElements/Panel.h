@@ -42,8 +42,13 @@ public:
 	const Fraction IntersectionFraction(int x, int y);
 
 	const bool UpdateWindowSize();
+	void UpdateWindowPos();
 
 	bool IsMouseInsidePanel();
+
+	bool IsVisible();
+	void Hide();
+	void Show();
 
 protected:
 	int mWidth;
