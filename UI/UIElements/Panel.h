@@ -50,6 +50,8 @@ public:
 	void Hide();
 	void Show();
 
+	HWND *GetPanelWindowHandle();
+
 protected:
 	int mWidth;
 	int mHeight;

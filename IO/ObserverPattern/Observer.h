@@ -7,7 +7,7 @@ class Observer
 public:
 	Observer() {}
 	virtual ~Observer() {}
-	virtual void Update(const TAttribute* attribute) = 0; /*This function will be called
+	virtual void Update(TAttribute* attribute) = 0; /*This function will be called
 													  by observables that this
 													  observer is subscribed to.
 													  This needs to be customized

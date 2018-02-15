@@ -201,10 +201,15 @@ bool Panel::IsVisible()
 
 void Panel::Hide()
 {
-	ShowWindow(this->mPanelWindow, SW_HIDE);
+	ShowWindow(this->mPanelWindow, SW_HIDE | SW_MINIMIZE);
 }
 
 void Panel::Show()
 {
-	ShowWindow(this->mPanelWindow, SW_SHOW);
+	ShowWindow(this->mPanelWindow, SW_SHOWDEFAULT);
+}
+
+HWND *Panel::GetPanelWindowHandle()
+{
+	return &this->mPanelWindow;
 }

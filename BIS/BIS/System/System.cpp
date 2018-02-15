@@ -123,6 +123,15 @@ void System::BuildGraphicalUserInterface(
 		this->mpWindow->GetWindow(),
 		windowName.c_str());
 
+	this->mpMenuPanel = new EventMenu();
+	this->mpMenuPanel->Init(
+		this->mpTopViewPanel->GetWidth(), 
+		this->mpTopViewPanel->GetHeight(), 
+		&this->mEventLog, 
+		windowName.c_str(), 
+		this->mpTopViewPanel->GetPanelWindowHandle());
+	this->mpMenuPanel->AddObserver(this);
+
 	this->mSetupPanels();
 	this->mSetupModels();
 	this->mSetupBoat();
@@ -139,6 +148,11 @@ void System::Run()
 	}
 }
 
+void System::Update( Room * pickedRoom)
+{
+	this->mAddEvent(pickedRoom);
+}
+
 void System::mUpdate()
 {
 	this->mpWindow->Update();
@@ -146,6 +160,7 @@ void System::mUpdate()
 	this->mpControlPanel->Update();
 	this->mpTopViewPanel->Update();
 	this->mpSideViewPanel->Update();
+	this->mpMenuPanel->Update();
 }
 
 void System::mDraw()
@@ -154,6 +169,7 @@ void System::mDraw()
 	this->mpControlPanel->Draw();
 	this->mpTopViewPanel->Draw();
 	this->mpSideViewPanel->Draw();
+	this->mpMenuPanel->Draw();
 }
 
 void System::mHandleInput()
@@ -168,7 +184,9 @@ void System::mHandleInput()
 	int type_index = rand() % 4;
 	if (Mouse::IsButtonPressed(Buttons::Left))
 	{
-		if (this->mpTopViewPanel->IsMouseInsidePanel())
+		if (
+			this->mpTopViewPanel->IsMouseInsidePanel() && 
+			!this->mpMenuPanel->IsMouseInsidePanel())
 		{
 			Picking::GetWorldRay(
 				this->mpTopViewCamera,
@@ -179,8 +197,7 @@ void System::mHandleInput()
 			Room *picked_room = this->mBoat.GetPickedRoom(this->mRay);
 			if (picked_room)
 			{
-				picked_room->AddPlotterEvent(Event::Water);
-				this->mAddEvent(picked_room);
+				this->mpMenuPanel->OpenAt(picked_room);
 			}
 		}
 	}
@@ -325,14 +342,6 @@ void System::mSetupPanels()
 		"Reset");
 
 
-	this->mpControlPanel->AddButton(70, 70, 60, 20,
-		this->mpControlPanel->GetBitmapByName("Injury"), "Injury");
-	this->mpControlPanel->AddButton(70, 70, 60, 95,
-		this->mpControlPanel->GetBitmapByName("Gas"), "Gas");
-	this->mpControlPanel->AddButton(70, 70, 60, 170,
-		this->mpControlPanel->GetBitmapByName("Water"), "Water");
-	this->mpControlPanel->AddButton(70, 70, 60, 245,
-		this->mpControlPanel->GetBitmapByName("Fire"), "Fire");
 	this->mpControlPanel->AddButton(70, 70, 60, 340,
 		this->mpControlPanel->GetBitmapByName("Reset"), "Reset");
 
