@@ -28,11 +28,14 @@ ActiveEvent* EventLog::AddEvent(Event::Type type, int roomIndex)
 	int logIndex;
 	int activeIndex;
 
+	bool newActive = false;
+
 	// Check if the room already has an active event.
 	// In that case, update it's activeEvent
 	activeIndex = GetRoomActiveEventIndex(roomIndex);
 	if (activeIndex == -1)
 	{
+		newActive = true;
 		ActiveEvent *newActiveEvent = new ActiveEvent;
 		activeIndex = (int)this->mpActiveEvents.size();
 
@@ -42,20 +45,27 @@ ActiveEvent* EventLog::AddEvent(Event::Type type, int roomIndex)
 		this->mpActiveEvents.push_back(newActiveEvent);
 	}
 
-	// Create new log event
-	LogEvent *newLogEvent = new LogEvent;
+	// Check if event type already is active in room
+	if (!this->mpActiveEvents[activeIndex]->EventTypeExists(type) || newActive)
+	{
+		// Create new log event
+		LogEvent *newLogEvent = new LogEvent;
 
-	newLogEvent->SetActiveEventIndex(activeIndex);
-	newLogEvent->SetType(type);
+		newLogEvent->SetActiveEventIndex(activeIndex);
+		newLogEvent->SetType(type);
 
-	logIndex = (int)this->mpLogEvents.size();
+		logIndex = (int)this->mpLogEvents.size();
 
-	this->mpLogEvents.push_back(newLogEvent);
-	this->mpActiveEvents[activeIndex]->AddEvent(
-		logIndex,
-		this->mpLogEvents.back());
+		this->mpLogEvents.push_back(newLogEvent);
+		this->mpActiveEvents[activeIndex]->AddEvent(
+			logIndex,
+			this->mpLogEvents.back());
 
-	return this->mpActiveEvents[activeIndex];
+		return this->mpActiveEvents[activeIndex];
+	}
+	
+	// Event type already exists in room
+	return nullptr;
 }
 
 bool EventLog::ClearEvent(Event::Type type, int roomIndex)

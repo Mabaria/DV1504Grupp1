@@ -19,8 +19,8 @@ public:
 	void SetInputTypes(std::vector<Event::Type> list);
 	bool CanDetect(Event::Type type) const;
 	
-	int AutoTrigger(Event::Type type); // Will return a ActiveEvent index
-	int PlotTrigger(Event::Type type);
+	bool AutoTrigger(Event::Type type); // Will return a ActiveEvent index
+	bool PlotTrigger(Event::Type type);
 
 
 	// Log specific
@@ -42,7 +42,7 @@ private:
 
 	// Sensor specific
 	std::vector<Event::Type> mInputTypes;	/* Holds all the type of events the
-																					 sensor can detect */
+											   sensor can detect */
 	// Log specific
 	EventLog *mpEventLog;
 

@@ -14,6 +14,9 @@ public:
 	// Event specific
 	bool AddEvent(int index, LogEvent* pEvent);
 	bool ClearEvent(int index);
+
+	bool EventTypeExists(Event::Type type) const;
+
 	int GetEventCount() const;
 	int GetEventIndexAt(int index) const;
 	std::vector<LogEvent*> GetActiveEvents() const;
