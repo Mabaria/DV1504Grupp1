@@ -20,18 +20,26 @@ Panel2D::Panel2D(
 
 Panel2D::~Panel2D()
 {
-	for (int i = 0; i < (int)this->mButtonVector.size(); i++)
+	for (unsigned int i = 0; i < this->mButtonVector.size(); i++)
 	{
 		if (this->mButtonVector[i])
 		{
 			delete this->mButtonVector[i];
 		}
 	} 
-	for (int i = 0; i < (int)this->mTextBoxVector.size(); i++)
+	for (unsigned int i = 0; i < this->mTextBoxVector.size(); i++)
 	{
 		if (this->mTextBoxVector[i])
 		{
 			delete this->mTextBoxVector[i];
+		}
+	}
+	for (unsigned int i = 0; i < this->mBitmapVector.size(); i++)
+	{
+		if (this->mBitmapVector[i].bitmap)
+		{
+			this->mBitmapVector[i].bitmap->Release();
+			this->mBitmapVector[i].bitmap = nullptr;
 		}
 	}
 	delete this->mDirect2D;
@@ -55,6 +63,18 @@ void Panel2D::AddButton(
 	this->mButtonNames.push_back(buttonName); // Add to names list
 	Button *newButton = new Button(this->mDirect2D,
 		imageFilePath,
+		left,
+		top,
+		left + width,
+		top + height);
+	this->mButtonVector.push_back(newButton); // Add button
+}
+
+void Panel2D::AddButton(int width, int height, int top, int left, ID2D1Bitmap * bitmap, std::string buttonName)
+{
+	this->mButtonNames.push_back(buttonName); // Add to names list
+	Button *newButton = new Button(this->mDirect2D,
+		bitmap,
 		left,
 		top,
 		left + width,
@@ -110,6 +130,26 @@ Button * Panel2D::GetButtonByIndex(unsigned int index)
 	if (index <= this->mButtonVector.size()) // Bounds check
 	{
 		to_return = this->mButtonVector[index];
+	}
+	return to_return;
+}
+
+ID2D1Bitmap * Panel2D::GetBitmapByName(std::string bitmapName)
+{
+	ID2D1Bitmap *to_return = nullptr; // Default return is nullptr
+	std::vector<BitmapInfo>::iterator it;
+
+	for (it = this->mBitmapVector.begin();
+		it != this->mBitmapVector.end();
+		++it)
+	{
+		if (bitmapName.compare((*it).name) == 0) // Button with correct name found
+		{
+			to_return = (*it).bitmap; // Return pointer to button
+			it = this->mBitmapVector.end() - 1; // Set iterator to end
+											   // -1 because incrementation is performed after this.
+											   // Incrementing on .end() is a baaad idea.
+		}
 	}
 	return to_return;
 }
@@ -329,4 +369,46 @@ void Panel2D::mUpdateButtons()
 void Panel2D::mUpdateTextBoxes()
 {
 
+}
+
+void Panel2D::LoadImageToBitmap(
+	std::string imageFilePath,
+	std::string bitmapName)
+{
+	BitmapInfo new_bitmap_struct;
+	new_bitmap_struct.name = bitmapName;
+	std::wstring_convert<std::codecvt<wchar_t, char, std::mbstate_t>> convert;
+	std::wstring w_file_path = convert.from_bytes(imageFilePath);
+
+	IWICFormatConverter *converter = this->mDirect2D->GetpFormatConverter();
+	IWICBitmapDecoder *decoder = this->mDirect2D->GetpBitmapDecoder();
+	IWICBitmapFrameDecode *bitmapSrc = this->mDirect2D->GetpBitmapSrc();
+
+	this->mDirect2D->GetpImagingFactory()->CreateFormatConverter(&converter);
+	this->mDirect2D->SetpFormatConverter(converter);
+	this->mDirect2D->GetpImagingFactory()->CreateDecoderFromFilename(
+		w_file_path.c_str(),
+		NULL,
+		GENERIC_READ,
+		WICDecodeMetadataCacheOnDemand,
+		&decoder);
+	this->mDirect2D->SetpBitmapDecoder(decoder);
+	if (this->mDirect2D->GetpBitmapDecoder() != nullptr)
+	{
+		this->mDirect2D->GetpBitmapDecoder()->GetFrame(0, &bitmapSrc);
+		this->mDirect2D->SetpBitmapSrc(bitmapSrc);
+		this->mDirect2D->GetpFormatConverter()->Initialize(
+			bitmapSrc,
+			GUID_WICPixelFormat32bppPBGRA,
+			WICBitmapDitherTypeNone,
+			NULL,
+			0.f,
+			WICBitmapPaletteTypeMedianCut);
+		this->mDirect2D->GetpRenderTarget()->CreateBitmapFromWicBitmap(
+			this->mDirect2D->GetpFormatConverter(),
+			NULL,
+			&new_bitmap_struct.bitmap);
+	}
+
+	this->mBitmapVector.push_back(new_bitmap_struct);
 }

@@ -22,6 +22,7 @@ Button::Button(
 	this->mpFillBrush = nullptr;
 	this->D2D1Panel = D2D1Panel;
 	this->mCurrState = BUTTON_STATE::RESET;
+	this->mBitmapLoadedByFilePath = true;
 	
 	this->CreateButton(
 		imageFilePath, 
@@ -32,9 +33,70 @@ Button::Button(
 
 }
 
+Button::Button(
+	Direct2D * D2D1Panel,
+	ID2D1Bitmap * bitmapPointer,
+	int left,
+	int top,
+	int right,
+	int bottom)
+{
+	this->mpBitMap = bitmapPointer;
+
+	this->mWidth = 0.0f;
+	this->mBoundingBoxPercentage.left = 0.0f;
+	this->mBoundingBoxPercentage.right = 0.0f;
+	this->mBoundingBoxPercentage.top = 0.0f;
+	this->mBoundingBoxPercentage.bottom = 0.0f;
+	this->mOpacity = 1.0f;
+	this->mBmpLoaded = false;
+	this->mpFailBrush = nullptr;
+	this->mpRectBrush = nullptr;
+	this->mpFillBrush = nullptr;
+	this->D2D1Panel = D2D1Panel;
+	this->mCurrState = BUTTON_STATE::RESET;
+	this->mBitmapLoadedByFilePath = false;
+
+	
+	this->D2D1Panel->GetpRenderTarget()->CreateSolidColorBrush(
+		D2D1::ColorF(D2D1::ColorF(0.75f, 0.75f, 0.75f, 1.0f)),
+		&this->mpRectBrush);
+	this->D2D1Panel->GetpRenderTarget()->CreateSolidColorBrush(
+		D2D1::ColorF(D2D1::ColorF(1.f, 1.f, 1.f, 1.0f)),
+		&this->mpFillBrush);
+	this->mButtonSize = D2D1::RectF(
+		(float)left,
+		(float)top,
+		(float)right,
+		(float)bottom);
+	this->mIconSize = this->mButtonSize;
+
+	if (this->mpBitMap)
+	{
+		this->mBitmapRenderSize = D2D1::RectF(
+			0,
+			0,
+			this->mpBitMap->GetSize().width,
+			this->mpBitMap->GetSize().height);
+		this->mWidth = this->mpBitMap->GetSize().width / 3;
+		this->mUpdateBoundingBox();
+		this->mBmpLoaded = true;
+	}
+	else
+	{
+		this->D2D1Panel->GetpRenderTarget()->CreateSolidColorBrush(
+			D2D1::ColorF(D2D1::ColorF::Red),
+			&mpFailBrush);
+	}
+}
+
 Button::~Button()
 {
-	this->ReleaseCOM(this->mpBitMap);
+	if (this->mBitmapLoadedByFilePath)
+	{
+		this->ReleaseCOM(this->mpBitMap);
+
+	}
 	this->ReleaseCOM(this->mpFailBrush);
 	this->ReleaseCOM(this->mpRectBrush);
 	this->ReleaseCOM(this->mpFillBrush);
@@ -68,7 +130,20 @@ void Button::CreateButton(
 		(float)right, 
 		(float)bottom);
 	this->mIconSize = this->mButtonSize;
-	this->LoadImageToBitmap(imageFilePath);
+	if (this->mpBitMap)
+	{
+		this->mBitmapRenderSize = D2D1::RectF(
+			0,
+			0,
+			this->mpBitMap->GetSize().width,
+			this->mpBitMap->GetSize().height);
+		this->mWidth = this->mpBitMap->GetSize().width / 3;
+		this->mBmpLoaded = true;
+	}
+	else
+	{
+		this->LoadImageToBitmap(imageFilePath);
+	}	
 	if (this->mBmpLoaded)
 	{	
 		this->mBitmapRenderSize = D2D1::RectF(
@@ -241,6 +316,18 @@ void Button::SetRectStatus(BUTTON_STATE rectState)
 			break;
 		}
 	}
+}
+
+void Button::SetBitmap(ID2D1Bitmap * bitmapPointer)
+{
+
+	if (this->mBitmapLoadedByFilePath)
+	{
+		this->ReleaseCOM(this->mpBitMap);
+
+	}
+	this->mpBitMap = bitmapPointer;
+	this->mBitmapLoadedByFilePath = false;
 }
 
 void Button::LoadImageToBitmap(
