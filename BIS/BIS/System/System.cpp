@@ -193,23 +193,7 @@ void System::mHandleInput()
 			}
 		}
 	}
-	if (Mouse::IsButtonPressed(Buttons::Right))
-	{
-		if (this->mpTopViewPanel->IsMouseInsidePanel())
-		{
-			Picking::GetWorldRay(
-				this->mpTopViewCamera,
-				Mouse::GetXPercentage(),
-				Mouse::GetYPercentage(),
-				this->mRay);
-
-			Room *picked_room = this->mBoat.GetPickedRoom(this->mRay);
-			if (picked_room)
-			{
-				this->mRemoveEvent(picked_room);
-			}
-		}
-	}
+	
 }
 
 void System::mAddEvent(Room * room)

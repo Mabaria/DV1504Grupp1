@@ -31,13 +31,12 @@ bool EventMenu::Init(float parentWidth,
 
 	this->mpEventLog = pEventLog;
 	this->mpPanel = new Panel2D(
-		this->mMenuWidth,									// Width
-		this->mMenuHeight,									// Height
+		this->mMenuWidth,										// Width
+		this->mMenuHeight,										// Height
 		this->mParentPanelHeight / 2 - this->mMenuHeight / 2,	// Top
 		this->mParentPanelWidth / 2 - this->mMenuWidth / 2,		// Left
 		*pWindow,
 		windowName);
-	this->mpPanel->Hide();
 
 	this->mpPanel->LoadImageToBitmap("../../Models/Button01.png", "InjuryOff");
 	this->mpPanel->LoadImageToBitmap("../../Models/Button02.png", "GasOff");

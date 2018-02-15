@@ -271,7 +271,7 @@ Window::Window(
 			0,
 			this->mTitle.c_str(),
 			this->mTitle.c_str(),
-			WS_OVERLAPPEDWINDOW,
+			WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN,
 			CW_USEDEFAULT,
 			CW_USEDEFAULT,
 			window_size.right - window_size.left,	// Width of window

@@ -14,7 +14,7 @@ Panel::Panel(int width, int height, int top, int left, HWND handle, LPCTSTR titl
 		0,
 		this->mTitle,
 		this->mTitle,
-		WS_CHILD | WS_BORDER,
+		WS_CHILD | WS_BORDER | WS_CLIPCHILDREN,
 		this->mLeft,
 		this->mTop,
 		this->mWidth,
@@ -201,7 +201,7 @@ bool Panel::IsVisible()
 
 void Panel::Hide()
 {
-	ShowWindow(this->mPanelWindow, SW_HIDE | SW_MINIMIZE);
+	MoveWindow(this->mPanelWindow, 0, 0, 0, 0, FALSE);
 }
 
 void Panel::Show()
