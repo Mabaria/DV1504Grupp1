@@ -279,7 +279,7 @@ bool Boat::ReadFile(std::string filePath)
 
 	DeckDesc dDesc;
 	RoomDesc rDesc;
-
+	
 	if (file.is_open())
 	{
 		while (getline(file, line))
@@ -408,7 +408,7 @@ RoomDesc Boat::FillRoomDescFromLine(std::string line)
 
 		buffer >> word;
 	}
-	desc.name = roomName;
+	desc.name = this->CorrectName(roomName);
 
 	/**
 	*	Get sensor data
@@ -508,6 +508,8 @@ std::string Boat::GetNameFromLine(std::string line, char until)
 			done = true;
 	}
 
+	name = this->CorrectName(name);
+
 	return name;
 }
 
@@ -526,5 +528,36 @@ std::string Boat::GetDeckNameByRoomIndex(int index)
 	}
 
 	return "DeckNotFound";
+}
+
+std::string Boat::CorrectName(std::string name)
+{
+	std::string newName = "";
+
+	for (int i = 0; i < name.size(); i++)
+	{
+		int c = name[i];
+		
+		switch (name[i])
+		{
+		case -91: // ¥
+			newName += 'å';
+			break;
+		case -92: // ¤
+			newName += 'ä';
+			break;
+		case -74: // ¶
+			newName += 'ö';
+			break;
+
+		case -61: // Character skip
+			break;
+
+		default:
+			newName += name[i];
+			break;
+		}
+	}
+	return newName;
 }
 
