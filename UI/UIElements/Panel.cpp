@@ -201,7 +201,7 @@ bool Panel::IsVisible()
 
 void Panel::Hide()
 {
-	MoveWindow(this->mPanelWindow, 0, 0, 0, 0, FALSE);
+	MoveWindow(this->mPanelWindow, 0, 0, 0, 0, TRUE);
 }
 
 void Panel::Show()

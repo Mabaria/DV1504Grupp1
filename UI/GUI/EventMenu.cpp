@@ -38,6 +38,7 @@ bool EventMenu::Init(float parentWidth,
 		*pWindow,
 		windowName);
 
+
 	this->mpPanel->LoadImageToBitmap("../../Models/Button01.png", "InjuryOff");
 	this->mpPanel->LoadImageToBitmap("../../Models/Button02.png", "GasOff");
 	this->mpPanel->LoadImageToBitmap("../../Models/Button03.png", "WaterOff");
@@ -49,6 +50,8 @@ bool EventMenu::Init(float parentWidth,
 	this->mpPanel->LoadImageToBitmap("../../Models/Exit.png", "Exit");
 	
 	this->InitButtons();
+
+	this->mpPanel->Hide();
 
 	return true;
 }
