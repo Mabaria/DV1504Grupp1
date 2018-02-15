@@ -286,7 +286,7 @@ void System::mSetupPanels()
 	this->mpTopViewCamera = new Camera (
 		{ -0.02f, 6.19f, 2.99f, 0.0f },
 		{ 0.0f, 1.0f, 0.0f, 0.0f },
-		{ 0.000001f, 0.0f, 0.0f, 0.0f },
+		{ 0.0f, 0.00000001f, 0.0f, 0.0f },
 		XM_PI / 15.0f, 16.0f / 9.0f,
 		0.1f, 10.0f, LOOK_AT, PERSPECTIVE);
 
@@ -342,12 +342,16 @@ void System::mSetupPanels()
 		"Reset");
 
 
-	this->mpControlPanel->AddButton(70, 70, 60, 340,
+	this->mpControlPanel->AddButton(70, 70, 10, 10,
 		this->mpControlPanel->GetBitmapByName("Reset"), "Reset");
+	this->mpControlPanel->AddButton(70, 70, 90, 10,
+		this->mpControlPanel->GetBitmapByName("Reset"), "Reset2");
 
 
 	this->mpControlPanel->GetButtonByName("Reset")->
 		AddObserver(this->mpSideViewPanel);
+	this->mpControlPanel->GetButtonByName("Reset2")->
+		AddObserver(this->mpTopViewPanel);
 
 	// Setting up the active log panel.
 	this->mpActiveLogPanel->SetNotificationList(0, 0);
