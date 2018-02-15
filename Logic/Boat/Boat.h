@@ -78,4 +78,6 @@ private:
 	std::vector<DirectX::XMMATRIX> mInverseFloorMatrix;
 
 	EventLog *mpEventLog;
+
+	std::string CorrectName(std::string name);
 };
