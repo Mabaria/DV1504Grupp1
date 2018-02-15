@@ -396,7 +396,7 @@
       <Filter>Source Files\BIS</Filter>
     </ClCompile>
     <ClCompile Include="..\..\UI\GUI\EventMenu.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

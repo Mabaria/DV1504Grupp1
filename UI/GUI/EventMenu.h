@@ -15,10 +15,10 @@ public:
 		EventLog *pEventLog,
 		LPCTSTR windowName,
 		Window *pWindow);
-	bool Show(Room *pRoom, float screenX = 0.5f, float screenY = 0.5f);
+	bool OpenAt(Room *pRoom, float panelX = 0.5f, float panelY = 0.5f);
 	bool Update();
 	bool Draw() const;
-	virtual void Update(const Button& attribute);
+	virtual void Update(const Button* attribute);
 
 private:
 	int mMenuWidth, mMenuHeight;
@@ -26,6 +26,8 @@ private:
 	bool mVisible;
 	EventLog *mpEventLog;
 	Panel2D *mpPanel;
+
+	Room *mpActiveRoom;
 
 	void InitButtons();
 };

@@ -11,6 +11,7 @@ EventMenu::EventMenu()
 	this->mVisible = false;
 	this->mpEventLog = nullptr;
 	this->mpPanel = nullptr;
+	this->mpActiveRoom = nullptr;
 }
 
 EventMenu::~EventMenu()
@@ -39,11 +40,18 @@ bool EventMenu::Init(float parentWidth,
 	
 	this->InitButtons();
 
+	//! Uncomment this later
+	this->mVisible = true;
+
 	return true;
 }
 
-bool EventMenu::Show(Room *pRoom, float screenX, float screenY)
+bool EventMenu::OpenAt(Room *pRoom, float panelX, float panelY)
 {
+	int margin = this->mParentPanelWidth / 6;
+
+	//if(this)
+
 	return false;
 }
 
@@ -60,7 +68,7 @@ bool EventMenu::Draw() const
 	return true;
 }
 
-void EventMenu::Update(const Button & attribute)
+void EventMenu::Update(const Button *attribute)
 {
 	std::cout << "Clicked " << std::endl;
 }
