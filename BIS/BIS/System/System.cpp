@@ -262,6 +262,8 @@ void System::mSetupPanels()
 		{ 0.000001f, 0.0f, 0.0f, 0.0f },
 		120.f, 32.f/9.f,
 		0.1f, 100.0f, LOOK_AT, PERSPECTIVE);
+
+	this->mpTopViewPanel->SetCamera(this->mpTopViewCamera);
 	this->mpSideViewPanel->SetCamera(this->mpSideViewCamera);
 
 	// Creating and setting the shaders.
