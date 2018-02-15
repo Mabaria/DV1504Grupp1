@@ -422,6 +422,9 @@ void Test_Panel2DTextBoxes()
 	Mesh floor2("../../Models/Floor2.obj");
 	Mesh floor1("../../Models/Floor1.obj");
 	Mesh floor01("../../Models/Floor01.obj");
+	
+	
+	
 
 	MeshObject floor2_object("floor2", &floor2);
 	MeshObject floor1_object("floor1", &floor1);
@@ -516,7 +519,7 @@ void Test_Panel2DTextBoxes()
 
 
 	//! BUTTONS HERE
-	control_panel.AddButton(70, 70, 30, 20, "../../Models/Button01.png", "Dead");
+	control_panel.AddButton(70, 70, 30, 20, "../../Models/Button01.png", "Injury");
 	control_panel.AddButton(70, 70, 30, 90, "../../Models/Button02.png", "Gas");
 	control_panel.AddButton(70, 70, 30, 160, "../../Models/Button03.png", "Water");
 	control_panel.AddButton(70, 70, 30, 230, "../../Models/Button04.png", "Fire");

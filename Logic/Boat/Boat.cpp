@@ -306,8 +306,10 @@ bool Boat::ReadFile(std::string filePath)
 				{
 					rDesc = this->FillRoomDescFromLine(line);
 
-					rDesc.index = (int)this->mpRooms.size();
+					rDesc.indexInBoat = (int)this->mpRooms.size();
 					rDesc.deckName = this->mpDecks.back()->GetName();
+					rDesc.deckIndex = (int)this->mpDecks.size() - 1;
+					rDesc.indexInDeck = this->mpDecks.back()->GetRoomCount();
 					rDesc.pEventLog = this->mpEventLog;
 
 					/**

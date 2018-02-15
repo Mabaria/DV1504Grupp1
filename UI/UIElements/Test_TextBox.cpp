@@ -18,10 +18,10 @@ void Test_Text()
 	{
 		testText += "h";
 		testBox.SetText(testText);
-		testBox.SetTextBoxSize(testBox.GetTextBoxSize().left + 1,
-			testBox.GetTextBoxSize().top + 1,
-			testBox.GetTextBoxSize().right + 2,
-			testBox.GetTextBoxSize().bottom + 2);
+		testBox.SetTextBoxSize((int)testBox.GetTextBoxSize().left + 1,
+			(int)testBox.GetTextBoxSize().top + 1,
+			(int)testBox.GetTextBoxSize().right + 2,
+			(int)testBox.GetTextBoxSize().bottom + 2);
 		window.Update();
 		D2Test.GetpRenderTarget()->BeginDraw();
 		D2Test.GetpRenderTarget()->Clear(D2D1::ColorF(D2D1::ColorF::AliceBlue));

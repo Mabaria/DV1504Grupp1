@@ -40,7 +40,11 @@ D2D1_RECT_F TextBox::GetTextBoxSize() const
 
 void TextBox::SetTextBoxSize(int left, int top, int right, int bottom)
 {
-	this->mLayoutRect = D2D1::RectF(left, top, right, bottom);
+	this->mLayoutRect = D2D1::RectF(
+		(float)left,
+		(float)top,
+		(float)right,
+		(float)bottom);
 }
 
 void TextBox::SetText(std::string text)
@@ -119,7 +123,7 @@ void TextBox::mCreateTextFormat()
 		this->mFontWeight,
 		DWRITE_FONT_STYLE_NORMAL,
 		DWRITE_FONT_STRETCH_NORMAL,
-		this->mFontSize,
+		(float)this->mFontSize,
 		L"sv-SE",
 		&this->mpTextFormat
 	);

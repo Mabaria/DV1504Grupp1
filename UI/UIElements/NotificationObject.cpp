@@ -16,7 +16,7 @@ NotificationObject::NotificationObject(
 	this->mEventType = event->GetType();
 	this->mIndex = index;
 	
-	this->mTextBox.SetFontSize(12);
+	this->mTextBox.SetFontSize(18);
 	this->mTextBox.SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
 	D2D1_SIZE_F render_target_size = direct2d->GetpRenderTarget()->GetSize();	
 

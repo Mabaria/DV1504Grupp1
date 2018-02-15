@@ -7,17 +7,19 @@
 #include "../../GraphicsEngine/DX/Direct3D.h"
 #include "MeshObject.h"
 #include "../../GraphicsEngine/Camera/Camera.h"
+#include "../../IO/ObserverPattern/Observer.h"
 
-class Panel3D : public Panel
+class Panel3D : public Panel, public Observer<Button>
 {
 public:
 	Panel3D(
 		int width, 
 		int height, 
 		int top, 
-		int left, 
+		int left,
 		HWND handle, 
-		LPCTSTR title);
+		LPCTSTR title,
+		bool movableCamera = false);
 	~Panel3D();
 	
 	D3D11& rGetDirect3D();
@@ -58,7 +60,19 @@ public:
 	const void UpdateMatrixBuffer(int index);
 
 	const void SetCamera(Camera *camera);
+	void Update(const Button* attribute) override;
 
+	void * operator new(size_t i) // To make sure it is 16 bit aligned
+	{
+		return _aligned_malloc(i, 16);
+	}
+
+	void operator delete(void *p)
+	{
+		_aligned_free(p);
+	}
+
+	//void SetCameraPosition()
 private:
 	D3D11 mDirect3D;
 	std::vector<MeshObject*> mpMeshObjects;
@@ -108,4 +122,5 @@ private:
 
 	const void UpdateMouse();
 	const bool UpdateCamera();
+	bool mMovableCamera;
 };

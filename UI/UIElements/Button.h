@@ -10,7 +10,7 @@ enum BUTTON_STATE
 	RESET
 };
 
-class Button : public Observable<Button*>
+class Button : public Observable<Button>
 {
 public:
 	Button(
