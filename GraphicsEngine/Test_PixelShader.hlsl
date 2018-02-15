@@ -153,7 +153,7 @@ float3 GetBoatShading(PS_IN input)
 
 	// Top light
 	lights[0].dir = float3(0.0f, 1.0f, 0.0f);
-	lights[0].color = float3(0.45f, 0.45f, 0.45f);
+	lights[0].color = float3(0.25f, 0.25f, 0.25f);
 	lights[0].illu = 1.0f;
 
 
