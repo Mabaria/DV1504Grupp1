@@ -50,6 +50,7 @@
     <ClCompile Include="..\..\Logic\Event\Event.cpp" />
     <ClCompile Include="..\..\IO\Test_Picking.cpp" />
     <ClCompile Include="..\..\Logic\Timer.cpp" />
+    <ClCompile Include="..\..\UI\GUI\EventMenu.cpp" />
     <ClCompile Include="..\..\UI\UIElements\Button.cpp" />
     <ClCompile Include="..\..\UI\UIElements\MeshObject.cpp" />
     <ClCompile Include="..\..\UI\UIElements\NotificationList.cpp" />
@@ -98,6 +99,7 @@
     <ClInclude Include="..\..\Logic\Event\Event.h" />
     <ClInclude Include="..\..\Logic\Timer.h" />
     <ClInclude Include="..\..\Test\Testing.h" />
+    <ClInclude Include="..\..\UI\GUI\EventMenu.h" />
     <ClInclude Include="..\..\UI\UIElements\Button.h" />
     <ClInclude Include="..\..\UI\UIElements\MeshObject.h" />
     <ClInclude Include="..\..\UI\UIElements\NotificationList.h" />
