@@ -322,7 +322,7 @@ void System::mSetupModels()
 		Rotate(XM_PI / 2.0f, 0.0f, 0.0f);
 
 	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor01")->
-		Translate(0.6f, 0.0f, -0.5f);
+		Translate(0.65f, 0.0f, -0.5f);
 
 
 	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor1")->
