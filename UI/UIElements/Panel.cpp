@@ -206,7 +206,7 @@ void Panel::Hide()
 
 void Panel::Show()
 {
-	ShowWindow(this->mPanelWindow, SW_SHOWDEFAULT);
+	ShowWindow(this->mPanelWindow, SW_NORMAL);
 }
 
 HWND *Panel::GetPanelWindowHandle()

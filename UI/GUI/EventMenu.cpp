@@ -75,8 +75,8 @@ bool EventMenu::OpenAt(Room *pRoom)
 
 	this->mpPanel->SetLeft(posX);
 	this->mpPanel->SetTop(posY);
-	this->mpPanel->UpdateWindowPos();
 	this->mpPanel->Show();
+	this->mpPanel->UpdateWindowPos();
 
 	this->mpActiveRoom = pRoom;
 
