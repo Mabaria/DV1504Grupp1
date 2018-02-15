@@ -28,8 +28,8 @@ private:
 	void mDraw();
 	void mHandleInput();
 
-	void mAddEvent(Room *room, LogEvent *logEvent);
-	void mRemoveEvent(Room *room, LogEvent *logEvent);
+	void mAddEvent(Room *room);
+	void mRemoveEvent(Room *room);
 
 	void mSetupPanels();
 	void mSetupModels();

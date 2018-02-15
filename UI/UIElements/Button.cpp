@@ -134,17 +134,7 @@ void Button::CreateButton(
 		(float)right, 
 		(float)bottom);
 	this->mIconSize = this->mButtonSize;
-	if (this->mpBitMap)
-	{
-		this->mBitmapRenderSize = D2D1::RectF(
-			0,
-			0,
-			this->mpBitMap->GetSize().width,
-			this->mpBitMap->GetSize().height);
-		this->mWidth = this->mpBitMap->GetSize().width / 3;
-		this->mBmpLoaded = true;
-	}
-	else
+	if (this->mBitmapLoadedByFilePath)
 	{
 		this->LoadImageToBitmap(imageFilePath);
 	}	

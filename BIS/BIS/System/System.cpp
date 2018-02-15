@@ -158,6 +158,14 @@ void System::mDraw()
 
 void System::mHandleInput()
 {
+	Event::Type types[] = 
+	{
+		Event::Fire,
+		Event::Water,
+		Event::Gas,
+		Event::Injury
+	};
+	int type_index = rand() % 4;
 	if (Mouse::IsButtonPressed(Buttons::Left))
 	{
 		if (this->mpTopViewPanel->IsMouseInsidePanel())
@@ -171,26 +179,9 @@ void System::mHandleInput()
 			Room *picked_room = this->mBoat.GetPickedRoom(this->mRay);
 			if (picked_room)
 			{
-				LogEvent *temp = new LogEvent(Event::Water);
-				std::string room_name = picked_room->GetName();
-				std::string deck_name = picked_room->GetDeckName();
-				this->mBoat.CreateAutoEvent(
-					temp->GetType(), 
-					room_name,
-					deck_name);
-
-				//this->mEventLog.AddEvent(temp->GetType(), picked_room->GetIndexInBoat());
-				//this->mpActiveLogPanel->AddNotification(picked_room, temp);
-				this->mAddEvent(picked_room, temp);
+				picked_room->AddPlotterEvent(Event::Water);
+				this->mAddEvent(picked_room);
 			}
-		}
-		else if (this->mpControlPanel->IsMouseInsidePanel())
-		{
-			// Todo: Handle control panel stuff.
-		}
-		else if (this->mpActiveLogPanel->IsMouseInsidePanel())
-		{
-			// Todo: Handle clicking notification object stuff.
 		}
 	}
 	if (Mouse::IsButtonPressed(Buttons::Right))
@@ -206,44 +197,70 @@ void System::mHandleInput()
 			Room *picked_room = this->mBoat.GetPickedRoom(this->mRay);
 			if (picked_room)
 			{
-				LogEvent *temp = new LogEvent(Event::Fire);
-				std::string room_name = picked_room->GetName();
-				std::string deck_name = picked_room->GetDeckName();
-				this->mBoat.CreateAutoEvent(
-					temp->GetType(),
-					room_name,
-					deck_name);
-
-				//this->mEventLog.AddEvent(temp->GetType(), picked_room->GetIndexInBoat());
-				//this->mpActiveLogPanel->AddNotification(picked_room, temp);
-				this->mAddEvent(picked_room, temp);
+				
+				this->mRemoveEvent(picked_room);
 			}
 		}
 	}
-
 }
 
-void System::mAddEvent(Room * room, LogEvent * logEvent)
+void System::mAddEvent(Room * room)
 {
-	this->mpActiveLogPanel->AddNotification(room, logEvent);
+	std::vector<LogEvent*> events_in_room = room->GetActiveEvents();
+	this->mpActiveLogPanel->AddNotification(room, events_in_room.back());
+
 	std::string test = room->GetDeckName();
 	test.replace(test.begin() + 5, test.end(), "bounds");
-	MeshObject *picked_deck = this->mpTopViewPanel->rGetMeshObject(test);
+
+	MeshObject *top_picked_deck = this->mpTopViewPanel->rGetMeshObject(test);
+	MeshObject *side_picked_deck = this->mpSideViewPanel->rGetMeshObject(test);
 	int index_in_deck = room->GetIndexInDeck();
-	std::vector<Event::Type> events_in_room = this->mBoat.GetEventsInRoom(
-		room->GetName(), 
-		room->GetDeckName());
+
 	EventData event_data = { 0 };
 	for (int i = 0; (i < (int)events_in_room.size()) && (i < 4); i++)
 	{
-		event_data.slots[i] = events_in_room[i] + 1;
+		event_data.slots[i] = events_in_room[i]->GetType() + 1;		
 	}
-	picked_deck->SetEvent(event_data, this->mpTopViewPanel->rGetDirect3D().GetContext(), index_in_deck);
+
+	top_picked_deck->SetEvent(
+		event_data, 
+		this->mpTopViewPanel->rGetDirect3D().GetContext(), 
+		index_in_deck);
+
+	side_picked_deck->SetEvent(
+		event_data, 
+		this->mpSideViewPanel->rGetDirect3D().GetContext(), 
+		index_in_deck);
+	
 }
 
-void System::mRemoveEvent(Room * room, LogEvent * logEvent)
+void System::mRemoveEvent(Room * room)
 {
-	this->mpActiveLogPanel->RemoveNotification(room, logEvent);
+	std::vector<LogEvent*> events_in_room = room->GetActiveEvents();
+	this->mpActiveLogPanel->RemoveNotification(room, events_in_room.back());
+
+	std::string test = room->GetDeckName();
+	test.replace(test.begin() + 5, test.end(), "bounds");
+
+	MeshObject *top_picked_deck = this->mpTopViewPanel->rGetMeshObject(test);
+	MeshObject *side_picked_deck = this->mpSideViewPanel->rGetMeshObject(test);
+	int index_in_deck = room->GetIndexInDeck();
+
+	EventData event_data = { 0 };
+	for (int i = 0; (i < (int)events_in_room.size()) && (i < 4); i++)
+	{
+		event_data.slots[i] = events_in_room[i]->GetType() + 1;
+	}
+
+	top_picked_deck->SetEvent(
+		event_data,
+		this->mpTopViewPanel->rGetDirect3D().GetContext(),
+		index_in_deck);
+
+	side_picked_deck->SetEvent(
+		event_data,
+		this->mpSideViewPanel->rGetDirect3D().GetContext(),
+		index_in_deck);
 }
 
 void System::mSetupPanels()
@@ -489,6 +506,7 @@ void System::mSetupBoat()
 	this->mBoat.AddRoom("Skyddsrum", "Trossdäck", inputs);*/
 
 	this->mBoat.ReadFile("../../SaveFiles/data.boat");
+
 
 	// Creating the mesh list that 
 	Mesh mesh_list[] =
