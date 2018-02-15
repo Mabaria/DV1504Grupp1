@@ -6,6 +6,7 @@
 #include "../../../GraphicsEngine/Quad.h"
 #include "../../../IO/Picking.h"
 
+
 /* TODO:
 *Picking
 *Kontrollknappar
@@ -37,7 +38,7 @@ private:
 
 	Panel2D *mpControlPanel;
 	Panel2D *mpActiveLogPanel;
-	Panel2D *mpPopUpPanel;
+	Panel2D *mpMenuPanel;
 			
 	Panel3D *mpSideViewPanel;
 	Panel3D *mpTopViewPanel;

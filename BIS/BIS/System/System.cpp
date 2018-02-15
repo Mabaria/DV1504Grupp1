@@ -6,7 +6,7 @@ System::System()
 	this->mpControlPanel	= nullptr;
 	this->mpTopViewCamera	= nullptr;
 	this->mpSideViewCamera	= nullptr;
-	this->mpPopUpPanel		= nullptr;
+	this->mpMenuPanel		= nullptr;
 	this->mpSideViewPanel	= nullptr;
 	this->mpTopViewPanel	= nullptr;
 	this->mpWindow			= nullptr;
@@ -44,10 +44,10 @@ System::~System()
 		delete this->mpSideViewCamera;
 		this->mpSideViewCamera = nullptr;
 	}
-	if (this->mpPopUpPanel)
+	if (this->mpMenuPanel)
 	{
-		delete this->mpPopUpPanel;
-		this->mpPopUpPanel = nullptr;
+		delete this->mpMenuPanel;
+		this->mpMenuPanel = nullptr;
 	}
 	if (this->mpWindow)
 	{
@@ -271,14 +271,14 @@ void System::mSetupPanels()
 		{ 0.0f, 1.0f, 0.0f, 0.0f },
 		{ 0.000001f, 0.0f, 0.0f, 0.0f },
 		XM_PI / 15.0f, 16.0f / 9.0f,
-		0.1f, 25.0f, LOOK_AT, PERSPECTIVE);
+		0.1f, 10.0f, LOOK_AT, PERSPECTIVE);
 
 	this->mpSideViewCamera = new Camera(
 		{ -0.0251480788f, 1.28821635f, 3.78684092f, 0.0f },
 		{ 0.0f, 1.0f, 0.0f, 0.0f },
 		{ 0.000001f, 0.0f, 0.0f, 0.0f },
 		120.f, 32.f/9.f,
-		0.1f, 100.0f, LOOK_AT, PERSPECTIVE);
+		0.1f, 25.0f, LOOK_AT, PERSPECTIVE);
 
 	this->mpTopViewPanel->SetCamera(this->mpTopViewCamera);
 	this->mpSideViewPanel->SetCamera(this->mpSideViewCamera);
@@ -342,6 +342,8 @@ void System::mSetupPanels()
 
 	// Setting up the active log panel.
 	this->mpActiveLogPanel->SetNotificationList(0, 0);
+
+
 }
 
 void System::mSetupModels()
@@ -463,9 +465,9 @@ void System::mSetupModels()
 	this->mpSideViewPanel->rGetMeshObject("Bryggdäck")->Scale(0.5f, 0.5f, 0.5f);
 	this->mpSideViewPanel->rGetMeshObject("Huvuddäck")->Scale(0.5f, 0.5f, 0.5f);
 	this->mpSideViewPanel->rGetMeshObject("Trossdäck")->Scale(0.5f, 0.5f, 0.5f);
-	this->mpSideViewPanel->rGetMeshObject("Bryggbounds")->Scale(0.5f, 0.5f, 0.5f);
-	this->mpSideViewPanel->rGetMeshObject("Huvudbounds")->Scale(0.5f, 0.5f, 0.5f);
-	this->mpSideViewPanel->rGetMeshObject("Trossbounds")->Scale(0.5f, 0.5f, 0.5f);
+	this->mpSideViewPanel->rGetMeshObject("Bryggbounds")->Scale(0.5f, 0.5f, 0.53f);
+	this->mpSideViewPanel->rGetMeshObject("Huvudbounds")->Scale(0.5f, 0.5f, 0.53f);
+	this->mpSideViewPanel->rGetMeshObject("Trossbounds")->Scale(0.5f, 0.5f, 0.53f);
 
 
 }
