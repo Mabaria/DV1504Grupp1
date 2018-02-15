@@ -63,8 +63,8 @@ float4 main(PS_IN input) : SV_TARGET
 		if (alpha != 1.0f) // If it's going to blend, turn it grey
 		{
 			ambient = float3(0.5f, 0.5f, 0.5f);
+			alpha = 0.0f;
 		}
-
 
 		// Transparency in 3D text texture wont further shading (early exit)
 		float4 s = texture2d.Sample(ss, input.tex.xy);
@@ -83,6 +83,7 @@ float4 main(PS_IN input) : SV_TARGET
 	if (Are_there_active_events)
 	{
 		int nr_of_events = GetNrOfEvents();
+		alpha = 0.5f;
 
 		for (int i = 0; i < nr_of_events; i++)
 		{
@@ -103,10 +104,6 @@ float4 main(PS_IN input) : SV_TARGET
 				break;
 			}
 		}
-	}
-	else
-	{
-		//ambient = 0.0f;
 	}
 
 	return float4(saturate(diffuse + ambient), alpha);
