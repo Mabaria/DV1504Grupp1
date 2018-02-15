@@ -263,7 +263,6 @@ void System::mSetupPanels()
 		120.f, 32.f/9.f,
 		0.1f, 100.0f, LOOK_AT, PERSPECTIVE);
 	this->mpSideViewPanel->SetCamera(this->mpSideViewCamera);
-	this->mpTopViewPanel->SetCamera(this->mpTopViewCamera);
 
 	// Creating and setting the shaders.
 	this->mpSideViewPanel->CreateShadersAndSetup(
@@ -289,16 +288,38 @@ void System::mSetupPanels()
 	(DWRITE_FONT_WEIGHT_ULTRA_BLACK);
 	this->mpControlPanel->GetTextBoxByName("title")->SetTextAlignment
 	(DWRITE_TEXT_ALIGNMENT_CENTER);
-	this->mpControlPanel->AddButton(70, 70, 60, 20, "../../Models/Button01.png", "Injury");
-	this->mpControlPanel->AddButton(70, 70, 60, 95, "../../Models/Button02.png", "Gas");
-	this->mpControlPanel->AddButton(70, 70, 60, 170, "../../Models/Button03.png", "Water");
-	this->mpControlPanel->AddButton(70, 70, 60, 245, "../../Models/Button04.png", "Fire");
-	this->mpControlPanel->AddButton(70, 70, 60, 340,
-		/*(this->mpControlPanel->GetHeight() - 140) / 2,
-		this->mpControlPanel->GetWidth() - 140,*/
-		"../../Models/Button05.png", "Reset");
 
-	this->mpControlPanel->GetButtonByName("Reset")->AddObserver(this->mpSideViewPanel);
+	this->mpControlPanel->LoadImageToBitmap(
+		"../../Models/Button01.png",
+		"Injury");
+	this->mpControlPanel->LoadImageToBitmap(
+		"../../Models/Button02.png",
+		"Gas");
+	this->mpControlPanel->LoadImageToBitmap(
+		"../../Models/Button03.png",
+		"Water");
+	this->mpControlPanel->LoadImageToBitmap(
+		"../../Models/Button04.png",
+		"Fire");
+	this->mpControlPanel->LoadImageToBitmap(
+		"../../Models/Button05.png",
+		"Reset");
+
+
+	this->mpControlPanel->AddButton(70, 70, 60, 20,
+		this->mpControlPanel->GetBitmapByName("Injury"), "Injury");
+	this->mpControlPanel->AddButton(70, 70, 60, 95,
+		this->mpControlPanel->GetBitmapByName("Gas"), "Gas");
+	this->mpControlPanel->AddButton(70, 70, 60, 170,
+		this->mpControlPanel->GetBitmapByName("Water"), "Water");
+	this->mpControlPanel->AddButton(70, 70, 60, 245,
+		this->mpControlPanel->GetBitmapByName("Fire"), "Fire");
+	this->mpControlPanel->AddButton(70, 70, 60, 340,
+		this->mpControlPanel->GetBitmapByName("Reset"), "Reset");
+
+
+	this->mpControlPanel->GetButtonByName("Reset")->
+		AddObserver(this->mpSideViewPanel);
 
 	// Setting up the active log panel.
 	this->mpActiveLogPanel->SetNotificationList(0, 0);
@@ -338,21 +359,21 @@ void System::mSetupModels()
 		"Text3D_Floor01",
 		this->mTexts[0]->GetIndices(),
 		this->mTexts[0]->GetVertices(),
-		L"../../Models/däck01.dds"
+		L"../../Models/d01.dds"
 	); 
 	
 	this->mpTopViewPanel->AddMeshObject(
 		"Text3D_Floor1", 
 		this->mTexts[0]->GetIndices(), 
 		this->mTexts[0]->GetVertices(), 
-		L"../../Models/Däck1.dds"
+		L"../../Models/d1.dds"
 	);
 	
 	this->mpTopViewPanel->AddMeshObject(
 		"Text3D_Floor2",
 		this->mTexts[0]->GetIndices(),
 		this->mTexts[0]->GetVertices(),
-		L"../../Models/däck2.dds"
+		L"../../Models/d2.dds"
 	);
 
 
@@ -369,33 +390,33 @@ void System::mSetupModels()
 
 
 	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor01")->
-		Scale(scale * 2.8f, scale * 1.2f, scale * 3.5f);
+		Scale(scale * 2.0f, scale * 1.2f, scale * 3.5f);
 
 	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor01")->
-		Rotate(XM_PI / 2, XM_PI / 2, 0.0f);
+		Rotate(XM_PI / 2.0f, 0.0f, 0.0f);
 
 	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor01")->
-		Translate(0.7f, 0.0f, -0.35f);
+		Translate(0.65f, 0.0f, -0.5f);
 
 
 	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor1")->
-		Scale(scale * 2.8f, scale * 1.2f, scale * 3.5f);
+		Scale(scale * 1.0f, scale * 1.2f, scale * 3.5f);
 
 	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor1")->
-		Rotate(XM_PI / 2, XM_PI / 2, 0.0f);
+		Rotate(XM_PI / 2.0, 0.0f, 0.0f);
 
 	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor1")->
-		Translate(0.7f, 0.0f, 0.15f);
+		Translate(0.75f, 0.0f, -0.05f);
 
 
 	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor2")->
-		Scale(scale * 2.8f, scale * 1.2f, scale * 3.5f);
+		Scale(scale * 1.0f, scale * 1.2f, scale * 3.5f);
 
 	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor2")->
-		Rotate(XM_PI / 2, XM_PI / 2, 0.0f);
+		Rotate(XM_PI / 2.0f, 0.0f, 0.0f);
 
 	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor2")->
-		Translate(0.7f, 0.0f, 0.65f);
+		Translate(0.75f, 0.0f, 0.45f);
 
 	
 
