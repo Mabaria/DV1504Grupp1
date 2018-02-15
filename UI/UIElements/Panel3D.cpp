@@ -492,7 +492,7 @@ const void Panel3D::SetCamera(Camera * camera)
 	//this->UpdateCamera();
 }
 
-void Panel3D::Update(const Button * attribute)
+void Panel3D::Update(Button * attribute)
 {
 	this->mRadius = 4.0f;
 	this->mDirection = DirectX::XMVector3Normalize({

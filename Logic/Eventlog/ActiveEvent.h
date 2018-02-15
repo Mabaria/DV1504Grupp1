@@ -3,8 +3,10 @@
 #include <vector>
 #include "LogEvent.h"
 
+#include "../../IO/ObserverPattern/Observable.h"
 
-class ActiveEvent
+
+class ActiveEvent : public Observable<ActiveEvent>
 {
 public:
 
@@ -13,10 +15,11 @@ public:
 	
 	// Event specific
 	bool AddEvent(int index, LogEvent* pEvent);
-	bool ClearEvent(int index);
+	bool ClearEvent(Event::Type type);
 
 	bool EventTypeExists(Event::Type type) const;
 
+	bool IsEmpty() const;
 	int GetEventCount() const;
 	int GetEventIndexAt(int index) const;
 	std::vector<LogEvent*> GetActiveEvents() const;

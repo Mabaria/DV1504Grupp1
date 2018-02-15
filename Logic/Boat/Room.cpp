@@ -116,14 +116,19 @@ void Room::SetEventLog(EventLog *pEventLog)
 *	Event specific
 */
 
-void Room::AddSensorEvent(Event::Type type)
+bool Room::AddSensorEvent(Event::Type type)
 {
-	this->mSensor.AutoTrigger(type);
+	return this->mSensor.AutoTrigger(type);
 }
 
-void Room::AddPlotterEvent(Event::Type type)
+bool Room::AddPlotterEvent(Event::Type type)
 {
-	this->mSensor.PlotTrigger(type);
+	return this->mSensor.PlotTrigger(type);
+}
+
+bool Room::ClearEvent(Event::Type type)
+{
+	return this->mSensor.ClearEvent(type);
 }
 
 void Room::AddInputType(Event::Type type)

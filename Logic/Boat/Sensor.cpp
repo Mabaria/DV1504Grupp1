@@ -62,7 +62,7 @@ bool Sensor::AutoTrigger(Event::Type type)
 	if (!this->CanDetect(type))
 		return false;
 
-	ActiveEvent *pActiveEvent = this->mpEventLog->AddEvent(type, this->mRoomIndex);
+	ActiveEvent *pActiveEvent = this->mpEventLog->AddEvent(type, this->mRoomIndex, this);
 
 	// Sanity check
 	if (pActiveEvent == nullptr)	// Event type already exist
@@ -75,7 +75,7 @@ bool Sensor::AutoTrigger(Event::Type type)
 
 bool Sensor::PlotTrigger(Event::Type type)
 {
-	ActiveEvent *pActiveEvent = this->mpEventLog->AddEvent(type, this->mRoomIndex);
+	ActiveEvent *pActiveEvent = this->mpEventLog->AddEvent(type, this->mRoomIndex, this);
 
 	// Sanity check
 	if (pActiveEvent == nullptr)	// Event type already exist
@@ -83,6 +83,28 @@ bool Sensor::PlotTrigger(Event::Type type)
 	
 	this->mpActiveEvent = pActiveEvent;
 	this->mActiveEventIndex = this->mpActiveEvent->GetIndexInEventLog();
+	return true;
+}
+
+bool Sensor::ClearEvent(Event::Type type)
+{
+	// Sanity check
+	if (this->mpActiveEvent == nullptr) // No active events in room
+		return false;
+
+	// Clear event
+	if (!this->mpActiveEvent->ClearEvent(type)) // Failed to clear event (type doesn't exist)
+		return false;
+	
+	// Check if room is clear from events.
+	// If that is the case, the active event will be deleted
+	if (this->mpActiveEvent->IsEmpty())
+	{
+		this->mpEventLog->ClearActiveEvent(this->mActiveEventIndex);
+		this->mActiveEventIndex = -1;
+		this->mpActiveEvent = nullptr;
+	}
+
 	return true;
 }
 
@@ -163,4 +185,13 @@ std::string Sensor::WriteString() const
 	ss << "}";
 	
 	return ss.str();
+}
+
+/**
+*	Observer specific
+*/
+
+void Sensor::Update(ActiveEvent *pAttribute)
+{
+	this->mActiveEventIndex = pAttribute->GetIndexInEventLog();
 }

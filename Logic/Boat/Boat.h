@@ -41,9 +41,9 @@ public:
 	void SetEventLog(EventLog *pEventLog);
 
 	// Event specific
-	void CreateAutoEvent(Event::Type type, std::string roomName, std::string deckName);
-	void CreatePlotEvent(Event::Type type, std::string roomName, std::string deckName);
-	void ClearEvent(Event::Type type, std::string roomName, std::string deckName);
+	bool CreateAutoEvent(Event::Type type, std::string roomName, std::string deckName);
+	bool CreatePlotEvent(Event::Type type, std::string roomName, std::string deckName);
+	bool ClearEvent(Event::Type type, std::string roomName, std::string deckName);
 	std::vector<Event::Type> GetEventsInRoom(std::string roomName, std::string deckName);
 
 	// Disk specific

@@ -474,7 +474,7 @@ void Camera::SetProjectionMode(const PROJECTION_MODE new_projection_mode)
 	this->mUpdateProjMatrix();
 }
 
-void Camera::Update(const Button * attribute)
+void Camera::Update(Button * attribute)
 {
 	// Reset the camera when prompted by button
 	this->mReset();

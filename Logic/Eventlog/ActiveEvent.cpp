@@ -32,11 +32,11 @@ bool ActiveEvent::AddEvent(int index, LogEvent* pEvent)
 	return true;
 }
 
-bool ActiveEvent::ClearEvent(int index)
+bool ActiveEvent::ClearEvent(Event::Type type)
 {
 	for (int i = 0; i < (int)this->mEvents.size(); i++)
 	{
-		if (this->mEvents[i].index == index)
+		if (this->mEvents[i].pointer->GetType() == type)
 		{
 			this->mEvents.erase(this->mEvents.begin() + i);
 			return true;
@@ -52,6 +52,14 @@ bool ActiveEvent::EventTypeExists(Event::Type type) const
 		if (this->mEvents[i].pointer->GetType() == type)
 			return true;
 	}
+
+	return false;
+}
+
+bool ActiveEvent::IsEmpty() const
+{
+	if ((int)this->mEvents.size() == 0)
+		return true;
 
 	return false;
 }

@@ -23,7 +23,7 @@ EventLog::~EventLog()
 *	Event specific
 */
 
-ActiveEvent* EventLog::AddEvent(Event::Type type, int roomIndex)
+ActiveEvent* EventLog::AddEvent(Event::Type type, int roomIndex, Observer<ActiveEvent> *pObserver)
 {
 	int logIndex;
 	int activeIndex;
@@ -37,6 +37,7 @@ ActiveEvent* EventLog::AddEvent(Event::Type type, int roomIndex)
 	{
 		newActive = true;
 		ActiveEvent *newActiveEvent = new ActiveEvent;
+		newActiveEvent->AddObserver(pObserver);
 		activeIndex = (int)this->mpActiveEvents.size();
 
 		newActiveEvent->SetRoomIndex(roomIndex);
@@ -82,33 +83,22 @@ bool EventLog::ClearEvent(Event::Type type, int roomIndex)
 	if (activeIndex == -1)
 		return false; // Nothing to clear
 
-	int size = this->mpActiveEvents[activeIndex]->GetEventCount();
-	int index;
+	return this->mpActiveEvents[activeIndex]->ClearEvent(type);
+}
 
-	for (int i = 0; i < size; i++)
+void EventLog::ClearActiveEvent(int index)
+{
+	if (index < 0 || index > (int)this->mpActiveEvents.size())
+		return;
+
+	delete this->mpActiveEvents[index];
+	this->mpActiveEvents.erase(this->mpActiveEvents.begin() + index);
+
+	for (int i = index; i < (int)this->mpActiveEvents.size(); i++)
 	{
-		index = this->mpActiveEvents[activeIndex]->GetEventIndexAt(i);
-		if (this->mpLogEvents[index]->GetType() == type) // Found
-		{
-			if (!this->mpActiveEvents[activeIndex]->ClearEvent(index))
-				return false; // Could not clear event
-
-			// Check if room is not active anymore.
-			// In that case, delete the active event
-			if (this->mpActiveEvents[activeIndex]->GetEventCount() == 0)
-			{
-				this->mpActiveEvents.erase(this->mpActiveEvents.begin() + activeIndex);
-
-				for (int i = activeIndex; i < (int)this->mpActiveEvents.size(); i++)
-					this->mpActiveEvents[i]->SetIndexInEventLog(i);
-			}
-
-			return true;
-		}
+		this->mpActiveEvents[i]->SetIndexInEventLog(i);
+		this->mpActiveEvents[i]->NotifyObservers(this->mpActiveEvents[i]);
 	}
-
-	// The type of event wasn't active
-	return false;
 }
 
 std::vector<Event::Type> EventLog::GetEvents(int roomIndex) const

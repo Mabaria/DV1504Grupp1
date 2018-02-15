@@ -6,6 +6,8 @@
 #include "../Event/Event.h"
 #include "Sensor.h"
 
+//#include "Boat.h"
+
 struct RoomDesc
 {
 	int indexInBoat;
@@ -49,13 +51,14 @@ public:
 	void SetEventLog(EventLog *pEventLog);
 
 	// Event specific
-	void AddSensorEvent(Event::Type type);	/* This function will only add
+	bool AddSensorEvent(Event::Type type);	/* This function will only add
 											   event if sensor is capable
 											   of detecting the event type*/
 
-	void AddPlotterEvent(Event::Type type);	/* This function will add the
+	bool AddPlotterEvent(Event::Type type);	/* This function will add the
 											   event without checking the
 											   sensor */
+	bool ClearEvent(Event::Type type);
 
 	void AddInputType(Event::Type type);
 	int GetActiveEventIndex() const;

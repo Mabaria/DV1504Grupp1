@@ -17,7 +17,7 @@ class EventReporter : public Observer<int>
 public:
 	EventReporter() {}
 	~EventReporter() {}
-	void Update(const int* attribute)
+	void Update(int* attribute)
 	{
 		if (*attribute == 5)
 		{

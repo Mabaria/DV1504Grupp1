@@ -6,7 +6,9 @@
 #include "../Event/Event.h"
 #include "../Eventlog/EventLog.h"
 
-class Sensor
+#include "../../IO/ObserverPattern/Observer.h"
+
+class Sensor : public Observer<ActiveEvent>
 {
 public:
 
@@ -21,6 +23,8 @@ public:
 	
 	bool AutoTrigger(Event::Type type); // Will return a ActiveEvent index
 	bool PlotTrigger(Event::Type type);
+
+	bool ClearEvent(Event::Type type);
 
 
 	// Log specific
@@ -37,6 +41,9 @@ public:
 	
 	// Disk specific
 	std::string WriteString() const;
+
+	// Observer specific
+	void Update(ActiveEvent *pAttribute) override;
 
 private:
 

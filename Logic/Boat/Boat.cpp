@@ -197,28 +197,28 @@ void Boat::SetEventLog(EventLog *pEventLog)
 *	Event specific
 */
 
-void Boat::CreateAutoEvent(Event::Type type,
+bool Boat::CreateAutoEvent(Event::Type type,
 	std::string roomName,
 	std::string deckName)
 {
 	int index = this->GetRoomIndex(roomName, deckName);
-	this->mpRooms[index]->AddSensorEvent(type);
+	return this->mpRooms[index]->AddSensorEvent(type);
 }
 
-void Boat::CreatePlotEvent(Event::Type type,
+bool Boat::CreatePlotEvent(Event::Type type,
 	std::string roomName,
 	std::string deckName)
 {
 	int index = this->GetRoomIndex(roomName, deckName);
-	this->mpRooms[index]->AddPlotterEvent(type);
+	return this->mpRooms[index]->AddPlotterEvent(type);
 }
 
-void Boat::ClearEvent(Event::Type type,
+bool Boat::ClearEvent(Event::Type type,
 	std::string roomName,
 	std::string deckName)
 {
 	int roomIndex = this->GetRoomIndex(roomName, deckName);
-	this->mpEventLog->ClearEvent(type, roomIndex);
+	return this->mpEventLog->ClearEvent(type, roomIndex);
 }
 
 std::vector<Event::Type> Boat::GetEventsInRoom(std::string roomName,
