@@ -56,20 +56,34 @@ bool Sensor::CanDetect(Event::Type type) const
 	return false;
 }
 
-int Sensor::AutoTrigger(Event::Type type)
+bool Sensor::AutoTrigger(Event::Type type)
 {
 	// Check early exit
 	if (!this->CanDetect(type))
-		return -1;
+		return false;
 
-	this->mpActiveEvent = this->mpEventLog->AddEvent(type, this->mRoomIndex);
-	return this->mpActiveEvent->GetIndexInEventLog();
+	ActiveEvent *pActiveEvent = this->mpEventLog->AddEvent(type, this->mRoomIndex);
+
+	// Sanity check
+	if (pActiveEvent == nullptr)	// Event type already exist
+		return false;
+	
+	this->mpActiveEvent = pActiveEvent;
+	this->mActiveEventIndex = this->mpActiveEvent->GetIndexInEventLog();
+	return true;
 }
 
-int Sensor::PlotTrigger(Event::Type type)
+bool Sensor::PlotTrigger(Event::Type type)
 {
-	this->mpActiveEvent = this->mpEventLog->AddEvent(type, this->mRoomIndex);
-	return this->mpActiveEvent->GetIndexInEventLog();
+	ActiveEvent *pActiveEvent = this->mpEventLog->AddEvent(type, this->mRoomIndex);
+
+	// Sanity check
+	if (pActiveEvent == nullptr)	// Event type already exist
+		return false;
+	
+	this->mpActiveEvent = pActiveEvent;
+	this->mActiveEventIndex = this->mpActiveEvent->GetIndexInEventLog();
+	return true;
 }
 
 

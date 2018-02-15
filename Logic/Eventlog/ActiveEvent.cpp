@@ -45,6 +45,17 @@ bool ActiveEvent::ClearEvent(int index)
 	return false;
 }
 
+bool ActiveEvent::EventTypeExists(Event::Type type) const
+{
+	for (int i = 0; i < (int)this->mEvents.size(); i++)
+	{
+		if (this->mEvents[i].pointer->GetType() == type)
+			return true;
+	}
+
+	return false;
+}
+
 int ActiveEvent::GetEventCount() const
 {
 	return (int)this->mEvents.size();

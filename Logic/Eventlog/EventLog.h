@@ -33,9 +33,9 @@ public:
 
 	// Event Specific
 	ActiveEvent* AddEvent(Event::Type type, int roomIndex);	/* Pushing an event
-																										at the end of the list,
-																										returns index of event in
-																										the active log */
+															   at the end of the list,
+															   returns index of event in
+															   the active log */
 	bool ClearEvent(Event::Type type, int roomIndex);
 	std::vector<Event::Type> GetEvents(int roomIndex) const;
 	std::vector<Event::Type> GetEvents(std::string roomName) const;
