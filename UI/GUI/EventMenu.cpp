@@ -80,6 +80,8 @@ bool EventMenu::OpenAt(Room *pRoom)
 	this->mpPanel->Show();
 	this->mpPanel->UpdateWindowPos();
 
+	this->mVisible = true;
+
 	this->mpActiveRoom = pRoom;
 
 	return true;
@@ -93,7 +95,10 @@ bool EventMenu::Update()
 
 bool EventMenu::Draw() const
 {
-	this->mpPanel->Draw();
+	if (this->mVisible)
+		this->mpPanel->Draw();
+	else
+		this->mpPanel->Hide();
 	return true;
 }
 
@@ -116,6 +121,7 @@ void EventMenu::Update( Button *attribute)
 		if (button_name.compare("Exit") == 0)
 		{
 			this->mpPanel->Hide();
+			this->mVisible = false;
 		}
 		else
 		{
