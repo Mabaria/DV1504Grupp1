@@ -14,11 +14,11 @@ public:
 	const int GetMinutes();
 	const int GetHours();
 	const int GetDays();
+	const long GetTimeAsSecondsSinceStart();
 	const std::string GetTimeAsStr();
 	const std::string GetSecondsAsStr();
 	const std::string GetMinutesAsStr();
 	const std::string GetHoursAsStr();
-
 private:
 	time_t mStartTime;
 	tm *pStartTimeStruct;

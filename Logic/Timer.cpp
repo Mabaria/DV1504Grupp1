@@ -73,6 +73,13 @@ const int Timer::GetDays()
 	return pdiff_struct->tm_yday;
 }
 
+const long Timer::GetTimeAsSecondsSinceStart()
+{
+	this->UpdateTime();
+	time_t diff = this->mTimeNow - this->mStartTime;
+	return (long)diff;
+}
+
 const std::string Timer::GetTimeAsStr()
 {
 	this->UpdateTime();

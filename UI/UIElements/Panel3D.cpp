@@ -64,7 +64,7 @@ Panel3D::Panel3D(int width, int height, int top, int left,
 	this->mSpeed		= 0.06f;
 	this->mMouseDiff.x	= 0.0f;
 	this->mMouseDiff.y	= 0.0f;
-	this->mBtnToPan		= Buttons::ScrollPress;
+	this->mBtnToPan		= Buttons::Right;
 
 	this->mOrthographicMaxView = 2.0f;
 	this->mMovableCamera = movableCamera;

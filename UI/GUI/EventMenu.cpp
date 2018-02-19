@@ -50,6 +50,9 @@ bool EventMenu::Init(float parentWidth,
 	
 	this->InitButtons();
 
+	//! DET GÅR INTE ATT GÖMMA FÖNSTRET I BÖRJAN.
+	this->mpPanel->Hide();
+
 	return true;
 }
 
@@ -77,6 +80,8 @@ bool EventMenu::OpenAt(Room *pRoom)
 	this->mpPanel->Show();
 	this->mpPanel->UpdateWindowPos();
 
+	this->mVisible = true;
+
 	this->mpActiveRoom = pRoom;
 
 	return true;
@@ -90,7 +95,10 @@ bool EventMenu::Update()
 
 bool EventMenu::Draw() const
 {
-	this->mpPanel->Draw();
+	if (this->mVisible)
+		this->mpPanel->Draw();
+	else
+		this->mpPanel->Hide();
 	return true;
 }
 
@@ -113,6 +121,7 @@ void EventMenu::Update( Button *attribute)
 		if (button_name.compare("Exit") == 0)
 		{
 			this->mpPanel->Hide();
+			this->mVisible = false;
 		}
 		else
 		{
@@ -191,5 +200,4 @@ void EventMenu::InitButtons()
 	this->mpPanel->GetButtonByName("Water")->AddObserver(this);
 	this->mpPanel->GetButtonByName("Injury")->AddObserver(this);
 	this->mpPanel->GetButtonByName("Exit")->AddObserver(this);
-	//this->mpPanel->GetButtonByName("Injury")->SetOpacity(0.6f);
 }

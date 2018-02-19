@@ -16,7 +16,8 @@ NotificationObject::NotificationObject(
 	this->mEventType = event->GetType();
 	this->mIndex = index;
 	
-	this->mTextBox.SetFontSize(18);
+	this->mTextBox.SetFontSize(32);
+	this->mTextBox.SetFontWeight(DWRITE_FONT_WEIGHT_ULTRA_BLACK);
 	this->mTextBox.SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
 	D2D1_SIZE_F render_target_size = direct2d->GetpRenderTarget()->GetSize();	
 
@@ -117,12 +118,8 @@ const std::string NotificationObject::GetStartTime() const
 
 const std::string NotificationObject::GetNotificationString() const
 {
-	std::string return_string = "Händelse ";
-	return_string += std::to_string(this->mIndex);
-	return_string += "\n";
+	std::string return_string = "";
 	return_string += this->mRoomName;
-	return_string += "\n";
-	return_string += this->mDeckName;
 	return_string += "\n";
 	return_string += this->mElapsedTime;
 	
