@@ -40,6 +40,8 @@ private:
 	TextBox mTitle;
 	Button mTitleFrame;
 
+	std::string mDefaultTitle;
+
 	// Render target pointer for size purposes.
 	ID2D1HwndRenderTarget *mpRenderTarget;
 	std::vector<NotificationObject*> mObjects;

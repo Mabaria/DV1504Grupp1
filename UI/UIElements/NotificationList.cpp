@@ -13,15 +13,16 @@ NotificationList::NotificationList(Direct2D *direct2d, int posX, int posY)
 		this->mPosX, 
 		this->mPosY, 
 		(int)direct2d->GetpRenderTarget()->GetSize().width,
-		(int)direct2d->GetpRenderTarget()->GetSize().height / 30);
+		(int)direct2d->GetpRenderTarget()->GetSize().height / 10);
 
-	this->mTitle.SetText("Aktiv Logg | Antal: 0");
+	this->mDefaultTitle = "Aktiv Logg\n Antal: ";
+	this->mTitle.SetText(this->mDefaultTitle + "0");
 	this->mTitleFrame.SetButtonSize(
 		0,
 		0,
 		(int)this->mTitle.GetTextBoxSize().right,
 		(int)this->mTitle.GetTextBoxSize().bottom);
-	this->mTitle.SetFontSize(28);
+	this->mTitle.SetFontSize(40);
 	this->mTitle.SetFontWeight(DWRITE_FONT_WEIGHT_ULTRA_BLACK);
 	this->mTitle.SetFontName(L"times new roman");
 	this->mTitle.SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
@@ -71,7 +72,7 @@ bool NotificationList::AddNotification(
 
 		// Updates the number of events in the title.
 		this->mTitle.SetText(
-			"Aktiv Logg | Antal: " + std::to_string(this->mObjects.size()));
+			this->mDefaultTitle + std::to_string(this->mObjects.size()));
 	}
 	return new_event;
 }
@@ -115,7 +116,7 @@ bool NotificationList::RemoveNotification(Room * room, Event::Type type)
 
 			// Updates the number of events in the title.
 			this->mTitle.SetText(
-				"Aktiv Logg | Antal: " + std::to_string(this->mObjects.size()));
+				this->mDefaultTitle + std::to_string(this->mObjects.size()));
 		}
 	}
 	return result;
