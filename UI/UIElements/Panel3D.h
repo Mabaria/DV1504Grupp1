@@ -72,11 +72,11 @@ public:
 		_aligned_free(p);
 	}
 
-	//void SetCameraPosition()
+	
 private:
 	D3D11 mDirect3D;
 	std::vector<MeshObject*> mpMeshObjects;
-	//HWND mPanelWindow;
+	
 
 	ID3D11VertexShader *mpVertexShader;
 	ID3D11GeometryShader *mpGeometryShader;
@@ -104,9 +104,6 @@ private:
 
 
 	const void CreateTexture(std::wstring texturePath);
-
-
-	// --- TEMP ---
 
 	Buttons mBtnToPan;
 
