@@ -298,6 +298,15 @@ void Window::Open()
 	}
 }
 
+void Window::OpenNormal()
+{
+	if (this->mHwnd && !this->mIsOpen)
+	{
+		ShowWindow(this->mHwnd, SW_SHOWNORMAL);
+		this->mIsOpen = true;
+	}
+}
+
 const bool Window::IsOpen() const
 {
 	return this->mIsOpen;

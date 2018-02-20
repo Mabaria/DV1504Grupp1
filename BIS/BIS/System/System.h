@@ -30,6 +30,8 @@ private:
 	void mSetupPanels();
 	void mSetupModels();
 	void mSetupBoat();
+	
+	void mSetupInfoWindow(int windowWidth, int windowHeight);
 
 	Panel2D *mpControlPanel;
 	Panel2D *mpActiveLogPanel;
@@ -45,6 +47,12 @@ private:
 	Camera *mpTopViewCamera;
 	Camera *mpSideViewCamera;
 	Window *mpWindow;
+
+	// User info.
+	Window *mpInfoWindow;
+	Panel2D *mpInfoPanel;
+	int mInfoWindowWidth;
+	int mInfoWindowHeight;
 
 	EventLog mEventLog;
 	Boat mBoat;

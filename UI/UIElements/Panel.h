@@ -49,6 +49,9 @@ public:
 	bool IsVisible();
 	void Hide();
 	void Show();
+	
+	// Does not work, do not use.
+	void ShowOnTop();
 
 	HWND *GetPanelWindowHandle();
 

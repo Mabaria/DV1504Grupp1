@@ -184,14 +184,11 @@ void Panel::UpdateWindowPos()
 
 bool Panel::IsMouseInsidePanel()
 {
-	if (Mouse::IsButtonDown(Buttons::Left))
-		int i = 0;
 	RECT window_rect;
 	GetWindowRect(this->mPanelWindow, &window_rect);
 	POINT mouse_pos;
 	GetCursorPos(&mouse_pos);
 	return PtInRect(&window_rect, mouse_pos); // if mouse is inside panel
-
 }
 
 bool Panel::IsVisible()
@@ -206,7 +203,22 @@ void Panel::Hide()
 
 void Panel::Show()
 {
-	ShowWindow(this->mPanelWindow, SW_NORMAL);
+	ShowWindow(this->mPanelWindow, SW_SHOW);
+}
+
+void Panel::ShowOnTop()
+{
+	this->Show();
+	// Only changes z order, retains current size and position
+	// with the SWP_NOMOVE and SWP_NOSIZE flags.
+	SetWindowPos(
+		this->mPanelWindow,
+		HWND_TOPMOST, 
+		this->mLeft,
+		this->mTop,
+		this->mWidth,
+		this->mHeight,
+		SWP_NOMOVE | SWP_NOSIZE);
 }
 
 HWND *Panel::GetPanelWindowHandle()

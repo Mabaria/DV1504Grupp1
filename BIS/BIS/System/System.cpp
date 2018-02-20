@@ -6,10 +6,12 @@ System::System()
 	this->mpControlPanel	= nullptr;
 	this->mpTopViewCamera	= nullptr;
 	this->mpSideViewCamera	= nullptr;
+	this->mpInfoPanel		= nullptr;
 	this->mpMenuPanel		= nullptr;
 	this->mpSideViewPanel	= nullptr;
 	this->mpTopViewPanel	= nullptr;
 	this->mpWindow			= nullptr;
+	this->mpInfoWindow		= nullptr;
 }
 
 System::~System()
@@ -49,10 +51,20 @@ System::~System()
 		delete this->mpMenuPanel;
 		this->mpMenuPanel = nullptr;
 	}
+	if (this->mpInfoPanel)
+	{
+		delete this->mpInfoPanel;
+		this->mpInfoPanel = nullptr;
+	}
 	if (this->mpWindow)
 	{
 		delete this->mpWindow;
 		this->mpWindow = nullptr;
+	}
+	if (this->mpInfoWindow)
+	{
+		delete this->mpInfoWindow;
+		this->mpInfoWindow = nullptr;
 	}
 	for (int i = 0; i < (int)this->mFloors.size(); i++)
 	{
@@ -135,6 +147,7 @@ void System::BuildGraphicalUserInterface(
 	this->mSetupPanels();
 	this->mSetupModels();
 	this->mSetupBoat();
+	this->mSetupInfoWindow(windowWidth, windowHeight);
 }
 
 void System::Run()
@@ -161,6 +174,19 @@ void System::mUpdate()
 	this->mpTopViewPanel->Update();
 	this->mpSideViewPanel->Update();
 	this->mpMenuPanel->Update();
+	if (this->mpInfoWindow->IsOpen())
+	{
+		this->mpInfoWindow->Update();
+		this->mpInfoPanel->Update();
+	}
+	else
+	{
+		// Can't use observer for this one, sorry.
+		if (this->mpControlPanel->GetButtonByName("Info")->GetButtState() == CLICKED)
+		{
+			this->mpInfoWindow->OpenNormal();
+		}
+	}
 }
 
 void System::mDraw()
@@ -170,6 +196,11 @@ void System::mDraw()
 	this->mpTopViewPanel->Draw();
 	this->mpSideViewPanel->Draw();
 	this->mpMenuPanel->Draw();
+
+	if (this->mpInfoWindow->IsOpen())
+	{
+		this->mpInfoPanel->Draw();
+	}
 }
 
 void System::mHandleInput()
@@ -293,13 +324,16 @@ void System::mSetupPanels()
 	this->mpControlPanel->LoadImageToBitmap(
 		"../../Models/Button05.png",
 		"Reset");
-
+	this->mpControlPanel->LoadImageToBitmap(
+		"../../Models/Info.png", 
+		"Info");
 
 	this->mpControlPanel->AddButton(70, 70, 10, 10,
 		this->mpControlPanel->GetBitmapByName("Reset"), "Reset");
 	this->mpControlPanel->AddButton(70, 70, 90, 10,
 		this->mpControlPanel->GetBitmapByName("Reset"), "Reset2");
-
+	this->mpControlPanel->AddButton(70, 70, 90, 90,
+		this->mpControlPanel->GetBitmapByName("Info"), "Info");
 
 	this->mpControlPanel->GetButtonByName("Reset")->
 		AddObserver(this->mpSideViewPanel);
@@ -492,4 +526,46 @@ void System::mSetupBoat()
 	*	Send corresponding pointers
 	*/
 	this->mBoat.SetEventLog(&this->mEventLog);
+}
+
+void System::mSetupInfoWindow(int windowWidth, int windowHeight)
+{
+	this->mInfoWindowWidth = windowWidth;
+	this->mInfoWindowHeight = windowHeight;
+
+	this->mpInfoWindow = new Window(
+		L"Användarinformation",
+		this->mInfoWindowWidth / 3,
+		this->mInfoWindowHeight);
+	this->mpInfoPanel = new Panel2D(
+		this->mInfoWindowWidth,
+		this->mInfoWindowHeight,
+		0, 
+		0, 
+		this->mpInfoWindow->GetWindow(), 
+		L"Användarinformation");
+
+	std::string title_string = "Hur man använder verktyget:";
+	std::vector<std::string> header_strings;
+	std::vector<std::string> body_strings;
+
+	int title_font_size		= 40;
+	int header_font_size	= 30;
+	int body_font_size		= 20;
+
+	header_strings.push_back("Kontroller");
+	body_strings.push_back("Vänster musknapp: Välja rum eller händelser samt lägga till och ta bort händelser.\nHöger musknapp: Håll in och dra för att rotera kameran.");
+	
+	this->mpInfoPanel->AddTextbox(
+		this->mpInfoPanel->GetWidth(),
+		title_font_size * 4 / 3 + 5,
+		0,
+		0,
+		title_string,
+		"title");
+	this->mpInfoPanel->GetTextBoxByName("title")->SetFontSize(title_font_size);
+	this->mpInfoPanel->GetTextBoxByName("title")->SetFontWeight(DWRITE_FONT_WEIGHT_ULTRA_BLACK);
+	this->mpInfoPanel->GetTextBoxByName("title")->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
+	this->mpInfoPanel->GetTextBoxByName("title")->SetFontName(L"comic sans ms");
+
 }
