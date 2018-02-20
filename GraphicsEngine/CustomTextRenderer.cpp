@@ -19,6 +19,26 @@ CustomTextRenderer::CustomTextRenderer(
 
 }
 
+CustomTextRenderer::~CustomTextRenderer()
+{
+	if (this->mpD2DFactory)
+	{
+		this->mpD2DFactory->Release();
+	}
+	if (this->mpRT)
+	{
+		this->mpRT->Release();
+	}
+	if (this->mpOutlineBrush)
+	{
+		this->mpOutlineBrush->Release();
+	}
+	if (this->mpFillBrush)
+	{
+		this->mpFillBrush->Release();
+	}
+}
+
 HRESULT CustomTextRenderer::DrawGlyphRun(
 	void * clientDrawingContext,
 	FLOAT baselineOriginX,
@@ -100,4 +120,14 @@ HRESULT CustomTextRenderer::DrawGlyphRun(
 	pTransformedGeometry->Release();
 
 	return hr;
+}
+
+HRESULT CustomTextRenderer::DrawUnderline(void * clientDrawingContext, FLOAT baselineOriginX, FLOAT baselineOriginY, const DWRITE_UNDERLINE * underline, IUnknown * clientDrawingEffect)
+{
+	return E_NOTIMPL;
+}
+
+HRESULT CustomTextRenderer::DrawInlineObject(void * clientDrawingContext, FLOAT originX, FLOAT originY, IDWriteInlineObject * inlineObject, BOOL isSideways, BOOL isRightToLeft, IUnknown * clientDrawingEffect)
+{
+	return E_NOTIMPL;
 }

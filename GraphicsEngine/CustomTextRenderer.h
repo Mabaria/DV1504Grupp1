@@ -14,6 +14,8 @@ public:
 		ID2D1SolidColorBrush* pFillBrush
 	);
 
+	~CustomTextRenderer();
+
 	HRESULT STDMETHODCALLTYPE DrawGlyphRun(
 		void                         * clientDrawingContext,
 		FLOAT                         baselineOriginX,
@@ -24,6 +26,23 @@ public:
 		IUnknown                     * clientDrawingEffect
 	) override;
 
+	HRESULT STDMETHODCALLTYPE DrawUnderline(
+		void             * clientDrawingContext,
+		FLOAT             baselineOriginX,
+		FLOAT             baselineOriginY,
+		const DWRITE_UNDERLINE * underline,
+		IUnknown         * clientDrawingEffect
+	) override;
+
+	HRESULT STDMETHODCALLTYPE DrawInlineObject(
+		void                * clientDrawingContext,
+		FLOAT                originX,
+		FLOAT                originY,
+		IDWriteInlineObject * inlineObject,
+		BOOL                 isSideways,
+		BOOL                 isRightToLeft,
+		IUnknown            * clientDrawingEffect
+	) override;
 
 private:
 	ID2D1Factory * mpD2DFactory;
