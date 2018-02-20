@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\GraphicsEngine\Camera\Camera.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\Camera\Test_Camera.cpp" />
+    <ClCompile Include="..\..\GraphicsEngine\CustomTextRenderer.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\DX\Direct2D.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\DX\Direct3D.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\Parsing\MaterialHandler.cpp" />
@@ -67,6 +68,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\GraphicsEngine\Camera\Camera.h" />
     <ClInclude Include="..\..\GraphicsEngine\Camera\Test_Camera.h" />
+    <ClInclude Include="..\..\GraphicsEngine\CustomTextRenderer.h" />
     <ClInclude Include="..\..\GraphicsEngine\DX\Direct2D.h" />
     <ClInclude Include="..\..\GraphicsEngine\DX\Direct3D.h" />
     <ClInclude Include="..\..\GraphicsEngine\Parsing\MaterialHandler.h" />
