@@ -174,12 +174,9 @@ void System::mUpdate()
 	this->mpTopViewPanel->Update();
 	this->mpSideViewPanel->Update();
 	this->mpMenuPanel->Update();
-	if (this->mpInfoWindow->IsOpen())
-	{
-		this->mpInfoWindow->Update();
-		this->mpInfoPanel->Update();
-	}
-	else
+	this->mpInfoWindow->Update();
+	
+	if(!this->mpInfoWindow->IsOpen())
 	{
 		// Can't use observer for this one, sorry.
 		if (this->mpControlPanel->GetButtonByName("Info")->GetButtState() == CLICKED)
