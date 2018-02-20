@@ -30,6 +30,7 @@ public:
 
 	const int GetWidth() const;
 	const int GetHeight() const;
+	const int GetBottom() const;
 
 	// For changing the index upon deletion.
 	const int GetIndex() const;

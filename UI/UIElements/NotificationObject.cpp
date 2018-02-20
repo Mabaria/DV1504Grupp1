@@ -143,6 +143,11 @@ const int NotificationObject::GetHeight() const
 		-  (int)this->mButton.GetButtonSize().top;
 }
 
+const int NotificationObject::GetBottom() const
+{
+	return this->mButton.GetButtonSize().bottom;
+}
+
 const int NotificationObject::GetIndex() const
 {
 	return this->mIndex;

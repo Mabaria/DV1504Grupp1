@@ -24,7 +24,6 @@ NotificationList::NotificationList(Direct2D *direct2d, int posX, int posY)
 		(int)this->mTitle.GetTextBoxSize().bottom);
 	this->mTitle.SetFontSize(40);
 	this->mTitle.SetFontWeight(DWRITE_FONT_WEIGHT_ULTRA_BLACK);
-	//this->mTitle.SetFontName(L"times new roman");
 	this->mTitle.SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
 }
 
@@ -61,15 +60,21 @@ bool NotificationList::AddNotification(
 			direct2d,
 			(int)this->mObjects.size() + 1));
 
-		// Moves the object 2 pixels in x for looks, and in y based on the
-		// number of objects in the list plus an offset for looks plus the
-		// height of the title text box.
-		this->mObjects.back()->Move(
-			2,
-			((int)this->mObjects.size() - 1)
-			* (this->mObjects[0]->GetHeight() + this->mSpace)
-			+ (int)this->mTitle.GetTextBoxSize().bottom);
+		this->mObjects.back()->Move(2, this->mSpace);
 
+		if (this->mObjects.size() > 1)
+		{
+			this->mObjects.back()->Move(
+				0,
+				this->mObjects[this->mObjects.size() - 2]->GetBottom());
+		}
+		else
+		{
+			this->mObjects.back()->Move(
+				0,
+				(int)this->mTitle.GetTextBoxSize().bottom);
+		}
+		
 		// Updates the number of events in the title.
 		this->mTitle.SetText(
 			this->mDefaultTitle + std::to_string(this->mObjects.size()));
