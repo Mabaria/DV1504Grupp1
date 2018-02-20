@@ -10,7 +10,10 @@ public:
 	
 	static const float GetX();
 	static const float GetY();
+	static const float GetExactX();
+	static const float GetExactY();
 	static const Position GetPosition();
+	static const Position GetExactPosition();
 	
 	static const float GetXPercentage();
 	static const float GetYPercentage();

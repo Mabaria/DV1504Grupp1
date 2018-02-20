@@ -28,7 +28,8 @@ public:
 private:
 	int mMenuWidth, mMenuHeight;
 	int mParentPanelWidth, mParentPanelHeight;
-	bool mVisible;
+	bool mVisible, mButtonFocus, mDraggingWindow;
+	int mDragX, mDragY;
 	EventLog *mpEventLog;
 	Panel2D *mpPanel;
 

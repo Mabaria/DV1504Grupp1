@@ -9,6 +9,8 @@ EventMenu::EventMenu()
 	this->mParentPanelHeight = 0;
 
 	this->mVisible = false;
+	this->mButtonFocus = false;
+	this->mDraggingWindow = false;
 	this->mpEventLog = nullptr;
 	this->mpPanel = nullptr;
 	this->mpActiveRoom = nullptr;
@@ -84,13 +86,62 @@ bool EventMenu::OpenAt(Room *pRoom)
 
 	this->mpActiveRoom = pRoom;
 
+	// TODO: Following functionallity does not work because GetActiveEvents
+	// does not work as intended. Not too important feature anyway
+
+	//for (int i = 0; i < pRoom->GetActiveEvents().size(); i++)
+	//{
+	//	switch (pRoom->GetActiveEvents()[i]->GetType())
+	//	{
+	//	case Event::Type::Fire:
+	//		this->mpPanel->GetButtonByName("Fire")->SetBitmap(
+	//			this->mpPanel->GetBitmapByName("FireOn"));
+	//		break;
+	//	case Event::Type::Water:
+	//		this->mpPanel->GetButtonByName("Water")->SetBitmap(
+	//			this->mpPanel->GetBitmapByName("WaterOn"));
+	//		break;
+	//	case Event::Type::Gas:
+	//		this->mpPanel->GetButtonByName("Gas")->SetBitmap(
+	//			this->mpPanel->GetBitmapByName("GasOn"));
+	//		break;
+	//	case Event::Type::Injury:
+	//		this->mpPanel->GetButtonByName("Injury")->SetBitmap(
+	//			this->mpPanel->GetBitmapByName("InjuryOn"));
+	//		break;
+	//	}
+	//}
+
 	return true;
 }
 
 bool EventMenu::Update()
 {
 	this->mpPanel->Update();
-	return false;
+	if (Mouse::IsButtonPressed(Buttons::Left)
+		&& !this->mDraggingWindow
+		&& !mButtonFocus
+		&& this->mpPanel->IsMouseInsidePanel()
+		&& !this->mpPanel->GetButtonOcclude())
+	{
+		this->mDraggingWindow = true;
+		this->mDragX = Mouse::GetExactX() - this->mpPanel->GetLeft();
+		this->mDragY = Mouse::GetExactY() - this->mpPanel->GetTop();
+	}
+	else if (!Mouse::IsButtonDown(Buttons::Left))
+	{
+		this->mButtonFocus = false;
+		this->mDraggingWindow = false;
+	}
+
+	if (this->mDraggingWindow)
+	{
+		std::cout << this->mDragX << ", " << this->mDragY << std::endl;
+		this->mpPanel->SetLeft(Mouse::GetExactX() - this->mDragX);
+		this->mpPanel->SetTop(Mouse::GetExactY() - this->mDragY);
+		this->mpPanel->UpdateWindowPos();
+	}
+	return true;
 }
 
 bool EventMenu::Draw() const
