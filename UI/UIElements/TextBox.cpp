@@ -25,6 +25,7 @@ TextBox::TextBox(
 	this->SetText(this->mTextString);
 
 	this->mCreateTextFormat();
+	this->mCreateTextLayout();
 }
 
 TextBox::~TextBox()
@@ -104,6 +105,18 @@ void TextBox::SetFontName(std::wstring fontName)
 void TextBox::SetTextAlignment(DWRITE_TEXT_ALIGNMENT textAlignment)
 {
 	this->mpTextFormat->SetTextAlignment(textAlignment);
+}
+
+void TextBox::mCreateTextLayout()
+{
+	HRESULT hr = this->D2D1Panel->GetpTextFactory()->CreateTextLayout(
+		this->mpTextWchar,									// string
+		wcslen(this->mpTextWchar),							// string length
+		this->mpTextFormat,									// text format
+		this->mLayoutRect.right - this->mLayoutRect.left,	// max width
+		this->mLayoutRect.bottom - this->mLayoutRect.top,	// max height
+		&this->mTextLayout									// return pointer
+	);
 }
 
 void TextBox::mCreateColor()

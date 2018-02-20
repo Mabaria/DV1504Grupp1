@@ -40,6 +40,12 @@ private:
 	DWRITE_FONT_WEIGHT mFontWeight;
 	std::wstring mFontName;
 
+	/* New additions related to custom text layout */
+
+	IDWriteTextLayout *mTextLayout;
+	void mCreateTextLayout();
+
+	/*---------------------------------------------*/
 	void mCreateColor();
 	void mCreateTextFormat();
 	void ReleaseCOM(IUnknown *object);
