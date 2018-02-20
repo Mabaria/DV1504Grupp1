@@ -22,8 +22,8 @@ EventMenu::~EventMenu()
 		delete this->mpPanel;
 }
 
-bool EventMenu::Init(float parentWidth,
-	float parentHeight,
+bool EventMenu::Init(int parentWidth,
+	int parentHeight,
 	EventLog *pEventLog,
 	LPCTSTR windowName,
 	HWND *pWindow)
@@ -63,9 +63,10 @@ bool EventMenu::OpenAt(Room *pRoom)
 	int margin = this->mParentPanelWidth / 24;
 	int posX = 0;
 	int posY = 0;
-	Position mousePos = Mouse::GetPositionPercentage();
-	mousePos.x = mousePos.x * this->mParentPanelWidth;
-	mousePos.y = mousePos.y * this->mParentPanelHeight;
+	//FPosition mousePos = Mouse::GetPositionPercentage();
+	//mousePos.x = mousePos.x * this->mParentPanelWidth;
+	//mousePos.y = mousePos.y * this->mParentPanelHeight;
+	Position mousePos = Mouse::GetPosition();
 
 	if (mousePos.x + margin + this->mMenuWidth < this->mParentPanelWidth)
 		posX = mousePos.x + margin;

@@ -32,6 +32,10 @@ enum Buttons
 
 struct Position
 {
+	int x, y;
+};
+struct FPosition
+{
 	float x, y;
 };
 
@@ -50,15 +54,15 @@ public:
 	static char buttonsPrevious;
 
 	static Position mousePosition;
-	static Position mousePositionPercentage;
+	static FPosition mousePositionPercentage;
 	static Position exactMousePosition;
-	static Position exactMousePositionPercentage;
+	static FPosition exactMousePositionPercentage;
 	static float scrollDirection;
 
 	static void SetMouseButton(const Buttons button, const bool is_pressed);
 	static void SetMousePositionPercentage(const float x, const float y);
-	static void SetMousePosition(const float x, const float y);
-	static void SetExactMousePosition(const float x, const float y);
+	static void SetMousePosition(const int x, const int y);
+	static void SetExactMousePosition(const int x, const int y);
 	static void SetExactMousePositionPercentage(const float x, const float y);
 
 	static void SetMouseScroll(const float scroll);

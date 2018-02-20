@@ -10,8 +10,8 @@ public:
 	EventMenu();
 	~EventMenu();
 
-	bool Init(float parentWidth,
-		float parentHeight,
+	bool Init(int parentWidth,
+		int parentHeight,
 		EventLog *pEventLog,
 		LPCTSTR windowName,
 		HWND *pWindow);

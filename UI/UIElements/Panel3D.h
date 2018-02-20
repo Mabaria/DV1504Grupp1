@@ -108,8 +108,8 @@ private:
 	Buttons mBtnToPan;
 
 	XMVECTOR mDirection;
-	Position mMouseOrigin;
-	Position mMouseDiff;
+	FPosition mMouseOrigin;
+	FPosition mMouseDiff;
 	bool mShowCursor;
 
 	float mOrthographicMaxView;

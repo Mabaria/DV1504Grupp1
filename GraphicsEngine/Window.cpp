@@ -180,8 +180,8 @@ LRESULT CALLBACK WindowProcedure(
 		GetClientRect(hWnd, &client_rect);
 
 		InputDevice::SetExactMousePosition(
-			(float)cursor_pos.x,
-			(float)cursor_pos.y
+			cursor_pos.x,
+			cursor_pos.y
 		);
 
 		InputDevice::SetExactMousePositionPercentage(
@@ -192,8 +192,8 @@ LRESULT CALLBACK WindowProcedure(
 		cursor_pos.x -= window_rect.left;
 		cursor_pos.y -= window_rect.top;
 		InputDevice::SetMousePosition(
-			(float)cursor_pos.x,
-			(float)cursor_pos.y
+			cursor_pos.x,
+			cursor_pos.y
 		);
 
 		// Set a percentage across the client screen
