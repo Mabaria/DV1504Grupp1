@@ -7,6 +7,9 @@
 #include <vector>
 #include "TextBox.h"
 #include "NotificationList.h"
+
+// todo ADD CustomTextRenderer to this class :D
+
 struct BitmapInfo
 {
 	ID2D1Bitmap* bitmap = nullptr;
@@ -77,6 +80,7 @@ private:
 	std::vector<Button*> mButtonVector;
 	std::vector<std::string> mButtonNames;
 	std::vector<BitmapInfo> mBitmapVector;
+
 
 	void mUpdateTextBoxes();
 	std::vector<TextBox*> mTextBoxVector;

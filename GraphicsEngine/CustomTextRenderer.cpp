@@ -131,3 +131,92 @@ HRESULT CustomTextRenderer::DrawInlineObject(void * clientDrawingContext, FLOAT 
 {
 	return E_NOTIMPL;
 }
+
+HRESULT CustomTextRenderer::DrawStrikethrough(void * clientDrawingContext, FLOAT baselineOriginX, FLOAT baselineOriginY, const DWRITE_STRIKETHROUGH * strikethrough, IUnknown * clientDrawingEffect)
+{
+	return E_NOTIMPL;
+}
+
+HRESULT CustomTextRenderer::GetCurrentTransform(void * clientDrawingContext, DWRITE_MATRIX * transform)
+{
+	this->mpRT->GetTransform(reinterpret_cast<D2D1_MATRIX_3X2_F*>(transform));
+	return S_OK;
+}
+
+HRESULT CustomTextRenderer::IsPixelSnappingDisabled(void * clientDrawingContext, BOOL * isDisabled)
+{
+	*isDisabled = FALSE;
+	return S_OK;
+}
+
+HRESULT CustomTextRenderer::GetPixelsPerDip(void * clientDrawingContext, FLOAT * pixelsPerDip)
+{
+	float x, yUnused;
+
+	this->mpRT->GetDpi(&x, &yUnused);
+	*pixelsPerDip = x / 96;
+
+	return S_OK;
+}
+
+unsigned long CustomTextRenderer::AddRef()
+{
+	return InterlockedIncrement(&this->mRefCount);
+}
+
+unsigned long CustomTextRenderer::Release()
+{
+	unsigned long new_count = InterlockedDecrement(&this->mRefCount);
+	if (new_count == 0)
+	{
+		delete this;
+		return 0;
+	}
+
+	return new_count;
+}
+
+HRESULT CustomTextRenderer::QueryInterface(REFIID riid, void ** ppvObject)
+{
+	if (__uuidof(IDWriteTextRenderer) == riid)
+	{
+		*ppvObject = this;
+	}
+	else if (__uuidof(IDWritePixelSnapping) == riid)
+	{
+		*ppvObject = this;
+	}
+	else if (__uuidof(IUnknown) == riid)
+	{
+		*ppvObject = this;
+	}
+	else
+	{
+		*ppvObject = nullptr;
+		return E_FAIL;
+	}
+
+	this->AddRef();
+
+	return S_OK;
+}
+
+void CustomTextRenderer::SetOutlineBrush(ID2D1SolidColorBrush * pOutlineBrush)
+{
+	if (this->mpOutlineBrush)
+	{
+		this->mpOutlineBrush->Release();
+	}
+	this->mpOutlineBrush = pOutlineBrush;
+	pOutlineBrush->AddRef();
+}
+
+void CustomTextRenderer::SetFillBrush(ID2D1SolidColorBrush * pFillBrush)
+{
+	if (this->mpFillBrush)
+	{
+		this->mpFillBrush->Release();
+	}
+	this->mpFillBrush = pFillBrush;
+	pFillBrush->AddRef();
+}

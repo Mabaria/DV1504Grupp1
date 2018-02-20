@@ -44,8 +44,43 @@ public:
 		IUnknown            * clientDrawingEffect
 	) override;
 
+	HRESULT STDMETHODCALLTYPE DrawStrikethrough(
+		void                 * clientDrawingContext,
+		FLOAT                 baselineOriginX,
+		FLOAT                 baselineOriginY,
+		const DWRITE_STRIKETHROUGH * strikethrough,
+		IUnknown             * clientDrawingEffect
+	) override;
+
+	HRESULT STDMETHODCALLTYPE GetCurrentTransform(
+		void          * clientDrawingContext,
+		DWRITE_MATRIX * transform
+	) override;
+
+	HRESULT STDMETHODCALLTYPE IsPixelSnappingDisabled(
+		void * clientDrawingContext,
+		BOOL  * isDisabled
+	) override;
+
+	HRESULT STDMETHODCALLTYPE GetPixelsPerDip(
+		void  * clientDrawingContext,
+		FLOAT * pixelsPerDip
+	) override;
+
+	unsigned long STDMETHODCALLTYPE AddRef() override;
+	unsigned long STDMETHODCALLTYPE Release() override;
+	
+	HRESULT STDMETHODCALLTYPE QueryInterface(
+		REFIID riid,
+		void   **ppvObject
+	) override;
+
+	void SetOutlineBrush(ID2D1SolidColorBrush* pOutlineBrush);
+	void SetFillBrush(ID2D1SolidColorBrush* pFillBrush);
+
 private:
-	ID2D1Factory * mpD2DFactory;
+	unsigned long mRefCount;
+	ID2D1Factory *mpD2DFactory;
 	ID2D1HwndRenderTarget *mpRT;
 	ID2D1SolidColorBrush *mpOutlineBrush;
 	ID2D1SolidColorBrush *mpFillBrush;
