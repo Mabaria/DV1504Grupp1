@@ -1,29 +1,40 @@
 #include "NotificationList.h"
 
-NotificationList::NotificationList(Direct2D *direct2d, int posX, int posY)
-	:mTitle(direct2d, 0, 0, 0, 0), mTitleFrame(direct2d, "", 0, 0, 0, 0)
+NotificationList::NotificationList(
+	Direct2D *direct2d, 
+	int posX, 
+	int posY,
+	int titleFontSize,
+	int objectFontSize)
+	:mTitle(direct2d, 0, 0, 0, 0), 
+	mTitleFrame(direct2d, "", 0, 0, 0, 0)
 {
-	this->mPosX = posX;
-	this->mPosY = posY;
-	this->mListTop		= this->mPosY;
-	this->mListBottom	= this->mPosY;
-	this->mpRenderTarget = direct2d->GetpRenderTarget();
-	this->mSpace = 4;
+	this->mPosX				= posX;
+	this->mPosY				= posY;
+	this->mListTop			= this->mPosY;
+	this->mListBottom		= this->mPosY;
+	this->mpRenderTarget	= direct2d->GetpRenderTarget();
+	this->mSpace			= 4;
+	this->mObjectFontSize	= objectFontSize;
+
+
 	this->mTitle.SetTextBoxSize(
 		this->mPosX, 
 		this->mPosY, 
-		direct2d->GetpRenderTarget()->GetSize().width,
-		direct2d->GetpRenderTarget()->GetSize().height / 18);
+		(int)direct2d->GetpRenderTarget()->GetSize().width,
+		titleFontSize * 8 / 3); // 2 * 4 / 3 (two lines) + a little extra.
 
-	this->mTitle.SetText("Aktiv Logg\nAntal: 0");
+	this->mDefaultTitle = "Aktiv Logg\n Antal: ";
+	this->mTitle.SetText(this->mDefaultTitle + "0");
+
 	this->mTitleFrame.SetButtonSize(
 		0,
 		0,
-		this->mTitle.GetTextBoxSize().right,
-		this->mTitle.GetTextBoxSize().bottom);
-	this->mTitle.SetFontSize(17);
+		(int)this->mTitle.GetTextBoxSize().right,
+		(int)this->mTitle.GetTextBoxSize().bottom);
+
+	this->mTitle.SetFontSize(titleFontSize);
 	this->mTitle.SetFontWeight(DWRITE_FONT_WEIGHT_ULTRA_BLACK);
-	this->mTitle.SetFontName(L"Times new roman");
 	this->mTitle.SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
 }
 
@@ -35,41 +46,63 @@ NotificationList::~NotificationList()
 	}
 }
 
-void NotificationList::AddNotification(
+bool NotificationList::AddNotification(
 	Direct2D * direct2d, 
 	Room * room, 
-	LogEvent * event)
+	LogEvent * event,
+	ID2D1Bitmap * bitmap)
 {
-	// Creates a new notification object and pushes it to the vector along
-	// with the number of objects in the vector for indexing.
-	this->mObjects.push_back(new NotificationObject(
-		room, 
-		event, 
-		direct2d, 
-		(int)this->mObjects.size() + 1));
+	bool new_event = true;
+	for (int i = 0; i < (int)this->mObjects.size() && new_event; i++)
+	{
+		if ((room->GetName() == this->mObjects[i]->GetRoomName()) &&
+			(room->GetDeckName() == this->mObjects[i]->GetDeckName()) &&
+			(event->GetType() == this->mObjects[i]->GetEventType()))
+		{
+			new_event = false;
+		}
+	}
+	if (new_event)
+	{
+		// Creates a new notification object and pushes it to the vector 
+		// along with the number of objects in the vector for indexing.
+		this->mObjects.push_back(new NotificationObject(
+			room,
+			event,
+			direct2d,
+			(int)this->mObjects.size() + 1,
+			this->mObjectFontSize,
+			bitmap));
 
-	// Moves the object 2 pixels in x for looks, and in y based on the
-	// number of objects in the list plus an offset for looks plus the
-	// height of the title text box.
-	this->mObjects.back()->Move(
-		2, 
-		((int)this->mObjects.size() - 1)
-		* (this->mObjects[0]->GetHeight() + this->mSpace) 
-		+ this->mTitle.GetTextBoxSize().bottom);
+		this->mObjects.back()->Move(2, this->mSpace);
 
-	// Updates the number of events in the title.
-	this->mTitle.SetText(
-		"Aktiv Logg\nAntal: " + std::to_string(this->mObjects.size()));
+		if (this->mObjects.size() > 1)
+		{
+			this->mObjects.back()->Move(
+				0,
+				this->mObjects[this->mObjects.size() - 2]->GetBottom());
+		}
+		else
+		{
+			this->mObjects.back()->Move(
+				0,
+				(int)this->mTitle.GetTextBoxSize().bottom);
+		}
+		
+		// Updates the number of events in the title.
+		this->mTitle.SetText(
+			this->mDefaultTitle + std::to_string(this->mObjects.size()));
+	}
+	return new_event;
 }
 
-bool NotificationList::RemoveNotification(Room * room, LogEvent * event)
+bool NotificationList::RemoveNotification(Room * room, Event::Type type)
 {
 	// Returns false if the notification object is not found.
 	bool result = false;
 
 	std::string room_name = room->GetName();
 	std::string deck_name = room->GetDeckName();
-	Event::Type event_type = event->GetType();
 
 	// Searching through the vector until 
 	// a matching notification object is found.
@@ -77,7 +110,7 @@ bool NotificationList::RemoveNotification(Room * room, LogEvent * event)
 	{
 		if ((room_name == this->mObjects[i]->GetRoomName()) &&
 			(deck_name == this->mObjects[i]->GetDeckName()) &&
-			(event_type == this->mObjects[i]->GetEventType()))
+			(type == this->mObjects[i]->GetEventType()))
 		{
 			result = true;
 
@@ -102,7 +135,7 @@ bool NotificationList::RemoveNotification(Room * room, LogEvent * event)
 
 			// Updates the number of events in the title.
 			this->mTitle.SetText(
-				"Aktiv Logg\nAntal: " + std::to_string(this->mObjects.size()));
+				this->mDefaultTitle + std::to_string(this->mObjects.size()));
 		}
 	}
 	return result;
@@ -143,7 +176,7 @@ void NotificationList::MoveLog(float speed)
 			this->mObjects[i]->Move(0, 
 				this->mSpace 
 				- this->mListTop 
-				+ this->mTitle.GetTextBoxSize().bottom);
+				+ (int)this->mTitle.GetTextBoxSize().bottom);
 		}
 	}
 	else if (this->mListBottom < this->mpRenderTarget->GetSize().height)

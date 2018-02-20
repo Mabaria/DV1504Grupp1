@@ -50,6 +50,7 @@
     <ClCompile Include="..\..\Logic\Event\Event.cpp" />
     <ClCompile Include="..\..\IO\Test_Picking.cpp" />
     <ClCompile Include="..\..\Logic\Timer.cpp" />
+    <ClCompile Include="..\..\UI\GUI\EventMenu.cpp" />
     <ClCompile Include="..\..\UI\UIElements\Button.cpp" />
     <ClCompile Include="..\..\UI\UIElements\MeshObject.cpp" />
     <ClCompile Include="..\..\UI\UIElements\NotificationList.cpp" />
@@ -61,6 +62,7 @@
     <ClCompile Include="..\..\UI\UIElements\Test_TextBox.cpp" />
     <ClCompile Include="..\..\UI\UIElements\TextBox.cpp" />
     <ClCompile Include="BIS.cpp" />
+    <ClCompile Include="System\System.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\GraphicsEngine\Camera\Camera.h" />
@@ -97,6 +99,7 @@
     <ClInclude Include="..\..\Logic\Event\Event.h" />
     <ClInclude Include="..\..\Logic\Timer.h" />
     <ClInclude Include="..\..\Test\Testing.h" />
+    <ClInclude Include="..\..\UI\GUI\EventMenu.h" />
     <ClInclude Include="..\..\UI\UIElements\Button.h" />
     <ClInclude Include="..\..\UI\UIElements\MeshObject.h" />
     <ClInclude Include="..\..\UI\UIElements\NotificationList.h" />
@@ -107,6 +110,7 @@
     <ClInclude Include="..\..\UI\UIElements\Test_Panel.h" />
     <ClInclude Include="..\..\UI\UIElements\Test_TextBox.h" />
     <ClInclude Include="..\..\UI\UIElements\TextBox.h" />
+    <ClInclude Include="System\System.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="..\..\GraphicsEngine\Test_PixelShader.hlsl">

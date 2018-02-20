@@ -120,6 +120,14 @@ Room* Boat::GetRoomPointer(std::string roomName, std::string deckName)
 	return nullptr;
 }
 
+Room* Boat::GetRoomPointerAt(int index)
+{
+	if (index < 0 || index > (int)this->mpRooms.size())
+		return nullptr;
+
+	return this->mpRooms[index];
+}
+
 Room* Boat::GetPickedRoom(Ray ray)
 {
 	float tMain, t;
@@ -189,28 +197,28 @@ void Boat::SetEventLog(EventLog *pEventLog)
 *	Event specific
 */
 
-void Boat::CreateAutoEvent(Event::Type type,
+bool Boat::CreateAutoEvent(Event::Type type,
 	std::string roomName,
 	std::string deckName)
 {
 	int index = this->GetRoomIndex(roomName, deckName);
-	this->mpRooms[index]->AddAutoEvent(type);
+	return this->mpRooms[index]->AddSensorEvent(type);
 }
 
-void Boat::CreatePlotEvent(Event::Type type,
+bool Boat::CreatePlotEvent(Event::Type type,
 	std::string roomName,
 	std::string deckName)
 {
 	int index = this->GetRoomIndex(roomName, deckName);
-	this->mpRooms[index]->AddPlotEvent(type);
+	return this->mpRooms[index]->AddPlotterEvent(type);
 }
 
-void Boat::ClearEvent(Event::Type type,
+bool Boat::ClearEvent(Event::Type type,
 	std::string roomName,
 	std::string deckName)
 {
 	int roomIndex = this->GetRoomIndex(roomName, deckName);
-	this->mpEventLog->ClearEvent(type, roomIndex);
+	return this->mpEventLog->ClearEvent(type, roomIndex);
 }
 
 std::vector<Event::Type> Boat::GetEventsInRoom(std::string roomName,
@@ -271,7 +279,7 @@ bool Boat::ReadFile(std::string filePath)
 
 	DeckDesc dDesc;
 	RoomDesc rDesc;
-
+	
 	if (file.is_open())
 	{
 		while (getline(file, line))
@@ -306,8 +314,10 @@ bool Boat::ReadFile(std::string filePath)
 				{
 					rDesc = this->FillRoomDescFromLine(line);
 
-					rDesc.index = (int)this->mpRooms.size();
+					rDesc.indexInBoat = (int)this->mpRooms.size();
 					rDesc.deckName = this->mpDecks.back()->GetName();
+					rDesc.deckIndex = (int)this->mpDecks.size() - 1;
+					rDesc.indexInDeck = this->mpDecks.back()->GetRoomCount();
 					rDesc.pEventLog = this->mpEventLog;
 
 					/**
@@ -398,7 +408,7 @@ RoomDesc Boat::FillRoomDescFromLine(std::string line)
 
 		buffer >> word;
 	}
-	desc.name = roomName;
+	desc.name = this->CorrectName(roomName);
 
 	/**
 	*	Get sensor data
@@ -498,6 +508,8 @@ std::string Boat::GetNameFromLine(std::string line, char until)
 			done = true;
 	}
 
+	name = this->CorrectName(name);
+
 	return name;
 }
 
@@ -516,5 +528,36 @@ std::string Boat::GetDeckNameByRoomIndex(int index)
 	}
 
 	return "DeckNotFound";
+}
+
+std::string Boat::CorrectName(std::string name)
+{
+	std::string newName = "";
+
+	for (int i = 0; i < name.size(); i++)
+	{
+		int c = name[i];
+		
+		switch (name[i])
+		{
+		case -91: // ¥
+			newName += 'å';
+			break;
+		case -92: // ¤
+			newName += 'ä';
+			break;
+		case -74: // ¶
+			newName += 'ö';
+			break;
+
+		case -61: // Character skip
+			break;
+
+		default:
+			newName += name[i];
+			break;
+		}
+	}
+	return newName;
 }
 

@@ -10,7 +10,7 @@ enum BUTTON_STATE
 	RESET
 };
 
-class Button : public Observable<Button*>
+class Button : public Observable<Button>
 {
 public:
 	Button(
@@ -19,7 +19,16 @@ public:
 		int left,
 		int top,
 		int right,
-		int bottom);
+		int bottom,
+		std::string name = "");
+	Button(
+		Direct2D *D2D1Panel,
+		ID2D1Bitmap* bitmapPointer,
+		int left,
+		int top,
+		int right,
+		int bottom,
+		std::string name = "");
 	~Button();
 
 	const std::wstring StrToWstr(std::string str);
@@ -44,10 +53,12 @@ public:
 	void MoveIcon(int x, int y);
 	void SetButtonStatus(BUTTON_STATE buttState);
 	void SetRectStatus(BUTTON_STATE rectState);
+	void SetBitmap(ID2D1Bitmap* bitmapPointer);
 	void LoadImageToBitmap(std::string imageFilePath);
 	BUTTON_STATE GetButtState() const;
 
 	void SetOpacity(float opacity);
+	std::string GetName() const;
 private:
 	
 	Direct2D *D2D1Panel;
@@ -70,4 +81,7 @@ private:
 	BUTTON_STATE mCurrState;
 	void ReleaseCOM(IUnknown *object);
 	void mUpdateBoundingBox();
+
+	bool mBitmapLoadedByFilePath;
+	std::string mName;
 };

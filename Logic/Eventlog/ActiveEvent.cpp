@@ -15,39 +15,85 @@ ActiveEvent::~ActiveEvent()
 *	Event specific
 */
 
-bool ActiveEvent::AddEvent(int index)
+bool ActiveEvent::AddEvent(int index, LogEvent* pEvent)
 {
-	for (int i = 0; i < this->mEventIndices.size(); i++)
+	for (int i = 0; i < (int)this->mEvents.size(); i++)
 	{
-		if (this->mEventIndices[i] == index)
+		if (this->mEvents[i].index == index)
 			return false; // Event already exists
 	}
 
-	this->mEventIndices.push_back(index);
+	EventInfo newEvent;
+
+	newEvent.index = index;
+	newEvent.pointer = pEvent;
+
+	this->mEvents.push_back(newEvent);
 	return true;
 }
 
-bool ActiveEvent::ClearEvent(int index)
+bool ActiveEvent::ClearEvent(Event::Type type)
 {
-	for (int i = 0; i < this->mEventIndices.size(); i++)
+	for (int i = 0; i < (int)this->mEvents.size(); i++)
 	{
-		if (this->mEventIndices[i] == index)
+		if (this->mEvents[i].pointer->GetType() == type)
 		{
-			this->mEventIndices.erase(this->mEventIndices.begin() + i);
+			this->mEvents.erase(this->mEvents.begin() + i);
 			return true;
 		}
 	}
 	return false;
 }
 
-int ActiveEvent::GetEventCount() const
+bool ActiveEvent::EventTypeExists(Event::Type type) const
 {
-	return (int)this->mEventIndices.size();
+	for (int i = 0; i < (int)this->mEvents.size(); i++)
+	{
+		if (this->mEvents[i].pointer->GetType() == type)
+			return true;
+	}
+
+	return false;
 }
 
-int ActiveEvent::operator[](int index) const
+bool ActiveEvent::IsEmpty() const
 {
-	return this->mEventIndices[index];
+	if ((int)this->mEvents.size() == 0)
+		return true;
+
+	return false;
+}
+
+int ActiveEvent::GetEventCount() const
+{
+	return (int)this->mEvents.size();
+}
+
+int ActiveEvent::GetEventIndexAt(int index) const
+{
+	return this->mEvents[index].index;
+}
+
+std::vector<LogEvent*> ActiveEvent::GetActiveEvents() const
+{
+	std::vector<LogEvent*> activeEvents;
+
+	for (int i = 0; i < (int)this->mEvents.size(); i++)
+	{
+		activeEvents.push_back(this->mEvents[i].pointer);
+	}
+
+	return activeEvents;
+}
+
+void ActiveEvent::SetIndexInEventLog(int index)
+{
+	this->mIndexInEventLog = index;
+}
+
+int ActiveEvent::GetIndexInEventLog() const
+{
+	return this->mIndexInEventLog;
 }
 
 

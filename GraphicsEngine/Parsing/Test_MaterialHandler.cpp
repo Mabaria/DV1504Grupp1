@@ -18,7 +18,7 @@ void Test_Material_Handler()
 	mixbag_object.Scale(0.2f, 0.2f, 0.2f);
 	mixbag_object.Translate(-30.0f, -10.0f, 0.0f);
 
-	mat_test_boat_object.Scale(0.1, 0.1, 0.1);
+	mat_test_boat_object.Scale(0.1f, 0.1f, 0.1f);
 	//mat_test_boat_object.Rotate(0.0f, 0.00f, 3.14f);
 
 	mat_test_boat_object.pGetMaterialHandler()->GetDiffuseColor(0);

@@ -1,4 +1,4 @@
-boatmodel Testskepp
+﻿boatmodel Testskepp
 
 // d <<deck name>> <<offset>> <<count>>
 // r <<room name>> / sensor <<room event index>>

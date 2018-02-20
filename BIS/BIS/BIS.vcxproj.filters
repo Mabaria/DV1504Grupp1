@@ -222,6 +222,12 @@
     <ClInclude Include="..\..\UI\UIElements\NotificationList.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
+    <ClInclude Include="System\System.h">
+      <Filter>Header Files\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UI\GUI\EventMenu.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BIS.cpp">
@@ -374,9 +380,6 @@
     <ClCompile Include="..\..\IO\ObserverPattern\Test_Obs.cpp">
       <Filter>Source Files\IO\Test</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\GraphicsEngine\Parsing\MaterialHandler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\GraphicsEngine\Parsing\Test_MaterialHandler.cpp">
       <Filter>Source Files\UI\Test</Filter>
     </ClCompile>
@@ -384,6 +387,15 @@
       <Filter>Source Files\UI</Filter>
     </ClCompile>
     <ClCompile Include="..\..\UI\UIElements\NotificationList.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\GraphicsEngine\Parsing\MaterialHandler.cpp">
+      <Filter>Source Files\GraphicsEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="System\System.cpp">
+      <Filter>Source Files\BIS</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UI\GUI\EventMenu.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
   </ItemGroup>

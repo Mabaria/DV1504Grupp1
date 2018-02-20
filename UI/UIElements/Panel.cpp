@@ -14,7 +14,7 @@ Panel::Panel(int width, int height, int top, int left, HWND handle, LPCTSTR titl
 		0,
 		this->mTitle,
 		this->mTitle,
-		WS_CHILD | WS_BORDER,
+		WS_CHILD | WS_BORDER | WS_CLIPCHILDREN,
 		this->mLeft,
 		this->mTop,
 		this->mWidth,
@@ -170,7 +170,19 @@ const bool Panel::UpdateWindowSize()
 	return updated;
 }
 
-bool Panel::mIsMouseInsidePanel()
+void Panel::UpdateWindowPos()
+{
+	SetWindowPos(
+		this->mPanelWindow,
+		HWND_TOP, // Z order, ignored by SWP_NOZORDER. 
+		this->mLeft,
+		this->mTop,
+		this->mWidth,
+		this->mHeight,
+		SWP_NOZORDER);
+}
+
+bool Panel::IsMouseInsidePanel()
 {
 	if (Mouse::IsButtonDown(Buttons::Left))
 		int i = 0;
@@ -180,4 +192,24 @@ bool Panel::mIsMouseInsidePanel()
 	GetCursorPos(&mouse_pos);
 	return PtInRect(&window_rect, mouse_pos); // if mouse is inside panel
 
+}
+
+bool Panel::IsVisible()
+{
+	return IsWindowVisible(this->mPanelWindow);
+}
+
+void Panel::Hide()
+{
+	MoveWindow(this->mPanelWindow, 0, 0, 0, 0, FALSE);
+}
+
+void Panel::Show()
+{
+	ShowWindow(this->mPanelWindow, SW_NORMAL);
+}
+
+HWND *Panel::GetPanelWindowHandle()
+{
+	return &this->mPanelWindow;
 }

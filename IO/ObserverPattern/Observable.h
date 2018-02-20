@@ -35,7 +35,7 @@ public:
 		return false;
 	}/* Use this if you want to remove an observer for any reason*/
 
-	void NotifyObservers(const TAttribute& attribute) 
+	void NotifyObservers(TAttribute* attribute) 
 	{
 		typename std::vector<Observer<TAttribute>*>::const_iterator iter;
 		for (iter = this->mObserverList.begin();

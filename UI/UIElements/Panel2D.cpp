@@ -20,18 +20,26 @@ Panel2D::Panel2D(
 
 Panel2D::~Panel2D()
 {
-	for (int i = 0; i < (int)this->mButtonVector.size(); i++)
+	for (unsigned int i = 0; i < this->mButtonVector.size(); i++)
 	{
 		if (this->mButtonVector[i])
 		{
 			delete this->mButtonVector[i];
 		}
 	} 
-	for (int i = 0; i < (int)this->mTextBoxVector.size(); i++)
+	for (unsigned int i = 0; i < this->mTextBoxVector.size(); i++)
 	{
 		if (this->mTextBoxVector[i])
 		{
 			delete this->mTextBoxVector[i];
+		}
+	}
+	for (unsigned int i = 0; i < this->mBitmapVector.size(); i++)
+	{
+		if (this->mBitmapVector[i].bitmap)
+		{
+			this->mBitmapVector[i].bitmap->Release();
+			this->mBitmapVector[i].bitmap = nullptr;
 		}
 	}
 	delete this->mDirect2D;
@@ -58,7 +66,21 @@ void Panel2D::AddButton(
 		left,
 		top,
 		left + width,
-		top + height);
+		top + height,
+		buttonName);
+	this->mButtonVector.push_back(newButton); // Add button
+}
+
+void Panel2D::AddButton(int width, int height, int top, int left, ID2D1Bitmap * bitmap, std::string buttonName)
+{
+	this->mButtonNames.push_back(buttonName); // Add to names list
+	Button *newButton = new Button(this->mDirect2D,
+		bitmap,
+		left,
+		top,
+		left + width,
+		top + height,
+		buttonName);
 	this->mButtonVector.push_back(newButton); // Add button
 }
 
@@ -114,6 +136,26 @@ Button * Panel2D::GetButtonByIndex(unsigned int index)
 	return to_return;
 }
 
+ID2D1Bitmap * Panel2D::GetBitmapByName(std::string bitmapName)
+{
+	ID2D1Bitmap *to_return = nullptr; // Default return is nullptr
+	std::vector<BitmapInfo>::iterator it;
+
+	for (it = this->mBitmapVector.begin();
+		it != this->mBitmapVector.end();
+		++it)
+	{
+		if (bitmapName.compare((*it).name) == 0) // Button with correct name found
+		{
+			to_return = (*it).bitmap; // Return pointer to button
+			it = this->mBitmapVector.end() - 1; // Set iterator to end
+											   // -1 because incrementation is performed after this.
+											   // Incrementing on .end() is a baaad idea.
+		}
+	}
+	return to_return;
+}
+
 TextBox * Panel2D::GetTextBoxByName(std::string name)
 {
 	TextBox *to_return = nullptr; // Default return is nullptr
@@ -148,26 +190,51 @@ TextBox * Panel2D::GetTextBoxByIndex(unsigned int index)
 	return to_return;
 }
 
-void Panel2D::SetNotificationList(int posX, int posY)
+void Panel2D::SetNotificationList(
+	int posX, 
+	int posY, 
+	int titleFontSize, 
+	int objectFontSize)
 {
 	this->mNotificationList = new NotificationList(
 		this->mDirect2D, 
 		posX, 
-		posY);
+		posY,
+		titleFontSize,
+		objectFontSize);
 	this->mNotificationListIsActive = true;
 }
 
-void Panel2D::AddNotification(Room * room, LogEvent * event)
+bool Panel2D::AddNotification(Room * room, LogEvent * event)
 {
-	this->mNotificationList->AddNotification(
+	ID2D1Bitmap *bitmap = nullptr;
+	switch (event->GetType())
+	{
+	case Event::Fire:
+		bitmap = this->GetBitmapByName("Fire");
+		break;
+	case Event::Water:
+		bitmap = this->GetBitmapByName("Water");
+		break;
+	case Event::Gas:
+		bitmap = this->GetBitmapByName("Gas");
+		break;
+	case Event::Injury:
+		bitmap = this->GetBitmapByName("Injury");
+		break;
+	default:
+		break;
+	}
+	return this->mNotificationList->AddNotification(
 		this->mDirect2D, 
 		room, 
-		event);
+		event,
+		bitmap);
 }
 
-bool Panel2D::RemoveNotification(Room * room, LogEvent * event)
+bool Panel2D::RemoveNotification(Room * room, Event::Type type)
 {
-	return this->mNotificationList->RemoveNotification(room, event);
+	return this->mNotificationList->RemoveNotification(room, type);
 }
 
 void Panel2D::ScrollActiveLog()
@@ -175,7 +242,7 @@ void Panel2D::ScrollActiveLog()
 	if (Mouse::GetScroll() != 0 
 		&& this->mNotificationList->GetListHeight() 
 		> this->mDirect2D->GetpRenderTarget()->GetSize().height 
-		&& this->mIsMouseInsidePanel())
+		&& this->IsMouseInsidePanel())
 	{
 		this->mNotificationList->MoveLog(Mouse::GetScroll() * 10.0f);
 	}
@@ -186,7 +253,6 @@ void Panel2D::Update()
 {
 	this->UpdateWindowSize();
 	this->mUpdateButtons();
-	this->mUpdateTextBoxes();
 
 	// Updating the notification list only if
 	// the panel has one.
@@ -237,7 +303,7 @@ void Panel2D::mUpdateButtons()
 {
 	 // For notification list.
 	Button *button = nullptr;
-	if (this->mIsMouseInsidePanel()) /* Check if mouse is inside panel,
+	if (this->IsMouseInsidePanel()) /* Check if mouse is inside panel,
 									 if not there is no chance of any buttons
 									 being pressed. */
 	{
@@ -326,7 +392,44 @@ void Panel2D::mUpdateButtons()
 	}
 }
 
-void Panel2D::mUpdateTextBoxes()
+void Panel2D::LoadImageToBitmap(
+	std::string imageFilePath,
+	std::string bitmapName)
 {
+	BitmapInfo new_bitmap_struct;
+	new_bitmap_struct.name = bitmapName;
+	std::wstring_convert<std::codecvt<wchar_t, char, std::mbstate_t>> convert;
+	std::wstring w_file_path = convert.from_bytes(imageFilePath);
 
+	IWICFormatConverter *converter = this->mDirect2D->GetpFormatConverter();
+	IWICBitmapDecoder *decoder = this->mDirect2D->GetpBitmapDecoder();
+	IWICBitmapFrameDecode *bitmapSrc = this->mDirect2D->GetpBitmapSrc();
+
+	this->mDirect2D->GetpImagingFactory()->CreateFormatConverter(&converter);
+	this->mDirect2D->SetpFormatConverter(converter);
+	this->mDirect2D->GetpImagingFactory()->CreateDecoderFromFilename(
+		w_file_path.c_str(),
+		NULL,
+		GENERIC_READ,
+		WICDecodeMetadataCacheOnDemand,
+		&decoder);
+	this->mDirect2D->SetpBitmapDecoder(decoder);
+	if (this->mDirect2D->GetpBitmapDecoder() != nullptr)
+	{
+		this->mDirect2D->GetpBitmapDecoder()->GetFrame(0, &bitmapSrc);
+		this->mDirect2D->SetpBitmapSrc(bitmapSrc);
+		this->mDirect2D->GetpFormatConverter()->Initialize(
+			bitmapSrc,
+			GUID_WICPixelFormat32bppPBGRA,
+			WICBitmapDitherTypeNone,
+			NULL,
+			0.f,
+			WICBitmapPaletteTypeMedianCut);
+		this->mDirect2D->GetpRenderTarget()->CreateBitmapFromWicBitmap(
+			this->mDirect2D->GetpFormatConverter(),
+			NULL,
+			&new_bitmap_struct.bitmap);
+	}
+
+	this->mBitmapVector.push_back(new_bitmap_struct);
 }
