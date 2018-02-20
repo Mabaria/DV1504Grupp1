@@ -778,8 +778,11 @@ const void Panel3D::Draw()
 				numIndices,	// Number of indices.
 				0,			// Start index location.
 				offset);	// Base vertex location.
-		}
+		}		
 	}
+	IDXGISurface *BackBuffer;
+	this->mDirect3D.GetSwapChain()->GetBuffer(0, IID_PPV_ARGS(&BackBuffer));
+	this->mDirect2D.GetpContext()->
 	this->mDirect3D.GetSwapChain()->Present(1, 0);
 }
 

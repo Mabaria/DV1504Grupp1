@@ -8,6 +8,7 @@
 #include "MeshObject.h"
 #include "../../GraphicsEngine/Camera/Camera.h"
 #include "../../IO/ObserverPattern/Observer.h"
+#include "../../GraphicsEngine/DX/Direct2D.h"
 
 class Panel3D : public Panel, public Observer<Button>
 {
@@ -75,6 +76,7 @@ public:
 	//void SetCameraPosition()
 private:
 	D3D11 mDirect3D;
+	Direct2D mDirect2D;
 	std::vector<MeshObject*> mpMeshObjects;
 	//HWND mPanelWindow;
 
