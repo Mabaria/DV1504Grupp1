@@ -782,7 +782,7 @@ const void Panel3D::Draw()
 	}
 	IDXGISurface *BackBuffer;
 	this->mDirect3D.GetSwapChain()->GetBuffer(0, IID_PPV_ARGS(&BackBuffer));
-	this->mDirect2D.GetpContext()->
+	//this->mDirect2D.GetpContext()->
 	this->mDirect3D.GetSwapChain()->Present(1, 0);
 }
 

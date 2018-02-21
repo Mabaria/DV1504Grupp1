@@ -7,11 +7,11 @@
 #include <vector>
 #include "TextBox.h"
 #include "NotificationList.h"
-struct BitmapInfo
-{
-	ID2D1Bitmap* bitmap = nullptr;
-	std::string name = "";
-};
+//struct BitmapInfo
+//{
+//	ID2D1Bitmap* bitmap = nullptr;
+//	std::string name = "";
+//};
 class Panel2D : public Panel
 {
 public:
@@ -43,8 +43,8 @@ public:
 
 	Button* GetButtonByName(std::string name);
 	Button* GetButtonByIndex(unsigned int index);
-	ID2D1Bitmap* GetBitmapByName(std::string bitmapName);
-	void LoadImageToBitmap(std::string imageFilePath, std::string bitmapName);
+	//ID2D1Bitmap* GetBitmapByName(std::string bitmapName);
+	//void LoadImageToBitmap(std::string imageFilePath, std::string bitmapName);
 
 
 	// Text box stuff.
@@ -76,7 +76,7 @@ private:
 
 	std::vector<Button*> mButtonVector;
 	std::vector<std::string> mButtonNames;
-	std::vector<BitmapInfo> mBitmapVector;
+	//std::vector<BitmapInfo> mBitmapVector;
 
 	void mUpdateTextBoxes();
 	std::vector<TextBox*> mTextBoxVector;

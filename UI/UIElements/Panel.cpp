@@ -36,6 +36,15 @@ Panel::Panel(int width, int height, int top, int left, HWND handle, LPCTSTR titl
 
 Panel::~Panel()
 {
+	for (unsigned int i = 0; i < this->mBitmapVector.size(); i++)
+	{
+		if (this->mBitmapVector[i].bitmap)
+		{
+			this->mBitmapVector[i].bitmap->Release();
+			this->mBitmapVector[i].bitmap = nullptr;
+		}
+	}
+	delete this->mDirect2D;
 }
 
 const void Panel::SetWidth(int width)
@@ -252,4 +261,24 @@ void Panel::LoadImageToBitmap(std::string imageFilePath, std::string bitmapName)
 	}
 
 	this->mBitmapVector.push_back(new_bitmap_struct);
+}
+
+ID2D1Bitmap * Panel::GetBitmapByName(std::string bitmapName)
+{
+	ID2D1Bitmap *to_return = nullptr; // Default return is nullptr
+	std::vector<BitmapInfo>::iterator it;
+
+	for (it = this->mBitmapVector.begin();
+		it != this->mBitmapVector.end();
+		++it)
+	{
+		if (bitmapName.compare((*it).name) == 0) // Button with correct name found
+		{
+			to_return = (*it).bitmap; // Return pointer to button
+			it = this->mBitmapVector.end() - 1; // Set iterator to end
+												// -1 because incrementation is performed after this.
+												// Incrementing on .end() is a baaad idea.
+		}
+	}
+	return to_return;
 }
