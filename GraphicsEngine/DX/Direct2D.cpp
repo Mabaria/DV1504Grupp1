@@ -4,16 +4,18 @@ Direct2D::Direct2D(HWND window,
 	unsigned int width,
 	unsigned int height)
 {
-	this->mpFactory = nullptr;
-	this->mpRenderTarget = nullptr;
-	this->mpWicFactory = nullptr;
-	this->mpConverter = nullptr;
-	this->mpDecoder = nullptr;
-	this->mpBitmapSrc = nullptr;
-	this->mpTextFactory = nullptr;
-	this->mTrimmer = {};
+	this->mpFactory			= nullptr;
+	this->mpRenderTarget	= nullptr;
+	this->mpWicFactory		= nullptr;
+	this->mpConverter		= nullptr;
+	this->mpDecoder			= nullptr;
+	this->mpBitmapSrc		= nullptr;
+	this->mpTextFactory		= nullptr;
+	this->mpFactory1		= nullptr;
+	this->mpDevice			= nullptr;
+	this->mpContext			= nullptr;
+	this->mTrimmer			= {};
 	this->mTrimmer.granularity = DWRITE_TRIMMING_GRANULARITY_CHARACTER;
-
 	this->mInit();
 	this->CreateRenderTarget(window, width, height);	
 }
@@ -106,6 +108,11 @@ const DWRITE_TRIMMING Direct2D::GetTrimmer()
 	return this->mTrimmer;
 }
 
+ID2D1DeviceContext * Direct2D::GetpContext()
+{
+	return this->mpContext;
+}
+
 void Direct2D::SetpFormatConverter(IWICFormatConverter* pConverter)
 {
 	this->mpConverter = pConverter;
@@ -124,6 +131,14 @@ void Direct2D::SetpBitmapDecoder(IWICBitmapDecoder * pDecoder)
 void Direct2D::SetpBitmapSrc(IWICBitmapFrameDecode * pBitmapSrc)
 {
 	this->mpBitmapSrc = pBitmapSrc;
+}
+
+void Direct2D::InitDevice(IDXGIDevice * dxgiDevice)
+{
+	this->mpFactory1->CreateDevice(dxgiDevice, &this->mpDevice);
+	this->mpDevice->CreateDeviceContext(
+		D2D1_DEVICE_CONTEXT_OPTIONS_NONE,
+		&this->mpContext);
 }
 
 void Direct2D::mCreateWicFactory()
