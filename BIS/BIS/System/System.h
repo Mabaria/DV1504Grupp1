@@ -8,21 +8,15 @@
 #include "../../../UI/GUI/EventMenu.h"
 #include "../../../IO/Keyboard.h"
 
-/* TODO:
-*Picking
-*Kontrollknappar
-*Båtgrejer
-*/
-
-
-
-
 class System : public Observer<Room>
 {
 public:
 	System();
 	~System();
-	void BuildGraphicalUserInterface(const std::wstring windowName, const int windowWidth, const int windowHeight);
+	void BuildGraphicalUserInterface(
+		const std::wstring windowName, 
+		const int windowWidth, 
+		const int windowHeight);
 	void Run();
 	virtual void Update( Room *pickedRoom);
 
@@ -31,9 +25,6 @@ private:
 	void mUpdate();
 	void mDraw();
 	void mHandleInput();
-
-	void mAddEvent(Room *room);
-	void mRemoveEvent(Room *room);
 
 	void mUpdateEvents(Room *room);
 

@@ -130,8 +130,8 @@ void System::BuildGraphicalUserInterface(
 
 	this->mpMenuPanel = new EventMenu();
 	this->mpMenuPanel->Init(
-		this->mpTopViewPanel->GetWidth(), 
-		this->mpTopViewPanel->GetHeight(), 
+		(float)this->mpTopViewPanel->GetWidth(), 
+		(float)this->mpTopViewPanel->GetHeight(), 
 		&this->mEventLog, 
 		windowName.c_str(), 
 		this->mpTopViewPanel->GetPanelWindowHandle());
@@ -213,70 +213,6 @@ void System::mHandleInput()
 	}
 }
 
-void System::mAddEvent(Room * room)
-{
-	std::vector<LogEvent*> events_in_room = room->GetActiveEvents();
-	this->mpActiveLogPanel->AddNotification(room, events_in_room.back());
-
-	//! Temp solution.
-	std::string test = room->GetDeckName();
-	test.replace(test.begin() + 5, test.end(), "bounds");
-
-	// Saving things for readability.
-	MeshObject *top_picked_deck = this->mpTopViewPanel->rGetMeshObject(test);
-	MeshObject *side_picked_deck = this->mpSideViewPanel->rGetMeshObject(test);
-	int index_in_deck = room->GetIndexInDeck();
-
-	// Filling event data for bounding box coloring.
-	EventData event_data = { 0 };
-	for (int i = 0; (i < (int)events_in_room.size()) && (i < 4); i++)
-	{
-		event_data.slots[i] = events_in_room[i]->GetType() + 1;
-	}
-
-	top_picked_deck->SetEvent(
-		event_data,
-		this->mpTopViewPanel->rGetDirect3D().GetContext(),
-		index_in_deck);
-
-	side_picked_deck->SetEvent(
-		event_data,
-		this->mpSideViewPanel->rGetDirect3D().GetContext(),
-		index_in_deck);
-	
-}
-
-void System::mRemoveEvent(Room * room)
-{
-	std::vector<LogEvent*> events_in_room = room->GetActiveEvents();
-	
-	/*this->mpActiveLogPanel->RemoveNotification(room, events_in_room.back());
-	room->ClearEvent(this->mpMenuPanel->GetLastClicked());
-*/
-	std::string test = room->GetDeckName();
-	test.replace(test.begin() + 5, test.end(), "bounds");
-
-	MeshObject *top_picked_deck = this->mpTopViewPanel->rGetMeshObject(test);
-	MeshObject *side_picked_deck = this->mpSideViewPanel->rGetMeshObject(test);
-	int index_in_deck = room->GetIndexInDeck();
-
-	EventData event_data = { 0 };
-	for (int i = 0; (i < (int)events_in_room.size()) && (i < 4); i++)
-	{
-		event_data.slots[i] = events_in_room[i]->GetType() + 1;
-	}
-
-	top_picked_deck->SetEvent(
-		event_data,
-		this->mpTopViewPanel->rGetDirect3D().GetContext(),
-		index_in_deck);
-
-	side_picked_deck->SetEvent(
-		event_data,
-		this->mpSideViewPanel->rGetDirect3D().GetContext(),
-		index_in_deck);
-}
-
 void System::mUpdateEvents(Room * room)
 {
 	std::vector<LogEvent*> events_in_room = room->GetActiveEvents();
@@ -289,19 +225,18 @@ void System::mUpdateEvents(Room * room)
 	}
 
 	// Temp solution. Sorry
-	std::string test = room->GetDeckName();
-	test.replace(test.begin() + 5, test.end(), "bounds");
+	std::string bounds_name = room->GetDeckName() + "bounds";
 
 	// Saving things for readability.
-	MeshObject *top_picked_deck = this->mpTopViewPanel->rGetMeshObject(test);
-	MeshObject *side_picked_deck = this->mpSideViewPanel->rGetMeshObject(test);
+	MeshObject *top_picked_deck = this->mpTopViewPanel->rGetMeshObject(bounds_name);
+	MeshObject *side_picked_deck = this->mpSideViewPanel->rGetMeshObject(bounds_name);
 	int index_in_deck = room->GetIndexInDeck();
 
 	// Filling event data for bounding box coloring.
 	EventData event_data = { 0 };
 	for (int i = 0; (i < (int)events_in_room.size()) && (i < 4); i++)
 	{
-		event_data.slots[i] = events_in_room[i]->GetType() + 1;
+		event_data.slots[i] = (float)events_in_room[i]->GetType() + 1;
 	}
 
 	top_picked_deck->SetEvent(
@@ -395,8 +330,33 @@ void System::mSetupPanels()
 	this->mpControlPanel->GetButtonByName("Reset2")->
 		AddObserver(this->mpTopViewPanel);
 
-	// Setting up the active log panel.
-	this->mpActiveLogPanel->SetNotificationList(0, 0);
+	this->mpActiveLogPanel->LoadImageToBitmap(
+		"../../Models/Button01.png",
+		"Injury");
+	this->mpActiveLogPanel->LoadImageToBitmap(
+		"../../Models/Button02.png",
+		"Gas");
+	this->mpActiveLogPanel->LoadImageToBitmap(
+		"../../Models/Button03.png",
+		"Water");
+	this->mpActiveLogPanel->LoadImageToBitmap(
+		"../../Models/Button04.png",
+		"Fire");
+	this->mpActiveLogPanel->LoadImageToBitmap(
+		"../../Models/Button05.png",
+		"Reset");
+
+	// Setting up the active log panel. (top, left, titleFontSize, objectFontSize)
+	int list_top = 0;
+	int list_left = 0;
+	int title_font_size = 40;
+	int object_font_size = 14;
+
+	this->mpActiveLogPanel->SetNotificationList(
+		list_top, 
+		list_left, 
+		title_font_size,
+		object_font_size);
 
 
 }
@@ -419,9 +379,9 @@ void System::mSetupModels()
 	MeshObject floor_brygg("Bryggdäck", this->mFloors[0]);
 	MeshObject floor_huvud("Huvuddäck", this->mFloors[1]);
 	MeshObject floor_tross("Trossdäck", this->mFloors[2]);
-	MeshObject bound_brygg("Bryggbounds", this->mBounds[0]);
-	MeshObject bound_huvud("Huvudbounds", this->mBounds[1]);
-	MeshObject bound_tross("Trossbounds", this->mBounds[2]);
+	MeshObject bound_brygg("Bryggdäckbounds", this->mBounds[0]);
+	MeshObject bound_huvud("Huvuddäckbounds", this->mBounds[1]);
+	MeshObject bound_tross("Trossdäckbounds", this->mBounds[2]);
 
 	this->mpTopViewPanel->AddMeshObject(&floor_brygg);
 	this->mpTopViewPanel->AddMeshObject(&floor_huvud);
@@ -496,33 +456,33 @@ void System::mSetupModels()
 
 	
 
-	this->mpTopViewPanel->rGetMeshObject("Bryggdäck")  ->Scale(scale, scale, scale);
-	this->mpTopViewPanel->rGetMeshObject("Huvuddäck")  ->Scale(scale, scale, scale);
-	this->mpTopViewPanel->rGetMeshObject("Trossdäck")  ->Scale(scale, scale, scale);
-	this->mpTopViewPanel->rGetMeshObject("Bryggbounds")->Scale(scale, scale, scale);
-	this->mpTopViewPanel->rGetMeshObject("Huvudbounds")->Scale(scale, scale, scale);
-	this->mpTopViewPanel->rGetMeshObject("Trossbounds")->Scale(scale, scale, scale);
+	this->mpTopViewPanel->rGetMeshObject("Bryggdäck")->Scale(scale, scale, scale);
+	this->mpTopViewPanel->rGetMeshObject("Huvuddäck")->Scale(scale, scale, scale);
+	this->mpTopViewPanel->rGetMeshObject("Trossdäck")->Scale(scale, scale, scale);
+	this->mpTopViewPanel->rGetMeshObject("Bryggdäckbounds")->Scale(scale, scale, scale);
+	this->mpTopViewPanel->rGetMeshObject("Huvuddäckbounds")->Scale(scale, scale, scale);
+	this->mpTopViewPanel->rGetMeshObject("Trossdäckbounds")->Scale(scale, scale, scale);
 
 	this->mpTopViewPanel->rGetMeshObject("Bryggdäck")->Translate(0.0f, 0.0f, -0.5f);
 	this->mpTopViewPanel->rGetMeshObject("Huvuddäck")->Translate(0.0f, 0.0f, 0.0f);
 	this->mpTopViewPanel->rGetMeshObject("Trossdäck")->Translate(0.0f, 0.0f, 0.5f);
-	this->mpTopViewPanel->rGetMeshObject("Bryggbounds")->Translate(0.0f, 0.0f, -0.5f);
-	this->mpTopViewPanel->rGetMeshObject("Huvudbounds")->Translate(0.0f, 0.0f, 0.0f);
-	this->mpTopViewPanel->rGetMeshObject("Trossbounds")->Translate(0.0f, 0.0f, 0.5f);
+	this->mpTopViewPanel->rGetMeshObject("Bryggdäckbounds")->Translate(0.0f, 0.0f, -0.5f);
+	this->mpTopViewPanel->rGetMeshObject("Huvuddäckbounds")->Translate(0.0f, 0.0f, 0.0f);
+	this->mpTopViewPanel->rGetMeshObject("Trossdäckbounds")->Translate(0.0f, 0.0f, 0.5f);
 
 	this->mpSideViewPanel->rGetMeshObject("Bryggdäck")->Translate(0.05f, 0.9f, 0.0f);
 	this->mpSideViewPanel->rGetMeshObject("Huvuddäck")->Translate(0.05f, 0.0f, 0.0f);
 	this->mpSideViewPanel->rGetMeshObject("Trossdäck")->Translate(0.05f, -0.9f, 0.0f);
-	this->mpSideViewPanel->rGetMeshObject("Bryggbounds")->Translate(0.05f, 0.9f, 0.0f);
-	this->mpSideViewPanel->rGetMeshObject("Huvudbounds")->Translate(0.05f, 0.0f, 0.0f);
-	this->mpSideViewPanel->rGetMeshObject("Trossbounds")->Translate(0.05f, -0.9f, 0.0f);
+	this->mpSideViewPanel->rGetMeshObject("Bryggdäckbounds")->Translate(0.05f, 0.9f, 0.0f);
+	this->mpSideViewPanel->rGetMeshObject("Huvuddäckbounds")->Translate(0.05f, 0.0f, 0.0f);
+	this->mpSideViewPanel->rGetMeshObject("Trossdäckbounds")->Translate(0.05f, -0.9f, 0.0f);
 
 	this->mpSideViewPanel->rGetMeshObject("Bryggdäck")->Scale(0.5f, 0.5f, 0.5f);
 	this->mpSideViewPanel->rGetMeshObject("Huvuddäck")->Scale(0.5f, 0.5f, 0.5f);
 	this->mpSideViewPanel->rGetMeshObject("Trossdäck")->Scale(0.5f, 0.5f, 0.5f);
-	this->mpSideViewPanel->rGetMeshObject("Bryggbounds")->Scale(0.5f, 0.5f, 0.53f);
-	this->mpSideViewPanel->rGetMeshObject("Huvudbounds")->Scale(0.5f, 0.5f, 0.53f);
-	this->mpSideViewPanel->rGetMeshObject("Trossbounds")->Scale(0.5f, 0.5f, 0.53f);
+	this->mpSideViewPanel->rGetMeshObject("Bryggdäckbounds")->Scale(0.5f, 0.5f, 0.53f);
+	this->mpSideViewPanel->rGetMeshObject("Huvuddäckbounds")->Scale(0.5f, 0.5f, 0.53f);
+	this->mpSideViewPanel->rGetMeshObject("Trossdäckbounds")->Scale(0.5f, 0.5f, 0.53f);
 
 
 }
@@ -531,7 +491,8 @@ void System::mSetupBoat()
 {
 	this->mBoat.ReadFile("../../SaveFiles/data.boat");
 
-	// Creating the mesh list that 
+	// Creating the mesh and matrix list that boat 
+	// needs to load bounding boxes to the rooms.
 	Mesh mesh_list[] =
 	{
 		*this->mBounds[0], // Bryggdäck

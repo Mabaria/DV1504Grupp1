@@ -37,6 +37,7 @@ private:
 	IWICBitmapFrameDecode *mpBitmapSrc;
 	ID2D1HwndRenderTarget *mpRenderTarget;
 	ID2D1Factory *mpFactory;
+	
 	IDWriteFactory *mpTextFactory;
 	DWRITE_TRIMMING mTrimmer;
 
