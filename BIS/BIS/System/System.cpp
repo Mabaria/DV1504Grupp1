@@ -11,85 +11,34 @@ System::System()
 	this->mpSideViewPanel	= nullptr;
 	this->mpTopViewPanel	= nullptr;
 	this->mpWindow			= nullptr;
-	this->mpInfoWindow		= nullptr;
+
 }
 
 System::~System()
 {
-	if (this->mpActiveLogPanel)
-	{
-		delete this->mpActiveLogPanel;
-		this->mpActiveLogPanel = nullptr;
-	}
-	if (this->mpControlPanel)
-	{
-		delete this->mpControlPanel;
-		this->mpControlPanel = nullptr;
-	}
-	if (this->mpSideViewPanel)
-	{
-		delete this->mpSideViewPanel;
-		this->mpSideViewPanel = nullptr;
-	}
-	if (this->mpTopViewPanel)
-	{
-		delete this->mpTopViewPanel;
-		this->mpTopViewPanel = nullptr;
-	}
-	if (this->mpTopViewCamera)
-	{
-		delete this->mpTopViewCamera;
-		this->mpTopViewCamera = nullptr;
-	}
-	if (this->mpSideViewCamera)
-	{
-		delete this->mpSideViewCamera;
-		this->mpSideViewCamera = nullptr;
-	}
-	if (this->mpMenuPanel)
-	{
-		delete this->mpMenuPanel;
-		this->mpMenuPanel = nullptr;
-	}
-	if (this->mpInfoPanel)
-	{
-		delete this->mpInfoPanel;
-		this->mpInfoPanel = nullptr;
-	}
-	if (this->mpWindow)
-	{
-		delete this->mpWindow;
-		this->mpWindow = nullptr;
-	}
-	if (this->mpInfoWindow)
-	{
-		delete this->mpInfoWindow;
-		this->mpInfoWindow = nullptr;
-	}
+	delete this->mpActiveLogPanel;	
+	delete this->mpControlPanel;	
+	delete this->mpSideViewPanel;	
+	delete this->mpTopViewPanel;	
+	delete this->mpTopViewCamera;
+	delete this->mpSideViewCamera;	
+	delete this->mpMenuPanel;	
+	delete this->mpInfoPanel;	
+	delete this->mpWindow;	
+
+	
 	for (int i = 0; i < (int)this->mFloors.size(); i++)
 	{
-		if (this->mFloors[i])
-		{
-			delete this->mFloors[i];
-			this->mFloors[i] = nullptr;
-		}
+		delete this->mFloors[i];	
 	}
 	for (int i = 0; i < (int)this->mBounds.size(); i++)
-	{
-		if (this->mBounds[i])
-		{
-			delete this->mBounds[i];
-			this->mBounds[i] = nullptr;
-		}
+	{	
+		delete this->mBounds[i];		
 	}
 
 	for (int i = 0; i < (int)this->mTexts.size(); i++)
-	{
-		if (this->mTexts[i])
-		{
-			delete this->mTexts[i];
-			this->mTexts[i] = nullptr;
-		}
+	{	
+		delete this->mTexts[i];		
 	}
 }
 
@@ -147,7 +96,7 @@ void System::BuildGraphicalUserInterface(
 	this->mSetupPanels();
 	this->mSetupModels();
 	this->mSetupBoat();
-	this->mSetupInfoWindow(windowWidth, windowHeight);
+	this->mSetupInfoWindow(windowWidth, windowHeight, windowName);
 }
 
 void System::Run()
@@ -174,16 +123,23 @@ void System::mUpdate()
 	this->mpTopViewPanel->Update();
 	this->mpSideViewPanel->Update();
 	this->mpMenuPanel->Update();
-	this->mpInfoWindow->Update();
-	
-	if(!this->mpInfoWindow->IsOpen())
+
+	// For information/guide/tutorial panel.
+	if (this->mpInfoPanel->IsVisible())
 	{
-		// Can't use observer for this one, sorry.
-		if (this->mpControlPanel->GetButtonByName("Info")->GetButtState() == CLICKED)
+		this->mpInfoPanel->Update();
+		if (this->mpInfoPanel->GetButtonByName("Exit")
+			->GetButtState() == CLICKED)
 		{
-			this->mpInfoWindow->OpenNormal();
+			this->mpInfoPanel->Hide();
 		}
 	}
+	else if (this->mpControlPanel->GetButtonByName("Info")
+		->GetButtState() == CLICKED)
+	{
+		this->mpInfoPanel->ShowOnTop();
+	}
+
 }
 
 void System::mDraw()
@@ -194,7 +150,7 @@ void System::mDraw()
 	this->mpSideViewPanel->Draw();
 	this->mpMenuPanel->Draw();
 
-	if (this->mpInfoWindow->IsOpen())
+	if (this->mpInfoPanel->IsVisible())
 	{
 		this->mpInfoPanel->Draw();
 	}
@@ -227,6 +183,8 @@ void System::mHandleInput()
 void System::mUpdateEvents(Room * room)
 {
 	std::vector<LogEvent*> events_in_room = room->GetActiveEvents();
+	// If there already is an active event of that type in that room
+	// the event is removed.
 	if (!this->mpActiveLogPanel->AddNotification(room, events_in_room.back()))
 	{
 		Event::Type to_remove = this->mpMenuPanel->GetLastClicked();
@@ -235,7 +193,8 @@ void System::mUpdateEvents(Room * room)
 		events_in_room = room->GetActiveEvents();
 	}
 
-	// Temp solution. Sorry
+	// Adds bounds to the deck name to get the name of the 
+	// mesh object holding the bounding boxes for the deck.
 	std::string bounds_name = room->GetDeckName() + "bounds";
 
 	// Saving things for readability.
@@ -525,22 +484,27 @@ void System::mSetupBoat()
 	this->mBoat.SetEventLog(&this->mEventLog);
 }
 
-void System::mSetupInfoWindow(int windowWidth, int windowHeight)
+void System::mSetupInfoWindow(
+	int windowWidth, 
+	int windowHeight,
+	std::wstring windowName)
 {
 	this->mInfoWindowWidth = windowWidth;
 	this->mInfoWindowHeight = windowHeight;
 
-	this->mpInfoWindow = new Window(
-		L"Användarinformation",
-		this->mInfoWindowWidth / 3,
-		this->mInfoWindowHeight);
 	this->mpInfoPanel = new Panel2D(
-		this->mInfoWindowWidth,
-		this->mInfoWindowHeight,
-		0, 
-		0, 
-		this->mpInfoWindow->GetWindow(), 
-		L"Användarinformation");
+		windowWidth / 3 + 10,
+		windowHeight - 100,
+		10, 
+		windowWidth / 3, 
+		this->mpWindow->GetWindow(), 
+		windowName.c_str());
+	
+	this->mpInfoPanel->Hide();
+	
+	this->mpInfoPanel->LoadImageToBitmap("../../Models/Exit.png", "Exit");
+	this->mpInfoPanel->AddButton(30, 30, 0, this->mpInfoPanel->GetWidth() - 30, 
+		this->mpInfoPanel->GetBitmapByName("Exit"), "Exit");
 
 	std::string title_string = "Hur man använder verktyget:";
 	std::vector<std::string> header_strings;
@@ -551,7 +515,9 @@ void System::mSetupInfoWindow(int windowWidth, int windowHeight)
 	int body_font_size		= 20;
 
 	header_strings.push_back("Kontroller");
-	body_strings.push_back("Vänster musknapp: Välja rum eller händelser samt lägga till och ta bort händelser.\nHöger musknapp: Håll in och dra för att rotera kameran.");
+	body_strings.push_back("Vänster musknapp: Välja rum eller händelser " 
+		"samt lägga till och ta bort händelser.\n"
+		"Höger musknapp: Håll in och dra för att rotera kameran.");
 	
 	this->mpInfoPanel->AddTextbox(
 		this->mpInfoPanel->GetWidth(),

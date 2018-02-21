@@ -14,7 +14,7 @@ Panel::Panel(int width, int height, int top, int left, HWND handle, LPCTSTR titl
 		0,
 		this->mTitle,
 		this->mTitle,
-		WS_CHILD | WS_BORDER | WS_CLIPCHILDREN,
+		WS_CHILD | WS_BORDER | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
 		this->mLeft,
 		this->mTop,
 		this->mWidth,
@@ -32,6 +32,7 @@ Panel::Panel(int width, int height, int top, int left, HWND handle, LPCTSTR titl
 	this->mParentWidth	= parent_size.right - parent_size.left;
 	this->mParentTop	= parent_size.top;
 	this->mParentLeft	= parent_size.left;
+	this->mIsVisible		= true;
 }
 
 Panel::~Panel()
@@ -184,41 +185,44 @@ void Panel::UpdateWindowPos()
 
 bool Panel::IsMouseInsidePanel()
 {
-	RECT window_rect;
-	GetWindowRect(this->mPanelWindow, &window_rect);
-	POINT mouse_pos;
-	GetCursorPos(&mouse_pos);
-	return PtInRect(&window_rect, mouse_pos); // if mouse is inside panel
+	bool result = false;
+	if (this->mIsVisible)
+	{
+		RECT window_rect;
+		GetWindowRect(this->mPanelWindow, &window_rect);
+		POINT mouse_pos;
+		GetCursorPos(&mouse_pos);
+		result = PtInRect(&window_rect, mouse_pos); // if mouse is inside panel
+	}
+	return result;
 }
 
 bool Panel::IsVisible()
 {
-	return IsWindowVisible(this->mPanelWindow);
+	return this->mIsVisible;
 }
 
 void Panel::Hide()
 {
-	MoveWindow(this->mPanelWindow, 0, 0, 0, 0, FALSE);
+	this->mIsVisible = false;
+	MoveWindow(this->mPanelWindow, 0, 0, 0, 0, TRUE);
 }
 
 void Panel::Show()
 {
+	this->mIsVisible = true;
 	ShowWindow(this->mPanelWindow, SW_SHOW);
 }
 
 void Panel::ShowOnTop()
 {
 	this->Show();
-	// Only changes z order, retains current size and position
-	// with the SWP_NOMOVE and SWP_NOSIZE flags.
-	SetWindowPos(
-		this->mPanelWindow,
-		HWND_TOPMOST, 
-		this->mLeft,
-		this->mTop,
-		this->mWidth,
-		this->mHeight,
-		SWP_NOMOVE | SWP_NOSIZE);
+	
+	SetWindowPos(this->mPanelWindow, 
+		HWND_TOP, 0, 0, 0, 0, 
+		SWP_SHOWWINDOW | 
+		SWP_NOSIZE | 
+		SWP_NOMOVE);
 }
 
 HWND *Panel::GetPanelWindowHandle()

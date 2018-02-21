@@ -66,6 +66,8 @@ protected:
 	int mParentTop;
 	int mParentLeft;
 
+	bool mIsVisible;
+
 	// To compare sizes.
 	HWND mParentWindow;
 	HWND mPanelWindow;
