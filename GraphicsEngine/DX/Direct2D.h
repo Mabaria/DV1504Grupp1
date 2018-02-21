@@ -17,6 +17,7 @@ public:
 	Direct2D(HWND window,
 		unsigned int width,
 		unsigned int height);
+	Direct2D();
 	~Direct2D();
 	void CreateRenderTarget(HWND window, unsigned int width, unsigned int height);
 	IWICFormatConverter *GetpFormatConverter();

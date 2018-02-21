@@ -20,6 +20,23 @@ Direct2D::Direct2D(HWND window,
 	this->CreateRenderTarget(window, width, height);	
 }
 
+Direct2D::Direct2D()
+{
+	this->mpFactory = nullptr;
+	this->mpRenderTarget = nullptr;
+	this->mpWicFactory = nullptr;
+	this->mpConverter = nullptr;
+	this->mpDecoder = nullptr;
+	this->mpBitmapSrc = nullptr;
+	this->mpTextFactory = nullptr;
+	this->mpFactory1 = nullptr;
+	this->mpDevice = nullptr;
+	this->mpContext = nullptr;
+	this->mTrimmer = {};
+	this->mTrimmer.granularity = DWRITE_TRIMMING_GRANULARITY_CHARACTER;
+	this->mInit();
+}
+
 Direct2D::~Direct2D()
 {
 	this->ReleaseCOM(this->mpFactory);
