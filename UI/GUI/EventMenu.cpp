@@ -138,8 +138,20 @@ bool EventMenu::Update()
 	if (this->mDraggingWindow)
 	{
 		std::cout << this->mDragX << ", " << this->mDragY << std::endl;
-		this->mpPanel->SetLeft(Mouse::GetExactX() - this->mDragX);
-		this->mpPanel->SetTop(Mouse::GetExactY() - this->mDragY);
+		int left = Mouse::GetExactX() - this->mDragX;
+		if (left + this->mMenuWidth > this->mParentPanelWidth)
+			left = this->mParentPanelWidth - this->mMenuWidth;
+		else if (left < 0)
+			left = 0;
+
+		int top = Mouse::GetExactY() - this->mDragY;
+		if (top + this->mMenuHeight > this->mParentPanelHeight)
+			top = this->mParentPanelHeight - this->mMenuHeight;
+		else if (top < 0)
+			top = 0;
+
+		this->mpPanel->SetLeft(left);
+		this->mpPanel->SetTop(top);
 		this->mpPanel->UpdateWindowPos();
 	}
 	return true;
