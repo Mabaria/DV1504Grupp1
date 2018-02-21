@@ -190,21 +190,46 @@ TextBox * Panel2D::GetTextBoxByIndex(unsigned int index)
 	return to_return;
 }
 
-void Panel2D::SetNotificationList(int posX, int posY)
+void Panel2D::SetNotificationList(
+	int posX, 
+	int posY, 
+	int titleFontSize, 
+	int objectFontSize)
 {
 	this->mNotificationList = new NotificationList(
 		this->mDirect2D, 
 		posX, 
-		posY);
+		posY,
+		titleFontSize,
+		objectFontSize);
 	this->mNotificationListIsActive = true;
 }
 
 bool Panel2D::AddNotification(Room * room, LogEvent * event)
 {
+	ID2D1Bitmap *bitmap = nullptr;
+	switch (event->GetType())
+	{
+	case Event::Fire:
+		bitmap = this->GetBitmapByName("Fire");
+		break;
+	case Event::Water:
+		bitmap = this->GetBitmapByName("Water");
+		break;
+	case Event::Gas:
+		bitmap = this->GetBitmapByName("Gas");
+		break;
+	case Event::Injury:
+		bitmap = this->GetBitmapByName("Injury");
+		break;
+	default:
+		break;
+	}
 	return this->mNotificationList->AddNotification(
 		this->mDirect2D, 
 		room, 
-		event);
+		event,
+		bitmap);
 }
 
 bool Panel2D::RemoveNotification(Room * room, Event::Type type)
@@ -233,7 +258,6 @@ void Panel2D::Update()
 {
 	this->UpdateWindowSize();
 	this->mUpdateButtons();
-	this->mUpdateTextBoxes();
 
 	// Updating the notification list only if
 	// the panel has one.
@@ -376,11 +400,6 @@ void Panel2D::mUpdateButtons()
 			}
 		}
 	}
-}
-
-void Panel2D::mUpdateTextBoxes()
-{
-
 }
 
 void Panel2D::LoadImageToBitmap(

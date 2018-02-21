@@ -60,7 +60,11 @@ public:
 	TextBox* GetTextBoxByIndex(unsigned int index);
 
 	// Notification object/list stuff.
-	void SetNotificationList(int posX, int posY);
+	void SetNotificationList(
+		int posX, 
+		int posY,
+		int titleFontSize,
+		int objectFontSize);
 	bool AddNotification(Room *room, LogEvent *event);
 	bool RemoveNotification(Room *room, Event::Type type);
 
@@ -79,7 +83,6 @@ private:
 	std::vector<std::string> mButtonNames;
 	std::vector<BitmapInfo> mBitmapVector;
 
-	void mUpdateTextBoxes();
 	std::vector<TextBox*> mTextBoxVector;
 	std::vector<std::string> mTextBoxNames;
 

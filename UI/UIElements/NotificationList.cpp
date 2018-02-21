@@ -1,28 +1,39 @@
 #include "NotificationList.h"
 
-NotificationList::NotificationList(Direct2D *direct2d, int posX, int posY)
-	:mTitle(direct2d, 0, 0, 0, 0), mTitleFrame(direct2d, "", 0, 0, 0, 0)
+NotificationList::NotificationList(
+	Direct2D *direct2d, 
+	int posX, 
+	int posY,
+	int titleFontSize,
+	int objectFontSize)
+	:mTitle(direct2d, 0, 0, 0, 0), 
+	mTitleFrame(direct2d, "", 0, 0, 0, 0)
 {
-	this->mPosX = posX;
-	this->mPosY = posY;
-	this->mListTop		= this->mPosY;
-	this->mListBottom	= this->mPosY;
-	this->mpRenderTarget = direct2d->GetpRenderTarget();
-	this->mSpace = 4;
+	this->mPosX				= posX;
+	this->mPosY				= posY;
+	this->mListTop			= this->mPosY;
+	this->mListBottom		= this->mPosY;
+	this->mpRenderTarget	= direct2d->GetpRenderTarget();
+	this->mSpace			= 4;
+	this->mObjectFontSize	= objectFontSize;
+
+
 	this->mTitle.SetTextBoxSize(
 		this->mPosX, 
 		this->mPosY, 
 		(int)direct2d->GetpRenderTarget()->GetSize().width,
-		(int)direct2d->GetpRenderTarget()->GetSize().height / 10);
+		titleFontSize * 8 / 3); // 2 * 4 / 3 (two lines) + a little extra.
 
 	this->mDefaultTitle = "Aktiv Logg\n Antal: ";
 	this->mTitle.SetText(this->mDefaultTitle + "0");
+
 	this->mTitleFrame.SetButtonSize(
 		0,
 		0,
 		(int)this->mTitle.GetTextBoxSize().right,
 		(int)this->mTitle.GetTextBoxSize().bottom);
-	this->mTitle.SetFontSize(40);
+
+	this->mTitle.SetFontSize(titleFontSize);
 	this->mTitle.SetFontWeight(DWRITE_FONT_WEIGHT_ULTRA_BLACK);
 	this->mTitle.SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
 }
@@ -38,7 +49,8 @@ NotificationList::~NotificationList()
 bool NotificationList::AddNotification(
 	Direct2D * direct2d, 
 	Room * room, 
-	LogEvent * event)
+	LogEvent * event,
+	ID2D1Bitmap * bitmap)
 {
 	bool new_event = true;
 	for (int i = 0; i < (int)this->mObjects.size() && new_event; i++)
@@ -58,7 +70,9 @@ bool NotificationList::AddNotification(
 			room,
 			event,
 			direct2d,
-			(int)this->mObjects.size() + 1));
+			(int)this->mObjects.size() + 1,
+			this->mObjectFontSize,
+			bitmap));
 
 		this->mObjects.back()->Move(2, this->mSpace);
 
