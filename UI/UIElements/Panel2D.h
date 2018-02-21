@@ -88,5 +88,6 @@ private:
 	NotificationList *mNotificationList;
 	bool mNotificationListIsActive;
 
+
 	
 };

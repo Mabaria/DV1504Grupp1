@@ -392,6 +392,7 @@ void Panel2D::mUpdateButtons()
 	}
 }
 
+
 //void Panel2D::LoadImageToBitmap(
 //	std::string imageFilePath,
 //	std::string bitmapName)

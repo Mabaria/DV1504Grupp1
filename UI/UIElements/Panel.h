@@ -84,5 +84,7 @@ protected:
 
 	CustomTextRenderer* mTextRenderer;
 
+	void mCreateTextRenderer();
+
 private:
 };
