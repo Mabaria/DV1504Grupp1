@@ -8,7 +8,6 @@ D3D11::D3D11()
 	this->mSwapChain = nullptr;
 	this->mBackBuffer = nullptr;
 	this->mDepthBuffer = nullptr;
-	this->mpDXGIDevice = nullptr;
 	this->mSamplerState = nullptr;	
 }
 
@@ -23,7 +22,6 @@ D3D11::D3D11(
 	this->mContext = nullptr;
 	this->mSwapChain = nullptr;
 	this->mBackBuffer = nullptr;
-	this->mpDXGIDevice = nullptr;
 	this->mDepthBuffer = nullptr;
 
 	this->mModeDesc = { 0 };
@@ -64,8 +62,6 @@ void D3D11::Init(HWND window)
 
 	this->mContext->RSSetViewports(1, &this->mViewport);
 	this->ChangeSize(this->mSize);
-
-	this->mDevice->QueryInterface(&this->mpDXGIDevice);
 
 	D3D11_SAMPLER_DESC sampler_desc{};
 	sampler_desc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;

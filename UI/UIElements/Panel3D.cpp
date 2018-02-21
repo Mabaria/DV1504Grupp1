@@ -780,10 +780,6 @@ const void Panel3D::Draw()
 				offset);	// Base vertex location.
 		}		
 	}
-	IDXGISurface *BackBuffer;
-	this->mDirect3D.GetSwapChain()->GetBuffer(0, IID_PPV_ARGS(&BackBuffer));
-	this->LoadImageToBitmap("../../Models/pepehans.jpg", "pepe");
-	//this->mDirect2D.GetpContext()->CreateBitmapFromDxgiSurface(this->mDirect3D.get)
 	this->mDirect3D.GetSwapChain()->Present(1, 0);
 }
 

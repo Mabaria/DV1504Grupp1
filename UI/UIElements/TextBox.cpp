@@ -16,9 +16,9 @@ TextBox::TextBox(
 	std::wstring mTextWString;
 	std::string mTextString;
 	this->mpTextFormat = nullptr;
-	this->mFontName = L"Times new roman";
+	this->mFontName = L"Constantia";
 	
-	this->mFontWeight = DWRITE_FONT_WEIGHT_NORMAL;
+	this->mFontWeight = DWRITE_FONT_WEIGHT_BOLD;
 	this->mCreateColor();
 
 	this->SetColor(D2D1::ColorF::Black);
@@ -47,6 +47,7 @@ void TextBox::SetTextBoxSize(int left, int top, int right, int bottom)
 		(float)top,
 		(float)right,
 		(float)bottom);
+
 }
 
 void TextBox::SetText(std::string text)
@@ -54,6 +55,12 @@ void TextBox::SetText(std::string text)
 	this->mTextString = text;
 	this->mTextWString = this->mStrConverter.from_bytes(text);
 	this->mpTextWchar = this->mTextWString.c_str();
+
+	if (this->mpTextLayout)
+	{
+		this->mpTextLayout->Release();
+		this->mCreateTextLayout();
+	}
 }
 
 void TextBox::DrawTextBox()
@@ -86,6 +93,9 @@ void TextBox::MoveTextBox(int x, int y)
 		this->mLayoutRect.top + y,
 		this->mLayoutRect.right + x,
 		this->mLayoutRect.bottom + y);
+
+	this->mpTextLayout->Release();
+	this->mCreateTextLayout();
 }
 
 void TextBox::SetFontSize(unsigned int size)
@@ -136,6 +146,15 @@ void TextBox::mCreateTextLayout()
 		this->mLayoutRect.bottom - this->mLayoutRect.top,	// max height
 		&this->mpTextLayout									// return pointer
 	);
+
+	DWRITE_TEXT_RANGE text_range = { 0, wcslen(this->mpTextWchar)};
+	IDWriteFontCollection* pFontCollection = nullptr;
+	// Get the system font collection
+	hr = this->D2D1Panel->GetpTextFactory()->GetSystemFontCollection(&pFontCollection);
+	// Set the specified font
+	this->mpTextLayout->SetFontCollection(pFontCollection, text_range);
+	this->mpTextLayout->SetFontFamilyName(this->mFontName.c_str(), text_range);
+	pFontCollection->Release();
 }
 
 void TextBox::mCreateColor()

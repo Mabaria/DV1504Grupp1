@@ -76,7 +76,6 @@ public:
 	
 private:
 	D3D11 mDirect3D;
-	Direct2D mDirect2D;
 	std::vector<MeshObject*> mpMeshObjects;
 	
 

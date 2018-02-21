@@ -100,7 +100,6 @@ HRESULT CustomTextRenderer::DrawGlyphRun(
 			&pTransformedGeometry
 		);
 	}
-
 	//! ---------------------------------------------------------
 	//! Actual drawing happens down here
 	//! ---------------------------------------------------------

@@ -11,13 +11,11 @@ Direct2D::Direct2D(HWND window,
 	this->mpDecoder			= nullptr;
 	this->mpBitmapSrc		= nullptr;
 	this->mpTextFactory		= nullptr;
-	this->mpFactory1		= nullptr;
-	this->mpDevice			= nullptr;
-	this->mpContext			= nullptr;
 	this->mTrimmer			= {};
 	this->mTrimmer.granularity = DWRITE_TRIMMING_GRANULARITY_CHARACTER;
 	this->mInit();
 	this->CreateRenderTarget(window, width, height);	
+	this->mCreateTextRenderer(); // Render target needs to exist
 }
 
 Direct2D::Direct2D()
@@ -29,9 +27,6 @@ Direct2D::Direct2D()
 	this->mpDecoder = nullptr;
 	this->mpBitmapSrc = nullptr;
 	this->mpTextFactory = nullptr;
-	this->mpFactory1 = nullptr;
-	this->mpDevice = nullptr;
-	this->mpContext = nullptr;
 	this->mTrimmer = {};
 	this->mTrimmer.granularity = DWRITE_TRIMMING_GRANULARITY_CHARACTER;
 	this->mInit();
@@ -47,6 +42,7 @@ Direct2D::~Direct2D()
 	this->ReleaseCOM(this->mpBitmapSrc);
 	this->ReleaseCOM(this->mpTextFactory);
 	this->ReleaseCOM(this->mpTextRenderer);
+	delete this->mpTextRenderer;
 }
 
 void Direct2D::mCreateFactory()
@@ -60,7 +56,6 @@ void Direct2D::mInit()
 	this->mCreateFactory();
 	this->mCreateWicFactory();
 	this->mCreateTextFactory();
-	this->mCreateTextRenderer();
 }
 
 void Direct2D::ReleaseCOM(IUnknown * object)
@@ -84,7 +79,7 @@ void Direct2D::CreateRenderTarget(
 			D2D1::SizeU(width, height)),
 		&this->mpRenderTarget);
 	this->mpRenderTarget->SetAntialiasMode
-	(D2D1_ANTIALIAS_MODE_ALIASED);
+	(D2D1_ANTIALIAS_MODE_PER_PRIMITIVE);
 }
 
 IWICFormatConverter *Direct2D::GetpFormatConverter()
@@ -127,10 +122,6 @@ const DWRITE_TRIMMING Direct2D::GetTrimmer()
 	return this->mTrimmer;
 }
 
-ID2D1DeviceContext * Direct2D::GetpContext()
-{
-	return this->mpContext;
-}
 
 CustomTextRenderer * Direct2D::GetpTextRenderer()
 {
@@ -157,13 +148,6 @@ void Direct2D::SetpBitmapSrc(IWICBitmapFrameDecode * pBitmapSrc)
 	this->mpBitmapSrc = pBitmapSrc;
 }
 
-void Direct2D::InitDevice(IDXGIDevice * dxgiDevice)
-{
-	this->mpFactory1->CreateDevice(dxgiDevice, &this->mpDevice);
-	this->mpDevice->CreateDeviceContext(
-		D2D1_DEVICE_CONTEXT_OPTIONS_NONE,
-		&this->mpContext);
-}
 
 void Direct2D::mCreateWicFactory()
 {

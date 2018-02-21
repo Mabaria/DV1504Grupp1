@@ -274,7 +274,7 @@ void System::mSetupPanels()
 		"title");
 	this->mpControlPanel->GetTextBoxByName("title")->SetFontSize(40);
 	this->mpControlPanel->GetTextBoxByName("title")->SetFontWeight
-	(DWRITE_FONT_WEIGHT_ULTRA_BLACK);
+	(DWRITE_FONT_WEIGHT_NORMAL);
 	this->mpControlPanel->GetTextBoxByName("title")->SetTextAlignment
 	(DWRITE_TEXT_ALIGNMENT_CENTER);
 
