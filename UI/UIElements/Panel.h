@@ -4,6 +4,7 @@
 #include <math.h>
 #include "../../IO/Mouse.h"
 #include "../../GraphicsEngine/DX/Direct2D.h"
+#include "../../GraphicsEngine/CustomTextRenderer.h"
 #include <locale>
 
 struct Fraction
@@ -80,6 +81,8 @@ protected:
 	LPCTSTR mTitle;
 
 	std::vector<BitmapInfo> mBitmapVector;
+
+	CustomTextRenderer* mTextRenderer;
 
 private:
 };

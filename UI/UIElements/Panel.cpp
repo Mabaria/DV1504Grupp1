@@ -32,6 +32,8 @@ Panel::Panel(int width, int height, int top, int left, HWND handle, LPCTSTR titl
 	this->mParentWidth	= parent_size.right - parent_size.left;
 	this->mParentTop	= parent_size.top;
 	this->mParentLeft	= parent_size.left;
+
+	this->mTextRenderer = nullptr;
 }
 
 Panel::~Panel()
@@ -45,6 +47,11 @@ Panel::~Panel()
 		}
 	}
 	delete this->mDirect2D;
+
+	if (this->mTextRenderer)
+	{
+		this->mTextRenderer->Release();
+	}
 }
 
 const void Panel::SetWidth(int width)
