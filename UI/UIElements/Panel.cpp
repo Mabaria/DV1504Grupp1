@@ -34,7 +34,6 @@ Panel::Panel(int width, int height, int top, int left, HWND handle, LPCTSTR titl
 	this->mParentLeft	= parent_size.left;
 
 
-	this->mCreateTextRenderer();
 }
 
 Panel::~Panel()
@@ -49,10 +48,6 @@ Panel::~Panel()
 	}
 	delete this->mDirect2D;
 
-	if (this->mTextRenderer)
-	{
-		this->mTextRenderer->Release();
-	}
 }
 
 const void Panel::SetWidth(int width)
@@ -291,27 +286,4 @@ ID2D1Bitmap * Panel::GetBitmapByName(std::string bitmapName)
 	return to_return;
 }
 
-void Panel::mCreateTextRenderer()
-{
-	this->mTextRenderer = nullptr;
-	ID2D1SolidColorBrush  *outlineBrush, *fillBrush;
 
-	// Create outline brush
-	this->mDirect2D->GetpRenderTarget()->CreateSolidColorBrush(
-		D2D1::ColorF(D2D1::ColorF::Black), &outlineBrush);
-	// Create solid color fill brush
-	this->mDirect2D->GetpRenderTarget()->CreateSolidColorBrush(
-		D2D1::ColorF(D2D1::ColorF::White), &fillBrush);
-
-
-	this->mTextRenderer = new CustomTextRenderer(
-		this->mDirect2D->GetpFactory,
-		this->mDirect2D->GetpRenderTarget,
-		outlineBrush,
-		fillBrush
-	);
-
-	// Release the locally created objects, text renderer has its own ref
-	outlineBrush->Release();
-	fillBrush->Release();
-}

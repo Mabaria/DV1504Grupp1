@@ -32,6 +32,7 @@ TextBox::~TextBox()
 {
 	this->ReleaseCOM(this->mpColor);
 	this->ReleaseCOM(this->mpTextFormat);
+	this->ReleaseCOM(this->mpTextLayout);
 }
 
 D2D1_RECT_F TextBox::GetTextBoxSize() const
@@ -57,13 +58,19 @@ void TextBox::SetText(std::string text)
 
 void TextBox::DrawTextBox()
 {
-	this->D2D1Panel->GetpRenderTarget()->DrawTextW(
+	/*this->D2D1Panel->GetpRenderTarget()->DrawTextW(
 		this->mpTextWchar,
 		wcslen(this->mpTextWchar),
 		this->mpTextFormat,
 		this->mLayoutRect,
 		this->mpColor,
 		D2D1_DRAW_TEXT_OPTIONS_CLIP
+	);*/
+	this->mpTextLayout->Draw(
+		NULL,
+		this->D2D1Panel->GetpTextRenderer(),
+		this->mLayoutRect.left, //todo CHECK SO THIS IS CORRECT
+		this->mLayoutRect.top   //todo CHECK SO THIS IS CORRECT
 	);
 }
 
@@ -86,6 +93,9 @@ void TextBox::SetFontSize(unsigned int size)
 	this->mFontSize = size;
 	this->mpTextFormat->Release();
 	this->mCreateTextFormat();
+
+	this->mpTextLayout->Release();
+	this->mCreateTextLayout();
 }
 
 void TextBox::SetFontWeight(DWRITE_FONT_WEIGHT fontWeight)
@@ -93,6 +103,9 @@ void TextBox::SetFontWeight(DWRITE_FONT_WEIGHT fontWeight)
 	this->mFontWeight = fontWeight;
 	this->mpTextFormat->Release();
 	this->mCreateTextFormat();
+
+	this->mpTextLayout->Release();
+	this->mCreateTextLayout();
 }
 
 void TextBox::SetFontName(std::wstring fontName)
@@ -100,11 +113,17 @@ void TextBox::SetFontName(std::wstring fontName)
 	this->mFontName = fontName;
 	this->mpTextFormat->Release();
 	this->mCreateTextFormat();
+
+	this->mpTextLayout->Release();
+	this->mCreateTextLayout();
 }
 
 void TextBox::SetTextAlignment(DWRITE_TEXT_ALIGNMENT textAlignment)
 {
 	this->mpTextFormat->SetTextAlignment(textAlignment);
+
+	this->mpTextLayout->Release();
+	this->mCreateTextLayout();
 }
 
 void TextBox::mCreateTextLayout()
@@ -115,7 +134,7 @@ void TextBox::mCreateTextLayout()
 		this->mpTextFormat,									// text format
 		this->mLayoutRect.right - this->mLayoutRect.left,	// max width
 		this->mLayoutRect.bottom - this->mLayoutRect.top,	// max height
-		&this->mTextLayout									// return pointer
+		&this->mpTextLayout									// return pointer
 	);
 }
 

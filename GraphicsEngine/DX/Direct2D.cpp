@@ -46,6 +46,7 @@ Direct2D::~Direct2D()
 	this->ReleaseCOM(this->mpDecoder);
 	this->ReleaseCOM(this->mpBitmapSrc);
 	this->ReleaseCOM(this->mpTextFactory);
+	this->ReleaseCOM(this->mpTextRenderer);
 }
 
 void Direct2D::mCreateFactory()
@@ -59,6 +60,7 @@ void Direct2D::mInit()
 	this->mCreateFactory();
 	this->mCreateWicFactory();
 	this->mCreateTextFactory();
+	this->mCreateTextRenderer();
 }
 
 void Direct2D::ReleaseCOM(IUnknown * object)
@@ -130,6 +132,11 @@ ID2D1DeviceContext * Direct2D::GetpContext()
 	return this->mpContext;
 }
 
+CustomTextRenderer * Direct2D::GetpTextRenderer()
+{
+	return this->mpTextRenderer;
+}
+
 void Direct2D::SetpFormatConverter(IWICFormatConverter* pConverter)
 {
 	this->mpConverter = pConverter;
@@ -173,4 +180,29 @@ void Direct2D::mCreateTextFactory()
 		DWRITE_FACTORY_TYPE_SHARED,
 		__uuidof(IDWriteFactory),
 		reinterpret_cast<IUnknown**>(&this->mpTextFactory));
+}
+
+void Direct2D::mCreateTextRenderer()
+{
+	this->mpTextRenderer = nullptr;
+	ID2D1SolidColorBrush  *outlineBrush, *fillBrush;
+
+	// Create outline brush
+	this->mpRenderTarget->CreateSolidColorBrush(
+		D2D1::ColorF(D2D1::ColorF::Black), &outlineBrush);
+	// Create solid color fill brush
+	this->mpRenderTarget->CreateSolidColorBrush(
+		D2D1::ColorF(D2D1::ColorF::White), &fillBrush);
+
+
+	this->mpTextRenderer = new CustomTextRenderer(
+		this->mpFactory,
+		this->mpRenderTarget,
+		outlineBrush,
+		fillBrush
+	);
+
+	// Release the locally created objects, text renderer has its own ref
+	outlineBrush->Release();
+	fillBrush->Release();
 }

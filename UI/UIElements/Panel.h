@@ -82,9 +82,6 @@ protected:
 
 	std::vector<BitmapInfo> mBitmapVector;
 
-	CustomTextRenderer* mTextRenderer;
-
-	void mCreateTextRenderer();
 
 private:
 };

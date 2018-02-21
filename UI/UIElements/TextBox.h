@@ -42,7 +42,7 @@ private:
 
 	/* New additions related to custom text layout */
 
-	IDWriteTextLayout *mTextLayout;
+	IDWriteTextLayout *mpTextLayout;
 	void mCreateTextLayout();
 
 	/*---------------------------------------------*/
