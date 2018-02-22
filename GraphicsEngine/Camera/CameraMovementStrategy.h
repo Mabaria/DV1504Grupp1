@@ -12,8 +12,8 @@ public:
 	~CameraMovementStrategy();
 
 	virtual bool Initialize(Camera& rCamera);
-	virtual bool Zoom(int zoom)				 = 0;
-	virtual bool Move(Position move)		 = 0;
+	virtual void Zoom(int zoom)				 = 0;
+	virtual void Move(Position move)		 = 0;
 	virtual void HandleChangeInCamera()		 = 0;
 
 private:
@@ -22,7 +22,7 @@ protected:
 	float mMoveSpeed;
 	float mZoomSpeed;
 
-	float mDistance;
+	float mDistance; // How far away the camera is from object
 	float mMaxDistance;
 	float mMinDistance;
 

@@ -21,6 +21,8 @@ bool CameraPanStrategy::Initialize(Camera & rCamera)
 {
 	CameraMovementStrategy::Initialize(rCamera);
 
+
+	// Keep start position to limit moves outside of desired area
 	this->mStartPosition = this->pCamera->GetPosition();
 
 	this->mMinX = XMVectorGetX(this->mStartPosition) - 2.0f;
@@ -34,13 +36,13 @@ bool CameraPanStrategy::Initialize(Camera & rCamera)
 	return false;
 }
 
-bool CameraPanStrategy::Zoom(int zoom)
+void CameraPanStrategy::Zoom(int zoom)
 {
 	XMVECTOR pos = this->pCamera->GetPosition();
 	this->mDistance = XMVectorGetY(pos);
-
 	this->mDistance -= zoom * this->mZoomSpeed;
 
+	// Keep zoom inside desired limits
 	if (this->mDistance  < this->mMinDistance)
 	{
 		this->mDistance = this->mMinDistance;
@@ -50,14 +52,14 @@ bool CameraPanStrategy::Zoom(int zoom)
 		this->mDistance = this->mMaxDistance;
 	}
 
+	// Set new zoom
 	pos = XMVectorSetY(pos, this->mDistance);
 	this->pCamera->SetCameraPosition(pos);
-
-	return true;
 }
 
-bool CameraPanStrategy::Move(Position move)
+void CameraPanStrategy::Move(Position move)
 {
+	// Make the move
 	this->pCamera->MoveCamera(
 		-move.x * this->mDistance,
 		0.0f,
@@ -67,6 +69,12 @@ bool CameraPanStrategy::Move(Position move)
 
 	XMVECTOR pos = this->pCamera->GetPosition();
 
+	/* 
+	
+	Keep movement inside of the desired area if a move was
+	made outside of the area
+
+	*/
 	float z = XMVectorGetZ(pos);
 	float x = XMVectorGetX(pos);
 
@@ -89,8 +97,6 @@ bool CameraPanStrategy::Move(Position move)
 	}
 
 	this->pCamera->SetCameraPosition(pos);
-
-	return true;
 }
 
 void CameraPanStrategy::HandleChangeInCamera()

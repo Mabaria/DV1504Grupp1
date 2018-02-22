@@ -9,13 +9,13 @@ public:
 	~CameraRotateStrategy();
 
 	virtual bool Initialize(Camera& rCamera);
-	virtual bool Zoom(int zoom);
-	virtual bool Move(Position move);
+	virtual void Zoom(int zoom);
+	virtual void Move(Position move);
 	virtual void HandleChangeInCamera();
 
 private:
 	DirectX::XMVECTOR mUp;
-	DirectX::XMVECTOR mDirection;
+	DirectX::XMVECTOR mDirection;	// The direction camera is displaced
 	DirectX::XMVECTOR mLookAt;
 
 	float mMaxHeight;

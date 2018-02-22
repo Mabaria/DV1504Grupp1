@@ -15,7 +15,7 @@ public:
 
 private:
 
-	bool mUpdateMouse();
+	bool mUpdateInput();
 
 	CameraMovementStrategy *mpStrategy;
 	Buttons mBtnToMove;
