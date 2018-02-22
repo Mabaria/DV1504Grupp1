@@ -122,6 +122,9 @@ D3D11 & Panel3D::rGetDirect3D()
 	return this->mDirect3D;
 }
 
+// Pixel Shader ID is based on the position in the array it has.
+// Which is in order of time it was added. 
+
 const void Panel3D::AddMeshObject(
 	std::string name,
 	std::vector<std::vector<unsigned int>> indices,
@@ -189,11 +192,15 @@ const void Panel3D::AddMeshObject(
 		}
 	}
 
+	// If pixel shader ID doesn't exist change it to default
 	if (pixelShaderID >= this->mpPixelShaders.size())
 		pixelShaderID = 0;
 
 	this->mpMeshObjects.back()->SetPixelShaderID(pixelShaderID);
 }
+
+// Pixel Shader ID is based on the position in the array it has.
+// Which is in order of time it was added. 
 
 const void Panel3D::AddMeshObject(MeshObject * meshObject,
 	int pixelShaderID,
@@ -259,8 +266,11 @@ const void Panel3D::AddMeshObject(MeshObject * meshObject,
 			);
 		}
 	}
+
+	// If pixel shader ID doesn't exist change it to default
 	if (pixelShaderID >= this->mpPixelShaders.size())
 		pixelShaderID = 0;
+
 	this->mpMeshObjects.back()->SetPixelShaderID(pixelShaderID);
 }
 
@@ -302,6 +312,7 @@ bool Panel3D::CreateShadersAndSetup(
 
 bool Panel3D::AddPixelShader(LPCWSTR pixelShaderPath)
 {
+	// Create pixel shader
 	bool result = this->mDirect3D.CreateShaders(
 		L"",
 		L"",
@@ -313,6 +324,7 @@ bool Panel3D::AddPixelShader(LPCWSTR pixelShaderPath)
 		0,
 		nullptr);
 
+	// If successful then add it to the rest
 	if(result)
 		this->mpPixelShaders.push_back(this->mpPixelShader);
 
@@ -609,6 +621,7 @@ const void Panel3D::Draw()
 	// and draws them one by one.
 	for (int i = 0; i < (int)this->mpMeshObjects.size(); i++)
 	{
+		// ___ SET PIXEL SHADER ___
 		ID3D11PixelShader* temp = this->mpPixelShaders[
 			this->mpMeshObjects[i]->GetPixelShaderID()
 		];
@@ -617,6 +630,7 @@ const void Panel3D::Draw()
 			pixel_shader = temp;
 			this->mDirect3D.GetContext()->PSSetShader(pixel_shader, nullptr, 0);
 		}
+		// ___ END ___
 
 		matrix_buffer = *this->mpMeshObjects[i]->rGetMatrixBuffer();
 		this->mDirect3D.GetContext()->PSSetShaderResources(
