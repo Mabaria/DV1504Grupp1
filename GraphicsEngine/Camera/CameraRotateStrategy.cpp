@@ -72,7 +72,7 @@ bool CameraRotateStrategy::Move(Position move)
 		)
 	);
 
-	// Avoid movement in Y axis
+	// Avoid movement in Y axis (Simple fix)
 	right = XMVector3Normalize(DirectX::XMVectorSetY(right, 0));
 
 
