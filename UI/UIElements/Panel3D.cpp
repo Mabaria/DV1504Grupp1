@@ -516,6 +516,47 @@ void Panel3D::Update(Button * attribute)
 	this->UpdateCamera();
 }
 
+void Panel3D::BindTextureToBitmap(ID3D11Texture2D * texture)
+{
+	IDXGISurface *surface;
+	ID2D1Bitmap1 *bitmap;
+
+	texture->QueryInterface(&surface);
+
+	this->mDirect2D->GetpContext()->CreateBitmapFromDxgiSurface(
+		surface,
+		nullptr,
+		&bitmap
+	);
+
+	this->mDirect2D->GetpContext()->SetTarget(bitmap);
+	bitmap->Release();
+	surface->Release();
+}
+
+void Panel3D::DrawBitmapToTexture(
+	ID2D1Bitmap * bitmap,
+	ID3D11Texture2D *textureBoundToBitmap)
+{
+	D3D11_TEXTURE2D_DESC hejRobin = { 0 };
+	textureBoundToBitmap->GetDesc(&hejRobin);
+	this->mDirect2D->GetpContext()->BeginDraw();
+	this->mDirect2D->GetpContext()->DrawBitmap(
+		bitmap,
+		D2D1::RectF(0, 0, hejRobin.Width, hejRobin.Height),
+		1.0f,
+		D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,
+		D2D1::RectF(
+			0,
+			0,
+			bitmap->GetSize().width,
+			bitmap->GetSize().height)
+	);
+
+	this->mDirect2D->GetpContext()->EndDraw();
+
+}
+
 const void Panel3D::Update()
 {
 	bool show_cursor = true;
@@ -781,45 +822,8 @@ const void Panel3D::Draw()
 				offset);	// Base vertex location.
 		}		
 	}
-	//////////////////////////////////////////////////////////////////////////////////////
-	IDXGISurface *surface;
-	ID3D11Texture2D *tex;
-	ID2D1Bitmap1 *bitmap;
-	
-	this->mDirect3D.GetSwapChain()->GetBuffer(0, IID_PPV_ARGS(&tex));
-
-	tex->QueryInterface(&surface);
-
-	this->mDirect2D->GetpContext()->CreateBitmapFromDxgiSurface(
-		surface,
-		nullptr,
-		&bitmap
-	);
-	
-	this->mDirect2D->GetpContext()->SetTarget(bitmap);
-
-	ID2D1SolidColorBrush *brush;
-	this->mDirect2D->GetpContext()->CreateSolidColorBrush(
-		D2D1::ColorF(D2D1::ColorF::Black),
-		&brush
-	);
-	
-
-	this->mDirect2D->GetpContext()->BeginDraw();
-	this->mDirect2D->GetpContext()->DrawLine(
-		D2D1::Point2F(0, 0),
-		D2D1::Point2F(this->mWidth, this->mHeight),
-		brush,
-		10.0f
-	);
-	this->mDirect2D->GetpContext()->EndDraw();
-
-	surface->Release();
-	tex->Release();
-	bitmap->Release();
-	brush->Release();
-	//////////////////////////////////////////////////////////////////////////////////////
 	this->mDirect3D.GetSwapChain()->Present(1, 0);
+	
 }
 
 MeshObject* Panel3D::rGetMeshObject(std::string name)

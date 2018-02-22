@@ -73,10 +73,14 @@ public:
 		_aligned_free(p);
 	}
 
+	void BindTextureToBitmap(ID3D11Texture2D *texture);
+	void DrawBitmapToTexture(
+		ID2D1Bitmap *bitmap,
+		ID3D11Texture2D *textureBoundToBitmap);
 	//void SetCameraPosition()
 private:
 	D3D11 mDirect3D;
-	//Direct2D mDirect2D;
+	
 	std::vector<MeshObject*> mpMeshObjects;
 	//HWND mPanelWindow;
 

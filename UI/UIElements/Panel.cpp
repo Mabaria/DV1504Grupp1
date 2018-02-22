@@ -263,6 +263,12 @@ void Panel::LoadImageToBitmap(std::string imageFilePath, std::string bitmapName)
 				NULL,
 				&new_bitmap_struct.bitmap);
 		}
+		else
+		{
+			this->mDirect2D->GetpContext()->CreateBitmapFromWicBitmap(
+				this->mDirect2D->GetpFormatConverter(),
+				&new_bitmap_struct.bitmap);
+		}
 	}
 
 	this->mBitmapVector.push_back(new_bitmap_struct);
@@ -287,3 +293,5 @@ ID2D1Bitmap * Panel::GetBitmapByName(std::string bitmapName)
 	}
 	return to_return;
 }
+
+
