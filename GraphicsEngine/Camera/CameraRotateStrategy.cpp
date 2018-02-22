@@ -34,37 +34,31 @@ bool CameraRotateStrategy::Initialize(Camera & rCamera)
 	return true;
 }
 
-bool CameraRotateStrategy::Zoom(int zoom)
+void CameraRotateStrategy::Zoom(int zoom)
 {
-	bool flag = true;
-
 	float d = this->mDistance;
 	d -= zoom * this->mZoomSpeed;
 
+	// Keep zoom inside desired area
+	
 	if (d < this->mMinDistance)
 	{
 		d = this->mMinDistance;
-		flag = false;
 	}
 
-	if (d > this->mMaxDistance)
+	else if (d > this->mMaxDistance)
 	{
 		d = this->mMaxDistance;
-		flag = false;
 	}
 
 	XMVECTOR v = this->pCamera->GetLookVector();
 	this->pCamera->SetCameraPosition(v + (this->mDirection * d));
 
 	this->mDistance = d;
-
-	return flag;
 }
 
-bool CameraRotateStrategy::Move(Position move)
+void CameraRotateStrategy::Move(Position move)
 {
-	bool flag = true;
-
 	XMVECTOR right = XMVector3Normalize(
 		XMVector3Cross(
 			this->mUp,
@@ -106,8 +100,6 @@ bool CameraRotateStrategy::Move(Position move)
 
 	XMVECTOR v = this->pCamera->GetLookVector();
 	this->pCamera->SetCameraPosition(v + (this->mDirection * this->mDistance));
-
-	return flag;
 }
 
 void CameraRotateStrategy::HandleChangeInCamera()

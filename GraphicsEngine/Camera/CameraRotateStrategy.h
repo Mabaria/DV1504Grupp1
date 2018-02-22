@@ -9,8 +9,8 @@ public:
 	~CameraRotateStrategy();
 
 	virtual bool Initialize(Camera& rCamera);
-	virtual bool Zoom(int zoom);
-	virtual bool Move(Position move);
+	virtual void Zoom(int zoom);
+	virtual void Move(Position move);
 	virtual void HandleChangeInCamera();
 
 private:

@@ -36,7 +36,7 @@ bool CameraPanStrategy::Initialize(Camera & rCamera)
 	return false;
 }
 
-bool CameraPanStrategy::Zoom(int zoom)
+void CameraPanStrategy::Zoom(int zoom)
 {
 	XMVECTOR pos = this->pCamera->GetPosition();
 	this->mDistance = XMVectorGetY(pos);
@@ -55,11 +55,9 @@ bool CameraPanStrategy::Zoom(int zoom)
 	// Set new zoom
 	pos = XMVectorSetY(pos, this->mDistance);
 	this->pCamera->SetCameraPosition(pos);
-
-	return true;
 }
 
-bool CameraPanStrategy::Move(Position move)
+void CameraPanStrategy::Move(Position move)
 {
 	// Make the move
 	this->pCamera->MoveCamera(
@@ -99,8 +97,6 @@ bool CameraPanStrategy::Move(Position move)
 	}
 
 	this->pCamera->SetCameraPosition(pos);
-
-	return true;
 }
 
 void CameraPanStrategy::HandleChangeInCamera()
