@@ -55,6 +55,13 @@ HRESULT CustomTextRenderer::DrawGlyphRun(
 		&pPathGeometry
 	);
 
+	// Create matrix for glyph run origin translation
+	D2D1::Matrix3x2F const matrix = D2D1::Matrix3x2F(
+		1.0f, 0.0f,
+		0.0f, 1.0f,
+		baselineOriginX, baselineOriginY
+	);
+
 	// Open the path geometry using the geometry sink
 	ID2D1GeometrySink *pSink = nullptr;
 	if (SUCCEEDED(hr))
@@ -78,17 +85,13 @@ HRESULT CustomTextRenderer::DrawGlyphRun(
 			pSink
 		);
 	}
+
 	// Close the geometry sink
 	if (SUCCEEDED(hr))
 	{
 		hr = pSink->Close();
 	}
-	// Create matrix for glyph run origin translation
-	D2D1::Matrix3x2F const matrix = D2D1::Matrix3x2F(
-		1.0f, 0.0f,
-		0.0f, 1.0f,
-		baselineOriginX, baselineOriginY
-	);
+
 
 	// Create the transformed geometry
 	ID2D1TransformedGeometry *pTransformedGeometry = NULL;
@@ -100,13 +103,16 @@ HRESULT CustomTextRenderer::DrawGlyphRun(
 			&pTransformedGeometry
 		);
 	}
+
 	//! ---------------------------------------------------------
 	//! Actual drawing happens down here
 	//! ---------------------------------------------------------
 
+
 	this->mpRT->DrawGeometry(
 		pTransformedGeometry,
-		this->mpOutlineBrush
+		this->mpOutlineBrush,
+		3.5f
 	);
 	this->mpRT->FillGeometry(
 		pTransformedGeometry,

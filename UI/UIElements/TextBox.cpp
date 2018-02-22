@@ -16,7 +16,7 @@ TextBox::TextBox(
 	std::wstring mTextWString;
 	std::string mTextString;
 	this->mpTextFormat = nullptr;
-	this->mFontName = L"Constantia";
+	this->mFontName = L"calibri";
 	
 	this->mFontWeight = DWRITE_FONT_WEIGHT_BOLD;
 	this->mCreateColor();
