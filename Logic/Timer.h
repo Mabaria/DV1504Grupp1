@@ -16,6 +16,11 @@ struct ClockDesc
 	int second;
 };
 
+/**
+*	TimeDesc is the _main_ description of a timestamp. This struct will be used
+*	when describing the time of an event.
+*/
+
 struct TimeDesc
 {
 	DateDesc date;
