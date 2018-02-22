@@ -17,7 +17,8 @@ CameraRotateStrategy::~CameraRotateStrategy()
 bool CameraRotateStrategy::Initialize(Camera & rCamera)
 {
 	CameraMovementStrategy::Initialize(rCamera);
-
+	
+	// Get camera values to handle the camera correctly
 	this->mDirection =
 		this->pCamera->GetPosition() - this->pCamera->GetLookVector();
 
@@ -71,6 +72,7 @@ bool CameraRotateStrategy::Move(Position move)
 		)
 	);
 
+	// Avoid movement in Y axis
 	right = XMVector3Normalize(DirectX::XMVectorSetY(right, 0));
 
 
@@ -81,6 +83,7 @@ bool CameraRotateStrategy::Move(Position move)
 		)
 	);
 
+	// Avoid movement being to high up and low
 	float y = XMVectorGetY(this->mDirection);
 	
 	if (y < this->mMinHeight && move.y < 0)
@@ -90,10 +93,13 @@ bool CameraRotateStrategy::Move(Position move)
 		move.y = 0;
 
 
+	// Move along the right and up vectors based on mouse movement
 	XMVECTOR newPos = this->pCamera->GetPosition()
 		+ (right		* move.x * this->mMoveSpeed * this->mDistance)
 		+ (this->mUp	* move.y * this->mMoveSpeed * this->mDistance);
 
+	// Get new direction based on a normalized vector 
+	// from point (look at) to new position
 	this->mDirection = XMVector3Normalize(
 		newPos - this->mLookAt
 	);
@@ -106,6 +112,8 @@ bool CameraRotateStrategy::Move(Position move)
 
 void CameraRotateStrategy::HandleChangeInCamera()
 {
+	// Update member variables if camera data has changed
+
 	this->mDirection =
 		this->pCamera->GetPosition() - this->pCamera->GetLookVector();
 

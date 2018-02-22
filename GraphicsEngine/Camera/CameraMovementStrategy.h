@@ -22,7 +22,7 @@ protected:
 	float mMoveSpeed;
 	float mZoomSpeed;
 
-	float mDistance;
+	float mDistance; // How far away the camera is from object
 	float mMaxDistance;
 	float mMinDistance;
 

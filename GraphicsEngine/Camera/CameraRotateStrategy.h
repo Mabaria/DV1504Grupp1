@@ -15,7 +15,7 @@ public:
 
 private:
 	DirectX::XMVECTOR mUp;
-	DirectX::XMVECTOR mDirection;
+	DirectX::XMVECTOR mDirection;	// The direction camera is displaced
 	DirectX::XMVECTOR mLookAt;
 
 	float mMaxHeight;

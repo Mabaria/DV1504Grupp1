@@ -587,7 +587,7 @@ const void Panel3D::Draw()
 		);
 
 
-		// Setting the constant buffer to the vertex shader.
+		// Setting the constant buffer to the vertex shader. 
 		this->mDirect3D.GetContext()->VSSetConstantBuffers(
 			0,					// Start slot.
 			1,					// Number of buffers
