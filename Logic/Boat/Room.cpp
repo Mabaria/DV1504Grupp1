@@ -5,11 +5,15 @@ Room::Room()
 	this->mIndexInBoat = -1;
 	this->mIndexInDeck = -1;
 	this->mDeckIndex = -1;
+
+	this->InitRoomInfo();
 }
 
 Room::Room(RoomDesc desc)
 {
 	this->InitFromDesc(desc);
+
+	this->InitRoomInfo();
 }
 
 Room::~Room()
@@ -162,4 +166,50 @@ std::string Room::WriteString() const
 	print += this->mSensor.WriteString();
 
 	return print;
+}
+
+void Room::InitRoomInfo()
+{
+	this->mRoomInfo.centerPosition.x = 
+		(this->mBoundingBox.x.max + this->mBoundingBox.x.min) / 2.0f;
+	this->mRoomInfo.centerPosition.y = 
+		(this->mBoundingBox.y.max + this->mBoundingBox.y.min) / 2.0f;
+	this->mRoomInfo.centerPosition.z = 
+		(this->mBoundingBox.z.max + this->mBoundingBox.z.min) / 2.0f;
+
+	this->mRoomInfo.size.x = 
+		this->mBoundingBox.x.max - this->mBoundingBox.x.min;
+	this->mRoomInfo.size.y = 
+		this->mBoundingBox.y.max - this->mBoundingBox.y.min;
+	this->mRoomInfo.size.z = 
+		this->mBoundingBox.z.max - this->mBoundingBox.z.min;
+	
+	// For distance to corner.
+	float x_dist = this->mBoundingBox.x.max - this->mRoomInfo.centerPosition.x;
+	float y_dist = this->mBoundingBox.y.max - this->mRoomInfo.centerPosition.y;
+	float z_dist = this->mBoundingBox.z.max - this->mRoomInfo.centerPosition.z;
+	
+	// Vector length calculation.
+	this->mRoomInfo.distanceToCorner = 
+		sqrt(pow(x_dist, 2) + pow(y_dist, 2) + pow(z_dist, 2));
+}
+
+const RoomInfo Room::GetRoomInfo() const
+{
+	return this->mRoomInfo;
+}
+
+const XMFLOAT3 Room::GetRoomCenter() const
+{
+	return this->mRoomInfo.centerPosition;
+}
+
+const float Room::GetDistanceToCorner() const
+{
+	return this->mRoomInfo.distanceToCorner;
+}
+
+const XMFLOAT3 Room::GetRoomSize() const
+{
+	return this->mRoomInfo.size;
 }

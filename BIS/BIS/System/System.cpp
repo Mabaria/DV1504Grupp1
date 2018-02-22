@@ -125,8 +125,8 @@ void System::BuildGraphicalUserInterface(
 
 	this->mpMenuPanel = new EventMenu();
 	this->mpMenuPanel->Init(
-		(float)this->mpTopViewPanel->GetWidth(), 
-		(float)this->mpTopViewPanel->GetHeight(), 
+		this->mpTopViewPanel->GetWidth(), 
+		this->mpTopViewPanel->GetHeight(), 
 		&this->mEventLog, 
 		windowName.c_str(), 
 		this->mpTopViewPanel->GetPanelWindowHandle());
