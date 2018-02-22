@@ -20,7 +20,7 @@ TextBox::TextBox(
 	this->mpTextBitmap = nullptr;
 	this->mpTextRenderTarget = nullptr;
 	
-	this->mFontWeight = DWRITE_FONT_WEIGHT_BOLD;
+	this->mFontWeight = DWRITE_FONT_WEIGHT_NORMAL;
 	this->mCreateColor();
 
 	this->SetColor(D2D1::ColorF::Black);
@@ -64,10 +64,9 @@ void TextBox::SetText(std::string text)
 {
 	this->mTextWString = this->mStrConverter.from_bytes(text);
 	this->mpTextWchar = this->mTextWString.c_str();
-	if (mTextString.compare(text) != 0)
+	if (mTextString.compare(text) != 0) // new text set
 	{
 		this->mTextString = text;
-
 
 		if (this->mpTextLayout)
 		{

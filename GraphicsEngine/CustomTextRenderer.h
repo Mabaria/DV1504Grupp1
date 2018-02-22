@@ -16,6 +16,10 @@ public:
 
 	~CustomTextRenderer();
 
+	// DrawGlyphRun is the main method invoked when drawing text
+	// using this text renderer, the remaining draw functions return
+	// E_NOTIMPL and thus do not work
+
 	HRESULT STDMETHODCALLTYPE DrawGlyphRun(
 		void                         * clientDrawingContext,
 		FLOAT                         baselineOriginX,
@@ -77,7 +81,10 @@ public:
 
 	void SetOutlineBrush(ID2D1SolidColorBrush* pOutlineBrush);
 	void SetFillBrush(ID2D1SolidColorBrush* pFillBrush);
-	void SetRenderTarget(ID2D1RenderTarget* pRenderTarget);
+	void SetRenderTarget(ID2D1RenderTarget* pRenderTarget); /* Used for setting
+															the desired bitmap
+															RT to draw the text
+															on*/
 
 private:
 	unsigned long mRefCount;
