@@ -17,15 +17,24 @@ TextBox::TextBox(
 	std::string mTextString;
 	this->mpTextFormat = nullptr;
 	this->mFontName = L"calibri";
+	this->mpTextBitmap = nullptr;
+	this->mpTextRenderTarget = nullptr;
 	
 	this->mFontWeight = DWRITE_FONT_WEIGHT_BOLD;
 	this->mCreateColor();
 
 	this->SetColor(D2D1::ColorF::Black);
-	this->SetText(this->mTextString);
 
+	this->SetText(this->mTextString);
 	this->mCreateTextFormat();
 	this->mCreateTextLayout();
+
+	HRESULT hr = this->D2D1Panel->GetpRenderTarget()->
+		CreateCompatibleRenderTarget(&this->mpTextRenderTarget);
+
+	hr = this->mpTextRenderTarget->GetBitmap(&this->mpTextBitmap);
+
+	this->mDrawToBitmap();
 }
 
 TextBox::~TextBox()
@@ -33,6 +42,7 @@ TextBox::~TextBox()
 	this->ReleaseCOM(this->mpColor);
 	this->ReleaseCOM(this->mpTextFormat);
 	this->ReleaseCOM(this->mpTextLayout);
+	this->ReleaseCOM(this->mpTextBitmap);
 }
 
 D2D1_RECT_F TextBox::GetTextBoxSize() const
@@ -61,6 +71,10 @@ void TextBox::SetText(std::string text)
 		this->mpTextLayout->Release();
 		this->mCreateTextLayout();
 	}
+	if (this->mpTextRenderTarget)
+	{
+		this->mDrawToBitmap(); // String update, draw to the bitmap again
+	}
 }
 
 void TextBox::DrawTextBox()
@@ -73,12 +87,24 @@ void TextBox::DrawTextBox()
 		this->mpColor,
 		D2D1_DRAW_TEXT_OPTIONS_CLIP
 	);*/
-	this->mpTextLayout->Draw(
-		NULL,
-		this->D2D1Panel->GetpTextRenderer(),
-		this->mLayoutRect.left, //todo CHECK SO THIS IS CORRECT
-		this->mLayoutRect.top   //todo CHECK SO THIS IS CORRECT
+	// Draw the bitmap
+	//! FOR TESTING ONLY, REMOVE THIS IF FOUND
+
+	this->SetText("TEST");
+	HRESULT hr = 
+		this->mpTextBitmap->CopyFromRenderTarget(
+			NULL,
+			this->mpTextRenderTarget,
+			NULL);
+
+	this->D2D1Panel->GetpRenderTarget()->DrawBitmap(
+		this->mpTextBitmap,
+		this->mLayoutRect,
+		1.0f,
+		D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,
+		this->mLayoutRect
 	);
+
 }
 
 void TextBox::SetColor(D2D1::ColorF color)
@@ -155,6 +181,27 @@ void TextBox::mCreateTextLayout()
 	this->mpTextLayout->SetFontCollection(pFontCollection, text_range);
 	this->mpTextLayout->SetFontFamilyName(this->mFontName.c_str(), text_range);
 	pFontCollection->Release();
+}
+
+void TextBox::mDrawToBitmap()
+{
+	HRESULT hr = S_OK;
+
+	// Clear the bitmap
+	this->mpTextRenderTarget->Clear(D2D1::ColorF(D2D1::ColorF::Black));
+	// Set the render target to the local bitmap render target
+	this->D2D1Panel->GetpTextRenderer()->SetRenderTarget(this->mpTextRenderTarget);
+
+	// Draw the text on the bitmap render target
+	hr = this->mpTextLayout->Draw(
+		NULL,
+		this->D2D1Panel->GetpTextRenderer(),
+		this->mLayoutRect.left,
+		this->mLayoutRect.top
+	);
+
+	// Fetch the bitmap
+	hr = this->mpTextRenderTarget->GetBitmap(&this->mpTextBitmap);
 }
 
 void TextBox::mCreateColor()

@@ -2,7 +2,7 @@
 
 CustomTextRenderer::CustomTextRenderer(
 	ID2D1Factory* pD2DFactory,
-	ID2D1HwndRenderTarget* pRT,
+	ID2D1RenderTarget* pRT,
 	ID2D1SolidColorBrush* pOutlineBrush,
 	ID2D1SolidColorBrush* pFillBrush
 )
@@ -84,6 +84,7 @@ HRESULT CustomTextRenderer::DrawGlyphRun(
 			glyphRun->bidiLevel % 2,
 			pSink
 		);
+
 	}
 
 	// Close the geometry sink
@@ -224,4 +225,9 @@ void CustomTextRenderer::SetFillBrush(ID2D1SolidColorBrush * pFillBrush)
 	}
 	this->mpFillBrush = pFillBrush;
 	pFillBrush->AddRef();
+}
+
+void CustomTextRenderer::SetRenderTarget(ID2D1RenderTarget * pRenderTarget)
+{
+	this->mpRT = pRenderTarget;
 }

@@ -9,7 +9,7 @@ public:
 
 	CustomTextRenderer(
 		ID2D1Factory* pD2DFactory,
-		ID2D1HwndRenderTarget* pRT,
+		ID2D1RenderTarget* pRT,
 		ID2D1SolidColorBrush* pOutlineBrush,
 		ID2D1SolidColorBrush* pFillBrush
 	);
@@ -77,11 +77,12 @@ public:
 
 	void SetOutlineBrush(ID2D1SolidColorBrush* pOutlineBrush);
 	void SetFillBrush(ID2D1SolidColorBrush* pFillBrush);
+	void SetRenderTarget(ID2D1RenderTarget* pRenderTarget);
 
 private:
 	unsigned long mRefCount;
 	ID2D1Factory *mpD2DFactory;
-	ID2D1HwndRenderTarget *mpRT;
+	ID2D1RenderTarget *mpRT;
 	ID2D1SolidColorBrush *mpOutlineBrush;
 	ID2D1SolidColorBrush *mpFillBrush;
 

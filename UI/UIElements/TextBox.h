@@ -45,6 +45,9 @@ private:
 	IDWriteTextLayout *mpTextLayout;
 	void mCreateTextLayout();
 
+	ID2D1Bitmap *mpTextBitmap;
+	ID2D1BitmapRenderTarget* mpTextRenderTarget;
+	void mDrawToBitmap();
 	/*---------------------------------------------*/
 	void mCreateColor();
 	void mCreateTextFormat();
