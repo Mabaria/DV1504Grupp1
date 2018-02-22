@@ -96,9 +96,6 @@
     <ClInclude Include="..\..\GraphicsEngine\Parsing\Mesh.h">
       <Filter>Header Files\GraphicsEngine</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\GraphicsEngine\Camera\Camera.h">
-      <Filter>Header Files\GraphicsEngine</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\GraphicsEngine\Test_Button.h">
       <Filter>Header Files\GraphicsEngine\Test</Filter>
     </ClInclude>
@@ -227,6 +224,12 @@
     </ClInclude>
     <ClInclude Include="..\..\UI\GUI\EventMenu.h">
       <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\GraphicsEngine\Actions.h">
+      <Filter>Header Files\GraphicsEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\GraphicsEngine\Camera\Camera.h">
+      <Filter>Header Files\GraphicsEngine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -398,6 +401,9 @@
     <ClCompile Include="..\..\UI\GUI\EventMenu.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\GraphicsEngine\Actions.cpp">
+      <Filter>Source Files\GraphicsEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
@@ -418,6 +424,15 @@
       <Filter>Shader Files</Filter>
     </FxCompile>
     <FxCompile Include="..\..\GraphicsEngine\Test_VertexShader.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\GraphicsEngine\Shaders\Action_VertexShader.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\GraphicsEngine\Shaders\Action_GeometryShader.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\GraphicsEngine\Shaders\Action_PixelShader.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
   </ItemGroup>

@@ -8,6 +8,7 @@
 #include "MeshObject.h"
 #include "../../GraphicsEngine/Camera/Camera.h"
 #include "../../IO/ObserverPattern/Observer.h"
+#include "../../GraphicsEngine/Actions.h"
 
 class Panel3D : public Panel, public Observer<Button>
 {
@@ -120,4 +121,6 @@ private:
 	const void UpdateMouse();
 	const bool UpdateCamera();
 	bool mMovableCamera;
+
+	Actions mActions;
 };

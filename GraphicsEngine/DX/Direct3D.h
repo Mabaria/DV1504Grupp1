@@ -42,6 +42,7 @@ public:
 	);
 
 	void Clear();
+	void ClearDepth();
 
 	IDXGISwapChain* GetSwapChain() const;
 	ID3D11DeviceContext* GetContext() const;
