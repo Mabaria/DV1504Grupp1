@@ -31,7 +31,6 @@ TextBox::TextBox(
 
 	HRESULT hr = this->D2D1Panel->GetpRenderTarget()->
 		CreateCompatibleRenderTarget(&this->mpTextRenderTarget);
-
 	hr = this->mpTextRenderTarget->GetBitmap(&this->mpTextBitmap);
 
 	this->mDrawToBitmap();
@@ -62,18 +61,22 @@ void TextBox::SetTextBoxSize(int left, int top, int right, int bottom)
 
 void TextBox::SetText(std::string text)
 {
-	this->mTextString = text;
 	this->mTextWString = this->mStrConverter.from_bytes(text);
 	this->mpTextWchar = this->mTextWString.c_str();
+	if (mTextString.compare(text) != 0)
+	{
+		this->mTextString = text;
 
-	if (this->mpTextLayout)
-	{
-		this->mpTextLayout->Release();
-		this->mCreateTextLayout();
-	}
-	if (this->mpTextRenderTarget)
-	{
-		this->mDrawToBitmap(); // String update, draw to the bitmap again
+
+		if (this->mpTextLayout)
+		{
+			this->mpTextLayout->Release();
+			this->mCreateTextLayout();
+		}
+		if (this->mpTextRenderTarget)
+		{
+			this->mDrawToBitmap(); // String update, draw to the bitmap again
+		}
 	}
 }
 
@@ -90,12 +93,6 @@ void TextBox::DrawTextBox()
 	// Draw the bitmap
 	//! FOR TESTING ONLY, REMOVE THIS IF FOUND
 
-	this->SetText("TEST");
-	HRESULT hr = 
-		this->mpTextBitmap->CopyFromRenderTarget(
-			NULL,
-			this->mpTextRenderTarget,
-			NULL);
 
 	this->D2D1Panel->GetpRenderTarget()->DrawBitmap(
 		this->mpTextBitmap,
@@ -186,12 +183,12 @@ void TextBox::mCreateTextLayout()
 void TextBox::mDrawToBitmap()
 {
 	HRESULT hr = S_OK;
-
+	this->mpTextRenderTarget->BeginDraw();
 	// Clear the bitmap
-	this->mpTextRenderTarget->Clear(D2D1::ColorF(D2D1::ColorF::Black));
+	this->mpTextRenderTarget->Clear();
 	// Set the render target to the local bitmap render target
 	this->D2D1Panel->GetpTextRenderer()->SetRenderTarget(this->mpTextRenderTarget);
-
+	
 	// Draw the text on the bitmap render target
 	hr = this->mpTextLayout->Draw(
 		NULL,
@@ -202,6 +199,8 @@ void TextBox::mDrawToBitmap()
 
 	// Fetch the bitmap
 	hr = this->mpTextRenderTarget->GetBitmap(&this->mpTextBitmap);
+
+	this->mpTextRenderTarget->EndDraw();
 }
 
 void TextBox::mCreateColor()
