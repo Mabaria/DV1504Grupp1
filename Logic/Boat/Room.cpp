@@ -5,15 +5,11 @@ Room::Room()
 	this->mIndexInBoat = -1;
 	this->mIndexInDeck = -1;
 	this->mDeckIndex = -1;
-
-	this->InitRoomInfo();
 }
 
 Room::Room(RoomDesc desc)
 {
 	this->InitFromDesc(desc);
-
-	this->InitRoomInfo();
 }
 
 Room::~Room()
@@ -41,6 +37,7 @@ void Room::SetName(std::string name)
 void Room::SetAABB(const AABB &boundingBox)
 {
 	this->mBoundingBox = boundingBox;
+	this->InitRoomInfo();
 }
 
 float Room::CheckRayCollision(const Ray & rRay)
