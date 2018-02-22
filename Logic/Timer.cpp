@@ -141,6 +141,24 @@ const std::string Timer::GetHoursAsStr()
 	return std::string(buffer);
 }
 
+Timestamp Timer::GetTimestamp() const
+{
+	Timestamp ts;
+
+	tm *tmp = gmtime(&this->mStartTime);
+
+	// Fill the timestamp
+	ts.date.year = tmp->tm_year + 1900;
+	ts.date.month = tmp->tm_mon + 1;
+	ts.date.day = tmp->tm_mday;
+
+	ts.clock.hour = tmp->tm_hour + 1;
+	ts.clock.minute = tmp->tm_min + 1;
+	ts.clock.second = tmp->tm_sec;
+
+	return ts;
+}
+
 void Timer::UpdateTime()
 {
 	this->mTimeNow = time(0);

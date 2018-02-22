@@ -1,5 +1,6 @@
 #pragma once
 
+#include <sstream>
 #include "../Event/Event.h"
 #include "../../Logic/Timer.h"
 

@@ -53,11 +53,44 @@ std::string LogEvent::GetFileString()
 	*	Jan 23 12:17:03 Eldsvåda startade i Maskinrum
 	*/
 
-	std::string print = "";
+	std::stringstream ss;
+	Timestamp ts;
 
-	print += this->mTimer.WhenTimerStarted();
+	ts = this->mTimer.GetTimestamp();
 
-	return print;
+	if (ts.date.year < 10)
+		ss << 0 << ts.date.year << "-";
+	else
+		ss << ts.date.year << "-";
+
+	if (ts.date.month < 10)
+		ss << 0 << ts.date.month << "-";
+	else
+		ss << ts.date.month << "-";
+
+	if (ts.date.day < 10)
+		ss << 0 << ts.date.day << " ";
+	else
+		ss << ts.date.day << " ";
+
+
+
+	if (ts.clock.hour < 10)
+		ss << 0 << ts.clock.hour << ":";
+	else
+		ss << ts.clock.hour << ":";
+
+	if (ts.clock.minute < 10)
+		ss << 0 << ts.clock.minute << ":";
+	else
+		ss << ts.clock.minute << ":";
+
+	if (ts.clock.second < 10)
+		ss << 0 << ts.clock.second;
+	else
+		ss << ts.clock.second;
+
+	return ss.str();
 }
 
 

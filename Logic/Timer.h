@@ -17,11 +17,11 @@ struct ClockDesc
 };
 
 /**
-*	TimeDesc is the _main_ description of a timestamp. This struct will be used
+*	Timestamp is the _main_ description of a timestamp. This struct will be used
 *	when describing the time of an event.
 */
 
-struct TimeDesc
+struct Timestamp
 {
 	DateDesc date;
 	ClockDesc clock;
@@ -44,6 +44,8 @@ public:
 	const std::string GetSecondsAsStr();
 	const std::string GetMinutesAsStr();
 	const std::string GetHoursAsStr();
+
+	Timestamp GetTimestamp() const;
 private:
 	time_t mStartTime;
 	tm *pStartTimeStruct;
