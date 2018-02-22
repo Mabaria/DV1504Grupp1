@@ -220,9 +220,6 @@ void TextBox::mDrawToBitmap()
 		this->mLayoutRect.top
 	);
 
-	// Fetch the bitmap
-	hr = this->mpTextRenderTarget->GetBitmap(&this->mpTextBitmap);
-
 	this->mpTextRenderTarget->EndDraw();
 }
 
