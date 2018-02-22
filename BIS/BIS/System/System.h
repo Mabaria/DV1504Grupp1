@@ -51,10 +51,8 @@ private:
 	Camera *mpSideViewCamera;
 	Window *mpWindow;
 
-	// User info.
+	// User guide.
 	Panel2D *mpInfoPanel;
-	int mInfoWindowWidth;
-	int mInfoWindowHeight;
 
 	EventLog mEventLog;
 	Boat mBoat;

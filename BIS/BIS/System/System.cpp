@@ -296,6 +296,12 @@ void System::mSetupPanels()
 	this->mpControlPanel->GetButtonByName("Reset2")->
 		AddObserver(this->mpTopViewPanel);
 
+
+	//////////////////////TEST
+	this->mpControlPanel->AddButton(300, 300, 0, 100,
+		this->mpControlPanel->GetBitmapByName("Reset"), "Reset");
+
+
 	this->mpActiveLogPanel->LoadImageToBitmap(
 		"../../Models/Button01.png",
 		"Injury");
@@ -489,9 +495,6 @@ void System::mSetupInfoWindow(
 	int windowHeight,
 	std::wstring windowName)
 {
-	this->mInfoWindowWidth = windowWidth;
-	this->mInfoWindowHeight = windowHeight;
-
 	this->mpInfoPanel = new Panel2D(
 		windowWidth / 3 + 10,
 		windowHeight - 100,
