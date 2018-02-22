@@ -568,8 +568,8 @@ const void Panel3D::UpdateMouse()
 		POINT mouse_pos;
 		GetCursorPos(&mouse_pos);
 
-		this->mMouseDiff.x = mouse_pos.x - this->mMouseOrigin.x;
-		this->mMouseDiff.y = mouse_pos.y - this->mMouseOrigin.y;
+		this->mMouseDiff.x = (float)mouse_pos.x - this->mMouseOrigin.x;
+		this->mMouseDiff.y = (float)mouse_pos.y - this->mMouseOrigin.y;
 
 		SetCursorPos(
 			(int)this->mMouseOrigin.x,

@@ -173,14 +173,12 @@ const bool Panel::UpdateWindowSize()
 
 void Panel::UpdateWindowPos()
 {
-	SetWindowPos(
-		this->mPanelWindow,
-		HWND_TOP, // Z order, ignored by SWP_NOZORDER. 
+	MoveWindow(this->mPanelWindow,
 		this->mLeft,
 		this->mTop,
 		this->mWidth,
 		this->mHeight,
-		SWP_NOZORDER);
+		false);
 }
 
 bool Panel::IsMouseInsidePanel()

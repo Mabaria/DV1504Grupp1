@@ -179,12 +179,21 @@ LRESULT CALLBACK WindowProcedure(
 		GetWindowRect(hWnd, &window_rect);
 		GetClientRect(hWnd, &client_rect);
 
+		InputDevice::SetExactMousePosition(
+			cursor_pos.x,
+			cursor_pos.y
+		);
+
+		InputDevice::SetExactMousePositionPercentage(
+			(float)cursor_pos.x / (float)client_rect.right,
+			(float)cursor_pos.y / (float)client_rect.bottom
+		);
 		// Set a relative position from the client area
 		cursor_pos.x -= window_rect.left;
 		cursor_pos.y -= window_rect.top;
 		InputDevice::SetMousePosition(
-			(float)cursor_pos.x,
-			(float)cursor_pos.y
+			cursor_pos.x,
+			cursor_pos.y
 		);
 
 		// Set a percentage across the client screen
@@ -324,6 +333,8 @@ void Window::Close()
 bool Window::Update()
 {
 	InputDevice::SetMouseScroll(0);
+	// Sets previous buttons to last updates buttons
+	InputDevice::buttonsPrevious = InputDevice::buttonsActive;
 	bool was_updated = false; // See if message is handled
 	if (PeekMessage(&this->mMsg, nullptr, 0, 0, PM_REMOVE))
 	{

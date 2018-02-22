@@ -9,6 +9,8 @@ EventMenu::EventMenu()
 	this->mParentPanelHeight = 0;
 
 	this->mVisible = false;
+	this->mButtonFocus = false;
+	this->mDraggingWindow = false;
 	this->mpEventLog = nullptr;
 	this->mpPanel = nullptr;
 	this->mpActiveRoom = nullptr;
@@ -20,8 +22,8 @@ EventMenu::~EventMenu()
 		delete this->mpPanel;
 }
 
-bool EventMenu::Init(float parentWidth,
-	float parentHeight,
+bool EventMenu::Init(int parentWidth,
+	int parentHeight,
 	EventLog *pEventLog,
 	LPCTSTR windowName,
 	HWND *pWindow)
@@ -61,9 +63,10 @@ bool EventMenu::OpenAt(Room *pRoom)
 	int margin = this->mParentPanelWidth / 24;
 	int posX = 0;
 	int posY = 0;
-	Position mousePos = Mouse::GetPositionPercentage();
-	mousePos.x = mousePos.x * this->mParentPanelWidth;
-	mousePos.y = mousePos.y * this->mParentPanelHeight;
+	//FPosition mousePos = Mouse::GetPositionPercentage();
+	//mousePos.x = mousePos.x * this->mParentPanelWidth;
+	//mousePos.y = mousePos.y * this->mParentPanelHeight;
+	Position mousePos = Mouse::GetPosition();
 
 	if (mousePos.x + margin + this->mMenuWidth < this->mParentPanelWidth)
 		posX = mousePos.x + margin;
@@ -84,13 +87,74 @@ bool EventMenu::OpenAt(Room *pRoom)
 
 	this->mpActiveRoom = pRoom;
 
+	// TODO: Following functionallity does not work because GetActiveEvents
+	// does not work as intended. Not too important feature anyway
+
+	//for (int i = 0; i < pRoom->GetActiveEvents().size(); i++)
+	//{
+	//	switch (pRoom->GetActiveEvents()[i]->GetType())
+	//	{
+	//	case Event::Type::Fire:
+	//		this->mpPanel->GetButtonByName("Fire")->SetBitmap(
+	//			this->mpPanel->GetBitmapByName("FireOn"));
+	//		break;
+	//	case Event::Type::Water:
+	//		this->mpPanel->GetButtonByName("Water")->SetBitmap(
+	//			this->mpPanel->GetBitmapByName("WaterOn"));
+	//		break;
+	//	case Event::Type::Gas:
+	//		this->mpPanel->GetButtonByName("Gas")->SetBitmap(
+	//			this->mpPanel->GetBitmapByName("GasOn"));
+	//		break;
+	//	case Event::Type::Injury:
+	//		this->mpPanel->GetButtonByName("Injury")->SetBitmap(
+	//			this->mpPanel->GetBitmapByName("InjuryOn"));
+	//		break;
+	//	}
+	//}
+
 	return true;
 }
 
 bool EventMenu::Update()
 {
 	this->mpPanel->Update();
-	return false;
+	if (Mouse::IsButtonPressed(Buttons::Left)
+		&& !this->mDraggingWindow
+		&& !mButtonFocus
+		&& this->mpPanel->IsMouseInsidePanel()
+		&& !this->mpPanel->GetButtonOcclude())
+	{
+		this->mDraggingWindow = true;
+		this->mDragX = Mouse::GetExactX() - this->mpPanel->GetLeft();
+		this->mDragY = Mouse::GetExactY() - this->mpPanel->GetTop();
+	}
+	else if (!Mouse::IsButtonDown(Buttons::Left))
+	{
+		this->mButtonFocus = false;
+		this->mDraggingWindow = false;
+	}
+
+	if (this->mDraggingWindow)
+	{
+		std::cout << this->mDragX << ", " << this->mDragY << std::endl;
+		int left = Mouse::GetExactX() - this->mDragX;
+		if (left + this->mMenuWidth > this->mParentPanelWidth)
+			left = this->mParentPanelWidth - this->mMenuWidth;
+		else if (left < 0)
+			left = 0;
+
+		int top = Mouse::GetExactY() - this->mDragY;
+		if (top + this->mMenuHeight > this->mParentPanelHeight)
+			top = this->mParentPanelHeight - this->mMenuHeight;
+		else if (top < 0)
+			top = 0;
+
+		this->mpPanel->SetLeft(left);
+		this->mpPanel->SetTop(top);
+		this->mpPanel->UpdateWindowPos();
+	}
+	return true;
 }
 
 bool EventMenu::Draw() const
