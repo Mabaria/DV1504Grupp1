@@ -170,25 +170,65 @@ void System::mDraw()
 
 void System::mHandleInput()
 {
-	if (Mouse::IsButtonPressed(Buttons::Left))
-	{
-		if (
-			this->mpTopViewPanel->IsMouseInsidePanel() && 
-			!this->mpMenuPanel->IsMouseInsidePanel())
-		{
-			Picking::GetWorldRay(
-				this->mpTopViewPanel->GetActiveCamera(),
-				Mouse::GetXPercentage(),
-				Mouse::GetYPercentage(),
-				this->mRay);
 
-			Room *picked_room = this->mBoat.GetPickedRoom(this->mRay);
-			if (picked_room)
+	if (
+		this->mpTopViewPanel->IsMouseInsidePanel() &&
+		!this->mpMenuPanel->IsMouseInsidePanel())
+	{
+		static Room* last_picked_room = nullptr;
+
+		Picking::GetWorldRay(
+			this->mpTopViewPanel->GetActiveCamera(),
+			Mouse::GetXPercentage(),
+			Mouse::GetYPercentage(),
+			this->mRay);
+
+		Room *picked_room = this->mBoat.GetPickedRoom(this->mRay);
+		if (picked_room)
+		{
+			if (Mouse::IsButtonPressed(Buttons::Left))
 			{
 				this->mpMenuPanel->OpenAt(picked_room);
 			}
+
+			// ___ HOVER EFFECT ___
+
+			if (last_picked_room == nullptr)
+			{
+				// Temp solution. Sorry
+				std::string picked_name = picked_room->GetDeckName() + "bounds";
+				this->mUpdateHover(picked_name, picked_room->GetIndexInDeck(), true);
+				last_picked_room = picked_room;
+			}
+
+
+			else if (picked_room != last_picked_room)
+			{
+				// Temp solution. Sorry
+				std::string picked_name = picked_room->GetDeckName() + "bounds";
+				std::string last_picked_name = last_picked_room->GetDeckName() + "bounds";
+
+				this->mUpdateHover(picked_name, picked_room->GetIndexInDeck(), true);
+				this->mUpdateHover(last_picked_name, last_picked_room->GetIndexInDeck(), false);
+
+				last_picked_room = picked_room;
+			}
+
 		}
+
+		else if(last_picked_room != nullptr)
+		{
+			// Temp solution. Sorry
+			std::string last_picked_name = last_picked_room->GetDeckName() + "bounds";
+			this->mUpdateHover(last_picked_name, last_picked_room->GetIndexInDeck(), false);
+			last_picked_room = picked_room;
+		}
+
+
+		// ___ END ___ (HOVER EFFECT)
 	}
+
+	
 	
 	if (Keyboard::IsKeyPressed(Keys::One))
 	{
@@ -202,6 +242,15 @@ void System::mHandleInput()
 		}
 			
 	}
+}
+
+void System::mUpdateHover(std::string name, int index, bool activate)
+{
+	this->mpTopViewPanel->rGetMeshObject(name)->SetHover(
+		activate,
+		this->mpTopViewPanel->rGetDirect3D().GetContext(),
+		index
+	);
 }
 
 void System::mUpdateEvents(Room * room)

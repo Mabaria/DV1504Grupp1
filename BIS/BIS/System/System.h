@@ -26,6 +26,8 @@ private:
 	void mDraw();
 	void mHandleInput();
 
+	void mUpdateHover(std::string name, int index, bool activate);
+
 	void mUpdateEvents(Room *room);
 
 	void mSetupPanels();

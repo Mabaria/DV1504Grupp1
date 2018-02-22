@@ -12,6 +12,11 @@ cbuffer MATERIAL_BUFFER : register(b1)
 	float Opacity;
 }
 
+cbuffer HOVER_BUFFER : register(b2)
+{
+	bool is_hover_effect_active;
+}
+
 struct PS_IN
 {
 	float4 pos		: SV_POSITION;
@@ -54,8 +59,8 @@ float4 main(PS_IN input) : SV_TARGET
 
 		if (IsAtEdge(input.tex))
 		{
-			ambient = ambient * 0.2f;
-			alpha = 0.8f;
+			diffuse -= 0.8f;
+			alpha = 0.3f;
 		}
 	}
 	else
@@ -63,7 +68,15 @@ float4 main(PS_IN input) : SV_TARGET
 		alpha = 0.0f;
 	}
 
-	
+	if (is_hover_effect_active)
+	{
+		if (IsAtEdge(input.tex))
+		{
+			ambient = 0.0f;
+			diffuse = float4(0.4f, 0.0f, 0.0f, 1.0f);
+			alpha = 1.0f;
+		}
+	}
 
 	return float4(saturate(diffuse + ambient), alpha);
 }

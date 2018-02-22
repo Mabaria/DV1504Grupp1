@@ -190,6 +190,19 @@ const void Panel3D::AddMeshObject(
 				this->mpMeshObjects.back()->rGetEventBuffer(i)
 			);
 		}
+
+		HoverData hover_data = { false };
+		event_desc.ByteWidth = sizeof(HoverData);
+		event_data.pSysMem = &hover_data;
+
+		for (int i = 0; i < 20; i++)
+		{
+			this->mDirect3D.GetDevice()->CreateBuffer(
+				&event_desc,
+				&event_data,
+				this->mpMeshObjects.back()->rGetHoverBuffer(i)
+			);
+		}
 	}
 
 	// If pixel shader ID doesn't exist change it to default
@@ -249,10 +262,10 @@ const void Panel3D::AddMeshObject(MeshObject * meshObject,
 		EventData data = { 0 };
 
 		D3D11_BUFFER_DESC event_desc = { 0 };
-		event_desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		event_desc.ByteWidth = sizeof(EventData);
-		event_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-		event_desc.Usage = D3D11_USAGE_DYNAMIC;
+		event_desc.BindFlags		= D3D11_BIND_CONSTANT_BUFFER;
+		event_desc.ByteWidth		= sizeof(EventData);
+		event_desc.CPUAccessFlags	= D3D11_CPU_ACCESS_WRITE;
+		event_desc.Usage			= D3D11_USAGE_DYNAMIC;
 
 		D3D11_SUBRESOURCE_DATA event_data = { 0 };
 		event_data.pSysMem = &data;
@@ -263,6 +276,19 @@ const void Panel3D::AddMeshObject(MeshObject * meshObject,
 				&event_desc,
 				&event_data,
 				this->mpMeshObjects.back()->rGetEventBuffer(i)
+			);
+		}
+
+		HoverData hover_data = { false };
+		event_desc.ByteWidth = sizeof(HoverData);
+		event_data.pSysMem = &hover_data;
+
+		for (int i = 0; i < 20; i++)
+		{
+			this->mDirect3D.GetDevice()->CreateBuffer(
+				&event_desc,
+				&event_data,
+				this->mpMeshObjects.back()->rGetHoverBuffer(i)
 			);
 		}
 	}
@@ -669,11 +695,16 @@ const void Panel3D::Draw()
 				0, 1, this->mpMeshObjects[i]->rGetEventBuffer(j)
 			);
 
+
 			// Setting the material buffer to the pixel shader.
 			this->mDirect3D.GetContext()->PSSetConstantBuffers(
 				1,
 				1,
 				&material_buffer
+			);
+
+			this->mDirect3D.GetContext()->PSSetConstantBuffers(
+				2, 1, this->mpMeshObjects[i]->rGetHoverBuffer(j)
 			);
 
 

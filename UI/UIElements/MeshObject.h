@@ -18,6 +18,12 @@ struct EventData
 	float slots[4];
 };
 
+struct HoverData
+{
+	bool IsEffectActive;
+	bool pad[15];
+};
+
 class MeshObject
 {
 public:
@@ -72,6 +78,11 @@ public:
 		ID3D11DeviceContext* context,
 		unsigned int index);
 
+	ID3D11Buffer **rGetHoverBuffer(const unsigned int index);
+	void SetHover(const bool hover,
+		ID3D11DeviceContext* context,
+		unsigned int index);
+
 	MaterialHandler* pGetMaterialHandler();
 	int GetMaterialIndexForIndexBuffer(unsigned int indexBufferIndex) const;
 
@@ -98,6 +109,7 @@ private:
 	std::vector<ID3D11Buffer*> mpIndexBuffers;
 	std::vector<ID3D11Buffer*> mpVertexBuffers;
 	std::vector<ID3D11Buffer*> mpMaterialBuffers;
+	ID3D11Buffer *mpHoverBuffers[20];
 	ID3D11Buffer* mpEventBuffers[20];
 	ID3D11Buffer *mpMatrixBuffer;
 
