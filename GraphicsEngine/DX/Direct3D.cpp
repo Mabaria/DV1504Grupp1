@@ -55,10 +55,12 @@ D3D11::~D3D11()
 	this->ReleaseCOM(this->mBackBuffer);
 	this->ReleaseCOM(this->mDepthBuffer);
 	this->ReleaseCOM(this->mSamplerState);
+	this->ReleaseCOM(this->mpDXGIDevice);
 }
 
 void D3D11::Init(HWND window)
 {
+
 	this->CreateDeviceAndSwapChain(window);
 	this->CreateRenderTarget();
 
@@ -146,6 +148,11 @@ void D3D11::ReleaseCOM(IUnknown *object)
 		object->Release();
 		object = nullptr;
 	}
+}
+
+IDXGIDevice * D3D11::GetDXGIDevice()
+{
+	return this->mpDXGIDevice;
 }
 
 bool D3D11::CreateShaders(
@@ -271,6 +278,19 @@ void D3D11::Clear()
 
 void D3D11::CreateDeviceAndSwapChain(const HWND& window)
 {
+	UINT creationFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
+
+	D3D_FEATURE_LEVEL featureLevels[] =
+	{
+		D3D_FEATURE_LEVEL_11_1,
+		D3D_FEATURE_LEVEL_11_0,
+		D3D_FEATURE_LEVEL_10_1,
+		D3D_FEATURE_LEVEL_10_0,
+		D3D_FEATURE_LEVEL_9_3,
+		D3D_FEATURE_LEVEL_9_2,
+		D3D_FEATURE_LEVEL_9_1
+	};
+
 	DXGI_SWAP_CHAIN_DESC swap_chain_desc	= { 0 };
 	swap_chain_desc.BufferCount				= 1;
 	swap_chain_desc.BufferDesc.Width		= this->mSize.width;
@@ -285,9 +305,9 @@ void D3D11::CreateDeviceAndSwapChain(const HWND& window)
 		NULL,
 		D3D_DRIVER_TYPE_HARDWARE,
 		NULL,
-		D3D11_CREATE_DEVICE_DEBUG,
-		NULL,
-		NULL,
+		D3D11_CREATE_DEVICE_DEBUG | creationFlags,
+		featureLevels,
+		ARRAYSIZE(featureLevels),
 		D3D11_SDK_VERSION,
 		&swap_chain_desc,
 		&this->mSwapChain,
@@ -303,8 +323,7 @@ void D3D11::CreateRenderTarget()
 	ID3D11Texture2D *back_buffer_texture = nullptr;
 	this->mSwapChain->GetBuffer(
 		0,
-		__uuidof(ID3D11Texture2D),
-		(LPVOID*)&back_buffer_texture
+		IID_PPV_ARGS(&back_buffer_texture)
 	);
 
 	D3D11_TEXTURE2D_DESC depth_buffer_desc = { 0 };

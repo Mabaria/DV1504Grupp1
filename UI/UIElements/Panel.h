@@ -14,6 +14,7 @@ struct Fraction
 struct BitmapInfo
 {
 	ID2D1Bitmap* bitmap = nullptr;
+	ID2D1Bitmap1* bitmap1 = nullptr;
 	std::string name = "";
 };
 

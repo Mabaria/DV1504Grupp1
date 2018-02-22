@@ -5,6 +5,7 @@ Panel3D::Panel3D(int width, int height, int top, int left,
 	:Panel(width, height, top, left, handle, title), mDirect3D(width, height)
 {
 	this->mDirect3D.Init(this->mPanelWindow);
+	this->mDirect2D->InitDeviceAndContext(this->mDirect3D.GetDXGIDevice());
 
 	// bfcull test
 	//D3D11_RASTERIZER_DESC rast_desc{};
@@ -780,10 +781,44 @@ const void Panel3D::Draw()
 				offset);	// Base vertex location.
 		}		
 	}
-	IDXGISurface *BackBuffer;
-	this->mDirect3D.GetSwapChain()->GetBuffer(0, IID_PPV_ARGS(&BackBuffer));
-	this->LoadImageToBitmap("../../Models/pepehans.jpg", "pepe");
-	//this->mDirect2D.GetpContext()->CreateBitmapFromDxgiSurface(this->mDirect3D.get)
+	//////////////////////////////////////////////////////////////////////////////////////
+	IDXGISurface *surface;
+	ID3D11Texture2D *tex;
+	ID2D1Bitmap1 *bitmap;
+	
+	this->mDirect3D.GetSwapChain()->GetBuffer(0, IID_PPV_ARGS(&tex));
+
+	tex->QueryInterface(&surface);
+
+	this->mDirect2D->GetpContext()->CreateBitmapFromDxgiSurface(
+		surface,
+		nullptr,
+		&bitmap
+	);
+	
+	this->mDirect2D->GetpContext()->SetTarget(bitmap);
+
+	ID2D1SolidColorBrush *brush;
+	this->mDirect2D->GetpContext()->CreateSolidColorBrush(
+		D2D1::ColorF(D2D1::ColorF::Black),
+		&brush
+	);
+	
+
+	this->mDirect2D->GetpContext()->BeginDraw();
+	this->mDirect2D->GetpContext()->DrawLine(
+		D2D1::Point2F(0, 0),
+		D2D1::Point2F(this->mWidth, this->mHeight),
+		brush,
+		10.0f
+	);
+	this->mDirect2D->GetpContext()->EndDraw();
+
+	surface->Release();
+	tex->Release();
+	bitmap->Release();
+	brush->Release();
+	//////////////////////////////////////////////////////////////////////////////////////
 	this->mDirect3D.GetSwapChain()->Present(1, 0);
 }
 

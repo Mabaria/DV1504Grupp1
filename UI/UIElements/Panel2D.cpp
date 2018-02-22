@@ -34,7 +34,7 @@ Panel2D::~Panel2D()
 			delete this->mTextBoxVector[i];
 		}
 	}
-	for (unsigned int i = 0; i < this->mBitmapVector.size(); i++)
+	/*for (unsigned int i = 0; i < this->mBitmapVector.size(); i++)
 	{
 		if (this->mBitmapVector[i].bitmap)
 		{
@@ -43,7 +43,7 @@ Panel2D::~Panel2D()
 		}
 	}
 	delete this->mDirect2D;
-
+*/
 	// Deleting the notification list only if 
 	// there is one to delete.
 	if (this->mNotificationListIsActive)

@@ -70,7 +70,7 @@ public:
 	void Draw();
 
 private:
-	Direct2D *mDirect2D;
+	//Direct2D *mDirect2D;
 	
 	void mUpdateButtons();
 

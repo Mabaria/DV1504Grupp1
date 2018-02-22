@@ -2,6 +2,7 @@
 
 #include "../Window.h"
 #include <d3d11.h>
+#include <d3d11_1.h>
 #include <d3dcompiler.h>
 #include <DirectXMath.h>
 
@@ -56,6 +57,7 @@ public:
 	const Size& GetSize();
 
 	void ReleaseCOM(IUnknown *object);
+	IDXGIDevice *GetDXGIDevice();
 
 private:
 	ID3D11Device *mDevice;

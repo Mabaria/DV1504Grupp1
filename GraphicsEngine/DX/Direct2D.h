@@ -34,7 +34,7 @@ public:
 	void SetpImagingFactory(IWICImagingFactory *pWicFactory);
 	void SetpBitmapDecoder(IWICBitmapDecoder *pDecoder);
 	void SetpBitmapSrc(IWICBitmapFrameDecode *pBitmapSrc);
-	void InitDevice(IDXGIDevice *dxgiDevice);
+	void InitDeviceAndContext(IDXGIDevice *dxgiDevice);
 private:
 
 	IWICFormatConverter *mpConverter;

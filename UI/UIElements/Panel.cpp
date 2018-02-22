@@ -9,6 +9,8 @@ Panel::Panel(int width, int height, int top, int left, HWND handle, LPCTSTR titl
 	this->mParentWindow	= handle;
 	this->mTitle		= title;
 
+	this->mDirect2D = new Direct2D();
+
 	// Creating a child window that will be the canvas to draw on for the panel.
 	this->mPanelWindow = CreateWindowEx(
 		0,
@@ -254,10 +256,13 @@ void Panel::LoadImageToBitmap(std::string imageFilePath, std::string bitmapName)
 			NULL,
 			0.f,
 			WICBitmapPaletteTypeMedianCut);
-		this->mDirect2D->GetpRenderTarget()->CreateBitmapFromWicBitmap(
-			this->mDirect2D->GetpFormatConverter(),
-			NULL,
-			&new_bitmap_struct.bitmap);
+		if (this->mDirect2D->GetpRenderTarget())
+		{
+			this->mDirect2D->GetpRenderTarget()->CreateBitmapFromWicBitmap(
+				this->mDirect2D->GetpFormatConverter(),
+				NULL,
+				&new_bitmap_struct.bitmap);
+		}
 	}
 
 	this->mBitmapVector.push_back(new_bitmap_struct);

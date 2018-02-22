@@ -46,12 +46,17 @@ Direct2D::~Direct2D()
 	this->ReleaseCOM(this->mpDecoder);
 	this->ReleaseCOM(this->mpBitmapSrc);
 	this->ReleaseCOM(this->mpTextFactory);
+	this->ReleaseCOM(this->mpFactory1);
+	this->ReleaseCOM(this->mpDevice);
+	this->ReleaseCOM(this->mpContext);
 }
 
 void Direct2D::mCreateFactory()
 {
 	 D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED,
 		&this->mpFactory);
+	 D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED,
+		 &this->mpFactory1);
 }
 
 void Direct2D::mInit()
@@ -150,7 +155,7 @@ void Direct2D::SetpBitmapSrc(IWICBitmapFrameDecode * pBitmapSrc)
 	this->mpBitmapSrc = pBitmapSrc;
 }
 
-void Direct2D::InitDevice(IDXGIDevice * dxgiDevice)
+void Direct2D::InitDeviceAndContext(IDXGIDevice * dxgiDevice)
 {
 	this->mpFactory1->CreateDevice(dxgiDevice, &this->mpDevice);
 	this->mpDevice->CreateDeviceContext(
