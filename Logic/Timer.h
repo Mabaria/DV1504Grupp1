@@ -2,6 +2,26 @@
 #include <ctime>
 #include <string>
 
+struct DateDesc
+{
+	int year;
+	int month;
+	int day;
+};
+
+struct ClockDesc
+{
+	int hour;
+	int minute;
+	int second;
+};
+
+struct TimeDesc
+{
+	DateDesc date;
+	ClockDesc clock;
+};
+
 class Timer
 {
 public:

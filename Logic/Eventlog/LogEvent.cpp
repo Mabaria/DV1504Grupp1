@@ -46,6 +46,31 @@ int LogEvent::GetActiveEventIndex() const
 	return this->mActiveEventIndex;
 }
 
+std::string LogEvent::GetFileString()
+{
+	/**
+	*	Will return a one-line string to be printed to the .log file. Ex:
+	*	Jan 23 12:17:03 Eldsvåda startade i Maskinrum
+	*/
+
+	std::string print = "";
+
+	print += this->mTimer.WhenTimerStarted();
+
+	return print;
+}
+
+
+
+/**
+*	Time specific
+*/
+
+void LogEvent::StartTimer()
+{
+	this->mTimer.StartTimer();
+}
+
 const int LogEvent::GetElapsedTime()
 {
 	return this->mTimer.GetSeconds();

@@ -54,6 +54,7 @@ ActiveEvent* EventLog::AddEvent(Event::Type type, int roomIndex, Observer<Active
 
 		newLogEvent->SetActiveEventIndex(activeIndex);
 		newLogEvent->SetType(type);
+		newLogEvent->StartTimer();
 
 		logIndex = (int)this->mpLogEvents.size();
 
@@ -163,7 +164,7 @@ void EventLog::SaveToFile(std::string filePath)
 
 	for (int i = 0; i < (int)this->mpLogEvents.size(); i++)
 	{
-		file << "EVENT TEXT" << "\n";
+		file << "[" << i << "] " << this->mpLogEvents[i]->GetFileString() << std::endl;
 	}
 
 	file.close();

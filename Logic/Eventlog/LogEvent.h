@@ -25,7 +25,10 @@ public:
 	void SetActiveEventIndex(int index);
 	int GetActiveEventIndex() const;
 
-	// Time
+	std::string GetFileString();
+
+	// Time specific
+	void StartTimer();
 	const int GetElapsedTime();
 	const std::string GetStartTimeAsString();
 	const std::string GetElapsedTimeAsString();
