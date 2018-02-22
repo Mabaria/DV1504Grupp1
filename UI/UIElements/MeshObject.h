@@ -75,6 +75,9 @@ public:
 	MaterialHandler* pGetMaterialHandler();
 	int GetMaterialIndexForIndexBuffer(unsigned int indexBufferIndex) const;
 
+	void SetPixelShaderID(int id);
+	int GetPixelShaderID();
+
 	void * operator new(size_t i) // To make sure it is 16 bit aligned
 	{
 		return _aligned_malloc(i, 16);
@@ -103,6 +106,7 @@ private:
 	int mNumberOfIndexBuffers;
 	int mNumberOfMaterialBuffers;
 
+	int mPixelShaderID;		// Pixel Shader to use
 
 	XMMATRIX mModelMatrix;
 };

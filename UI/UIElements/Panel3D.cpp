@@ -77,11 +77,6 @@ Panel3D::~Panel3D()
 		this->mpGeometryShader->Release();
 		this->mpGeometryShader = nullptr;
 	}
-	if (this->mpPixelShader)
-	{
-		this->mpPixelShader->Release();
-		this->mpPixelShader = nullptr;
-	}
 	if (this->mpInputLayout)
 	{			
 		this->mpInputLayout->Release();
@@ -106,6 +101,15 @@ Panel3D::~Panel3D()
 		}
 	}
 
+	for (size_t i = 0; i < this->mpPixelShaders.size(); i++)
+	{
+		if (this->mpPixelShaders[i])
+		{
+			this->mpPixelShaders[i]->Release();
+			this->mpPixelShaders[i] = nullptr;
+		}
+	}
+
 	if (this->mpMovableCameraComponent)
 	{
 		delete this->mpMovableCameraComponent;
@@ -122,6 +126,7 @@ const void Panel3D::AddMeshObject(
 	std::string name,
 	std::vector<std::vector<unsigned int>> indices,
 	std::vector<std::vector<Vertex>> vertices,
+	int pixelShaderID,
 	std::wstring texturePath,
 	bool use_event)
 {
@@ -153,8 +158,6 @@ const void Panel3D::AddMeshObject(
 			1.0f,
 			1.0f };
 		this->mCreateMaterialBuffer(&defaultMat);
-
-
 	}
 
 
@@ -185,9 +188,15 @@ const void Panel3D::AddMeshObject(
 			);
 		}
 	}
+
+	if (pixelShaderID >= this->mpPixelShaders.size())
+		pixelShaderID = 0;
+
+	this->mpMeshObjects.back()->SetPixelShaderID(pixelShaderID);
 }
 
 const void Panel3D::AddMeshObject(MeshObject * meshObject,
+	int pixelShaderID,
 	std::wstring texturePath,
 	bool use_event)
 {
@@ -223,33 +232,36 @@ const void Panel3D::AddMeshObject(MeshObject * meshObject,
 		
 	}
 
-		if (texturePath != L"")
-		{
-			this->CreateTexture(texturePath);
-		}
+	if (texturePath != L"")
+	{
+		this->CreateTexture(texturePath);
+	}
 	
-		if (use_event)
+	if (use_event)
+	{
+		EventData data = { 0 };
+
+		D3D11_BUFFER_DESC event_desc = { 0 };
+		event_desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		event_desc.ByteWidth = sizeof(EventData);
+		event_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		event_desc.Usage = D3D11_USAGE_DYNAMIC;
+
+		D3D11_SUBRESOURCE_DATA event_data = { 0 };
+		event_data.pSysMem = &data;
+
+		for (int i = 0; i < 20; i++)
 		{
-			EventData data = { 0 };
-
-			D3D11_BUFFER_DESC event_desc = { 0 };
-			event_desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-			event_desc.ByteWidth = sizeof(EventData);
-			event_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-			event_desc.Usage = D3D11_USAGE_DYNAMIC;
-
-			D3D11_SUBRESOURCE_DATA event_data = { 0 };
-			event_data.pSysMem = &data;
-
-			for (int i = 0; i < 20; i++)
-			{
-				this->mDirect3D.GetDevice()->CreateBuffer(
-					&event_desc,
-					&event_data,
-					this->mpMeshObjects.back()->rGetEventBuffer(i)
-				);
-			}
+			this->mDirect3D.GetDevice()->CreateBuffer(
+				&event_desc,
+				&event_data,
+				this->mpMeshObjects.back()->rGetEventBuffer(i)
+			);
 		}
+	}
+	if (pixelShaderID >= this->mpPixelShaders.size())
+		pixelShaderID = 0;
+	this->mpMeshObjects.back()->SetPixelShaderID(pixelShaderID);
 }
 
 bool Panel3D::CreateShadersAndSetup(
@@ -277,15 +289,32 @@ bool Panel3D::CreateShadersAndSetup(
 		this->mpGeometryShader, 
 		nullptr, 
 		0);
-	this->mDirect3D.GetContext()->PSSetShader(
-		this->mpPixelShader, 
-		nullptr, 
-		0);
+
+	this->mpPixelShaders.push_back(this->mpPixelShader);
 
 	// Setting up input assembler.
 	this->mDirect3D.GetContext()->IASetPrimitiveTopology
 	(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	this->mDirect3D.GetContext()->IASetInputLayout(this->mpInputLayout);
+
+	return result;
+}
+
+bool Panel3D::AddPixelShader(LPCWSTR pixelShaderPath)
+{
+	bool result = this->mDirect3D.CreateShaders(
+		L"",
+		L"",
+		pixelShaderPath,
+		nullptr,
+		nullptr,
+		&this->mpPixelShader,
+		nullptr,
+		0,
+		nullptr);
+
+	if(result)
+		this->mpPixelShaders.push_back(this->mpPixelShader);
 
 	return result;
 }
@@ -557,10 +586,11 @@ const void Panel3D::Draw()
 	UINT offset = 0;
 
 	// For readability.
+	ID3D11PixelShader *pixel_shader = nullptr;
 	ID3D11Buffer* vertex_buffer		= nullptr;
 	ID3D11Buffer* index_buffer		= nullptr;
-	ID3D11Buffer* matrix_buffer	= nullptr;
-	ID3D11Buffer* material_buffer = nullptr;
+	ID3D11Buffer* matrix_buffer		= nullptr;
+	ID3D11Buffer* material_buffer	= nullptr;
 	UINT numIndices = 0;
 
 	this->mDirect3D.GetContext()->VSSetConstantBuffers(
@@ -579,7 +609,14 @@ const void Panel3D::Draw()
 	// and draws them one by one.
 	for (int i = 0; i < (int)this->mpMeshObjects.size(); i++)
 	{
-
+		ID3D11PixelShader* temp = this->mpPixelShaders[
+			this->mpMeshObjects[i]->GetPixelShaderID()
+		];
+		if (pixel_shader != temp)
+		{
+			pixel_shader = temp;
+			this->mDirect3D.GetContext()->PSSetShader(pixel_shader, nullptr, 0);
+		}
 
 		matrix_buffer = *this->mpMeshObjects[i]->rGetMatrixBuffer();
 		this->mDirect3D.GetContext()->PSSetShaderResources(

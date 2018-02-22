@@ -41,7 +41,6 @@ private:
 
 	std::vector<Mesh*> mFloors;
 	std::vector<Mesh*> mBounds;
-	std::vector<Quad*> mTexts;
 
 	Camera *mpTopViewCameraPan;
 	Camera *mpTopViewCamera;

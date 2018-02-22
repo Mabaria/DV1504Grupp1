@@ -285,7 +285,7 @@ void Test_BoatOnScreen()
 	// --- Text On Screen ---
 
 	Quad txt(true);
-	top_view.AddMeshObject("Däck1Text", txt.GetIndices(), txt.GetVertices(), 
+	top_view.AddMeshObject("Däck1Text", txt.GetIndices(), txt.GetVertices(), 0,
 		L"../../Models/Däck1.DDS", false
 	);
 
@@ -306,7 +306,7 @@ void Test_BoatOnScreen()
 	tv.push_back(bb2.GetVertexVectors()[1]);
 
 
-	top_view.AddMeshObject(&bb2_object,
+	top_view.AddMeshObject(&bb2_object, 0,
 		L"../../Models/BlendColor.DDS", true
 	);
 	top_view.rGetMeshObject("Bound2UV")->Scale(0.1f, 0.1f, 0.1f);
@@ -340,7 +340,7 @@ void Test_BoatOnScreen()
 
 	//// -- side view ---
 
-	side_view.AddMeshObject(&bb2_object,
+	side_view.AddMeshObject(&bb2_object, 0,
 		L"../../Models/BlendColor.DDS", true
 	);
 	side_view.rGetMeshObject("Bound2UV")->Scale(0.15f, 0.3f, 0.1f);

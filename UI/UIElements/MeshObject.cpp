@@ -243,3 +243,13 @@ int MeshObject::GetMaterialIndexForIndexBuffer(unsigned int indexBufferIndex) co
 	}
 	return 0;
 }
+
+void MeshObject::SetPixelShaderID(int id)
+{
+	this->mPixelShaderID = id;
+}
+
+int MeshObject::GetPixelShaderID()
+{
+	return this->mPixelShaderID;
+}

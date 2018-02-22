@@ -75,15 +75,6 @@ System::~System()
 			this->mBounds[i] = nullptr;
 		}
 	}
-
-	for (int i = 0; i < (int)this->mTexts.size(); i++)
-	{
-		if (this->mTexts[i])
-		{
-			delete this->mTexts[i];
-			this->mTexts[i] = nullptr;
-		}
-	}
 }
 
 void System::BuildGraphicalUserInterface(
@@ -258,7 +249,7 @@ void System::mSetupPanels()
 		{ 0.0f, 1.0f, 0.0f, 0.0f },
 		{ 0.0f, 0.00000001f, 0.0f, 0.0f },
 		XM_PI / 15.0f, 16.0f / 9.0f,
-		0.1f, 10.0f, LOOK_AT, PERSPECTIVE);
+		0.1f, 20.0f, LOOK_AT, PERSPECTIVE);
 
 	this->mpTopViewCameraPan = new Camera(
 		{ 0.0f, 7.0f, 0.15f, 0.0f },
@@ -287,6 +278,10 @@ void System::mSetupPanels()
 		L"../../GraphicsEngine/Test_VertexShader.hlsl",
 		L"",
 		L"../../GraphicsEngine/Test_PixelShader.hlsl");
+
+	this->mpTopViewPanel->AddPixelShader(L"../../GraphicsEngine/PS_Text3D.hlsl");
+	this->mpTopViewPanel->AddPixelShader(L"../../GraphicsEngine/PS_EventBox.hlsl");
+	this->mpTopViewPanel->AddPixelShader(L"../../GraphicsEngine/PS_Boat.hlsl");
 
 	// Setting up the control panel.
 	this->mpControlPanel->AddTextbox(
@@ -372,8 +367,6 @@ void System::mSetupModels()
 	this->mBounds.push_back(new Mesh("../../Models/Bound1.obj"));
 	this->mBounds.push_back(new Mesh("../../Models/Bound2.obj"));
 
-	this->mTexts.push_back(new Quad(true));
-
 
 	// Creating temporary mesh objects to pass to the 3D panels.
 	MeshObject floor_brygg("Bryggdäck", this->mFloors[0]);
@@ -383,32 +376,33 @@ void System::mSetupModels()
 	MeshObject bound_huvud("Huvuddäckbounds", this->mBounds[1]);
 	MeshObject bound_tross("Trossdäckbounds", this->mBounds[2]);
 
-	this->mpTopViewPanel->AddMeshObject(&floor_brygg);
-	this->mpTopViewPanel->AddMeshObject(&floor_huvud);
-	this->mpTopViewPanel->AddMeshObject(&floor_tross);
-	this->mpTopViewPanel->AddMeshObject(&bound_brygg, L"../../Models/BlendColor.dds", true);
-	this->mpTopViewPanel->AddMeshObject(&bound_huvud, L"../../Models/BlendColor.dds", true);
-	this->mpTopViewPanel->AddMeshObject(&bound_tross, L"../../Models/BlendColor.dds", true);
+	this->mpTopViewPanel->AddMeshObject(&floor_brygg, 3);
+	this->mpTopViewPanel->AddMeshObject(&floor_huvud, 3);
+	this->mpTopViewPanel->AddMeshObject(&floor_tross, 3);
+	this->mpTopViewPanel->AddMeshObject(&bound_brygg, 2, L"../../Models/BlendColor.dds", true);
+	this->mpTopViewPanel->AddMeshObject(&bound_huvud, 2, L"../../Models/BlendColor.dds", true);
+	this->mpTopViewPanel->AddMeshObject(&bound_tross, 2, L"../../Models/BlendColor.dds", true);
 	
+	Quad quad(true);
 
 	this->mpTopViewPanel->AddMeshObject(
 		"Text3D_Floor01",
-		this->mTexts[0]->GetIndices(),
-		this->mTexts[0]->GetVertices(),
+		quad.GetIndices(),
+		quad.GetVertices(), 1,
 		L"../../Models/d01.dds"
 	); 
 	
 	this->mpTopViewPanel->AddMeshObject(
 		"Text3D_Floor1", 
-		this->mTexts[0]->GetIndices(), 
-		this->mTexts[0]->GetVertices(), 
+		quad.GetIndices(),
+		quad.GetVertices(), 1,
 		L"../../Models/d1.dds"
 	);
 	
 	this->mpTopViewPanel->AddMeshObject(
 		"Text3D_Floor2",
-		this->mTexts[0]->GetIndices(),
-		this->mTexts[0]->GetVertices(),
+		quad.GetIndices(),
+		quad.GetVertices(), 1,
 		L"../../Models/d2.dds"
 	);
 
@@ -416,9 +410,9 @@ void System::mSetupModels()
 	this->mpSideViewPanel->AddMeshObject(&floor_brygg);
 	this->mpSideViewPanel->AddMeshObject(&floor_huvud);
 	this->mpSideViewPanel->AddMeshObject(&floor_tross);
-	this->mpSideViewPanel->AddMeshObject(&bound_brygg, L"../../Models/BlendColor.dds", true);
-	this->mpSideViewPanel->AddMeshObject(&bound_huvud, L"../../Models/BlendColor.dds", true);
-	this->mpSideViewPanel->AddMeshObject(&bound_tross, L"../../Models/BlendColor.dds", true);
+	this->mpSideViewPanel->AddMeshObject(&bound_brygg, 0, L"../../Models/BlendColor.dds", true);
+	this->mpSideViewPanel->AddMeshObject(&bound_huvud, 0, L"../../Models/BlendColor.dds", true);
+	this->mpSideViewPanel->AddMeshObject(&bound_tross, 0, L"../../Models/BlendColor.dds", true);
 
 
 	// Scaling and translating the mesh objects in the panels.
@@ -483,8 +477,6 @@ void System::mSetupModels()
 	this->mpSideViewPanel->rGetMeshObject("Bryggdäckbounds")->Scale(0.5f, 0.5f, 0.53f);
 	this->mpSideViewPanel->rGetMeshObject("Huvuddäckbounds")->Scale(0.5f, 0.5f, 0.53f);
 	this->mpSideViewPanel->rGetMeshObject("Trossdäckbounds")->Scale(0.5f, 0.5f, 0.53f);
-
-
 }
 
 void System::mSetupBoat()

@@ -444,6 +444,15 @@
     <FxCompile Include="..\..\GraphicsEngine\Test_VertexShader.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
+    <FxCompile Include="..\..\GraphicsEngine\PS_Text3D.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\GraphicsEngine\PS_EventBox.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\GraphicsEngine\PS_Boat.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
