@@ -32,7 +32,7 @@ Panel::Panel(int width, int height, int top, int left, HWND handle, LPCTSTR titl
 	this->mParentWidth	= parent_size.right - parent_size.left;
 	this->mParentTop	= parent_size.top;
 	this->mParentLeft	= parent_size.left;
-	this->mIsVisible		= true;
+	this->mIsVisible	= true;
 }
 
 Panel::~Panel()
@@ -211,6 +211,7 @@ void Panel::Hide()
 void Panel::Show()
 {
 	this->mIsVisible = true;
+	this->UpdateWindowPos();
 	ShowWindow(this->mPanelWindow, SW_SHOW);
 }
 

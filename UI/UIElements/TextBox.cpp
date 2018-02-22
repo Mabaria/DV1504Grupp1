@@ -18,6 +18,7 @@ TextBox::TextBox(
 	this->mpTextFormat = nullptr;
 	this->mFontName = L"Times new roman";
 	
+	this->mAlignment = DWRITE_TEXT_ALIGNMENT_LEADING;
 	this->mFontWeight = DWRITE_FONT_WEIGHT_NORMAL;
 	this->mCreateColor();
 
@@ -103,7 +104,9 @@ void TextBox::SetFontName(std::wstring fontName)
 
 void TextBox::SetTextAlignment(DWRITE_TEXT_ALIGNMENT textAlignment)
 {
-	this->mpTextFormat->SetTextAlignment(textAlignment);
+	this->mAlignment = textAlignment;
+	this->mpTextFormat->Release();
+	this->mCreateTextFormat();
 }
 
 void TextBox::mCreateColor()
@@ -129,6 +132,7 @@ void TextBox::mCreateTextFormat()
 	);
 	this->mpTextFormat->SetTrimming(&this->D2D1Panel->GetTrimmer(), NULL);
 	this->mpTextFormat->SetWordWrapping(DWRITE_WORD_WRAPPING_EMERGENCY_BREAK);
+	this->mpTextFormat->SetTextAlignment(this->mAlignment);
 }
 
 void TextBox::ReleaseCOM(IUnknown * object)

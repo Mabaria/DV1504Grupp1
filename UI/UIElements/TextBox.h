@@ -39,6 +39,7 @@ private:
 	unsigned int mFontSize;
 	DWRITE_FONT_WEIGHT mFontWeight;
 	std::wstring mFontName;
+	DWRITE_TEXT_ALIGNMENT mAlignment;
 
 	void mCreateColor();
 	void mCreateTextFormat();
