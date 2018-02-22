@@ -237,6 +237,11 @@ bool Panel2D::RemoveNotification(Room * room, Event::Type type)
 	return this->mNotificationList->RemoveNotification(room, type);
 }
 
+bool Panel2D::GetButtonOcclude()
+{
+	return this->mButtonOccludes;
+}
+
 void Panel2D::ScrollActiveLog()
 {
 	if (Mouse::GetScroll() != 0 
@@ -303,6 +308,7 @@ void Panel2D::mUpdateButtons()
 {
 	 // For notification list.
 	Button *button = nullptr;
+	this->mButtonOccludes = false;
 	if (this->IsMouseInsidePanel()) /* Check if mouse is inside panel,
 									 if not there is no chance of any buttons
 									 being pressed. */
@@ -320,11 +326,13 @@ void Panel2D::mUpdateButtons()
 				Mouse::GetPositionPercentage().y >
 				(*it)->GetBoundingBoxPercentage().top) /* Classic bounds check */
 			{
-				if (Mouse::IsButtonDown(Buttons::Left))
+				this->mButtonOccludes = true;
+				if (Mouse::IsButtonPressed(Buttons::Left))
 				{
 					(*it)->SetButtonStatus(BUTTON_STATE::CLICKED);
 				}
-				else
+				else if(!Mouse::IsButtonDown(Buttons::Left) ||
+					(*it)->GetButtState() != BUTTON_STATE::CLICKED)
 					(*it)->SetButtonStatus(BUTTON_STATE::HOVER);
 			}
 			else
@@ -354,11 +362,13 @@ void Panel2D::mUpdateButtons()
 					button->GetBoundingBoxPercentage().top)
 					/* Classic bounds check */
 				{
-					if (Mouse::IsButtonDown(Buttons::Left))
+					this->mButtonOccludes = true;
+					if (Mouse::IsButtonPressed(Buttons::Left))
 					{
 						button->SetRectStatus(BUTTON_STATE::CLICKED);
 					}
-					else
+					else if (!Mouse::IsButtonDown(Buttons::Left) ||
+						button->GetButtState() != BUTTON_STATE::CLICKED)
 						button->SetRectStatus(BUTTON_STATE::HOVER);
 				}
 				else
