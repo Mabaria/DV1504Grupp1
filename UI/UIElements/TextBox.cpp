@@ -31,6 +31,7 @@ TextBox::TextBox(
 
 	HRESULT hr = this->D2D1Panel->GetpRenderTarget()->
 		CreateCompatibleRenderTarget(&this->mpTextRenderTarget);
+
 	hr = this->mpTextRenderTarget->GetBitmap(&this->mpTextBitmap);
 
 	this->mDrawToBitmap();
@@ -90,9 +91,9 @@ void TextBox::DrawTextBox()
 		this->mpColor,
 		D2D1_DRAW_TEXT_OPTIONS_CLIP
 	);*/
-	// Draw the bitmap
-	//! FOR TESTING ONLY, REMOVE THIS IF FOUND
 
+
+	// Draw the bitmap
 
 	this->D2D1Panel->GetpRenderTarget()->DrawBitmap(
 		this->mpTextBitmap,
@@ -119,6 +120,8 @@ void TextBox::MoveTextBox(int x, int y)
 
 	this->mpTextLayout->Release();
 	this->mCreateTextLayout();
+
+
 }
 
 void TextBox::SetFontSize(unsigned int size)
@@ -129,6 +132,11 @@ void TextBox::SetFontSize(unsigned int size)
 
 	this->mpTextLayout->Release();
 	this->mCreateTextLayout();
+
+	if (this->mpTextRenderTarget)
+	{
+		this->mDrawToBitmap(); // String update, draw to the bitmap again
+	}
 }
 
 void TextBox::SetFontWeight(DWRITE_FONT_WEIGHT fontWeight)
@@ -139,6 +147,11 @@ void TextBox::SetFontWeight(DWRITE_FONT_WEIGHT fontWeight)
 
 	this->mpTextLayout->Release();
 	this->mCreateTextLayout();
+
+	if (this->mpTextRenderTarget)
+	{
+		this->mDrawToBitmap(); // String update, draw to the bitmap again
+	}
 }
 
 void TextBox::SetFontName(std::wstring fontName)
@@ -149,6 +162,11 @@ void TextBox::SetFontName(std::wstring fontName)
 
 	this->mpTextLayout->Release();
 	this->mCreateTextLayout();
+
+	if (this->mpTextRenderTarget)
+	{
+		this->mDrawToBitmap(); // String update, draw to the bitmap again
+	}
 }
 
 void TextBox::SetTextAlignment(DWRITE_TEXT_ALIGNMENT textAlignment)
@@ -157,6 +175,11 @@ void TextBox::SetTextAlignment(DWRITE_TEXT_ALIGNMENT textAlignment)
 
 	this->mpTextLayout->Release();
 	this->mCreateTextLayout();
+
+	if (this->mpTextRenderTarget)
+	{
+		this->mDrawToBitmap(); // String update, draw to the bitmap again
+	}
 }
 
 void TextBox::mCreateTextLayout()
