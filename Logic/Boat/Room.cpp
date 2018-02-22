@@ -37,6 +37,8 @@ void Room::SetName(std::string name)
 void Room::SetAABB(const AABB &boundingBox)
 {
 	this->mBoundingBox = boundingBox;
+
+	// Runs here because mBoundingBox doesn't exist prior.
 	this->InitRoomInfo();
 }
 
