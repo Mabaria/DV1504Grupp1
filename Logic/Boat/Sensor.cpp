@@ -62,7 +62,11 @@ bool Sensor::AutoTrigger(Event::Type type)
 	if (!this->CanDetect(type))
 		return false;
 
-	ActiveEvent *pActiveEvent = this->mpEventLog->AddEvent(type, this->mRoomIndex, this);
+	ActiveEvent *pActiveEvent = this->mpEventLog->AddEvent(
+		type, 
+		this->mRoomIndex,
+		this->mRoomName,
+		this);
 
 	// Sanity check
 	if (pActiveEvent == nullptr)	// Event type already exist
@@ -75,7 +79,11 @@ bool Sensor::AutoTrigger(Event::Type type)
 
 bool Sensor::PlotTrigger(Event::Type type)
 {
-	ActiveEvent *pActiveEvent = this->mpEventLog->AddEvent(type, this->mRoomIndex, this);
+	ActiveEvent *pActiveEvent = this->mpEventLog->AddEvent(
+		type,
+		this->mRoomIndex,
+		this->mRoomName,
+		this);
 
 	// Sanity check
 	if (pActiveEvent == nullptr)	// Event type already exist
@@ -162,6 +170,11 @@ std::vector<LogEvent*> Sensor::GetActiveEvents() const
 void Sensor::SetRoomIndex(int index)
 {
 	this->mRoomIndex = index;
+}
+
+void Sensor::SetRoomName(std::string name)
+{
+	this->mRoomName = name;
 }
 
 

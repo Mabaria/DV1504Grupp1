@@ -32,6 +32,7 @@ void Room::SetIndex(int index)
 void Room::SetName(std::string name)
 {
 	this->mName = name;
+	this->mSensor.SetRoomName(this->mName);
 }
 
 void Room::SetAABB(const AABB &boundingBox)
@@ -57,6 +58,7 @@ void Room::InitFromDesc(RoomDesc desc)
 	this->mDeckIndex = desc.deckIndex;
 	this->mDeckName = desc.deckName;
 	this->mSensor.SetRoomIndex(desc.indexInBoat);
+	this->mSensor.SetRoomName(this->mName);
 	this->mSensor.SetEventLog(desc.pEventLog);
 	this->mSensor.SetInputTypes(desc.inputTypes);
 	this->mSensor.SetActiveEvent(desc.activeIndex, desc.pActiveEvent);

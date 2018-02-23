@@ -32,7 +32,11 @@ public:
 	~EventLog();
 
 	// Event Specific
-	ActiveEvent* AddEvent(Event::Type type, int roomIndex, Observer<ActiveEvent> *pObserver);
+	ActiveEvent* AddEvent(
+		Event::Type type, 
+		int roomIndex, 
+		std::string roomName,
+		Observer<ActiveEvent> *pObserver);
 															/* Pushing an event
 															at the end of the list,
 															returns index of event in
@@ -54,6 +58,7 @@ public:
 private:
 
 	int GetRoomActiveEventIndex(int roomIndex) const;
+	std::string CorrectName(std::string name);
 
 	std::vector<LogEvent*> mpLogEvents;	// Containing all events in the system
 	std::vector<ActiveEvent*> mpActiveEvents;

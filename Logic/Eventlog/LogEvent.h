@@ -28,6 +28,9 @@ public:
 
 	std::string GetFileString();
 
+	// Room specific
+	void SetRoomName(std::string name);
+
 	// Time specific
 	void StartTimer();
 	const int GetElapsedTime();
@@ -42,4 +45,6 @@ private:
 	Timer mTimer;
 	int mActiveEventIndex;
 	Event::Type mType;
+
+	std::string mRoomName;
 };

@@ -90,7 +90,29 @@ std::string LogEvent::GetFileString()
 	else
 		ss << ts.clock.second;
 
+
+	std::string type = Event::GetString(this->mType);
+	ss << "\t\t" << type;
+
+	if (type.size() == 8)
+		ss << "\t\t\t\t|\t\t";
+	else if (type.size() == 11)
+		ss << "\t\t\t|\t\t";
+	else
+		ss << "\t\t|\t\t";
+
+	ss << "startad\t\t|\t\t" << this->mRoomName;
+
 	return ss.str();
+}
+
+/**
+*	Room specific
+*/
+
+void LogEvent::SetRoomName(std::string name)
+{
+	this->mRoomName = name;
 }
 
 

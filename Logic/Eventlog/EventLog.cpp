@@ -23,7 +23,11 @@ EventLog::~EventLog()
 *	Event specific
 */
 
-ActiveEvent* EventLog::AddEvent(Event::Type type, int roomIndex, Observer<ActiveEvent> *pObserver)
+ActiveEvent* EventLog::AddEvent(
+	Event::Type type,
+	int roomIndex,
+	std::string roomName,
+	Observer<ActiveEvent> *pObserver)
 {
 	int logIndex;
 	int activeIndex;
@@ -54,6 +58,7 @@ ActiveEvent* EventLog::AddEvent(Event::Type type, int roomIndex, Observer<Active
 
 		newLogEvent->SetActiveEventIndex(activeIndex);
 		newLogEvent->SetType(type);
+		newLogEvent->SetRoomName(roomName);
 		newLogEvent->StartTimer();
 
 		logIndex = (int)this->mpLogEvents.size();
@@ -159,12 +164,28 @@ ActiveEvent* EventLog::GetActiveEventPointer(int index)
 
 void EventLog::SaveToFile(std::string filePath)
 {
+	// TODO: Kom på varför word får konstiga symboler för 'ä', men inte logstring
+
 	std::ofstream file;
 	file.open(filePath);
+	
+	std::string logstring;
+	std::string word = "händelse";
+
+	file << "e  yyyy-mm-dd hh:mm:ss\t\t"
+		//<< this->CorrectName("händelse")
+		<< word
+		<< "\t\t\t\t|\t\tstartad\t\t|\t\trumnamn"
+		<< std::endl << std::endl;
 
 	for (int i = 0; i < (int)this->mpLogEvents.size(); i++)
 	{
-		file << "[" << i << "] " << this->mpLogEvents[i]->GetFileString() << std::endl;
+		file << "e  ";
+
+		logstring = this->mpLogEvents[i]->GetFileString();
+		file << logstring << std::endl;
+
+		//file << this->mpLogEvents[i]->GetFileString() << std::endl;
 	}
 
 	file.close();
@@ -189,4 +210,35 @@ int EventLog::GetRoomActiveEventIndex(int roomIndex) const
 
 	// Return -1 if room doesn't have any active events
 	return -1;
+}
+
+std::string EventLog::CorrectName(std::string name)
+{
+	std::string newName = "";
+
+	for (int i = 0; i < name.size(); i++)
+	{
+		int c = name[i];
+
+		switch (name[i])
+		{
+		case -91: // ¥
+			newName += 'å';
+			break;
+		case -92: // ¤
+			newName += 'ä';
+			break;
+		case -74: // ¶
+			newName += 'ö';
+			break;
+
+		case -61: // Character skip
+			break;
+
+		default:
+			newName += name[i];
+			break;
+		}
+	}
+	return newName;
 }

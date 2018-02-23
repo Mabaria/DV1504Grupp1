@@ -153,7 +153,7 @@ Timestamp Timer::GetTimestamp() const
 	ts.date.day = tmp->tm_mday;
 
 	ts.clock.hour = tmp->tm_hour + 1;
-	ts.clock.minute = tmp->tm_min + 1;
+	ts.clock.minute = tmp->tm_min;
 	ts.clock.second = tmp->tm_sec;
 
 	return ts;

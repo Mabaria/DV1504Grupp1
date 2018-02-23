@@ -38,6 +38,7 @@ public:
 
 	// Room specific
 	void SetRoomIndex(int index);
+	void SetRoomName(std::string name);
 	
 	// Disk specific
 	std::string WriteString() const;
@@ -59,4 +60,5 @@ private:
 	
 	// Room specific
 	int mRoomIndex;	// Index to the room this sensor is in
+	std::string mRoomName;
 };
