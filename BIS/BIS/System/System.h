@@ -6,6 +6,7 @@
 #include "../../../GraphicsEngine/Quad.h"
 #include "../../../IO/Picking.h"
 #include "../../../UI/GUI/EventMenu.h"
+#include "../../../UI/UIElements/InfoPanel.h"
 
 class System : public Observer<Room>
 {
@@ -52,7 +53,8 @@ private:
 	Window *mpWindow;
 
 	// User guide.
-	Panel2D *mpInfoPanel;
+	//Panel2D *mpInfoPanel;
+	InfoPanel mpInfoPanel;
 
 	EventLog mEventLog;
 	Boat mBoat;

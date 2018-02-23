@@ -6,7 +6,7 @@ System::System()
 	this->mpControlPanel	= nullptr;
 	this->mpTopViewCamera	= nullptr;
 	this->mpSideViewCamera	= nullptr;
-	this->mpInfoPanel		= nullptr;
+	//this->mpInfoPanel		= nullptr;
 	this->mpMenuPanel		= nullptr;
 	this->mpSideViewPanel	= nullptr;
 	this->mpTopViewPanel	= nullptr;
@@ -23,7 +23,7 @@ System::~System()
 	delete this->mpTopViewCamera;
 	delete this->mpSideViewCamera;	
 	delete this->mpMenuPanel;	
-	delete this->mpInfoPanel;	
+	//delete this->mpInfoPanel;	
 	delete this->mpWindow;	
 
 	
@@ -93,6 +93,14 @@ void System::BuildGraphicalUserInterface(
 		this->mpTopViewPanel->GetPanelWindowHandle());
 	this->mpMenuPanel->AddObserver(this);
 
+	this->mpInfoPanel.Init(
+		windowWidth / 3, 
+		windowHeight - 100, 
+		10,
+		windowWidth / 3 + 10,
+		this->mpWindow->GetWindow(),
+		windowName.c_str());
+
 	this->mSetupPanels();
 	this->mSetupModels();
 	this->mSetupBoat();
@@ -124,8 +132,9 @@ void System::mUpdate()
 	this->mpSideViewPanel->Update();
 	this->mpMenuPanel->Update();
 
+	this->mpInfoPanel.Update();
 	// For information/guide/tutorial panel.
-	if (this->mpInfoPanel->IsVisible())
+	/*if (this->mpInfoPanel->IsVisible())
 	{
 		this->mpInfoPanel->Update();
 		if (this->mpInfoPanel->GetButtonByName("Exit")
@@ -138,7 +147,7 @@ void System::mUpdate()
 		->GetButtState() == CLICKED)
 	{
 		this->mpInfoPanel->ShowOnTop();
-	}
+	}*/
 
 }
 
@@ -149,11 +158,11 @@ void System::mDraw()
 	this->mpTopViewPanel->Draw();
 	this->mpSideViewPanel->Draw();
 	this->mpMenuPanel->Draw();
-
-	if (this->mpInfoPanel->IsVisible())
+	this->mpInfoPanel.Draw();
+	/*if (this->mpInfoPanel->IsVisible())
 	{
 		this->mpInfoPanel->Draw();
-	}
+	}*/
 }
 
 void System::mHandleInput()
@@ -296,6 +305,8 @@ void System::mSetupPanels()
 	this->mpControlPanel->GetButtonByName("Reset2")->
 		AddObserver(this->mpTopViewPanel);
 
+	this->mpControlPanel->GetButtonByName("Info")->
+		AddObserver(&this->mpInfoPanel);
 
 	//////////////////////TEST
 	this->mpControlPanel->AddButton(300, 300, 0, 100,
@@ -495,90 +506,90 @@ void System::mSetupInfoWindow(
 	int windowHeight,
 	std::wstring windowName)
 {
-	this->mpInfoPanel = new Panel2D(
-		windowWidth / 3 + 10,
-		windowHeight - 100,
-		10, 
-		windowWidth / 3 + 10, 
-		this->mpWindow->GetWindow(), 
-		windowName.c_str());
-	
-	this->mpInfoPanel->Hide();
-	
-	this->mpInfoPanel->LoadImageToBitmap("../../Models/Exit.png", "Exit");
-	this->mpInfoPanel->AddButton(30, 30, 0, this->mpInfoPanel->GetWidth() - 30, 
-		this->mpInfoPanel->GetBitmapByName("Exit"), "Exit");
+	//this->mpInfoPanel = new Panel2D(
+	//	windowWidth / 3 + 10,
+	//	windowHeight - 100,
+	//	10, 
+	//	windowWidth / 3 + 10, 
+	//	this->mpWindow->GetWindow(), 
+	//	windowName.c_str());
+	//
+	//this->mpInfoPanel->Hide();
+	//
+	//this->mpInfoPanel->LoadImageToBitmap("../../Models/Exit.png", "Exit");
+	//this->mpInfoPanel->AddButton(30, 30, 0, this->mpInfoPanel->GetWidth() - 30, 
+	//	this->mpInfoPanel->GetBitmapByName("Exit"), "Exit");
 
-	std::string title_string = "Användarguide";
-	std::vector<std::string> header_strings;
-	std::vector<std::string> body_strings;
+	//std::string title_string = "Användarguide";
+	//std::vector<std::string> header_strings;
+	//std::vector<std::string> body_strings;
 
-	int title_font_size		= 40;
-	int header_font_size	= 30;
-	int body_font_size		= 20;
+	//int title_font_size		= 40;
+	//int header_font_size	= 30;
+	//int body_font_size		= 20;
 
-	// Multiply these by number of rows of text for text box height.
-	int title_textbox_height	= title_font_size * 4 / 3 + 5;
-	int header_textbox_height	= header_font_size * 4 / 3 + 5;
-	int body_textbox_height		= body_font_size * 4 / 3 + 5;
+	//// Multiply these by number of rows of text for text box height.
+	//int title_textbox_height	= title_font_size * 4 / 3 + 5;
+	//int header_textbox_height	= header_font_size * 4 / 3 + 5;
+	//int body_textbox_height		= body_font_size * 4 / 3 + 5;
 
-	// For placing the textboxes.
-	int info_height = 0;
+	//// For placing the textboxes.
+	//int info_height = 0;
 
-	header_strings.push_back("Kontroller");
-	body_strings.push_back("Vänster musknapp: Välja rum eller händelser " 
-		"samt lägga till och ta bort händelser.\n"
-		"Höger musknapp: Håll in och dra för att rotera kameran.");
-	
-	this->mpInfoPanel->AddTextbox(
-		this->mpInfoPanel->GetWidth(),
-		title_textbox_height,
-		info_height,
-		0,
-		title_string,
-		"title");
+	//header_strings.push_back("Kontroller");
+	//body_strings.push_back("Vänster musknapp: Välja rum eller händelser " 
+	//	"samt lägga till och ta bort händelser.\n"
+	//	"Höger musknapp: Håll in och dra för att rotera kameran.");
+	//
+	//this->mpInfoPanel->AddTextbox(
+	//	this->mpInfoPanel->GetWidth(),
+	//	title_textbox_height,
+	//	info_height,
+	//	0,
+	//	title_string,
+	//	"title");
 
-	this->mpInfoPanel->GetTextBoxByName("title")->
-		SetFontSize(title_font_size);
-	this->mpInfoPanel->GetTextBoxByName("title")->
-		SetFontWeight(DWRITE_FONT_WEIGHT_ULTRA_BLACK);
-	this->mpInfoPanel->GetTextBoxByName("title")->
-		SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
-	this->mpInfoPanel->GetTextBoxByName("title")->
-		SetFontName(L"comic sans ms");
+	//this->mpInfoPanel->GetTextBoxByName("title")->
+	//	SetFontSize(title_font_size);
+	//this->mpInfoPanel->GetTextBoxByName("title")->
+	//	SetFontWeight(DWRITE_FONT_WEIGHT_ULTRA_BLACK);
+	//this->mpInfoPanel->GetTextBoxByName("title")->
+	//	SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
+	//this->mpInfoPanel->GetTextBoxByName("title")->
+	//	SetFontName(L"comic sans ms");
 
-	info_height += title_textbox_height;
+	//info_height += title_textbox_height;
 
-	this->mpInfoPanel->AddTextbox(
-		this->mpInfoPanel->GetWidth(),
-		header_textbox_height,
-		info_height,
-		0,
-		header_strings[0],
-		"controls_header");
+	//this->mpInfoPanel->AddTextbox(
+	//	this->mpInfoPanel->GetWidth(),
+	//	header_textbox_height,
+	//	info_height,
+	//	0,
+	//	header_strings[0],
+	//	"controls_header");
 
-	this->mpInfoPanel->GetTextBoxByName("controls_header")->
-		SetFontSize(header_font_size);							  
-	this->mpInfoPanel->GetTextBoxByName("controls_header")->
-		SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);			  
-	this->mpInfoPanel->GetTextBoxByName("controls_header")->
-		SetFontName(L"comic sans ms");
-	
-	info_height += header_textbox_height;
+	//this->mpInfoPanel->GetTextBoxByName("controls_header")->
+	//	SetFontSize(header_font_size);							  
+	//this->mpInfoPanel->GetTextBoxByName("controls_header")->
+	//	SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);			  
+	//this->mpInfoPanel->GetTextBoxByName("controls_header")->
+	//	SetFontName(L"comic sans ms");
+	//
+	//info_height += header_textbox_height;
 
-	this->mpInfoPanel->AddTextbox(
-		this->mpInfoPanel->GetWidth(),
-		body_textbox_height * 3,
-		info_height,
-		0,
-		body_strings[0],
-		"controls_body");
-	this->mpInfoPanel->GetTextBoxByName("controls_body")->
-		SetFontSize(body_font_size);							  		  
-	this->mpInfoPanel->GetTextBoxByName("controls_body")->
-		SetFontName(L"comic sans ms");
+	//this->mpInfoPanel->AddTextbox(
+	//	this->mpInfoPanel->GetWidth(),
+	//	body_textbox_height * 3,
+	//	info_height,
+	//	0,
+	//	body_strings[0],
+	//	"controls_body");
+	//this->mpInfoPanel->GetTextBoxByName("controls_body")->
+	//	SetFontSize(body_font_size);							  		  
+	//this->mpInfoPanel->GetTextBoxByName("controls_body")->
+	//	SetFontName(L"comic sans ms");
 
-	info_height += body_textbox_height * 3;
+	//info_height += body_textbox_height * 3;
 
 	
 
