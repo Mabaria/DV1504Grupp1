@@ -142,8 +142,8 @@ void System::Run()
 	this->mpWindow->Open();
 	while (this->mpWindow->IsOpen())
 	{
-		this->mUpdate();
 		this->mHandleInput();
+		this->mUpdate();
 		this->mDraw();
 	}
 }

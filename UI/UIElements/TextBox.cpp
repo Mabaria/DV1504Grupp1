@@ -10,8 +10,8 @@ TextBox::TextBox(
 	this->D2D1Panel = D2D1Panel;
 	this->SetTextBoxSize(left, top, right, bottom);
 	this->mTextString = "Default Text ;) Error x00074352EF";
-	this->mTextWString = L"";
-	this->mpTextWchar = nullptr;
+	this->mTextWString = this->mStrConverter.from_bytes(this->mTextString);
+	this->mpTextWchar = this->mTextWString.c_str();
 	this->mFontSize = 12;
 	std::wstring mTextWString;
 	std::string mTextString;
@@ -23,9 +23,9 @@ TextBox::TextBox(
 	this->mFontWeight = DWRITE_FONT_WEIGHT_NORMAL;
 	this->mCreateColor();
 
-	this->SetColor(D2D1::ColorF::Black);
+	//this->SetColor(D2D1::ColorF::Black);
 
-	this->SetText(this->mTextString);
+	//this->SetText(this->mTextString);
 	this->mCreateTextFormat();
 	this->mCreateTextLayout();
 
@@ -57,7 +57,6 @@ void TextBox::SetTextBoxSize(int left, int top, int right, int bottom)
 		(float)top,
 		(float)right,
 		(float)bottom);
-
 }
 
 void TextBox::SetText(std::string text)
@@ -90,10 +89,7 @@ void TextBox::DrawTextBox()
 		this->mpColor,
 		D2D1_DRAW_TEXT_OPTIONS_CLIP
 	);*/
-
-
 	// Draw the bitmap
-
 	this->D2D1Panel->GetpRenderTarget()->DrawBitmap(
 		this->mpTextBitmap,
 		this->mLayoutRect,
@@ -120,6 +116,7 @@ void TextBox::MoveTextBox(int x, int y)
 	this->mpTextLayout->Release();
 	this->mCreateTextLayout();
 
+	this->DrawToBitmap();
 
 }
 
@@ -146,6 +143,7 @@ void TextBox::SetFontWeight(DWRITE_FONT_WEIGHT fontWeight)
 
 	this->mpTextLayout->Release();
 	this->mCreateTextLayout();
+
 
 	if (this->mpTextRenderTarget)
 	{

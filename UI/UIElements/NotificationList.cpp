@@ -196,6 +196,7 @@ void NotificationList::Update()
 	for (int i = 0; i < (int)this->mObjects.size(); i++)
 	{
 		this->mObjects[i]->Update();
+
 	}
 
 	// List top and list bottom
