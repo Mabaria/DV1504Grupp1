@@ -31,11 +31,6 @@ private:
 	void mSetupPanels();
 	void mSetupModels();
 	void mSetupBoat();
-	
-	void mSetupInfoWindow(
-		int windowWidth, 
-		int windowHeight, 
-		std::wstring windowName);
 
 	Panel2D *mpControlPanel;
 	Panel2D *mpActiveLogPanel;
@@ -53,7 +48,6 @@ private:
 	Window *mpWindow;
 
 	// User guide.
-	//Panel2D *mpInfoPanel;
 	InfoPanel mpInfoPanel;
 
 	EventLog mEventLog;

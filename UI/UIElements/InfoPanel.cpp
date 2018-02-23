@@ -3,7 +3,6 @@
 InfoPanel::InfoPanel()
 {
 	this->mpPanel = nullptr;
-
 }
 
 InfoPanel::~InfoPanel()
@@ -19,21 +18,24 @@ void InfoPanel::Init(int width, int height, int top, int left, HWND parent, LPCT
 	this->mParentPanelWidth  = client_size.right - client_size.left;
 
 	this->mpPanel = new Panel2D(
-		width / 3 + 10,
-		height - 100,
+		width,
+		height,
 		10,
-		width / 3 + 10,
+		width + 10,
 		parent,
 		title);
 
 	this->mpPanel->Hide();
-
+	this->mVisible = false;
 	this->mpPanel->LoadImageToBitmap("../../Models/Exit.png", "Exit");
 	this->mpPanel->AddButton(30, 30, 0, this->mpPanel->GetWidth() - 30,
 		this->mpPanel->GetBitmapByName("Exit"), "Exit");
 	this->mpPanel->GetButtonByName("Exit")->AddObserver(this);
 
 	//! TEXT STUFF
+
+	// Header and body strings are vectors to
+	// support future looping if the user guide gets big.
 	std::string title_string = "Användarguide";
 	std::vector<std::string> header_strings;
 	std::vector<std::string> body_strings;
@@ -50,11 +52,13 @@ void InfoPanel::Init(int width, int height, int top, int left, HWND parent, LPCT
 	// For placing the textboxes.
 	int info_height = 0;
 
+	// Adds all the strings necessary.
 	header_strings.push_back("Kontroller");
 	body_strings.push_back("Vänster musknapp: Välja rum eller händelser "
 		"samt lägga till och ta bort händelser.\n"
 		"Höger musknapp: Håll in och dra för att rotera kameran.");
 
+	// Creates the title textbox.
 	this->mpPanel->AddTextbox(
 		this->mpPanel->GetWidth(),
 		title_textbox_height,
@@ -69,11 +73,11 @@ void InfoPanel::Init(int width, int height, int top, int left, HWND parent, LPCT
 		SetFontWeight(DWRITE_FONT_WEIGHT_ULTRA_BLACK);
 	this->mpPanel->GetTextBoxByName("title")->
 		SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
-	this->mpPanel->GetTextBoxByName("title")->
-		SetFontName(L"comic sans ms");
 
 	info_height += title_textbox_height;
 
+	// Creates header and body textboxes. Should loop when the number
+	// of lines of text in a string can be calculated.
 	this->mpPanel->AddTextbox(
 		this->mpPanel->GetWidth(),
 		header_textbox_height,
@@ -86,8 +90,6 @@ void InfoPanel::Init(int width, int height, int top, int left, HWND parent, LPCT
 		SetFontSize(header_font_size);
 	this->mpPanel->GetTextBoxByName("controls_header")->
 		SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
-	this->mpPanel->GetTextBoxByName("controls_header")->
-		SetFontName(L"comic sans ms");
 
 	info_height += header_textbox_height;
 
@@ -100,8 +102,6 @@ void InfoPanel::Init(int width, int height, int top, int left, HWND parent, LPCT
 		"controls_body");
 	this->mpPanel->GetTextBoxByName("controls_body")->
 		SetFontSize(body_font_size);
-	this->mpPanel->GetTextBoxByName("controls_body")->
-		SetFontName(L"comic sans ms");
 
 	info_height += body_textbox_height * 3;
 }
@@ -147,9 +147,16 @@ void InfoPanel::Update()
 
 void InfoPanel::Update(Button *button)
 {
-
-	this->mVisible = true;
-	this->mpPanel->ShowOnTop();
+	if (button->GetName() == "Info")
+	{
+		this->mVisible = true;
+		this->mpPanel->ShowOnTop();
+	}
+	else if (button->GetName() == "Exit")
+	{
+		this->mVisible = false;
+		this->mpPanel->Hide();
+	}
 }
 
 void InfoPanel::Draw()
@@ -162,4 +169,9 @@ void InfoPanel::Draw()
 	{
 		this->mpPanel->Hide();
 	}
+}
+
+bool InfoPanel::IsMouseInsidePanel()
+{
+	return this->mpPanel->IsMouseInsidePanel();
 }

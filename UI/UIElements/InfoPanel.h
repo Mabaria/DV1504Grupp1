@@ -17,6 +17,7 @@ public:
 	void Update();
 	virtual void Update(Button *button);
 	void Draw();
+	bool IsMouseInsidePanel();
 
 private:
 	int mParentPanelWidth, mParentPanelHeight;
