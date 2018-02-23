@@ -1,5 +1,7 @@
 #include "Panel3D.h"
 
+#include <iostream>
+
 Panel3D::Panel3D(int width, int height, int top, int left,
 	HWND handle, LPCTSTR title, bool movableCamera)
 	:Panel(width, height, top, left, handle, title), mDirect3D(width, height)
@@ -58,15 +60,8 @@ Panel3D::Panel3D(int width, int height, int top, int left,
 	this->mpProjBuffer	= nullptr;
 
 
+	this->mMovableCamera = false;
 	this->mShowCursor	= true;
-	this->mRadius		= 10.0f;
-	this->mDirection	= DirectX::XMVector3Normalize({ 0.5f, 0.3f, 0.5f });
-	this->mSpeed		= 0.06f;
-	this->mMouseDiff.x	= 0.0f;
-	this->mMouseDiff.y	= 0.0f;
-	this->mBtnToPan		= Buttons::Right;
-
-	this->mOrthographicMaxView = 2.0f;
 	this->mMovableCamera = movableCamera;
 }
 
@@ -109,6 +104,12 @@ Panel3D::~Panel3D()
 			delete this->mpMeshObjects[i];
 			this->mpMeshObjects[i] = nullptr;
 		}
+	}
+
+	if (this->mpMovableCameraComponent)
+	{
+		delete this->mpMovableCameraComponent;
+		this->mpMovableCameraComponent = nullptr;
 	}
 }
 
@@ -476,43 +477,37 @@ const void Panel3D::SetCamera(Camera * camera)
 {
 	this->mpCamera = camera;
 
-	this->mCreateMatrixBuffer(
-		&this->mpCamera->GetViewMatrix(), 
-		&this->mpViewBuffer);
-	this->mCreateMatrixBuffer(
-		&this->mpCamera->GetProjectionMatrix(), 
-		&this->mpProjBuffer);
+	if (!this->mpViewBuffer)
+	{
+		this->mCreateMatrixBuffer(
+			&this->mpCamera->GetViewMatrix(),
+			&this->mpViewBuffer);
+	}
+	if (!this->mpProjBuffer)
+	{
+		this->mCreateMatrixBuffer(
+			&this->mpCamera->GetProjectionMatrix(),
+			&this->mpProjBuffer);
+	}
 
-	this->mDirection = 
-		this->mpCamera->GetPosition() - this->mpCamera->GetLookVector();
+	if (this->mpMovableCameraComponent)
+	{
+		delete this->mpMovableCameraComponent;
+	}
 
-	this->mRadius = XMVectorGetX(XMVector3Length(this->mDirection));
-	this->mDirection = XMVector3Normalize(this->mDirection);
-
-	//this->UpdateCamera();
+	this->mpMovableCameraComponent = new MovableCameraComponent();
+	this->mpMovableCameraComponent->Initialize(*this->mpCamera);
+	this->mMovableCamera = true;
 }
 
 void Panel3D::Update(Button * attribute)
 {
-	if (attribute->GetName().compare("Reset") == 0)
-	{
-		this->mRadius = 4.0f;
-		this->mDirection = DirectX::XMVector3Normalize({
-			-0.025140788f,
-			1.28821635f,
-			3.78684092f });
-	}
-	else
-	{
-		this->mRadius = 6.0f;
-		this->mDirection = DirectX::XMVector3Normalize({
-			-0.02f,
-			6.19f,
-			2.99f });
-	}
-	this->mMouseDiff.x = 0.0f;
-	this->mMouseDiff.y = 0.0f;
-	this->UpdateCamera();
+	this->mpCamera->Update(attribute);
+}
+
+const Camera * Panel3D::GetActiveCamera()
+{
+	return this->mpCamera;
 }
 
 const void Panel3D::Update()
@@ -541,8 +536,7 @@ const void Panel3D::Update()
 		
 		if (this->mMovableCamera)
 		{
-			this->UpdateMouse();
-			show_cursor = this->mpCamera ? this->UpdateCamera() : true;
+			show_cursor = this->mpMovableCameraComponent->Update();
 		}
 	}
 
@@ -551,146 +545,6 @@ const void Panel3D::Update()
 		this->mShowCursor = show_cursor;
 		ShowCursor(this->mShowCursor);
 	}
-}
-
-const void Panel3D::UpdateMouse()
-{
-	if (Mouse::IsButtonPressed(this->mBtnToPan))
-	{
-		POINT mouse_pos;
-		GetCursorPos(&mouse_pos);
-		this->mMouseOrigin.x = (float)mouse_pos.x;
-		this->mMouseOrigin.y = (float)mouse_pos.y;
-	}
-
-	if (Mouse::IsButtonDown(this->mBtnToPan))
-	{
-		POINT mouse_pos;
-		GetCursorPos(&mouse_pos);
-
-		this->mMouseDiff.x = (float)mouse_pos.x - this->mMouseOrigin.x;
-		this->mMouseDiff.y = (float)mouse_pos.y - this->mMouseOrigin.y;
-
-		SetCursorPos(
-			(int)this->mMouseOrigin.x,
-			(int)this->mMouseOrigin.y
-		);
-
-		int dead_zone = 1;
-
-		if (abs(this->mMouseDiff.x) < dead_zone)
-			this->mMouseDiff.x = 0;
-		if (abs(this->mMouseDiff.y) < dead_zone)
-			this->mMouseDiff.y = 0;
-	}
-}
-
-const bool Panel3D::UpdateCamera()
-{
-	bool flag = false;
-	float scroll = Mouse::GetScroll();
-	
-	switch (this->mpCamera->GetProjectionMode())
-	{
-	case ORTHOGRAPHIC:
-	{
-		// Scroll - Zoom
-		if (scroll != 0)
-		{
-			this->mpCamera->SetViewWidth(
-				this->mpCamera->GetViewWidth() - (this->mSpeed * scroll)
-			);
-
-			this->mpCamera->SetViewHeight(
-				this->mpCamera->GetViewHeight() - (this->mSpeed * scroll)
-			);
-		}
-
-		// Restrict zoom out
-		if (this->mpCamera->GetViewWidth() > this->mOrthographicMaxView)
-			this->mpCamera->SetViewWidth(this->mOrthographicMaxView);
-
-		if (this->mpCamera->GetViewHeight() > this->mOrthographicMaxView)
-			this->mpCamera->SetViewHeight(this->mOrthographicMaxView);
-
-		// Mouse movement - Pan
-		if (Mouse::IsButtonDown(this->mBtnToPan))
-		{
-			flag = true;
-			this->mpCamera->MoveCamera(
-				{ this->mMouseDiff.x * -0.008f, this->mMouseDiff.y }, 
-				this->mSpeed
-			);
-		}
-		break;
-	}
-
-	case PERSPECTIVE:
-	{
-		// Scroll - Zoom
-		if (scroll != 0)
-		{
-			this->mRadius -= this->mSpeed * scroll * 4.0f;
-
-			if (this->mRadius < 1.0f)
-				this->mRadius = 1.0f;
-
-			if (this->mRadius > this->mpCamera->GetFarZ() - 1.0f)
-				this->mRadius = this->mpCamera->GetFarZ() - 1.0f;
-		}
-
-		// Mouse movement - Rotate
-		if (Mouse::IsButtonDown(this->mBtnToPan))
-		{
-			flag = true;
-			DirectX::XMVECTOR right = DirectX::XMVector3Cross(
-				this->mpCamera->GetLookVector() - this->mpCamera->GetPosition(),
-				this->mpCamera->GetUpVector()
-			);
-
-			DirectX::XMVECTOR up = DirectX::XMVector3Cross(
-				this->mpCamera->GetLookVector() - this->mpCamera->GetPosition(),
-				right
-			);
-
-			DirectX::XMVECTOR newPos = this->mpCamera->GetPosition()
-				+ up * this->mMouseDiff.y * -0.0008f
-				+ right * this->mMouseDiff.x * 0.005f;
-
-			DirectX::XMVECTOR dir = DirectX::XMVector3Normalize(
-				newPos - this->mpCamera->GetLookVector()
-			);
-
-			float y = DirectX::XMVectorGetY(dir);
-			if (y < 0.0f)
-			{
-				y = 0.0f;
-				dir = DirectX::XMVectorSetY(dir, y);
-				dir = DirectX::XMVector3Normalize(dir);
-			}
-			else if (y > 0.9f)
-			{
-				y = 0.9f;
-				dir = DirectX::XMVectorSetY(dir, y);
-				dir = DirectX::XMVector3Normalize(dir);
-			}
-
-			this->mDirection = dir;
-		}
-		// Update Camera
-
-		//this->mpCamera->SetCameraPosition(this->mpCamera->GetLookVector());
-		this->mpCamera->SetCameraPosition(0.0f, 0.0f, 0.0f);
-		this->mpCamera->MoveCamera(this->mDirection, this->mRadius);
-		break;
-	}
-
-	default:
-		break;
-
-	}
-
-	return !flag; // If mouse is down then don't show cursor
 }
 
 const void Panel3D::Draw()
@@ -733,7 +587,7 @@ const void Panel3D::Draw()
 		);
 
 
-		// Setting the constant buffer to the vertex shader.
+		// Setting the constant buffer to the vertex shader. 
 		this->mDirect3D.GetContext()->VSSetConstantBuffers(
 			0,					// Start slot.
 			1,					// Number of buffers

@@ -7,6 +7,7 @@
 #include "../../../IO/Picking.h"
 #include "../../../UI/GUI/EventMenu.h"
 #include "../../../UI/UIElements/InfoPanel.h"
+#include "../../../IO/Keyboard.h"
 
 class System : public Observer<Room>
 {
@@ -43,6 +44,7 @@ private:
 	std::vector<Mesh*> mBounds;
 	std::vector<Quad*> mTexts;
 
+	Camera *mpTopViewCameraPan;
 	Camera *mpTopViewCamera;
 	Camera *mpSideViewCamera;
 	Window *mpWindow;

@@ -20,6 +20,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\GraphicsEngine\Camera\Camera.cpp" />
+    <ClCompile Include="..\..\GraphicsEngine\Camera\CameraMovementStrategy.cpp" />
+    <ClCompile Include="..\..\GraphicsEngine\Camera\CameraPanStrategy.cpp" />
+    <ClCompile Include="..\..\GraphicsEngine\Camera\CameraRotateStrategy.cpp" />
+    <ClCompile Include="..\..\GraphicsEngine\Camera\MovableCameraComponent.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\Camera\Test_Camera.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\DX\Direct2D.cpp" />
     <ClCompile Include="..\..\GraphicsEngine\DX\Direct3D.cpp" />
@@ -67,6 +71,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\GraphicsEngine\Camera\Camera.h" />
+    <ClInclude Include="..\..\GraphicsEngine\Camera\CameraMovementStrategy.h" />
+    <ClInclude Include="..\..\GraphicsEngine\Camera\CameraPanStrategy.h" />
+    <ClInclude Include="..\..\GraphicsEngine\Camera\CameraRotateStrategy.h" />
+    <ClInclude Include="..\..\GraphicsEngine\Camera\MovableCameraComponent.h" />
     <ClInclude Include="..\..\GraphicsEngine\Camera\Test_Camera.h" />
     <ClInclude Include="..\..\GraphicsEngine\DX\Direct2D.h" />
     <ClInclude Include="..\..\GraphicsEngine\DX\Direct3D.h" />

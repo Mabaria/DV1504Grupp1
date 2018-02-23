@@ -15,16 +15,51 @@ System::System()
 
 System::~System()
 {
-	delete this->mpActiveLogPanel;	
-	delete this->mpControlPanel;	
-	delete this->mpSideViewPanel;	
-	delete this->mpTopViewPanel;	
-	delete this->mpTopViewCamera;
-	delete this->mpSideViewCamera;	
-	delete this->mpMenuPanel;	
-	delete this->mpWindow;	
-
-	
+	if (this->mpActiveLogPanel)
+	{
+		delete this->mpActiveLogPanel;
+		this->mpActiveLogPanel = nullptr;
+	}
+	if (this->mpControlPanel)
+	{
+		delete this->mpControlPanel;
+		this->mpControlPanel = nullptr;
+	}
+	if (this->mpSideViewPanel)
+	{
+		delete this->mpSideViewPanel;
+		this->mpSideViewPanel = nullptr;
+	}
+	if (this->mpTopViewPanel)
+	{
+		delete this->mpTopViewPanel;
+		this->mpTopViewPanel = nullptr;
+	}
+	if (this->mpTopViewCamera)
+	{
+		delete this->mpTopViewCamera;
+		this->mpTopViewCamera = nullptr;
+	}
+	if (this->mpTopViewCameraPan)
+	{
+		delete this->mpTopViewCameraPan;
+		this->mpTopViewCameraPan = nullptr;
+	}
+	if (this->mpSideViewCamera)
+	{
+		delete this->mpSideViewCamera;
+		this->mpSideViewCamera = nullptr;
+	}
+	if (this->mpMenuPanel)
+	{
+		delete this->mpMenuPanel;
+		this->mpMenuPanel = nullptr;
+	}
+	if (this->mpWindow)
+	{
+		delete this->mpWindow;
+		this->mpWindow = nullptr;
+	}
 	for (int i = 0; i < (int)this->mFloors.size(); i++)
 	{
 		delete this->mFloors[i];	
@@ -150,7 +185,7 @@ void System::mHandleInput()
 			!this->mpInfoPanel.IsMouseInsidePanel())
 		{
 			Picking::GetWorldRay(
-				this->mpTopViewCamera,
+				this->mpTopViewPanel->GetActiveCamera(),
 				Mouse::GetXPercentage(),
 				Mouse::GetYPercentage(),
 				this->mRay);
@@ -163,6 +198,18 @@ void System::mHandleInput()
 		}
 	}
 	
+	if (Keyboard::IsKeyPressed(Keys::One))
+	{
+		if (this->mpTopViewPanel->GetActiveCamera() != this->mpTopViewCamera)
+		{
+			this->mpTopViewPanel->SetCamera(this->mpTopViewCamera);
+		}
+		else if (this->mpTopViewPanel->GetActiveCamera() != this->mpTopViewCameraPan)
+		{
+			this->mpTopViewPanel->SetCamera(this->mpTopViewCameraPan);
+		}
+			
+	}
 }
 
 void System::mUpdateEvents(Room * room)
@@ -215,6 +262,13 @@ void System::mSetupPanels()
 		XM_PI / 15.0f, 16.0f / 9.0f,
 		0.1f, 10.0f, LOOK_AT, PERSPECTIVE);
 
+	this->mpTopViewCameraPan = new Camera(
+		{ 0.0f, 7.0f, 0.15f, 0.0f },
+		{ 0.0f, 1.0f, 0.0f, 0.0f },
+		{ 0.0f, -10.0f, -0.25f, 0.0f },
+		XM_PI / 15.0f, 16.0f / 9.0f,
+		0.1f, 20.0f, LOOK_TO, PERSPECTIVE);
+
 	this->mpSideViewCamera = new Camera(
 		{ -0.0251480788f, 1.28821635f, 3.78684092f, 0.0f },
 		{ 0.0f, 1.0f, 0.0f, 0.0f },
@@ -222,7 +276,7 @@ void System::mSetupPanels()
 		120.f, 32.f/9.f,
 		0.1f, 25.0f, LOOK_AT, PERSPECTIVE);
 
-	this->mpTopViewPanel->SetCamera(this->mpTopViewCamera);
+	this->mpTopViewPanel->SetCamera(this->mpTopViewCameraPan);
 	this->mpSideViewPanel->SetCamera(this->mpSideViewCamera);
 
 	// Creating and setting the shaders.
