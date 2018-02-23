@@ -265,6 +265,7 @@ void Panel2D::Scroll()
 	float lowest_point	= 0.0f;
 	float highest_point	= (float)INFINITY;
 
+	// Calculate the highest and lowest point.
 	for (int i = 0; i < (int)this->mTextBoxVector.size(); i++)
 	{
 		if (this->mTextBoxVector[i]->GetTextBoxSize().bottom > lowest_point)
@@ -277,14 +278,18 @@ void Panel2D::Scroll()
 		}
 	}
 
-	if ((Mouse::GetScroll() != 0.0f) && (lowest_point + highest_point > this->mTop + this->mHeight))
+	if ((Mouse::GetScroll() != 0.0f) 
+		&& (lowest_point + highest_point > this->mTop + this->mHeight))
 	{
 		float scroll_speed = Mouse::GetScroll() * 10.0f;
+		// Move the boxes in the direction of the scroll.
 		for (int i = 0; i < (int)mTextBoxVector.size(); i++)
 		{
 			this->mTextBoxVector[i]->MoveTextBox(0, (int)scroll_speed);
 		}
-		if ((lowest_point < this->mTop + this->mHeight) || (highest_point > this->mTop))
+		// If out of bounds, revert.
+		if ((lowest_point < this->mTop + this->mHeight) 
+			|| (highest_point > this->mTop))
 		{
 			for (int i = 0; i < (int)mTextBoxVector.size(); i++)
 			{
