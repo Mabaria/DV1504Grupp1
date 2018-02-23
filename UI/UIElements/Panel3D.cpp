@@ -535,15 +535,16 @@ void Panel3D::BindTextureToBitmap(ID3D11Texture2D * texture)
 }
 
 void Panel3D::DrawBitmapToTexture(
-	ID2D1Bitmap * bitmap,
-	ID3D11Texture2D *textureBoundToBitmap)
+	ID2D1Bitmap *bitmap,
+	float startX,
+	float startY,
+	float widthOfTex,
+	float heightOfTex)
 {
-	D3D11_TEXTURE2D_DESC hejRobin = { 0 };
-	textureBoundToBitmap->GetDesc(&hejRobin);
 	this->mDirect2D->GetpContext()->BeginDraw();
 	this->mDirect2D->GetpContext()->DrawBitmap(
 		bitmap,
-		D2D1::RectF(0, 0, hejRobin.Width, hejRobin.Height),
+		D2D1::RectF(startX, startY, widthOfTex, heightOfTex),
 		1.0f,
 		D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,
 		D2D1::RectF(
@@ -767,7 +768,6 @@ const void Panel3D::Draw()
 	// and draws them one by one.
 	for (int i = 0; i < (int)this->mpMeshObjects.size(); i++)
 	{
-
 
 		matrix_buffer = *this->mpMeshObjects[i]->rGetMatrixBuffer();
 		this->mDirect3D.GetContext()->PSSetShaderResources(

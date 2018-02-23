@@ -76,11 +76,15 @@ public:
 	void BindTextureToBitmap(ID3D11Texture2D *texture);
 	void DrawBitmapToTexture(
 		ID2D1Bitmap *bitmap,
-		ID3D11Texture2D *textureBoundToBitmap);
+		float startX,
+		float startY,
+		float widthOfTex,
+		float heightOfTex);
 	//void SetCameraPosition()
 private:
 	D3D11 mDirect3D;
-	
+	float heheSize = 0;
+	bool heheExpand = true;
 	std::vector<MeshObject*> mpMeshObjects;
 	//HWND mPanelWindow;
 

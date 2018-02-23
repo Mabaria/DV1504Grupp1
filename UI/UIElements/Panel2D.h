@@ -43,8 +43,7 @@ public:
 
 	Button* GetButtonByName(std::string name);
 	Button* GetButtonByIndex(unsigned int index);
-	//ID2D1Bitmap* GetBitmapByName(std::string bitmapName);
-	//void LoadImageToBitmap(std::string imageFilePath, std::string bitmapName);
+	
 
 
 	// Text box stuff.
@@ -70,13 +69,13 @@ public:
 	void Draw();
 
 private:
-	//Direct2D *mDirect2D;
+	
 	
 	void mUpdateButtons();
 
 	std::vector<Button*> mButtonVector;
 	std::vector<std::string> mButtonNames;
-	//std::vector<BitmapInfo> mBitmapVector;
+	
 
 	void mUpdateTextBoxes();
 	std::vector<TextBox*> mTextBoxVector;

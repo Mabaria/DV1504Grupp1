@@ -34,18 +34,6 @@ Panel2D::~Panel2D()
 			delete this->mTextBoxVector[i];
 		}
 	}
-	/*for (unsigned int i = 0; i < this->mBitmapVector.size(); i++)
-	{
-		if (this->mBitmapVector[i].bitmap)
-		{
-			this->mBitmapVector[i].bitmap->Release();
-			this->mBitmapVector[i].bitmap = nullptr;
-		}
-	}
-	delete this->mDirect2D;
-*/
-	// Deleting the notification list only if 
-	// there is one to delete.
 	if (this->mNotificationListIsActive)
 	{
 		delete this->mNotificationList;
@@ -136,25 +124,6 @@ Button * Panel2D::GetButtonByIndex(unsigned int index)
 	return to_return;
 }
 
-//ID2D1Bitmap * Panel2D::GetBitmapByName(std::string bitmapName)
-//{
-//	ID2D1Bitmap *to_return = nullptr; // Default return is nullptr
-//	std::vector<BitmapInfo>::iterator it;
-//
-//	for (it = this->mBitmapVector.begin();
-//		it != this->mBitmapVector.end();
-//		++it)
-//	{
-//		if (bitmapName.compare((*it).name) == 0) // Button with correct name found
-//		{
-//			to_return = (*it).bitmap; // Return pointer to button
-//			it = this->mBitmapVector.end() - 1; // Set iterator to end
-//											   // -1 because incrementation is performed after this.
-//											   // Incrementing on .end() is a baaad idea.
-//		}
-//	}
-//	return to_return;
-//}
 
 TextBox * Panel2D::GetTextBoxByName(std::string name)
 {
@@ -372,45 +341,3 @@ void Panel2D::mUpdateTextBoxes()
 {
 
 }
-
-//void Panel2D::LoadImageToBitmap(
-//	std::string imageFilePath,
-//	std::string bitmapName)
-//{
-//	BitmapInfo new_bitmap_struct;
-//	new_bitmap_struct.name = bitmapName;
-//	std::wstring_convert<std::codecvt<wchar_t, char, std::mbstate_t>> convert;
-//	std::wstring w_file_path = convert.from_bytes(imageFilePath);
-//
-//	IWICFormatConverter *converter = this->mDirect2D->GetpFormatConverter();
-//	IWICBitmapDecoder *decoder = this->mDirect2D->GetpBitmapDecoder();
-//	IWICBitmapFrameDecode *bitmapSrc = this->mDirect2D->GetpBitmapSrc();
-//
-//	this->mDirect2D->GetpImagingFactory()->CreateFormatConverter(&converter);
-//	this->mDirect2D->SetpFormatConverter(converter);
-//	this->mDirect2D->GetpImagingFactory()->CreateDecoderFromFilename(
-//		w_file_path.c_str(),
-//		NULL,
-//		GENERIC_READ,
-//		WICDecodeMetadataCacheOnDemand,
-//		&decoder);
-//	this->mDirect2D->SetpBitmapDecoder(decoder);
-//	if (this->mDirect2D->GetpBitmapDecoder() != nullptr)
-//	{
-//		this->mDirect2D->GetpBitmapDecoder()->GetFrame(0, &bitmapSrc);
-//		this->mDirect2D->SetpBitmapSrc(bitmapSrc);
-//		this->mDirect2D->GetpFormatConverter()->Initialize(
-//			bitmapSrc,
-//			GUID_WICPixelFormat32bppPBGRA,
-//			WICBitmapDitherTypeNone,
-//			NULL,
-//			0.f,
-//			WICBitmapPaletteTypeMedianCut);
-//		this->mDirect2D->GetpRenderTarget()->CreateBitmapFromWicBitmap(
-//			this->mDirect2D->GetpFormatConverter(),
-//			NULL,
-//			&new_bitmap_struct.bitmap);
-//	}
-//
-//	this->mBitmapVector.push_back(new_bitmap_struct);
-//}
