@@ -9,6 +9,7 @@
 #include "../../GraphicsEngine/Camera/Camera.h"
 #include "../../IO/ObserverPattern/Observer.h"
 #include "../../GraphicsEngine/DX/Direct2D.h"
+#include "../../GraphicsEngine/Camera/MovableCameraComponent.h"
 
 class Panel3D : public Panel, public Observer<Button>
 {
@@ -63,6 +64,8 @@ public:
 	const void SetCamera(Camera *camera);
 	void Update(Button* attribute);
 
+	const Camera* GetActiveCamera();
+
 	void * operator new(size_t i) // To make sure it is 16 bit aligned
 	{
 		return _aligned_malloc(i, 16);
@@ -83,8 +86,6 @@ public:
 	//void SetCameraPosition()
 private:
 	D3D11 mDirect3D;
-	float heheSize = 0;
-	bool heheExpand = true;
 	std::vector<MeshObject*> mpMeshObjects;
 	//HWND mPanelWindow;
 
@@ -115,22 +116,8 @@ private:
 
 	const void CreateTexture(std::wstring texturePath);
 
-
-	// --- TEMP ---
-
-	Buttons mBtnToPan;
-
-	XMVECTOR mDirection;
-	Position mMouseOrigin;
-	Position mMouseDiff;
+	
+	MovableCameraComponent* mpMovableCameraComponent;
 	bool mShowCursor;
-
-	float mOrthographicMaxView;
-
-	float mSpeed;
-	float mRadius;
-
-	const void UpdateMouse();
-	const bool UpdateCamera();
 	bool mMovableCamera;
 };

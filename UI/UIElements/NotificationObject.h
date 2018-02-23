@@ -15,7 +15,9 @@ public:
 		Room *room, 
 		LogEvent *event,
 		Direct2D *direct2d, 
-		int index);
+		int index,
+		int fontSize,
+		ID2D1Bitmap *bitmap = nullptr);
 	~NotificationObject();
 	
 	const Event::Type GetEventType() const;
@@ -30,6 +32,7 @@ public:
 
 	const int GetWidth() const;
 	const int GetHeight() const;
+	const int GetBottom() const;
 
 	// For changing the index upon deletion.
 	const int GetIndex() const;

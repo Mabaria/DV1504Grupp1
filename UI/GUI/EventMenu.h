@@ -10,8 +10,8 @@ public:
 	EventMenu();
 	~EventMenu();
 
-	bool Init(float parentWidth,
-		float parentHeight,
+	bool Init(int parentWidth,
+		int parentHeight,
 		EventLog *pEventLog,
 		LPCTSTR windowName,
 		HWND *pWindow);
@@ -28,7 +28,8 @@ public:
 private:
 	int mMenuWidth, mMenuHeight;
 	int mParentPanelWidth, mParentPanelHeight;
-	bool mVisible;
+	bool mVisible, mButtonFocus, mDraggingWindow;
+	int mDragX, mDragY;
 	EventLog *mpEventLog;
 	Panel2D *mpPanel;
 

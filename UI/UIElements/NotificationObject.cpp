@@ -4,8 +4,10 @@ NotificationObject::NotificationObject(
 	Room *room, 
 	LogEvent *event, 
 	Direct2D *direct2d,
-	int index) 
-	: mButton(direct2d, "", 0, 0, 0, 0)
+	int index,
+	int fontSize,
+	ID2D1Bitmap *bitmap) 
+	: mButton(direct2d, bitmap, 0, 0, 0, 0)
 	, mTextBox(direct2d, 0, 0, 0, 0)
 {
 	this->mTimer = event->GetTimer();
@@ -16,7 +18,7 @@ NotificationObject::NotificationObject(
 	this->mEventType = event->GetType();
 	this->mIndex = index;
 	
-	this->mTextBox.SetFontSize(32);
+	this->mTextBox.SetFontSize(fontSize);
 	this->mTextBox.SetFontWeight(DWRITE_FONT_WEIGHT_ULTRA_BLACK);
 	this->mTextBox.SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
 	D2D1_SIZE_F render_target_size = direct2d->GetpRenderTarget()->GetSize();	
@@ -26,7 +28,7 @@ NotificationObject::NotificationObject(
 	object_size.top = 0;
 	object_size.left = 0;
 	object_size.right = render_target_size.width - 4;
-	object_size.bottom = render_target_size.height / 11;
+	object_size.bottom = (float)fontSize * 8 / 3 + 5;
 
 	// 40x40 pixel icon.
 	D2D1_RECT_F icon_size;
@@ -42,29 +44,33 @@ NotificationObject::NotificationObject(
 	textbox_size.right = 19 * render_target_size.width / 20;
 	textbox_size.bottom = object_size.bottom;
 
-	std::string file_path = "../../Models/";
-	switch (this->mEventType)
+	if (!bitmap)
 	{
-	case Event::Type::Fire:
-		file_path += "Button04.png";
-		break;
-	case Event::Type::Water:
-		file_path += "Button03.png";
-		break;
-	case Event::Type::Gas:
-		file_path += "Button02.png";
-		break;
-	case Event::Type::Injury:
-		file_path += "Button01.png";
-		break;
-	default:
-		file_path += "pepehands.jpg";
+		std::string file_path = "../../Models/";
+		switch (this->mEventType)
+		{
+		case Event::Type::Fire:
+			file_path += "Button04.png";
+			break;
+		case Event::Type::Water:
+			file_path += "Button03.png";
+			break;
+		case Event::Type::Gas:
+			file_path += "Button02.png";
+			break;
+		case Event::Type::Injury:
+			file_path += "Button01.png";
+			break;
+		default:
+			file_path += "pepehands.jpg";
+		}
+
+		this->mButton.CreateButton(file_path, 0, 0, 0, 0);
 	}
 
 	// Every notification object starts at the same place,
 	// the handler places them where they need to be.
-	this->mButton.CreateButton(
-		file_path, 
+	this->mButton.SetButtonSize(
 		(int)object_size.left,
 		(int)object_size.top,
 		(int)object_size.right,
@@ -75,7 +81,6 @@ NotificationObject::NotificationObject(
 		(int)icon_size.top,
 		(int)icon_size.right,
 		(int)icon_size.bottom);
-
 
 	this->mTextBox.SetTextBoxSize(
 		(int)textbox_size.left,
@@ -141,6 +146,11 @@ const int NotificationObject::GetHeight() const
 {
 	return (int)this->mButton.GetButtonSize().bottom
 		-  (int)this->mButton.GetButtonSize().top;
+}
+
+const int NotificationObject::GetBottom() const
+{
+	return (int)this->mButton.GetButtonSize().bottom;
 }
 
 const int NotificationObject::GetIndex() const

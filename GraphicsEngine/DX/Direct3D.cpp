@@ -87,14 +87,23 @@ void D3D11::Init(HWND window)
 
 	ID3D11BlendState *blend_state = nullptr;
 	D3D11_BLEND_DESC blend_desc{};
-	blend_desc.RenderTarget[0].BlendEnable = TRUE;
-	blend_desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-	blend_desc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
-	blend_desc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
-	blend_desc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
-	blend_desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ZERO;
-	blend_desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
-	blend_desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	blend_desc.AlphaToCoverageEnable	= false;
+	blend_desc.IndependentBlendEnable	= false;
+
+	blend_desc.RenderTarget[0].BlendEnable				= TRUE;
+	blend_desc.RenderTarget[0].RenderTargetWriteMask	= D3D11_COLOR_WRITE_ENABLE_ALL;
+
+	// Blend Factor Color
+	blend_desc.RenderTarget[0].SrcBlend			= D3D11_BLEND_SRC_ALPHA;
+	blend_desc.RenderTarget[0].DestBlend		= D3D11_BLEND_INV_SRC_ALPHA;
+
+	// Blend Factor Alpha
+	blend_desc.RenderTarget[0].SrcBlendAlpha	= D3D11_BLEND_ZERO;   
+	blend_desc.RenderTarget[0].DestBlendAlpha	= D3D11_BLEND_ZERO;
+
+	// Blend Operation
+	blend_desc.RenderTarget[0].BlendOp			= D3D11_BLEND_OP_ADD;
+	blend_desc.RenderTarget[0].BlendOpAlpha		= D3D11_BLEND_OP_ADD;
 
 	if (FAILED(this->mDevice->CreateBlendState(&blend_desc, &blend_state)))
 	{

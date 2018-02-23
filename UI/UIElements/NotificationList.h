@@ -12,10 +12,20 @@
 class NotificationList
 {
 public:
-	NotificationList(Direct2D *direct2d, int posX, int posY);
+	NotificationList(
+		Direct2D *direct2d, 
+		int posX, 
+		int posY,
+		int titleFontSize,
+		int objectFontSize);
 	~NotificationList();
 
-	bool AddNotification(Direct2D *direct2d, Room *room, LogEvent *event);
+	bool AddNotification(
+		Direct2D *direct2d, 
+		Room *room, 
+		LogEvent *event,
+		ID2D1Bitmap *bitmap = nullptr);
+
 	bool RemoveNotification(Room *room, Event::Type type);
 	NotificationObject *GetNotificationObjectByIndex(int index);
 	const int GetNumberOfNotificationObjects() const;
@@ -36,10 +46,10 @@ private:
 	int mListBottom;
 
 	int mSpace;
+	int mObjectFontSize;
 
 	TextBox mTitle;
 	Button mTitleFrame;
-
 	std::string mDefaultTitle;
 
 	// Render target pointer for size purposes.
