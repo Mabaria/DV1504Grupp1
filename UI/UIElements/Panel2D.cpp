@@ -370,8 +370,3 @@ void Panel2D::mUpdateButtons()
 		}
 	}
 }
-
-void Panel2D::mUpdateTextBoxes()
-{
-
-}
