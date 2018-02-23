@@ -6,9 +6,9 @@
 #include "Panel.h"
 #include "../../GraphicsEngine/DX/Direct3D.h"
 #include "MeshObject.h"
-#include "../../GraphicsEngine/Camera/Camera.h"
 #include "../../IO/ObserverPattern/Observer.h"
 #include "../../GraphicsEngine/Actions.h"
+#include "../../GraphicsEngine/Camera/MovableCameraComponent.h"
 
 class Panel3D : public Panel, public Observer<Button>
 {
@@ -63,6 +63,8 @@ public:
 	const void SetCamera(Camera *camera);
 	void Update(Button* attribute);
 
+	const Camera* GetActiveCamera();
+
 	void * operator new(size_t i) // To make sure it is 16 bit aligned
 	{
 		return _aligned_malloc(i, 16);
@@ -106,20 +108,9 @@ private:
 
 	const void CreateTexture(std::wstring texturePath);
 
-	Buttons mBtnToPan;
-
-	XMVECTOR mDirection;
-	FPosition mMouseOrigin;
-	FPosition mMouseDiff;
+	
+	MovableCameraComponent* mpMovableCameraComponent;
 	bool mShowCursor;
-
-	float mOrthographicMaxView;
-
-	float mSpeed;
-	float mRadius;
-
-	const void UpdateMouse();
-	const bool UpdateCamera();
 	bool mMovableCamera;
 
 	Actions mActions;

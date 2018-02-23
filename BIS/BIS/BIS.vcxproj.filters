@@ -225,6 +225,18 @@
     <ClInclude Include="..\..\UI\GUI\EventMenu.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\GraphicsEngine\Camera\CameraMovementStrategy.h">
+      <Filter>Header Files\GraphicsEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\GraphicsEngine\Camera\MovableCameraComponent.h">
+      <Filter>Header Files\GraphicsEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\GraphicsEngine\Camera\CameraRotateStrategy.h">
+      <Filter>Header Files\GraphicsEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\GraphicsEngine\Camera\CameraPanStrategy.h">
+      <Filter>Header Files\GraphicsEngine</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\GraphicsEngine\Actions.h">
       <Filter>Header Files\GraphicsEngine</Filter>
     </ClInclude>
@@ -402,6 +414,18 @@
       <Filter>Source Files\UI</Filter>
     </ClCompile>
     <ClCompile Include="..\..\GraphicsEngine\Actions.cpp">
+      <Filter>Source Files\GraphicsEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\GraphicsEngine\Camera\MovableCameraComponent.cpp">
+      <Filter>Source Files\GraphicsEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\GraphicsEngine\Camera\CameraMovementStrategy.cpp">
+      <Filter>Source Files\GraphicsEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\GraphicsEngine\Camera\CameraRotateStrategy.cpp">
+      <Filter>Source Files\GraphicsEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\GraphicsEngine\Camera\CameraPanStrategy.cpp">
       <Filter>Source Files\GraphicsEngine</Filter>
     </ClCompile>
   </ItemGroup>
