@@ -501,6 +501,7 @@ const void Panel3D::SetCamera(Camera * camera)
 	this->mpMovableCameraComponent = new MovableCameraComponent();
 	this->mpMovableCameraComponent->Initialize(*this->mpCamera);
 	this->mMovableCamera = true;
+	this->mActions.SetMoveableCamera(this->mpMovableCameraComponent);
 }
 
 void Panel3D::Update(Button * attribute)

@@ -1,6 +1,7 @@
 #include "Actions.h"
 #include <iostream>
 #include <DDSTextureLoader.h>
+#include <stdlib.h>
 
 Actions::Actions()
 {
@@ -69,14 +70,26 @@ void Actions::Init(D3D11 *pDirect3D)
 	this->CompileShadersAndLayout();
 	this->CreateResourceAndSampler();
 	this->CreateVertexBuffer();
-	this->AddAction(-0.5f, 0.3f, 1);
-	this->AddAction(0.0f, -0.7f, 0);
-	this->AddAction(0.4f, 0.5f, 3);
+	for (int i = 0; i < this->mcMaxEvents; i++)
+	{
+		this->AddAction(
+			(float)(rand() % 1000) / 500.f - 1.0f,
+			(float)(rand() % 1000) / 500.f - 1.0f,
+			(rand() % 9) | (rand() % 4) << 4);
+	}
+	//this->AddAction(-0.5f, 0.3f, 1);
+	//this->AddAction(0.0f, -0.7f, 0);
+	//this->AddAction(0.4f, 0.5f, 3);
 }
 
 void Actions::SetCamera(Camera *pCamera)
 {
 	this->pCamera = pCamera;
+}
+
+void Actions::SetMoveableCamera(MovableCameraComponent *pMovableCamera)
+{
+	this->pMovableCamera = pMovableCamera;
 }
 
 bool Actions::AddAction(float x, float y, uint32_t data)
@@ -206,11 +219,13 @@ bool Actions::CreateResourceAndSampler()
 	//DirectX::XMStoreFloat4(&floatData, cameraPos);
 	//std::cout << sizeof(XMFLOAT4) << std::endl;
 
-	float tempData[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+	CameraData tempData = {
+		{ 0.0f, 0.0f, 0.0f },
+		0 };
 
 	D3D11_BUFFER_DESC desc = { 0 };
 	desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	desc.ByteWidth = sizeof(XMFLOAT4) * 4;
+	desc.ByteWidth = sizeof(CameraData);
 	desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	desc.Usage = D3D11_USAGE_DYNAMIC;
 
@@ -288,15 +303,15 @@ bool Actions::UpdateGSBuffer()
 		D3D11_MAP_WRITE_DISCARD,
 		0,
 		&mappedResource);
-
-	XMFLOAT4 floatData;
+	CameraData cameraData;
 	XMVECTOR cameraPos = pCamera->GetPosition();
-	DirectX::XMStoreFloat4(&floatData, cameraPos);
+	DirectX::XMStoreFloat3(&cameraData.position, cameraPos);
+	cameraData.data = (UINT)this->pMovableCamera->GetMovement();
 
 	memcpy(
 		mappedResource.pData,
-		&floatData,
-		sizeof(XMFLOAT4));
+		&cameraData,
+		sizeof(CameraData));
 
 	this->pDirect3D->GetContext()->Unmap(this->mpGSBuffer, 0);
 

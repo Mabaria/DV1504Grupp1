@@ -1,6 +1,7 @@
 #pragma once
 #include "DX/Direct3D.h"
 #include "Camera/Camera.h"
+#include "Camera/MovableCameraComponent.h"
 class Actions {
 public:
 	Actions();
@@ -8,6 +9,7 @@ public:
 
 	void Init(D3D11 *pDirect3D);
 	void SetCamera(Camera *pCamera);
+	void SetMoveableCamera(MovableCameraComponent *pMovableCamera);
 	bool AddAction(float x, float y, uint32_t data);
 	void Draw();
 private:
@@ -16,10 +18,16 @@ private:
 		float x, y, z;
 		uint32_t data;
 	};
-	const int mcMaxEvents = 20;
+	struct CameraData
+	{
+		XMFLOAT3 position;
+		uint32_t data;
+	};
+	const int mcMaxEvents = 2000;
 
 	D3D11 *pDirect3D;
 	Camera *pCamera;
+	MovableCameraComponent *pMovableCamera;
 
 	ID3D11VertexShader *mpVertexShader;
 	ID3D11GeometryShader *mpGeometryShader;

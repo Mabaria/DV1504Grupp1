@@ -36,10 +36,12 @@ bool MovableCameraComponent::Initialize(Camera& rCamera)
 	{
 	case LOOK_AT:
 		this->mpStrategy = new CameraRotateStrategy();
+		this->mMovement = CAMERA_MOVEMENT_ROTATE;
 		break;
 
 	case LOOK_TO:
 		this->mpStrategy = new CameraPanStrategy();
+		this->mMovement = CAMERA_MOVEMENT_PAN;
 		break;
 	}
 
@@ -80,6 +82,11 @@ bool MovableCameraComponent::Update()
 	
 
 	return !flag;
+}
+
+CAMERA_MOVEMENT MovableCameraComponent::GetMovement()
+{
+	return this->mMovement;
 }
 
 bool MovableCameraComponent::mUpdateInput()
