@@ -24,6 +24,8 @@ public:
 	void SetFontName(std::wstring fontName);
 	void SetTextAlignment(DWRITE_TEXT_ALIGNMENT textAlignment);
 
+	void DrawToBitmap();
+	ID2D1Bitmap* GetBitmap() const;
 
 private:
 
@@ -47,7 +49,7 @@ private:
 
 	ID2D1Bitmap *mpTextBitmap;
 	ID2D1BitmapRenderTarget* mpTextRenderTarget;
-	void mDrawToBitmap();
+
 	/*---------------------------------------------*/
 	void mCreateColor();
 	void mCreateTextFormat();

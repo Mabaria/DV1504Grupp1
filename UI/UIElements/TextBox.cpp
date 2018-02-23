@@ -34,7 +34,7 @@ TextBox::TextBox(
 
 	hr = this->mpTextRenderTarget->GetBitmap(&this->mpTextBitmap);
 
-	this->mDrawToBitmap();
+	this->DrawToBitmap();
 }
 
 TextBox::~TextBox()
@@ -75,7 +75,7 @@ void TextBox::SetText(std::string text)
 		}
 		if (this->mpTextRenderTarget)
 		{
-			this->mDrawToBitmap(); // String update, draw to the bitmap again
+			this->DrawToBitmap(); // String update, draw to the bitmap again
 		}
 	}
 }
@@ -134,7 +134,7 @@ void TextBox::SetFontSize(unsigned int size)
 
 	if (this->mpTextRenderTarget)
 	{
-		this->mDrawToBitmap(); // String update, draw to the bitmap again
+		this->DrawToBitmap(); // String update, draw to the bitmap again
 	}
 }
 
@@ -149,7 +149,7 @@ void TextBox::SetFontWeight(DWRITE_FONT_WEIGHT fontWeight)
 
 	if (this->mpTextRenderTarget)
 	{
-		this->mDrawToBitmap(); // String update, draw to the bitmap again
+		this->DrawToBitmap(); // String update, draw to the bitmap again
 	}
 }
 
@@ -164,7 +164,7 @@ void TextBox::SetFontName(std::wstring fontName)
 
 	if (this->mpTextRenderTarget)
 	{
-		this->mDrawToBitmap(); // String update, draw to the bitmap again
+		this->DrawToBitmap(); // String update, draw to the bitmap again
 	}
 }
 
@@ -177,7 +177,7 @@ void TextBox::SetTextAlignment(DWRITE_TEXT_ALIGNMENT textAlignment)
 
 	if (this->mpTextRenderTarget)
 	{
-		this->mDrawToBitmap(); // String update, draw to the bitmap again
+		this->DrawToBitmap(); // String update, draw to the bitmap again
 	}
 }
 
@@ -202,7 +202,7 @@ void TextBox::mCreateTextLayout()
 	pFontCollection->Release();
 }
 
-void TextBox::mDrawToBitmap()
+void TextBox::DrawToBitmap()
 {
 	HRESULT hr = S_OK;
 	this->mpTextRenderTarget->BeginDraw();
@@ -220,6 +220,11 @@ void TextBox::mDrawToBitmap()
 	);
 
 	this->mpTextRenderTarget->EndDraw();
+}
+
+ID2D1Bitmap * TextBox::GetBitmap() const
+{
+	return this->mpTextBitmap;
 }
 
 void TextBox::mCreateColor()
