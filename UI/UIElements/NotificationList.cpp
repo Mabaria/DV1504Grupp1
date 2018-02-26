@@ -42,7 +42,8 @@ NotificationList::~NotificationList()
 {
 	for (int i = 0; i < (int)this->mObjects.size(); i++)
 	{
-		delete this->mObjects[i];
+		if(this->mObjects[i])
+			delete this->mObjects[i];
 	}
 }
 
