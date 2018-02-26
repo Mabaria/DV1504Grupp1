@@ -505,7 +505,7 @@ void Panel3D::Update(Button * attribute)
 	this->mpCamera->Update(attribute);
 }
 
-const Camera * Panel3D::GetActiveCamera()
+Camera * Panel3D::GetActiveCamera()
 {
 	return this->mpCamera;
 }
@@ -632,7 +632,7 @@ const void Panel3D::Draw()
 				numIndices,	// Number of indices.
 				0,			// Start index location.
 				offset);	// Base vertex location.
-		}
+		}		
 	}
 	this->mDirect3D.GetSwapChain()->Present(1, 0);
 }

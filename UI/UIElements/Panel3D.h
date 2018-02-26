@@ -8,6 +8,7 @@
 #include "MeshObject.h"
 #include "../../IO/ObserverPattern/Observer.h"
 #include "../../GraphicsEngine/Camera/MovableCameraComponent.h"
+#include "../../GraphicsEngine/DX/Direct2D.h"
 
 class Panel3D : public Panel, public Observer<Button>
 {
@@ -62,7 +63,7 @@ public:
 	const void SetCamera(Camera *camera);
 	void Update(Button* attribute);
 
-	const Camera* GetActiveCamera();
+	Camera* GetActiveCamera();
 
 	void * operator new(size_t i) // To make sure it is 16 bit aligned
 	{

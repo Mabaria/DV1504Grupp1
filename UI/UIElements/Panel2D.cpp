@@ -326,9 +326,9 @@ void Panel2D::Draw()
 	this->mDirect2D->GetpRenderTarget()->BeginDraw();
 	this->mDirect2D->GetpRenderTarget()->Clear(
 		D2D1::ColorF(D2D1::ColorF(
-			0.9f,
-			0.9f,
-			0.9f,
+			0.3f,
+			0.41f,
+			0.5f,
 			1.0f)));
 	// Draw all the buttons in the panel
 	for (std::vector<Button*>::iterator it = 
@@ -453,6 +453,7 @@ void Panel2D::mUpdateButtons()
 		}
 	}
 }
+
 
 void Panel2D::LoadImageToBitmap(
 	std::string imageFilePath,

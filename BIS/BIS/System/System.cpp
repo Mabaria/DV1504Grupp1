@@ -119,8 +119,8 @@ void System::BuildGraphicalUserInterface(
 
 	this->mpMenuPanel = new EventMenu();
 	this->mpMenuPanel->Init(
-		(float)this->mpTopViewPanel->GetWidth(), 
-		(float)this->mpTopViewPanel->GetHeight(), 
+		this->mpTopViewPanel->GetWidth(), 
+		this->mpTopViewPanel->GetHeight(), 
 		&this->mEventLog, 
 		windowName.c_str(), 
 		this->mpTopViewPanel->GetPanelWindowHandle());
@@ -144,8 +144,8 @@ void System::Run()
 	this->mpWindow->Open();
 	while (this->mpWindow->IsOpen())
 	{
-		this->mUpdate();
 		this->mHandleInput();
+		this->mUpdate();
 		this->mDraw();
 	}
 }
@@ -194,6 +194,10 @@ void System::mHandleInput()
 			if (picked_room)
 			{
 				this->mpMenuPanel->OpenAt(picked_room);
+				this->mpTopViewPanel->GetActiveCamera()->MoveCamera(
+					XMLoadFloat3(&picked_room->GetRoomCenter()) - 
+					this->mpTopViewPanel->GetActiveCamera()->GetPosition(), 1.0f);
+				
 			}
 		}
 	}
@@ -300,7 +304,7 @@ void System::mSetupPanels()
 		"title");
 	this->mpControlPanel->GetTextBoxByName("title")->SetFontSize(40);
 	this->mpControlPanel->GetTextBoxByName("title")->SetFontWeight
-	(DWRITE_FONT_WEIGHT_ULTRA_BLACK);
+	(DWRITE_FONT_WEIGHT_NORMAL);
 	this->mpControlPanel->GetTextBoxByName("title")->SetTextAlignment
 	(DWRITE_TEXT_ALIGNMENT_CENTER);
 

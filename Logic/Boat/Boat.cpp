@@ -475,7 +475,11 @@ bool Boat::LoadBoundingBoxes(
 		for (int j = 0; j < size; j++)
 		{
 			this->mpRooms[this->mpDecks[i]->GetRoomOffset() + j]->SetAABB(
-				Picking::FromVerticesToAABB(submeshList[j]));			
+				Picking::FromVerticesToAABB(submeshList[j]));
+
+			// Sets room info in every room, uses deck matrix for center pos.
+			this->mpRooms[this->mpDecks[i]->GetRoomOffset() + j]->
+				InitRoomInfo(*matrixList[i]);
 		}
 	}
 	return true;
@@ -534,7 +538,7 @@ std::string Boat::CorrectName(std::string name)
 {
 	std::string newName = "";
 
-	for (int i = 0; i < name.size(); i++)
+	for (int i = 0; i < (int)name.size(); i++)
 	{
 		int c = name[i];
 		
