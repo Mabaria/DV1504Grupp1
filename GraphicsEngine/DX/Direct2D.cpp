@@ -17,7 +17,8 @@ Direct2D::Direct2D(HWND window,
 	this->mTrimmer = {};
 	this->mTrimmer.granularity = DWRITE_TRIMMING_GRANULARITY_CHARACTER;
 	this->mInit();
-	this->CreateRenderTarget(window, width, height);
+	this->CreateRenderTarget(window, width, height);	
+	this->mCreateTextRenderer(); // Render target needs to exist
 }
 
 Direct2D::Direct2D()
@@ -49,6 +50,8 @@ Direct2D::~Direct2D()
 	this->ReleaseCOM(this->mpFactory1);
 	this->ReleaseCOM(this->mpDevice);
 	this->ReleaseCOM(this->mpContext);
+	this->ReleaseCOM(this->mpTextRenderer);
+	delete this->mpTextRenderer;
 }
 
 void Direct2D::mCreateFactory()
@@ -87,7 +90,7 @@ void Direct2D::CreateRenderTarget(
 			D2D1::SizeU(width, height)),
 		&this->mpRenderTarget);
 	this->mpRenderTarget->SetAntialiasMode
-	(D2D1_ANTIALIAS_MODE_ALIASED);
+	(D2D1_ANTIALIAS_MODE_PER_PRIMITIVE);
 }
 
 IWICFormatConverter *Direct2D::GetpFormatConverter()
@@ -130,9 +133,10 @@ const DWRITE_TRIMMING Direct2D::GetTrimmer()
 	return this->mTrimmer;
 }
 
-ID2D1DeviceContext * Direct2D::GetpContext()
+
+CustomTextRenderer * Direct2D::GetpTextRenderer()
 {
-	return this->mpContext;
+	return this->mpTextRenderer;
 }
 
 void Direct2D::SetpFormatConverter(IWICFormatConverter* pConverter)
@@ -178,4 +182,29 @@ void Direct2D::mCreateTextFactory()
 		DWRITE_FACTORY_TYPE_SHARED,
 		__uuidof(IDWriteFactory),
 		reinterpret_cast<IUnknown**>(&this->mpTextFactory));
+}
+
+void Direct2D::mCreateTextRenderer()
+{
+	this->mpTextRenderer = nullptr;
+	ID2D1SolidColorBrush  *outlineBrush, *fillBrush;
+
+	// Create outline brush
+	this->mpRenderTarget->CreateSolidColorBrush(
+		D2D1::ColorF(D2D1::ColorF::Black), &outlineBrush);
+	// Create solid color fill brush
+	this->mpRenderTarget->CreateSolidColorBrush(
+		D2D1::ColorF(D2D1::ColorF::White), &fillBrush);
+
+
+	this->mpTextRenderer = new CustomTextRenderer(
+		this->mpFactory,
+		this->mpRenderTarget,
+		outlineBrush,
+		fillBrush
+	);
+
+	// Release the locally created objects, text renderer has its own ref
+	outlineBrush->Release();
+	fillBrush->Release();
 }

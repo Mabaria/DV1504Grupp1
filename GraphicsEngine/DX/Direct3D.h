@@ -71,8 +71,6 @@ private:
 	DXGI_SAMPLE_DESC mSampleDesc;
 	D3D11_VIEWPORT mViewport;
 
-	IDXGIDevice *mpDXGIDevice;
-
 	Size mSize;
 	float mClearColor[4];
 

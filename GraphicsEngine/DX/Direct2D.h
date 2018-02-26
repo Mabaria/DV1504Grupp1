@@ -6,6 +6,7 @@
 #include <Windows.h>
 #include <wincodec.h>
 #include <dwrite.h>
+#include "../CustomTextRenderer.h"
 #pragma comment(lib, "Dwrite")
 #pragma comment(lib, "windowscodecs")
 #pragma comment(lib, "d2d1")
@@ -28,7 +29,8 @@ public:
 	ID2D1HwndRenderTarget *GetpRenderTarget();
 	IDWriteFactory *GetpTextFactory();
 	const DWRITE_TRIMMING GetTrimmer();
-	ID2D1DeviceContext *GetpContext();
+	
+	CustomTextRenderer *GetpTextRenderer();
 
 	void SetpFormatConverter(IWICFormatConverter* pConverter);
 	void SetpImagingFactory(IWICImagingFactory *pWicFactory);
@@ -47,13 +49,13 @@ private:
 	IDWriteFactory *mpTextFactory;
 	DWRITE_TRIMMING mTrimmer;
 
-	ID2D1Factory1 *mpFactory1;
-	ID2D1Device *mpDevice;
-	ID2D1DeviceContext *mpContext;
+
+	CustomTextRenderer* mpTextRenderer;
 
 	void mCreateFactory();
 	void mCreateWicFactory();
 	void mCreateTextFactory();
+	void mCreateTextRenderer();
 	void mInit();
 	void ReleaseCOM(IUnknown *object);
 };

@@ -31,9 +31,11 @@ Panel::Panel(int width, int height, int top, int left, HWND handle, LPCTSTR titl
 	GetClientRect(this->mParentWindow, &parent_size);
 
 	this->mParentHeight = parent_size.bottom - parent_size.top;
-	this->mParentWidth = parent_size.right - parent_size.left;
-	this->mParentTop = parent_size.top;
-	this->mParentLeft = parent_size.left;
+	this->mParentWidth	= parent_size.right - parent_size.left;
+	this->mParentTop	= parent_size.top;
+	this->mParentLeft	= parent_size.left;
+
+
 }
 
 Panel::~Panel()
@@ -46,7 +48,7 @@ Panel::~Panel()
 			this->mBitmapVector[i].bitmap = nullptr;
 		}
 	}
-	delete this->mDirect2D;
+
 }
 
 const void Panel::SetWidth(int width)

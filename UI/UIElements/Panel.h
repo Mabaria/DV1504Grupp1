@@ -81,5 +81,6 @@ protected:
 
 	std::vector<BitmapInfo> mBitmapVector;
 
+
 private:
 };
