@@ -7,6 +7,7 @@ Panel3D::Panel3D(int width, int height, int top, int left,
 	:Panel(width, height, top, left, handle, title), mDirect3D(width, height)
 {
 	this->mDirect3D.Init(this->mPanelWindow);
+	this->mDirect2D->InitDeviceAndContext(this->mDirect3D.GetDXGIDevice());
 
 	// bfcull test
 	//D3D11_RASTERIZER_DESC rast_desc{};
@@ -18,50 +19,50 @@ Panel3D::Panel3D(int width, int height, int top, int left,
 	//rs_state->Release();
 	// ----------
 
-	this->mpVertexShader	= nullptr;
-	this->mpGeometryShader	= nullptr;
-	this->mpPixelShader		= nullptr;
-	this->mpInputLayout		= nullptr;	
+	this->mpVertexShader = nullptr;
+	this->mpGeometryShader = nullptr;
+	this->mpPixelShader = nullptr;
+	this->mpInputLayout = nullptr;
 
 	// Input element description did not want to be initialized any other way.
-	this->mInputDesc[0] = 
-	{ 
-		"POSITION", 
-		0, 
-		DXGI_FORMAT_R32G32B32_FLOAT, 
-		0, 
-		0, 
-		D3D11_INPUT_PER_VERTEX_DATA, 
+	this->mInputDesc[0] =
+	{
+		"POSITION",
+		0,
+		DXGI_FORMAT_R32G32B32_FLOAT,
+		0,
+		0,
+		D3D11_INPUT_PER_VERTEX_DATA,
 		0
 	};
-	this->mInputDesc[1] = 
-	{ 
-		"NORMAL", 
-		0, 
-		DXGI_FORMAT_R32G32B32_FLOAT, 
-		0, 
-		12, 
-		D3D11_INPUT_PER_VERTEX_DATA, 
-		0 
+	this->mInputDesc[1] =
+	{
+		"NORMAL",
+		0,
+		DXGI_FORMAT_R32G32B32_FLOAT,
+		0,
+		12,
+		D3D11_INPUT_PER_VERTEX_DATA,
+		0
 	};
-	this->mInputDesc[2] = 
-	{ 
-		"TEXCOORD", 
-		0, 
-		DXGI_FORMAT_R32G32_FLOAT, 
-		0, 
-		24, 
-		D3D11_INPUT_PER_VERTEX_DATA, 
-		0 
+	this->mInputDesc[2] =
+	{
+		"TEXCOORD",
+		0,
+		DXGI_FORMAT_R32G32_FLOAT,
+		0,
+		24,
+		D3D11_INPUT_PER_VERTEX_DATA,
+		0
 	};
 
-	this->mpCamera		= nullptr;
-	this->mpViewBuffer	= nullptr;
-	this->mpProjBuffer	= nullptr;
+	this->mpCamera = nullptr;
+	this->mpViewBuffer = nullptr;
+	this->mpProjBuffer = nullptr;
 
 
 	this->mMovableCamera = false;
-	this->mShowCursor	= true;
+	this->mShowCursor = true;
 	this->mMovableCamera = movableCamera;
 
 	this->mActions.Init(&this->mDirect3D);
@@ -75,27 +76,22 @@ Panel3D::~Panel3D()
 		this->mpVertexShader = nullptr;
 	}
 	if (this->mpGeometryShader)
-	{		  
+	{
 		this->mpGeometryShader->Release();
 		this->mpGeometryShader = nullptr;
 	}
-	if (this->mpPixelShader)
-	{
-		this->mpPixelShader->Release();
-		this->mpPixelShader = nullptr;
-	}
 	if (this->mpInputLayout)
-	{			
+	{
 		this->mpInputLayout->Release();
 		this->mpInputLayout = nullptr;
 	}
 	if (this->mpViewBuffer)
-	{			
+	{
 		this->mpViewBuffer->Release();
 		this->mpViewBuffer = nullptr;
 	}
 	if (this->mpProjBuffer)
-	{			
+	{
 		this->mpProjBuffer->Release();
 		this->mpProjBuffer = nullptr;
 	}
@@ -105,6 +101,15 @@ Panel3D::~Panel3D()
 		{
 			delete this->mpMeshObjects[i];
 			this->mpMeshObjects[i] = nullptr;
+		}
+	}
+
+	for (size_t i = 0; i < this->mpPixelShaders.size(); i++)
+	{
+		if (this->mpPixelShaders[i])
+		{
+			this->mpPixelShaders[i]->Release();
+			this->mpPixelShaders[i] = nullptr;
 		}
 	}
 
@@ -120,10 +125,14 @@ D3D11 & Panel3D::rGetDirect3D()
 	return this->mDirect3D;
 }
 
+// Pixel Shader ID is based on the position in the array it has.
+// Which is in order of time it was added. 
+
 const void Panel3D::AddMeshObject(
 	std::string name,
 	std::vector<std::vector<unsigned int>> indices,
 	std::vector<std::vector<Vertex>> vertices,
+	int pixelShaderID,
 	std::wstring texturePath,
 	bool use_event)
 {
@@ -155,8 +164,6 @@ const void Panel3D::AddMeshObject(
 			1.0f,
 			1.0f };
 		this->mCreateMaterialBuffer(&defaultMat);
-
-
 	}
 
 
@@ -186,10 +193,33 @@ const void Panel3D::AddMeshObject(
 				this->mpMeshObjects.back()->rGetEventBuffer(i)
 			);
 		}
+
+		HoverData hover_data = { false };
+		event_desc.ByteWidth = sizeof(HoverData);
+		event_data.pSysMem = &hover_data;
+
+		for (int i = 0; i < 20; i++)
+		{
+			this->mDirect3D.GetDevice()->CreateBuffer(
+				&event_desc,
+				&event_data,
+				this->mpMeshObjects.back()->rGetHoverBuffer(i)
+			);
+		}
 	}
+
+	// If pixel shader ID doesn't exist change it to default
+	if (pixelShaderID >= (int)this->mpPixelShaders.size())
+		pixelShaderID = 0;
+
+	this->mpMeshObjects.back()->SetPixelShaderID(pixelShaderID);
 }
 
+// Pixel Shader ID is based on the position in the array it has.
+// Which is in order of time it was added. 
+
 const void Panel3D::AddMeshObject(MeshObject * meshObject,
+	int pixelShaderID,
 	std::wstring texturePath,
 	bool use_event)
 {
@@ -216,47 +246,66 @@ const void Panel3D::AddMeshObject(MeshObject * meshObject,
 		// Add a default material if no material exists
 		MaterialStruct defaultMat =
 		{ 1.0f, 1.0f, 1.0f,
-		  1.0f, 1.0f, 1.0f,
-		  1.0f, 1.0f, 1.0f,
-		  1.0f,
-		  1.0f };
+			1.0f, 1.0f, 1.0f,
+			1.0f, 1.0f, 1.0f,
+			1.0f,
+			1.0f };
 		this->mCreateMaterialBuffer(&defaultMat);
-			
-		
+
+
 	}
 
-		if (texturePath != L"")
+	if (texturePath != L"")
+	{
+		this->CreateTexture(texturePath);
+	}
+
+	if (use_event)
+	{
+		EventData data = { 0 };
+
+		D3D11_BUFFER_DESC event_desc = { 0 };
+		event_desc.BindFlags		= D3D11_BIND_CONSTANT_BUFFER;
+		event_desc.ByteWidth		= sizeof(EventData);
+		event_desc.CPUAccessFlags	= D3D11_CPU_ACCESS_WRITE;
+		event_desc.Usage			= D3D11_USAGE_DYNAMIC;
+
+		D3D11_SUBRESOURCE_DATA event_data = { 0 };
+		event_data.pSysMem = &data;
+
+		for (int i = 0; i < 20; i++)
 		{
-			this->CreateTexture(texturePath);
+			this->mDirect3D.GetDevice()->CreateBuffer(
+				&event_desc,
+				&event_data,
+				this->mpMeshObjects.back()->rGetEventBuffer(i)
+			);
 		}
-	
-		if (use_event)
+
+		HoverData hover_data = { false };
+		event_desc.ByteWidth = sizeof(HoverData);
+		event_data.pSysMem = &hover_data;
+
+		for (int i = 0; i < 20; i++)
 		{
-			EventData data = { 0 };
-
-			D3D11_BUFFER_DESC event_desc = { 0 };
-			event_desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-			event_desc.ByteWidth = sizeof(EventData);
-			event_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-			event_desc.Usage = D3D11_USAGE_DYNAMIC;
-
-			D3D11_SUBRESOURCE_DATA event_data = { 0 };
-			event_data.pSysMem = &data;
-
-			for (int i = 0; i < 20; i++)
-			{
-				this->mDirect3D.GetDevice()->CreateBuffer(
-					&event_desc,
-					&event_data,
-					this->mpMeshObjects.back()->rGetEventBuffer(i)
-				);
-			}
+			this->mDirect3D.GetDevice()->CreateBuffer(
+				&event_desc,
+				&event_data,
+				this->mpMeshObjects.back()->rGetHoverBuffer(i)
+			);
 		}
+	}
+
+	// If pixel shader ID doesn't exist change it to default
+	if (pixelShaderID >= (int)this->mpPixelShaders.size())
+		pixelShaderID = 0;
+
+	this->mpMeshObjects.back()->SetPixelShaderID(pixelShaderID);
 }
 
 bool Panel3D::CreateShadersAndSetup(
-	LPCWSTR	vertexShaderPath, 
-	LPCWSTR	geometryShaderPath, 
+	LPCWSTR	vertexShaderPath,
+	LPCWSTR	geometryShaderPath,
 	LPCWSTR	pixelShaderPath)
 {
 	bool result = this->mDirect3D.CreateShaders(
@@ -267,27 +316,50 @@ bool Panel3D::CreateShadersAndSetup(
 		&this->mpGeometryShader,
 		&this->mpPixelShader,
 		this->mInputDesc,
-		sizeof(mInputDesc)/sizeof(D3D11_INPUT_ELEMENT_DESC),
+		sizeof(mInputDesc) / sizeof(D3D11_INPUT_ELEMENT_DESC),
 		&this->mpInputLayout);
 
 	// Setting shaders to the pipeline.
 	this->mDirect3D.GetContext()->VSSetShader(
-		this->mpVertexShader, 
-		nullptr, 
+		this->mpVertexShader,
+		nullptr,
 		0);
 	this->mDirect3D.GetContext()->GSSetShader(
-		this->mpGeometryShader, 
-		nullptr, 
+		this->mpGeometryShader,
+		nullptr,
 		0);
-	this->mDirect3D.GetContext()->PSSetShader(
-		this->mpPixelShader, 
-		nullptr, 
-		0);
+
+	this->mpPixelShaders.push_back(this->mpPixelShader);
 
 	// Setting up input assembler.
 	this->mDirect3D.GetContext()->IASetPrimitiveTopology
 	(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	this->mDirect3D.GetContext()->IASetInputLayout(this->mpInputLayout);
+
+	this->AddPixelShader(L"../../GraphicsEngine/PS_Boat.hlsl");
+	this->AddPixelShader(L"../../GraphicsEngine/PS_Text3D.hlsl");
+	this->AddPixelShader(L"../../GraphicsEngine/PS_EventBox.hlsl");
+
+	return result;
+}
+
+bool Panel3D::AddPixelShader(LPCWSTR pixelShaderPath)
+{
+	// Create pixel shader
+	bool result = this->mDirect3D.CreateShaders(
+		L"",
+		L"",
+		pixelShaderPath,
+		nullptr,
+		nullptr,
+		&this->mpPixelShader,
+		nullptr,
+		0,
+		nullptr);
+
+	// If successful then add it to the rest
+	if(result)
+		this->mpPixelShaders.push_back(this->mpPixelShader);
 
 	return result;
 }
@@ -319,19 +391,19 @@ const void Panel3D::CreateVertexBuffer(std::vector<Vertex> vertices)
 const void Panel3D::CreateIndexBuffer(std::vector<unsigned int> indices)
 {
 	ID3D11Buffer *index_buffer = nullptr;
-	
+
 	// Assuming the index buffers follow the same format.
 	D3D11_BUFFER_DESC index_buffer_desc{};
-	index_buffer_desc.Usage		= D3D11_USAGE_DEFAULT;
-	index_buffer_desc.ByteWidth	= (UINT)(sizeof(unsigned int) * indices.size());
-	index_buffer_desc.BindFlags	= D3D11_BIND_INDEX_BUFFER;
-	
+	index_buffer_desc.Usage = D3D11_USAGE_DEFAULT;
+	index_buffer_desc.ByteWidth = (UINT)(sizeof(unsigned int) * indices.size());
+	index_buffer_desc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+
 	D3D11_SUBRESOURCE_DATA index_buffer_data{};
 	index_buffer_data.pSysMem = indices.data();
 
 	if (FAILED(this->mDirect3D.GetDevice()->CreateBuffer(
-		&index_buffer_desc, 
-		&index_buffer_data, 
+		&index_buffer_desc,
+		&index_buffer_data,
 		&index_buffer)))
 	{
 		MessageBoxA(NULL, "Index buffer creation failed.", NULL, MB_OK);
@@ -341,22 +413,22 @@ const void Panel3D::CreateIndexBuffer(std::vector<unsigned int> indices)
 }
 
 const void Panel3D::mCreateMatrixBuffer(
-	XMMATRIX *matrix, 
+	XMMATRIX *matrix,
 	ID3D11Buffer **constantBuffer)
 {
 	D3D11_BUFFER_DESC buffer_desc{};
-	buffer_desc.BindFlags		= D3D11_BIND_CONSTANT_BUFFER;
-	buffer_desc.Usage			= D3D11_USAGE_DYNAMIC;
-	buffer_desc.CPUAccessFlags	= D3D11_CPU_ACCESS_WRITE;
-	buffer_desc.ByteWidth		= sizeof(XMMATRIX);
+	buffer_desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	buffer_desc.Usage = D3D11_USAGE_DYNAMIC;
+	buffer_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	buffer_desc.ByteWidth = sizeof(XMMATRIX);
 
 	D3D11_SUBRESOURCE_DATA buffer_data{};
 	buffer_data.pSysMem = matrix;
 
 	// Creates the buffer with the things.
 	if (FAILED(this->mDirect3D.GetDevice()->CreateBuffer(
-		&buffer_desc, 
-		&buffer_data, 
+		&buffer_desc,
+		&buffer_data,
 		constantBuffer)))
 	{
 		MessageBoxA(NULL, "Error creating matrix buffer.", NULL, MB_OK);
@@ -369,10 +441,10 @@ const void Panel3D::mCreateMaterialBuffer(
 {
 	ID3D11Buffer *material_buffer = nullptr;
 	D3D11_BUFFER_DESC buffer_desc{};
-	buffer_desc.BindFlags		= D3D11_BIND_CONSTANT_BUFFER;
-	buffer_desc.Usage			= D3D11_USAGE_DYNAMIC;
-	buffer_desc.CPUAccessFlags	= D3D11_CPU_ACCESS_WRITE;
-	buffer_desc.ByteWidth		= sizeof(MaterialStruct);
+	buffer_desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	buffer_desc.Usage = D3D11_USAGE_DYNAMIC;
+	buffer_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	buffer_desc.ByteWidth = sizeof(MaterialStruct);
 
 	D3D11_SUBRESOURCE_DATA buffer_data{};
 	buffer_data.pSysMem = matStruct;
@@ -392,9 +464,9 @@ const void Panel3D::mCreateMaterialBuffer(
 const void Panel3D::CreateTexture(std::wstring texturePath)
 {
 	if (FAILED(CreateDDSTextureFromFile(
-		this->mDirect3D.GetDevice(), 
-		texturePath.c_str(), 
-		nullptr, 
+		this->mDirect3D.GetDevice(),
+		texturePath.c_str(),
+		nullptr,
 		this->mpMeshObjects.back()->rGetTextureView())))
 	{
 		MessageBoxA(NULL, "Error loading texture.", NULL, MB_OK);
@@ -406,7 +478,7 @@ const void Panel3D::UpdateMatrixBuffer(std::string name)
 {
 	// Getting the mesh object of the given name.
 	MeshObject *mesh_object = this->rGetMeshObject(name);
-	
+
 	if (mesh_object)
 	{
 		// Getting the constant buffer and model matrix from that mesh object.
@@ -429,7 +501,7 @@ const void Panel3D::UpdateMatrixBuffer(std::string name)
 }
 
 const void Panel3D::UpdateMatrixBuffer(
-	XMMATRIX * matrix, 
+	XMMATRIX * matrix,
 	ID3D11Buffer ** buffer)
 {
 	if (matrix && *buffer)
@@ -509,9 +581,56 @@ void Panel3D::Update(Button * attribute)
 	this->mpCamera->Update(attribute);
 }
 
-const Camera * Panel3D::GetActiveCamera()
+Camera * Panel3D::GetActiveCamera()
 {
 	return this->mpCamera;
+}
+
+void Panel3D::BindTextureToBitmap(ID3D11Texture2D * texture)
+{
+	IDXGISurface *surface;
+	ID2D1Bitmap1 *bitmap;
+
+	texture->QueryInterface(&surface);
+
+	this->mDirect2D->GetpContext()->CreateBitmapFromDxgiSurface(
+		surface,
+		nullptr,
+		&bitmap
+	);
+
+	this->mDirect2D->GetpContext()->SetTarget(bitmap);
+	bitmap->Release();
+	surface->Release();
+}
+
+void Panel3D::DrawBitmapToTexture(
+	ID2D1Bitmap *bitmap,
+	float startX,
+	float startY,
+	float widthOfTex,
+	float heightOfTex)
+{
+	this->mDirect2D->GetpContext()->BeginDraw();
+	this->mDirect2D->GetpContext()->DrawBitmap(
+		bitmap,
+		D2D1::RectF(startX, startY, widthOfTex, heightOfTex),
+		1.0f,
+		D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,
+		D2D1::RectF(
+			0,
+			0,
+			bitmap->GetSize().width,
+			bitmap->GetSize().height)
+	);
+
+	this->mDirect2D->GetpContext()->EndDraw();
+
+}
+
+MovableCameraComponent * Panel3D::GetMovableComponent()
+{
+	return this->mpMovableCameraComponent;
 }
 
 const void Panel3D::Update()
@@ -537,7 +656,7 @@ const void Panel3D::Update()
 
 	if (this->IsMouseInsidePanel())
 	{
-		
+
 		if (this->mMovableCamera)
 		{
 			show_cursor = this->mpMovableCameraComponent->Update();
@@ -579,10 +698,11 @@ const void Panel3D::Draw()
 	UINT offset = 0;
 
 	// For readability.
+	ID3D11PixelShader *pixel_shader = nullptr;
 	ID3D11Buffer* vertex_buffer		= nullptr;
 	ID3D11Buffer* index_buffer		= nullptr;
-	ID3D11Buffer* matrix_buffer	= nullptr;
-	ID3D11Buffer* material_buffer = nullptr;
+	ID3D11Buffer* matrix_buffer		= nullptr;
+	ID3D11Buffer* material_buffer	= nullptr;
 	UINT numIndices = 0;
 	
 	this->mDirect3D.GetContext()->VSSetConstantBuffers(
@@ -601,7 +721,16 @@ const void Panel3D::Draw()
 	// and draws them one by one.
 	for (int i = 0; i < (int)this->mpMeshObjects.size(); i++)
 	{
-
+		// ___ SET PIXEL SHADER ___
+		ID3D11PixelShader* temp = this->mpPixelShaders[
+			this->mpMeshObjects[i]->GetPixelShaderID()
+		];
+		if (pixel_shader != temp)
+		{
+			pixel_shader = temp;
+			this->mDirect3D.GetContext()->PSSetShader(pixel_shader, nullptr, 0);
+		}
+		// ___ END ___
 
 		matrix_buffer = *this->mpMeshObjects[i]->rGetMatrixBuffer();
 		this->mDirect3D.GetContext()->PSSetShaderResources(
@@ -617,8 +746,8 @@ const void Panel3D::Draw()
 
 		for (int j = 0; j < this->mpMeshObjects[i]->GetNumberOfIndexBuffers(); j++)
 		{
-			index_buffer	= *this->mpMeshObjects[i]->pGetIndexBuffer(j);
-			vertex_buffer	= *this->mpMeshObjects[i]->pGetVertexBuffer(j);
+			index_buffer = *this->mpMeshObjects[i]->pGetIndexBuffer(j);
+			vertex_buffer = *this->mpMeshObjects[i]->pGetVertexBuffer(j);
 			material_buffer = *this->mpMeshObjects[i]->rGetMaterialBuffer(
 				this->mpMeshObjects[i]->GetMaterialIndexForIndexBuffer(j));
 
@@ -630,7 +759,7 @@ const void Panel3D::Draw()
 				&stride,		// Vertex size.
 				&offset);		// Offset.	
 
-			// Setting the index buffer to the input assembler.
+								// Setting the index buffer to the input assembler.
 			this->mDirect3D.GetContext()->IASetIndexBuffer(
 				index_buffer,			// Index buffer.
 				DXGI_FORMAT_R32_UINT,	// Format.
@@ -640,11 +769,16 @@ const void Panel3D::Draw()
 				0, 1, this->mpMeshObjects[i]->rGetEventBuffer(j)
 			);
 
+
 			// Setting the material buffer to the pixel shader.
 			this->mDirect3D.GetContext()->PSSetConstantBuffers(
 				1,
 				1,
 				&material_buffer
+			);
+
+			this->mDirect3D.GetContext()->PSSetConstantBuffers(
+				2, 1, this->mpMeshObjects[i]->rGetHoverBuffer(j)
 			);
 
 
@@ -662,11 +796,12 @@ const void Panel3D::Draw()
 	this->mActions.Draw();
 
 	this->mDirect3D.GetSwapChain()->Present(1, 0);
+
 }
 
 MeshObject* Panel3D::rGetMeshObject(std::string name)
 {
-	
+
 	for (int i = 0; i < (int)this->mpMeshObjects.size(); i++)
 	{
 		if (name == this->mpMeshObjects[i]->GetName())

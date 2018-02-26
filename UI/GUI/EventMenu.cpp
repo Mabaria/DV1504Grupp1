@@ -80,8 +80,8 @@ bool EventMenu::OpenAt(Room *pRoom)
 
 	this->mpPanel->SetLeft(posX);
 	this->mpPanel->SetTop(posY);
-	this->mpPanel->Show();
 	this->mpPanel->UpdateWindowPos();
+	this->mpPanel->Show();
 
 	this->mVisible = true;
 
@@ -121,7 +121,7 @@ bool EventMenu::Update()
 	this->mpPanel->Update();
 	if (Mouse::IsButtonPressed(Buttons::Left)
 		&& !this->mDraggingWindow
-		&& !mButtonFocus
+		&& !this->mButtonFocus
 		&& this->mpPanel->IsMouseInsidePanel()
 		&& !this->mpPanel->GetButtonOcclude())
 	{
@@ -137,7 +137,6 @@ bool EventMenu::Update()
 
 	if (this->mDraggingWindow)
 	{
-		std::cout << this->mDragX << ", " << this->mDragY << std::endl;
 		int left = Mouse::GetExactX() - this->mDragX;
 		if (left + this->mMenuWidth > this->mParentPanelWidth)
 			left = this->mParentPanelWidth - this->mMenuWidth;

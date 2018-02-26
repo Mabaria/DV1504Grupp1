@@ -7,20 +7,20 @@
 #include <vector>
 #include "TextBox.h"
 #include "NotificationList.h"
-struct BitmapInfo
-{
-	ID2D1Bitmap* bitmap = nullptr;
-	std::string name = "";
-};
+//struct BitmapInfo
+//{
+//	ID2D1Bitmap* bitmap = nullptr;
+//	std::string name = "";
+//};
 class Panel2D : public Panel
 {
 public:
 	Panel2D(
-		int width, 
-		int height, 
-		int top, 
-		int left, 
-		HWND handle, 
+		int width,
+		int height,
+		int top,
+		int left,
+		HWND handle,
 		LPCTSTR title);
 	~Panel2D();
 
@@ -43,16 +43,15 @@ public:
 
 	Button* GetButtonByName(std::string name);
 	Button* GetButtonByIndex(unsigned int index);
-	ID2D1Bitmap* GetBitmapByName(std::string bitmapName);
-	void LoadImageToBitmap(std::string imageFilePath, std::string bitmapName);
+
 
 
 	// Text box stuff.
 	void AddTextbox(
-		int width, 
-		int height, 
-		int top, 
-		int left, 
+		int width,
+		int height,
+		int top,
+		int left,
 		std::string text,
 		std::string name);
 
@@ -61,7 +60,7 @@ public:
 
 	// Notification object/list stuff.
 	void SetNotificationList(
-		int posX, 
+		int posX,
 		int posY,
 		int titleFontSize,
 		int objectFontSize);
@@ -71,17 +70,18 @@ public:
 	bool GetButtonOcclude();
 
 	void ScrollActiveLog();
+	void Scroll();
 	void Update();
 	void Draw();
 
 private:
-	Direct2D *mDirect2D;
-	
+
+
 	void mUpdateButtons();
 
 	std::vector<Button*> mButtonVector;
 	std::vector<std::string> mButtonNames;
-	std::vector<BitmapInfo> mBitmapVector;
+
 
 	std::vector<TextBox*> mTextBoxVector;
 	std::vector<std::string> mTextBoxNames;
@@ -90,4 +90,6 @@ private:
 	bool mNotificationListIsActive;
 
 	bool mButtonOccludes;
+
+
 };

@@ -163,3 +163,58 @@ std::string Room::WriteString() const
 
 	return print;
 }
+
+void Room::InitRoomInfo(XMMATRIX matrix)
+{
+	// Takes the mean distance from origin for each of the axes.
+	this->mRoomInfo.centerPosition.x = 
+		(this->mBoundingBox.x.max + this->mBoundingBox.x.min) / 2.0f;
+	this->mRoomInfo.centerPosition.y = 
+		(this->mBoundingBox.y.max + this->mBoundingBox.y.min) / 2.0f;
+	this->mRoomInfo.centerPosition.z = 
+		(this->mBoundingBox.z.max + this->mBoundingBox.z.min) / 2.0f;
+	
+	// Applying the deck matrix to the center position
+	// to get it in world space.
+	XMVECTOR center_pos = XMLoadFloat3(&this->mRoomInfo.centerPosition);
+	center_pos = XMVector3Transform(center_pos, matrix);
+	XMStoreFloat3(&this->mRoomInfo.centerPosition, center_pos);
+
+	// Takes the difference between the max and min points for each
+	// of the axes (unsigned).
+	this->mRoomInfo.size.x = std::abs(
+		this->mBoundingBox.x.max - this->mBoundingBox.x.min);
+	this->mRoomInfo.size.y = std::abs(					   
+		this->mBoundingBox.y.max - this->mBoundingBox.y.min);
+	this->mRoomInfo.size.z = std::abs(					   
+		this->mBoundingBox.z.max - this->mBoundingBox.z.min);
+	
+	// For distance to corner.
+	float x_dist = this->mBoundingBox.x.max - this->mRoomInfo.centerPosition.x;
+	float y_dist = this->mBoundingBox.y.max - this->mRoomInfo.centerPosition.y;
+	float z_dist = this->mBoundingBox.z.max - this->mRoomInfo.centerPosition.z;
+	
+	// Vector length calculation.
+	this->mRoomInfo.distanceToCorner = 
+		sqrt(pow(x_dist, 2) + pow(y_dist, 2) + pow(z_dist, 2));
+}
+
+const RoomInfo Room::GetRoomInfo() const
+{
+	return this->mRoomInfo;
+}
+
+const XMFLOAT3 Room::GetRoomCenter() const
+{
+	return this->mRoomInfo.centerPosition;
+}
+
+const float Room::GetDistanceToCorner() const
+{
+	return this->mRoomInfo.distanceToCorner;
+}
+
+const XMFLOAT3 Room::GetRoomSize() const
+{
+	return this->mRoomInfo.size;
+}

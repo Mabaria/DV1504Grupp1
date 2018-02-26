@@ -33,7 +33,7 @@ VS_OUT main( VS_IN input )
 	VS_OUT output;
 	matrix vm		= mul(view, model);
 	matrix mvp		= mul(proj, vm);
-	output.worldPos = mul(model, float4(input.pos, 1.0f));
+	output.worldPos = mul(model, float4(input.pos, 1.0f)).xyz;
 	output.pos		= mul(mvp, float4(input.pos, 1.0f));
 	output.nor		= input.nor;
 	output.tex		= input.tex;

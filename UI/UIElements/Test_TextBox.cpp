@@ -3,8 +3,8 @@
 void Test_Text()
 {
 	Window window(L"Text_Test", 1280, 720);
-	Direct2D D2Test(
-		window.GetWindow(),
+	Direct2D D2Test;
+	D2Test.CreateRenderTarget(window.GetWindow(),
 		window.GetClientSize().width,
 		window.GetClientSize().height);
 	Button butt(&D2Test,"",0,0,0,0);

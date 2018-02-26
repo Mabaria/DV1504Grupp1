@@ -6,6 +6,7 @@
 #include "../../../GraphicsEngine/Quad.h"
 #include "../../../IO/Picking.h"
 #include "../../../UI/GUI/EventMenu.h"
+#include "../../../UI/UIElements/InfoPanel.h"
 #include "../../../IO/Keyboard.h"
 
 class System : public Observer<Room>
@@ -26,6 +27,8 @@ private:
 	void mDraw();
 	void mHandleInput();
 
+	void mUpdateHover(std::string name, int index, bool activate);
+
 	void mUpdateEvents(Room *room);
 
 	void mSetupPanels();
@@ -41,12 +44,14 @@ private:
 
 	std::vector<Mesh*> mFloors;
 	std::vector<Mesh*> mBounds;
-	std::vector<Quad*> mTexts;
 
 	Camera *mpTopViewCameraPan;
 	Camera *mpTopViewCamera;
 	Camera *mpSideViewCamera;
 	Window *mpWindow;
+
+	// User guide.
+	InfoPanel mpInfoPanel;
 
 	EventLog mEventLog;
 	Boat mBoat;

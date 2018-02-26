@@ -66,7 +66,7 @@ bool MovableCameraComponent::Update()
 	// --- If input is detected update camera based on the strategy ---
 
 	// Zoom
-	float zoom = Mouse::GetScroll();
+	int zoom = (int)Mouse::GetScroll();
 	if (zoom)
 		this->mpStrategy->Zoom(zoom);
 
@@ -80,6 +80,8 @@ bool MovableCameraComponent::Update()
 		flag = true;
 	}
 	
+	if(this->mpStrategy->Animate())
+		this->mpStrategy->AnimateToNewPosition();
 
 	return !flag;
 }
@@ -87,6 +89,12 @@ bool MovableCameraComponent::Update()
 CAMERA_MOVEMENT MovableCameraComponent::GetMovement()
 {
 	return this->mMovement;
+}
+
+void MovableCameraComponent::FocusCameraOnRoom(Room * pRoom, bool use_animation)
+{
+	if (this->mpStrategy)
+		this->mpStrategy->FocusRoom(pRoom, use_animation);
 }
 
 bool MovableCameraComponent::mUpdateInput()
@@ -98,8 +106,8 @@ bool MovableCameraComponent::mUpdateInput()
 	{
 		POINT mouse_pos;
 		GetCursorPos(&mouse_pos);
-		this->mMouseOrigin.x = (float)mouse_pos.x;
-		this->mMouseOrigin.y = (float)mouse_pos.y;
+		this->mMouseOrigin.x = mouse_pos.x;
+		this->mMouseOrigin.y = mouse_pos.y;
 	}
 
 	// Based on origin get mouse movement

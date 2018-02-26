@@ -11,10 +11,11 @@ public:
 	virtual bool Initialize(Camera& rCamera);
 	virtual void Zoom(int zoom);
 	virtual void Move(Position move);
+	virtual void FocusRoom(Room *pRoom, bool animate);
 	virtual void HandleChangeInCamera();
+	virtual void AnimateToNewPosition();
 
 private:
-	XMVECTOR mStartPosition;
 	float mMinX, 
 		mMinZ, 
 		mMaxX, 

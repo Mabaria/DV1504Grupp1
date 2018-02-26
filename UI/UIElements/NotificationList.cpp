@@ -34,7 +34,7 @@ NotificationList::NotificationList(
 		(int)this->mTitle.GetTextBoxSize().bottom);
 
 	this->mTitle.SetFontSize(titleFontSize);
-	this->mTitle.SetFontWeight(DWRITE_FONT_WEIGHT_ULTRA_BLACK);
+	this->mTitle.SetFontWeight(DWRITE_FONT_WEIGHT_NORMAL);
 	this->mTitle.SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
 }
 
@@ -42,7 +42,8 @@ NotificationList::~NotificationList()
 {
 	for (int i = 0; i < (int)this->mObjects.size(); i++)
 	{
-		delete this->mObjects[i];
+		if(this->mObjects[i])
+			delete this->mObjects[i];
 	}
 }
 
@@ -196,6 +197,7 @@ void NotificationList::Update()
 	for (int i = 0; i < (int)this->mObjects.size(); i++)
 	{
 		this->mObjects[i]->Update();
+
 	}
 
 	// List top and list bottom
@@ -231,6 +233,6 @@ void NotificationList::Draw()
 			this->mObjects[i]->Draw();
 		}
 	}
-	this->mTitleFrame.DrawFilledRect(0.9f, 0.9f, 0.9f, 1.0f);
+	this->mTitleFrame.DrawFilledRect(0.10f, 0.27f, 0.40f, 1.0f);
 	this->mTitle.DrawTextBox();
 }
