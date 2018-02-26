@@ -159,7 +159,9 @@ void System::Update(Room * pickedRoom)
 	// If a notification object is clicked in the active log panel.
 	else if (this->mpActiveLogPanel->IsMouseInsidePanel())
 	{
-		//this->mpTopViewPanel->GetMovableComponent()->FocusCameraOnRoom(pickedRoom, true);
+		this->mpTopViewPanel->
+			GetMovableComponent()->
+			FocusCameraOnRoom(pickedRoom, true);
 	}
 }
 
