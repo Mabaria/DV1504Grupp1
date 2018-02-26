@@ -27,6 +27,8 @@ private:
 	void mDraw();
 	void mHandleInput();
 
+	void mUpdateHover(std::string name, int index, bool activate);
+
 	void mUpdateEvents(Room *room);
 
 	void mSetupPanels();
@@ -42,7 +44,6 @@ private:
 
 	std::vector<Mesh*> mFloors;
 	std::vector<Mesh*> mBounds;
-	std::vector<Quad*> mTexts;
 
 	Camera *mpTopViewCameraPan;
 	Camera *mpTopViewCamera;
