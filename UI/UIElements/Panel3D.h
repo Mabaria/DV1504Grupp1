@@ -10,6 +10,13 @@
 #include "../../GraphicsEngine/Camera/MovableCameraComponent.h"
 #include "../../GraphicsEngine/DX/Direct2D.h"
 
+enum PANEL3D_SHADER_TYPE
+{
+	PANEL3D_SHADER_BOAT = 1,
+	PANEL3D_SHADER_TEXT = 2,
+	PANEL3D_SHADER_EVENT = 3
+};
+
 class Panel3D : public Panel, public Observer<Button>
 {
 public:
