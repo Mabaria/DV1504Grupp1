@@ -195,6 +195,10 @@ void System::mHandleInput()
 			if (picked_room)
 			{
 				this->mpMenuPanel->OpenAt(picked_room);
+				this->mpTopViewPanel->GetActiveCamera()->MoveCamera(
+					XMLoadFloat3(&picked_room->GetRoomCenter()) - 
+					this->mpTopViewPanel->GetActiveCamera()->GetPosition(), 1.0f);
+				
 			}
 		}
 	}
