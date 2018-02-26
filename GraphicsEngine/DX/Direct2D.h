@@ -15,9 +15,6 @@
 class Direct2D
 {
 public:
-	Direct2D(HWND window,
-		unsigned int width,
-		unsigned int height);
 	Direct2D();
 	~Direct2D();
 	void CreateRenderTarget(HWND window, unsigned int width, unsigned int height);
@@ -29,6 +26,8 @@ public:
 	ID2D1HwndRenderTarget *GetpRenderTarget();
 	IDWriteFactory *GetpTextFactory();
 	const DWRITE_TRIMMING GetTrimmer();
+
+	ID2D1DeviceContext* GetpContext();
 	
 	CustomTextRenderer *GetpTextRenderer();
 
@@ -48,6 +47,10 @@ private:
 
 	IDWriteFactory *mpTextFactory;
 	DWRITE_TRIMMING mTrimmer;
+
+	ID2D1Factory1 *mpFactory1;
+	ID2D1Device *mpDevice;
+	ID2D1DeviceContext *mpContext;
 
 
 	CustomTextRenderer* mpTextRenderer;

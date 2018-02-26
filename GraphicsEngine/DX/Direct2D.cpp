@@ -1,26 +1,5 @@
 #include "Direct2D.h"
 
-Direct2D::Direct2D(HWND window,
-	unsigned int width,
-	unsigned int height)
-{
-	this->mpFactory = nullptr;
-	this->mpRenderTarget = nullptr;
-	this->mpWicFactory = nullptr;
-	this->mpConverter = nullptr;
-	this->mpDecoder = nullptr;
-	this->mpBitmapSrc = nullptr;
-	this->mpTextFactory = nullptr;
-	this->mpFactory1 = nullptr;
-	this->mpDevice = nullptr;
-	this->mpContext = nullptr;
-	this->mTrimmer = {};
-	this->mTrimmer.granularity = DWRITE_TRIMMING_GRANULARITY_CHARACTER;
-	this->mInit();
-	this->CreateRenderTarget(window, width, height);	
-	this->mCreateTextRenderer(); // Render target needs to exist
-}
-
 Direct2D::Direct2D()
 {
 	this->mpFactory = nullptr;
@@ -91,6 +70,8 @@ void Direct2D::CreateRenderTarget(
 		&this->mpRenderTarget);
 	this->mpRenderTarget->SetAntialiasMode
 	(D2D1_ANTIALIAS_MODE_PER_PRIMITIVE);
+
+	this->mCreateTextRenderer(); // Render target needs to exist
 }
 
 IWICFormatConverter *Direct2D::GetpFormatConverter()
@@ -131,6 +112,11 @@ IDWriteFactory *Direct2D::GetpTextFactory()
 const DWRITE_TRIMMING Direct2D::GetTrimmer()
 {
 	return this->mTrimmer;
+}
+
+ID2D1DeviceContext * Direct2D::GetpContext()
+{
+	return this->mpContext;
 }
 
 

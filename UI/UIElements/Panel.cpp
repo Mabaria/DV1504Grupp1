@@ -48,7 +48,8 @@ Panel::~Panel()
 			this->mBitmapVector[i].bitmap = nullptr;
 		}
 	}
-
+	this->mBitmapVector.clear();
+	delete this->mDirect2D;
 }
 
 const void Panel::SetWidth(int width)

@@ -5,7 +5,8 @@
 void Test_Button()
 {
 	Window window(L"Button_Test", 1280, 720);
-	Direct2D D2Test(
+	Direct2D D2Test;
+	D2Test.CreateRenderTarget(
 		window.GetWindow(),
 		window.GetClientSize().width,
 		window.GetClientSize().height);

@@ -11,8 +11,7 @@ Panel2D::Panel2D(
 	LPCTSTR title)
 	:Panel(width, height, top, left, handle, title)
 {
-	this->mDirect2D = new Direct2D(mPanelWindow, width, height);
-
+	this->mDirect2D->CreateRenderTarget(this->mPanelWindow, width, height);
 	// Assumes the panel does not have a notification list.
 	this->mNotificationList = nullptr;
 	this->mNotificationListIsActive = false;
