@@ -534,7 +534,7 @@ std::string Boat::CorrectName(std::string name)
 {
 	std::string newName = "";
 
-	for (int i = 0; i < name.size(); i++)
+	for (int i = 0; i < (int)name.size(); i++)
 	{
 		int c = name[i];
 		

@@ -68,6 +68,7 @@ public:
 	bool AddNotification(Room *room, LogEvent *event);
 	bool RemoveNotification(Room *room, Event::Type type);
 
+	bool GetButtonOcclude();
 
 	void ScrollActiveLog();
 	void Update();
@@ -88,6 +89,5 @@ private:
 	NotificationList *mNotificationList;
 	bool mNotificationListIsActive;
 
-
-	
+	bool mButtonOccludes;
 };
