@@ -74,7 +74,7 @@ public:
 	// Disk specific
 	std::string WriteString() const;
 
-	void InitRoomInfo();
+	void InitRoomInfo(XMMATRIX matrix);
 
 	// Returns a RoomInfo struct containing center position,
 	// size and distance to corner.
