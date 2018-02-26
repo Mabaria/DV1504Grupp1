@@ -1,30 +1,40 @@
 #include "NotificationList.h"
 
-NotificationList::NotificationList(Direct2D *direct2d, int posX, int posY)
-	:mTitle(direct2d, 0, 0, 0, 0), mTitleFrame(direct2d, "", 0, 0, 0, 0)
+NotificationList::NotificationList(
+	Direct2D *direct2d, 
+	int posX, 
+	int posY,
+	int titleFontSize,
+	int objectFontSize)
+	:mTitle(direct2d, 0, 0, 0, 0), 
+	mTitleFrame(direct2d, "", 0, 0, 0, 0)
 {
-	this->mPosX = posX;
-	this->mPosY = posY;
-	this->mListTop		= this->mPosY;
-	this->mListBottom	= this->mPosY;
-	this->mpRenderTarget = direct2d->GetpRenderTarget();
-	this->mSpace = 4;
+	this->mPosX				= posX;
+	this->mPosY				= posY;
+	this->mListTop			= this->mPosY;
+	this->mListBottom		= this->mPosY;
+	this->mpRenderTarget	= direct2d->GetpRenderTarget();
+	this->mSpace			= 4;
+	this->mObjectFontSize	= objectFontSize;
+
+
 	this->mTitle.SetTextBoxSize(
 		this->mPosX, 
 		this->mPosY, 
 		(int)direct2d->GetpRenderTarget()->GetSize().width,
-		(int)direct2d->GetpRenderTarget()->GetSize().height / 10);
+		titleFontSize * 8 / 3); // 2 * 4 / 3 (two lines) + a little extra.
 
 	this->mDefaultTitle = "Aktiv Logg\n Antal: ";
 	this->mTitle.SetText(this->mDefaultTitle + "0");
+
 	this->mTitleFrame.SetButtonSize(
 		0,
 		0,
 		(int)this->mTitle.GetTextBoxSize().right,
 		(int)this->mTitle.GetTextBoxSize().bottom);
-	this->mTitle.SetFontSize(40);
+
+	this->mTitle.SetFontSize(titleFontSize);
 	this->mTitle.SetFontWeight(DWRITE_FONT_WEIGHT_ULTRA_BLACK);
-	this->mTitle.SetFontName(L"times new roman");
 	this->mTitle.SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
 }
 
@@ -39,7 +49,8 @@ NotificationList::~NotificationList()
 bool NotificationList::AddNotification(
 	Direct2D * direct2d, 
 	Room * room, 
-	LogEvent * event)
+	LogEvent * event,
+	ID2D1Bitmap * bitmap)
 {
 	bool new_event = true;
 	for (int i = 0; i < (int)this->mObjects.size() && new_event; i++)
@@ -59,17 +70,25 @@ bool NotificationList::AddNotification(
 			room,
 			event,
 			direct2d,
-			(int)this->mObjects.size() + 1));
+			(int)this->mObjects.size() + 1,
+			this->mObjectFontSize,
+			bitmap));
 
-		// Moves the object 2 pixels in x for looks, and in y based on the
-		// number of objects in the list plus an offset for looks plus the
-		// height of the title text box.
-		this->mObjects.back()->Move(
-			2,
-			((int)this->mObjects.size() - 1)
-			* (this->mObjects[0]->GetHeight() + this->mSpace)
-			+ (int)this->mTitle.GetTextBoxSize().bottom);
+		this->mObjects.back()->Move(2, this->mSpace);
 
+		if (this->mObjects.size() > 1)
+		{
+			this->mObjects.back()->Move(
+				0,
+				this->mObjects[this->mObjects.size() - 2]->GetBottom());
+		}
+		else
+		{
+			this->mObjects.back()->Move(
+				0,
+				(int)this->mTitle.GetTextBoxSize().bottom);
+		}
+		
 		// Updates the number of events in the title.
 		this->mTitle.SetText(
 			this->mDefaultTitle + std::to_string(this->mObjects.size()));

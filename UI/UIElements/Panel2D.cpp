@@ -190,26 +190,56 @@ TextBox * Panel2D::GetTextBoxByIndex(unsigned int index)
 	return to_return;
 }
 
-void Panel2D::SetNotificationList(int posX, int posY)
+void Panel2D::SetNotificationList(
+	int posX, 
+	int posY, 
+	int titleFontSize, 
+	int objectFontSize)
 {
 	this->mNotificationList = new NotificationList(
 		this->mDirect2D, 
 		posX, 
-		posY);
+		posY,
+		titleFontSize,
+		objectFontSize);
 	this->mNotificationListIsActive = true;
 }
 
 bool Panel2D::AddNotification(Room * room, LogEvent * event)
 {
+	ID2D1Bitmap *bitmap = nullptr;
+	switch (event->GetType())
+	{
+	case Event::Fire:
+		bitmap = this->GetBitmapByName("Fire");
+		break;
+	case Event::Water:
+		bitmap = this->GetBitmapByName("Water");
+		break;
+	case Event::Gas:
+		bitmap = this->GetBitmapByName("Gas");
+		break;
+	case Event::Injury:
+		bitmap = this->GetBitmapByName("Injury");
+		break;
+	default:
+		break;
+	}
 	return this->mNotificationList->AddNotification(
 		this->mDirect2D, 
 		room, 
-		event);
+		event,
+		bitmap);
 }
 
 bool Panel2D::RemoveNotification(Room * room, Event::Type type)
 {
 	return this->mNotificationList->RemoveNotification(room, type);
+}
+
+bool Panel2D::GetButtonOcclude()
+{
+	return this->mButtonOccludes;
 }
 
 void Panel2D::ScrollActiveLog()
@@ -228,7 +258,6 @@ void Panel2D::Update()
 {
 	this->UpdateWindowSize();
 	this->mUpdateButtons();
-	this->mUpdateTextBoxes();
 
 	// Updating the notification list only if
 	// the panel has one.
@@ -279,6 +308,7 @@ void Panel2D::mUpdateButtons()
 {
 	 // For notification list.
 	Button *button = nullptr;
+	this->mButtonOccludes = false;
 	if (this->IsMouseInsidePanel()) /* Check if mouse is inside panel,
 									 if not there is no chance of any buttons
 									 being pressed. */
@@ -296,11 +326,13 @@ void Panel2D::mUpdateButtons()
 				Mouse::GetPositionPercentage().y >
 				(*it)->GetBoundingBoxPercentage().top) /* Classic bounds check */
 			{
-				if (Mouse::IsButtonDown(Buttons::Left))
+				this->mButtonOccludes = true;
+				if (Mouse::IsButtonPressed(Buttons::Left))
 				{
 					(*it)->SetButtonStatus(BUTTON_STATE::CLICKED);
 				}
-				else
+				else if(!Mouse::IsButtonDown(Buttons::Left) ||
+					(*it)->GetButtState() != BUTTON_STATE::CLICKED)
 					(*it)->SetButtonStatus(BUTTON_STATE::HOVER);
 			}
 			else
@@ -330,11 +362,13 @@ void Panel2D::mUpdateButtons()
 					button->GetBoundingBoxPercentage().top)
 					/* Classic bounds check */
 				{
-					if (Mouse::IsButtonDown(Buttons::Left))
+					this->mButtonOccludes = true;
+					if (Mouse::IsButtonPressed(Buttons::Left))
 					{
 						button->SetRectStatus(BUTTON_STATE::CLICKED);
 					}
-					else
+					else if (!Mouse::IsButtonDown(Buttons::Left) ||
+						button->GetButtState() != BUTTON_STATE::CLICKED)
 						button->SetRectStatus(BUTTON_STATE::HOVER);
 				}
 				else
@@ -366,11 +400,6 @@ void Panel2D::mUpdateButtons()
 			}
 		}
 	}
-}
-
-void Panel2D::mUpdateTextBoxes()
-{
-
 }
 
 void Panel2D::LoadImageToBitmap(
