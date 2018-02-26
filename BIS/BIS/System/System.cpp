@@ -121,8 +121,8 @@ void System::BuildGraphicalUserInterface(
 
 	this->mpMenuPanel = new EventMenu();
 	this->mpMenuPanel->Init(
-		(float)this->mpTopViewPanel->GetWidth(), 
-		(float)this->mpTopViewPanel->GetHeight(), 
+		this->mpTopViewPanel->GetWidth(), 
+		this->mpTopViewPanel->GetHeight(), 
 		&this->mEventLog, 
 		windowName.c_str(), 
 		this->mpTopViewPanel->GetPanelWindowHandle());
@@ -189,6 +189,10 @@ void System::mHandleInput()
 			if (Mouse::IsButtonPressed(Buttons::Left))
 			{
 				this->mpMenuPanel->OpenAt(picked_room);
+				this->mpTopViewPanel->GetActiveCamera()->MoveCamera(
+					XMLoadFloat3(&picked_room->GetRoomCenter()) - 
+					this->mpTopViewPanel->GetActiveCamera()->GetPosition(), 1.0f);
+				
 			}
 
 			// ___ HOVER EFFECT ___

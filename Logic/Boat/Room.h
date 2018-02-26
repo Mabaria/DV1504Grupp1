@@ -5,8 +5,9 @@
 #include "../Eventlog/EventLog.h"
 #include "../Event/Event.h"
 #include "Sensor.h"
+#include <DirectXMath.h>
 
-//#include "Boat.h"
+using namespace DirectX;
 
 struct RoomDesc
 {
@@ -21,6 +22,12 @@ struct RoomDesc
 	EventLog *pEventLog;
 };
 
+struct RoomInfo
+{
+	XMFLOAT3 centerPosition;
+	XMFLOAT3 size;
+	float distanceToCorner;
+};
 
 class Room
 {
@@ -67,6 +74,23 @@ public:
 	// Disk specific
 	std::string WriteString() const;
 
+	void InitRoomInfo(XMMATRIX matrix);
+
+	// Returns a RoomInfo struct containing center position,
+	// size and distance to corner.
+	const RoomInfo GetRoomInfo() const;
+
+	// Returns the room center position.
+	const XMFLOAT3 GetRoomCenter() const;
+
+	// Returns the distance from the center position
+	// to the corner of the bounding box.
+	const float GetDistanceToCorner() const;
+
+	// Returns a vector containing the size of the 
+	// bounding box in all directions.
+	const XMFLOAT3 GetRoomSize() const;
+
 private:
 
 	// Room specific
@@ -81,4 +105,7 @@ private:
 
 	// Sensor specific
 	Sensor mSensor;
+
+	// Room info for camera purposes.
+	RoomInfo mRoomInfo;
 };
