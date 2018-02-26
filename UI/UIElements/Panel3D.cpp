@@ -656,6 +656,8 @@ const void Panel3D::Draw()
 				offset);	// Base vertex location.
 		}
 	}
+
+	// Clear the depth buffer and draw the actions
 	this->mDirect3D.ClearDepth();
 	this->mActions.Draw();
 

@@ -6,10 +6,22 @@
 Actions::Actions()
 {
 	this->pDirect3D = nullptr;
+	this->pCamera = nullptr;
+	this->pMovableCamera = nullptr;
+
 	this->mpVertexShader = nullptr;
 	this->mpGeometryShader = nullptr;
 	this->mpPixelShader = nullptr;
 	this->mpInputLayout = nullptr;
+	this->mpIconResource = nullptr;
+	this->mpNumberResource = nullptr;
+	this->mpSamplerState = nullptr;
+	this->mpGSBuffer = nullptr;
+
+	this->mVertexSize = 0;
+	this->mpVertexArray = nullptr;
+	this->mpVertexPtrArray = nullptr;
+	this->mpVertexBuffer = nullptr;
 	this->mVertexArrayUpdated = false;
 }
 
@@ -35,51 +47,91 @@ Actions::~Actions()
 		this->mpInputLayout->Release();
 		this->mpInputLayout = nullptr;
 	}
-	if (this->mpTextureResource)
+	if (this->mpIconResource)
 	{
-		this->mpTextureResource->Release();
-		this->mpTextureResource = nullptr;
+		this->mpIconResource->Release();
+		this->mpIconResource = nullptr;
+	}
+	if (this->mpNumberResource)
+	{
+		this->mpNumberResource->Release();
+		this->mpNumberResource = nullptr;
 	}
 	if (this->mpSamplerState)
 	{
 		this->mpSamplerState->Release();
 		this->mpSamplerState = nullptr;
 	}
-	if (this->mpVertexBuffer)
-	{
-		this->mpVertexBuffer->Release();
-		this->mpVertexBuffer = nullptr;
-	}
 	if (this->mpGSBuffer)
 	{
 		this->mpGSBuffer->Release();
 		this->mpGSBuffer = nullptr;
+	}
+	if (this->mpVertexBuffer)
+	{
+		this->mpVertexBuffer->Release();
+		this->mpVertexBuffer = nullptr;
 	}
 	if (this->mpVertexArray)
 	{
 		delete[] this->mpVertexArray;
 		this->mpVertexArray = nullptr;
 	}
+	if (this->mpVertexPtrArray)
+	{
+		for (int i = 0; i < this->mVertexSize; i++)
+			delete this->mpVertexPtrArray[i];
+		delete[] this->mpVertexPtrArray;
+		this->mpVertexPtrArray = nullptr;
+	}
 }
 
-void Actions::Init(D3D11 *pDirect3D)
+bool Actions::Init(D3D11 *pDirect3D)
 {
+	// A Direct3D pointer used in the 3D panel is necessary
 	this->pDirect3D = pDirect3D;
 
-	//Todo: FAIL HANDLING
-	this->CompileShadersAndLayout();
-	this->CreateResourceAndSampler();
-	this->CreateVertexBuffer();
-	for (int i = 0; i < this->mcMaxEvents; i++)
+	if (!this->CompileShadersAndLayout())
 	{
-		this->AddAction(
-			(float)(rand() % 1000) / 500.f - 1.0f,
-			(float)(rand() % 1000) / 500.f - 1.0f,
-			(rand() % 9) | (rand() % 4) << 4);
+		// Add error message?
+		return false;
 	}
-	//this->AddAction(-0.5f, 0.3f, 1);
-	//this->AddAction(0.0f, -0.7f, 0);
-	//this->AddAction(0.4f, 0.5f, 3);
+	if (!this->CreateResources())
+	{
+		// Add error message?
+		return false;
+	}
+	if (!this->CreateVertexBuffer())
+	{
+		// Add error message?
+		return false;
+	}
+
+	// ------- TEST TEST TEST TEST TEST -------
+	// The following is a test that adds 30 actions.
+	// The "ActionPtr" is stored in a temporary list.
+	// Using the list, delete the first 25 actions.
+	// Something to point out here is that no memory leaks will occur
+	// when "tempList" goes out of scope. The Action class takes care
+	// of this in its destructor.
+
+	ActionPtr *tempList[30];
+	for (int i = 0; i < 30; i++)
+	{
+		uint32_t hello = Icon_Injured_Reported | Rotation_Stationary;
+		tempList[i] = this->AddAction(
+			(float)(rand() % 1000) / 500.f - 1.0f,
+			(float)(rand() % 1000) / 500.f - 1.0f,
+			Icon_Injured_Moved | Rotation_0 | Number_4);
+		// Feel free to experiment with your own combination of flags
+	}
+	for (int i = 0; i < 25; i++)
+	{
+		this->RemoveAction(&tempList[i]);
+	}
+	// ------- END OF TEST -------
+
+	return true;
 }
 
 void Actions::SetCamera(Camera *pCamera)
@@ -92,38 +144,71 @@ void Actions::SetMoveableCamera(MovableCameraComponent *pMovableCamera)
 	this->pMovableCamera = pMovableCamera;
 }
 
-bool Actions::AddAction(float x, float y, uint32_t data)
+Actions::ActionPtr *Actions::AddAction(float x, float y, uint32_t data)
 {
+	// Early exit if it would exceed max events
 	if (this->mVertexSize + 1 >= this->mcMaxEvents)
-		return false;
+		return nullptr;
 
-	this->mpVertexArray[this->mVertexSize++] = {
+	// Fill in vertex info from the input parameters
+	this->mpVertexArray[this->mVertexSize] = {
 		x, 0.0f, y, data
 	};
+	// Create a new Action Pointer with the right index
+	ActionPtr *returnPtr = new ActionPtr(this->mVertexSize);
+	// Store the pointer in an array
+	this->mpVertexPtrArray[this->mVertexSize++] =
+		returnPtr;
 
+	// Tell that the array has been updated and return the pointer
 	this->mVertexArrayUpdated = true;
-	return true;
+	return returnPtr;
+}
+
+void Actions::RemoveAction(ActionPtr **pActionPtr)
+{
+	// If the action is already removed (nullptr), then early exit
+	if ((*pActionPtr) != nullptr)
+	{
+		// Following code takes the last element of the vertex and pointer
+		// array and replaces the requested action. The action pointer will
+		// also be deleted so no loose ends/memory leaks remains.
+
+		this->mpVertexArray[(*pActionPtr)->index] =
+			this->mpVertexArray[--this->mVertexSize];
+		this->mpVertexPtrArray[(*pActionPtr)->index] =
+			this->mpVertexPtrArray[this->mVertexSize];
+		this->mpVertexPtrArray[(*pActionPtr)->index]->index = (*pActionPtr)->index;
+		delete (*pActionPtr);
+		(*pActionPtr) = nullptr;
+		this->mVertexArrayUpdated = true;
+	}
 }
 
 void Actions::Draw()
 {
+	// Upload data from CPU to GPU only if the array is updated
 	if (this->mVertexArrayUpdated)
 	{
 		this->UpdateVertexBuffer();
 		this->mVertexArrayUpdated = false;
 	}
+	// Update data about the camera. Safety-check if, for some reason, the
+	// camera haven't been added.
 	if (this->pCamera != nullptr)
 	{
 		this->UpdateGSBuffer();
 	}
+
+	// Following code sets all necessary resources before the draw call.
 	UINT stride = sizeof(ActionVertex);
 	UINT offset = 0;
 
-	this->pDirect3D->GetContext()->IASetInputLayout(this->mpInputLayout);
 	this->pDirect3D->GetContext()->VSSetShader(
 		this->mpVertexShader,
 		nullptr,
 		0);
+
 	this->pDirect3D->GetContext()->GSSetShader(
 		this->mpGeometryShader,
 		nullptr,
@@ -136,12 +221,12 @@ void Actions::Draw()
 		this->mpPixelShader,
 		nullptr,
 		0);
-
 	this->pDirect3D->GetContext()->PSSetShaderResources(
-		0, 1, &this->mpTextureResource);
+		0, 1, &this->mpIconResource);
+	this->pDirect3D->GetContext()->PSSetShaderResources(
+		1, 1, &this->mpNumberResource);
 
-	//this->pDirect3D->GetContext()->PSSetSamplers(0, 1, &this->mpSamplerState);
-
+	this->pDirect3D->GetContext()->IASetInputLayout(this->mpInputLayout);
 	this->pDirect3D->GetContext()->IASetVertexBuffers(
 		0,
 		1,
@@ -150,12 +235,15 @@ void Actions::Draw()
 		&offset);
 	this->pDirect3D->GetContext()->IASetPrimitiveTopology(
 		D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
-		//D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	// Draw only the amount of vertecies that are active
 	this->pDirect3D->GetContext()->Draw(this->mVertexSize, 0);
 }
 
 bool Actions::CompileShadersAndLayout()
 {
+	// Compiles shaders and input layouts
+
 	D3D11_INPUT_ELEMENT_DESC inputDesc[2] = {
 		{
 			"POSITION",
@@ -188,41 +276,36 @@ bool Actions::CompileShadersAndLayout()
 		&this->mpInputLayout);
 }
 
-bool Actions::CreateResourceAndSampler()
+bool Actions::CreateResources()
 {
+	// Create Shader Resources from files
 	if (FAILED(CreateDDSTextureFromFile(
 		this->pDirect3D->GetDevice(),
 		L"../../Models/Symbols.dds",
 		nullptr,
-		&this->mpTextureResource)))
+		&this->mpIconResource)))
 	{
 		std::cout << "Failed loading image!" << std::endl;
 		return false;
 	}
 
-	//D3D11_SAMPLER_DESC sampler_desc{};
-	//sampler_desc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
-	//sampler_desc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
-	//sampler_desc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
-	//sampler_desc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	if (FAILED(CreateDDSTextureFromFile(
+		this->pDirect3D->GetDevice(),
+		L"../../Models/Numbers.dds",
+		nullptr,
+		&this->mpNumberResource)))
+	{
+		std::cout << "Failed loading image!" << std::endl;
+		return false;
+	}
 
-	//if (FAILED(this->pDirect3D->GetDevice()->CreateSamplerState(
-	//	&sampler_desc,
-	//	&this->mpSamplerState)))
-	//{
-	//	std::cout << "Failed making sampler state!" << std::endl;
-	//	return false;
-	//}
-
-	//XMFLOAT4 floatData;
-	//XMVECTOR cameraPos = pCamera->GetPosition();
-	//DirectX::XMStoreFloat4(&floatData, cameraPos);
-	//std::cout << sizeof(XMFLOAT4) << std::endl;
-
+	// Just zero data if, for some reason, the camera wouldn't be loaded into
+	// this class.
 	CameraData tempData = {
 		{ 0.0f, 0.0f, 0.0f },
 		0 };
 
+	// Create buffer for camera data
 	D3D11_BUFFER_DESC desc = { 0 };
 	desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	desc.ByteWidth = sizeof(CameraData);
@@ -246,10 +329,13 @@ bool Actions::CreateResourceAndSampler()
 
 bool Actions::CreateVertexBuffer()
 {
+	// Initialize vertex data array and vertex pointer array
 	this->mpVertexArray = new ActionVertex[this->mcMaxEvents];
 	memset(this->mpVertexArray, 0, sizeof(ActionVertex)*this->mcMaxEvents);
-	this->mVertexSize = 0;
 
+	this->mpVertexPtrArray = new ActionPtr*[this->mcMaxEvents];
+
+	// Create buffer for the vertecies
 	D3D11_BUFFER_DESC vertex_buffer_desc{};
 	vertex_buffer_desc.Usage = D3D11_USAGE_DYNAMIC;
 	vertex_buffer_desc.ByteWidth = (UINT)(sizeof(ActionVertex) * this->mcMaxEvents);
@@ -272,6 +358,7 @@ bool Actions::CreateVertexBuffer()
 
 bool Actions::UpdateVertexBuffer()
 {
+	// Copies vertex data from CPU over to the GPU
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	ZeroMemory(&mappedResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
 
@@ -294,6 +381,7 @@ bool Actions::UpdateVertexBuffer()
 
 bool Actions::UpdateGSBuffer()
 {
+	// Copies camera data from CPU over to the GPU
 	D3D11_MAPPED_SUBRESOURCE mappedResource;
 	ZeroMemory(&mappedResource, sizeof(D3D11_MAPPED_SUBRESOURCE));
 

@@ -4,7 +4,7 @@
 #define TEX_WIDTH 1.0f / (float)ICON_WIDTH
 #define TEX_HEIGHT 1.0f / (float)ICON_HEIGHT
 
-#define ICON_SIZE 0.04f
+#define ICON_SIZE 0.025f
 
 cbuffer GSData : register(b0)
 {
@@ -22,7 +22,8 @@ struct GSInput
 struct GSOutput
 {
 	float4 pos : SV_POSITION;
-	float2 tex : TEXCOORD;
+	float2 iconTex : TEXCOORD0;
+	float2 numberTex : TEXCOORD1;
 };
 
 [maxvertexcount(4)]
@@ -34,9 +35,12 @@ void main(
 	GSOutput element;
 	float4 rightVec;
 	float4 upVec;
-	uint turn = (input[0].data >> 4) & 3;
+	// Retrieves the turn data from the data chunk
+	uint turn = (input[0].data >> 4) & 7;
 
-	if (cameraData == 1)
+	// If we're not paning and the icon is not stationary, rotate icon
+	// depending on what direction the camera is looking
+	if (cameraData == 1 && turn != 4)
 	{
 		float2 dir = normalize(cameraPos.xz - input[0].wpos.xz);
 		float2 dir2 = normalize(float2(1.0f, 0.0f));
@@ -51,13 +55,17 @@ void main(
 		}
 	}
 
+	// This section is a test to base the size of the action icon
+	// on the Z-distance of the camera. Will most likely be scrapped to
+	// make picking easier and more manageble.
 	float size;
 	if (input[0].pos.z < 3.f)
-		size = 0.12f;
+		size = 0.07f;
 	else
 		size = ICON_SIZE * input[0].pos.z;
 
-	if (turn == 0)
+	// Define up and right vectors depending on rotation
+	if (turn == 0 || turn == 4)
 	{
 		rightVec = float4(size, 0.0f, 0.0f, 0.0f);
 		upVec = float4(0.0f, size * 2.0f, 0.0f, 0.0f);
@@ -75,27 +83,52 @@ void main(
 		upVec = float4(-size, 0.0f, 0.0f, 0.0f);
 	}
 
+	// Extract what icon image should be displayed, then generate the UV
+	// coordinates for the pixel shader stage.
 	uint iconData = input[0].data & 15;
-	float2 texRectLow = float2(
+	float2 iconTexRectLow = float2(
 		(float)(iconData % ICON_WIDTH) * TEX_WIDTH,
 		(float)(iconData / ICON_HEIGHT) * TEX_HEIGHT);
-	float2 texRectHigh = float2(
-		texRectLow.x + TEX_WIDTH,
-		texRectLow.y + TEX_HEIGHT);
+	float2 iconTexRectHigh = float2(
+		iconTexRectLow.x + TEX_WIDTH,
+		iconTexRectLow.y + TEX_HEIGHT);
 
-	float4 UV = float4(texRectLow.xy, texRectHigh.xy);
+	float4 iconUV = float4(iconTexRectLow.xy, iconTexRectHigh.xy);
 
+	// Same as above but for numbers. In case no number should be displayed,
+	// have the UVs to be 0.0f.
+	float4 numberUV;
+	iconData = (input[0].data >> 9) & 15;
+	if (iconData == 0)
+		numberUV = float4(0.0f, 0.0f, 0.0f, 0.0f);
+	else
+	{
+		iconData--;
+		iconTexRectLow = float2(
+			(float)(iconData % ICON_WIDTH) * TEX_WIDTH,
+			(float)(iconData / ICON_HEIGHT) * TEX_HEIGHT);
+		iconTexRectHigh = float2(
+			iconTexRectLow.x + TEX_WIDTH,
+			iconTexRectLow.y + TEX_HEIGHT);
 
+		numberUV = float4(iconTexRectLow.xy, iconTexRectHigh.xy);
+	}
+
+	// Puzzle all info together into four vertices, making a quad
 	element.pos = input[0].pos - rightVec + upVec;
-	element.tex = float2(UV.x, UV.y);
+	element.iconTex = float2(iconUV.x, iconUV.y);
+	element.numberTex = float2(numberUV.x, numberUV.y);
 	output.Append(element);
 	element.pos = input[0].pos + rightVec + upVec;
-	element.tex = float2(UV.z, UV.y);
+	element.iconTex = float2(iconUV.z, iconUV.y);
+	element.numberTex = float2(numberUV.z, numberUV.y);
 	output.Append(element);
 	element.pos = input[0].pos - rightVec - upVec;
-	element.tex = float2(UV.x, UV.w);
+	element.iconTex = float2(iconUV.x, iconUV.w);
+	element.numberTex = float2(numberUV.x, numberUV.w);
 	output.Append(element);
 	element.pos = input[0].pos + rightVec - upVec;
-	element.tex = float2(UV.z, UV.w);
+	element.iconTex = float2(iconUV.z, iconUV.w);
+	element.numberTex = float2(numberUV.z, numberUV.w);
 	output.Append(element);
 }
