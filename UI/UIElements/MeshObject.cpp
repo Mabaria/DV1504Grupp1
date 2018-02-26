@@ -20,6 +20,11 @@ MeshObject::MeshObject(std::string name,
 	{
 		this->mpEventBuffers[i] = nullptr;
 	}
+
+	for (int i = 0; i < 20; i++)
+	{
+		this->mpHoverBuffers[i] = nullptr;
+	}
 }
 
 MeshObject::MeshObject(const MeshObject & other) 
@@ -40,6 +45,11 @@ MeshObject::MeshObject(const MeshObject & other)
 	for (int i = 0; i < 20; i++)
 	{
 		this->mpEventBuffers[i] = other.mpEventBuffers[i];
+	}
+
+	for (int i = 0; i < 20; i++)
+	{
+		this->mpHoverBuffers[i] = nullptr;
 	}
 }
 
@@ -63,6 +73,11 @@ MeshObject::MeshObject(const std::string name,
 	for (int i = 0; i < 20; i++)
 	{
 		this->mpEventBuffers[i] = nullptr;
+	}
+
+	for (int i = 0; i < 20; i++)
+	{
+		this->mpHoverBuffers[i] = nullptr;
 	}
 
 }
@@ -108,6 +123,15 @@ MeshObject::~MeshObject()
 		{
 			this->mpEventBuffers[i]->Release();
 			this->mpEventBuffers[i] = nullptr;
+		}
+	}
+
+	for (int i = 0; i < 20; i++)
+	{
+		if (this->mpHoverBuffers[i] != nullptr)
+		{
+			this->mpHoverBuffers[i]->Release();
+			this->mpHoverBuffers[i] = nullptr;
 		}
 	}
 }
@@ -230,6 +254,28 @@ void MeshObject::SetEvent(const EventData & active_events,
 	context->Unmap(this->mpEventBuffers[index], 0);
 }
 
+ID3D11Buffer ** MeshObject::rGetHoverBuffer(const unsigned int index)
+{
+	return &this->mpHoverBuffers[index];
+}
+
+void MeshObject::SetHover(const bool hover, ID3D11DeviceContext * context, unsigned int index)
+{
+	HoverData data = { false };
+	data.IsEffectActive = hover;
+
+	D3D11_MAPPED_SUBRESOURCE data_ptr{};
+	context->Map(
+		this->mpHoverBuffers[index],
+		0,
+		D3D11_MAP_WRITE_DISCARD,
+		0,
+		&data_ptr);
+
+	memcpy(data_ptr.pData, &data, sizeof(HoverData));
+	context->Unmap(this->mpHoverBuffers[index], 0);
+}
+
 MaterialHandler * MeshObject::pGetMaterialHandler()
 {
 	return &this->mMaterialHandler;
@@ -242,4 +288,14 @@ int MeshObject::GetMaterialIndexForIndexBuffer(unsigned int indexBufferIndex) co
 		return this->mMesh->GetSubmeshMaterialIndex(indexBufferIndex);
 	}
 	return 0;
+}
+
+void MeshObject::SetPixelShaderID(int id)
+{
+	this->mPixelShaderID = id;
+}
+
+int MeshObject::GetPixelShaderID()
+{
+	return this->mPixelShaderID;
 }

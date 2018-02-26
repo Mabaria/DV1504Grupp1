@@ -11,14 +11,16 @@ public:
 	virtual bool Initialize(Camera& rCamera);
 	virtual void Zoom(int zoom);
 	virtual void Move(Position move);
+	virtual void FocusRoom(Room *pRoom, bool animate);
 	virtual void HandleChangeInCamera();
+	virtual void AnimateToNewPosition();
 
 private:
-	DirectX::XMVECTOR mUp;
-	DirectX::XMVECTOR mDirection;	// The direction camera is displaced
-	DirectX::XMVECTOR mLookAt;
+	XMFLOAT3 mUp;
+	XMFLOAT3 mDirection;
 
 	float mMaxHeight;
 	float mMinHeight;
 
+	void mUpdatePosition();
 };

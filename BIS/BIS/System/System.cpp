@@ -65,13 +65,12 @@ System::~System()
 		delete this->mFloors[i];	
 	}
 	for (int i = 0; i < (int)this->mBounds.size(); i++)
-	{	
-		delete this->mBounds[i];		
-	}
-
-	for (int i = 0; i < (int)this->mTexts.size(); i++)
-	{	
-		delete this->mTexts[i];		
+	{
+		if (this->mBounds[i])
+		{
+			delete this->mBounds[i];
+			this->mBounds[i] = nullptr;
+		}
 	}
 }
 
@@ -188,29 +187,68 @@ void System::mDraw()
 
 void System::mHandleInput()
 {
-	if (Mouse::IsButtonPressed(Buttons::Left))
-	{
-		if (this->mpTopViewPanel->IsMouseInsidePanel() && 
-			!this->mpMenuPanel->IsMouseInsidePanel() &&
-			!this->mpInfoPanel.IsMouseInsidePanel())
-		{
-			Picking::GetWorldRay(
-				this->mpTopViewPanel->GetActiveCamera(),
-				Mouse::GetXPercentage(),
-				Mouse::GetYPercentage(),
-				this->mRay);
+	static Room* last_picked_room = nullptr; 
+	Room *picked_room = nullptr;
 
-			Room *picked_room = this->mBoat.GetPickedRoom(this->mRay);
-			if (picked_room)
+	if (
+		this->mpTopViewPanel->IsMouseInsidePanel() &&
+		!this->mpMenuPanel->IsMouseInsidePanel())
+	{
+
+		Picking::GetWorldRay(
+			this->mpTopViewPanel->GetActiveCamera(),
+			Mouse::GetXPercentage(),
+			Mouse::GetYPercentage(),
+			this->mRay);
+
+		picked_room = this->mBoat.GetPickedRoom(this->mRay);
+		if (picked_room)
+		{
+			if (Mouse::IsButtonPressed(Buttons::Left))
 			{
 				this->mpMenuPanel->OpenAt(picked_room);
-				this->mpTopViewPanel->GetActiveCamera()->MoveCamera(
-					XMLoadFloat3(&picked_room->GetRoomCenter()) - 
-					this->mpTopViewPanel->GetActiveCamera()->GetPosition(), 1.0f);
-				
+				this->mpTopViewPanel->GetMovableComponent()->FocusCameraOnRoom(picked_room, true);
 			}
+
+			// ___ HOVER EFFECT ___
+
+			if (last_picked_room == nullptr)
+			{
+				// Temp solution. Sorry
+				std::string picked_name = picked_room->GetDeckName() + "bounds";
+				this->mUpdateHover(picked_name, picked_room->GetIndexInDeck(), true);
+				last_picked_room = picked_room;
+			}
+			else
+			{
+				// Temp solution. Sorry
+				std::string picked_name = picked_room->GetDeckName() + "bounds";
+				std::string last_picked_name = last_picked_room->GetDeckName() + "bounds";
+
+				if (picked_room != last_picked_room)
+				{
+					this->mUpdateHover(last_picked_name, last_picked_room->GetIndexInDeck(), false);
+				}
+
+				this->mUpdateHover(picked_name, picked_room->GetIndexInDeck(), true);
+
+				last_picked_room = picked_room;
+			}
+
 		}
+
+		else if(last_picked_room != nullptr)
+		{
+			// Temp solution. Sorry
+			std::string last_picked_name = last_picked_room->GetDeckName() + "bounds";
+			this->mUpdateHover(last_picked_name, last_picked_room->GetIndexInDeck(), false);
+		}
+
+
+		// ___ END ___ (HOVER EFFECT)
 	}
+
+	
 	
 	if (Keyboard::IsKeyPressed(Keys::One))
 	{
@@ -222,8 +260,19 @@ void System::mHandleInput()
 		{
 			this->mpTopViewPanel->SetCamera(this->mpTopViewCameraPan);
 		}
-			
+
+		if(last_picked_room)
+			this->mpTopViewPanel->GetMovableComponent()->FocusCameraOnRoom(last_picked_room, false);
 	}
+}
+
+void System::mUpdateHover(std::string name, int index, bool activate)
+{
+	this->mpTopViewPanel->rGetMeshObject(name)->SetHover(
+		activate,
+		this->mpTopViewPanel->rGetDirect3D().GetContext(),
+		index
+	);
 }
 
 void System::mUpdateEvents(Room * room)
@@ -282,7 +331,7 @@ void System::mSetupPanels()
 		{ 0.0f, 1.0f, 0.0f, 0.0f },
 		{ 0.0f, 0.00000001f, 0.0f, 0.0f },
 		XM_PI / 15.0f, 16.0f / 9.0f,
-		0.1f, 10.0f, LOOK_AT, PERSPECTIVE);
+		0.1f, 20.0f, LOOK_AT, PERSPECTIVE);
 
 	this->mpTopViewCameraPan = new Camera(
 		{ 0.0f, 7.0f, 0.15f, 0.0f },
@@ -402,8 +451,6 @@ void System::mSetupModels()
 	this->mBounds.push_back(new Mesh("../../Models/Bound1.obj"));
 	this->mBounds.push_back(new Mesh("../../Models/Bound2.obj"));
 
-	this->mTexts.push_back(new Quad(true));
-
 
 	// Creating temporary mesh objects to pass to the 3D panels.
 	MeshObject floor_brygg("Bryggdäck", this->mFloors[0]);
@@ -413,42 +460,43 @@ void System::mSetupModels()
 	MeshObject bound_huvud("Huvuddäckbounds", this->mBounds[1]);
 	MeshObject bound_tross("Trossdäckbounds", this->mBounds[2]);
 
-	this->mpTopViewPanel->AddMeshObject(&floor_brygg);
-	this->mpTopViewPanel->AddMeshObject(&floor_huvud);
-	this->mpTopViewPanel->AddMeshObject(&floor_tross);
-	this->mpTopViewPanel->AddMeshObject(&bound_brygg, L"../../Models/BlendColor.dds", true);
-	this->mpTopViewPanel->AddMeshObject(&bound_huvud, L"../../Models/BlendColor.dds", true);
-	this->mpTopViewPanel->AddMeshObject(&bound_tross, L"../../Models/BlendColor.dds", true);
+	this->mpTopViewPanel->AddMeshObject(&floor_brygg, 3);
+	this->mpTopViewPanel->AddMeshObject(&floor_huvud, 3);
+	this->mpTopViewPanel->AddMeshObject(&floor_tross, 3);
+	this->mpTopViewPanel->AddMeshObject(&bound_brygg, 2, L"../../Models/BlendColor.dds", true);
+	this->mpTopViewPanel->AddMeshObject(&bound_huvud, 2, L"../../Models/BlendColor.dds", true);
+	this->mpTopViewPanel->AddMeshObject(&bound_tross, 2, L"../../Models/BlendColor.dds", true);
 	
+	Quad quad(true);
 
 	this->mpTopViewPanel->AddMeshObject(
 		"Text3D_Floor01",
-		this->mTexts[0]->GetIndices(),
-		this->mTexts[0]->GetVertices(),
+		quad.GetIndices(),
+		quad.GetVertices(), 1,
 		L"../../Models/d01.dds"
 	); 
 	
 	this->mpTopViewPanel->AddMeshObject(
 		"Text3D_Floor1", 
-		this->mTexts[0]->GetIndices(), 
-		this->mTexts[0]->GetVertices(), 
+		quad.GetIndices(),
+		quad.GetVertices(), 1,
 		L"../../Models/d1.dds"
 	);
 	
 	this->mpTopViewPanel->AddMeshObject(
 		"Text3D_Floor2",
-		this->mTexts[0]->GetIndices(),
-		this->mTexts[0]->GetVertices(),
+		quad.GetIndices(),
+		quad.GetVertices(), 1,
 		L"../../Models/d2.dds"
 	);
 
 
-	this->mpSideViewPanel->AddMeshObject(&floor_brygg);
-	this->mpSideViewPanel->AddMeshObject(&floor_huvud);
-	this->mpSideViewPanel->AddMeshObject(&floor_tross);
-	this->mpSideViewPanel->AddMeshObject(&bound_brygg, L"../../Models/BlendColor.dds", true);
-	this->mpSideViewPanel->AddMeshObject(&bound_huvud, L"../../Models/BlendColor.dds", true);
-	this->mpSideViewPanel->AddMeshObject(&bound_tross, L"../../Models/BlendColor.dds", true);
+	this->mpSideViewPanel->AddMeshObject(&floor_brygg, 3);
+	this->mpSideViewPanel->AddMeshObject(&floor_huvud, 3);
+	this->mpSideViewPanel->AddMeshObject(&floor_tross, 3);
+	this->mpSideViewPanel->AddMeshObject(&bound_brygg, 2, L"../../Models/BlendColor.dds", true);
+	this->mpSideViewPanel->AddMeshObject(&bound_huvud, 2, L"../../Models/BlendColor.dds", true);
+	this->mpSideViewPanel->AddMeshObject(&bound_tross, 2, L"../../Models/BlendColor.dds", true);
 
 
 	// Scaling and translating the mesh objects in the panels.
@@ -513,8 +561,6 @@ void System::mSetupModels()
 	this->mpSideViewPanel->rGetMeshObject("Bryggdäckbounds")->Scale(0.5f, 0.5f, 0.53f);
 	this->mpSideViewPanel->rGetMeshObject("Huvuddäckbounds")->Scale(0.5f, 0.5f, 0.53f);
 	this->mpSideViewPanel->rGetMeshObject("Trossdäckbounds")->Scale(0.5f, 0.5f, 0.53f);
-
-
 }
 
 void System::mSetupBoat()
