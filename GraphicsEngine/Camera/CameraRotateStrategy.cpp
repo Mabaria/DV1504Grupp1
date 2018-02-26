@@ -2,9 +2,8 @@
 
 CameraRotateStrategy::CameraRotateStrategy()
 {
-	this->mDirection	= { 0.0f, 0.0f, 0.0f };
-	this->mUp			= { 0.0f, 0.0f, 0.0f };
-	this->mLookAt		= { 0.0f, 0.0f, 0.0f };
+	XMStoreFloat3(&this->mDirection, { 0.0f, 0.0f, 0.0f });
+	XMStoreFloat3(&this->mUp, { 0.0f, 0.0f, 0.0f });
 
 	this->mMaxHeight = 0.8f;
 	this->mMinHeight = 0.3f;
@@ -17,25 +16,32 @@ CameraRotateStrategy::~CameraRotateStrategy()
 bool CameraRotateStrategy::Initialize(Camera & rCamera)
 {
 	CameraMovementStrategy::Initialize(rCamera);
+
+	XMVECTOR dir = { 0.0f, 0.0f, 0.0f };
+	XMVECTOR up = { 0.0f, 0.0f, 0.0f };
 	
 	// Get camera values to handle the camera correctly
-	this->mDirection =
+	dir =
 		this->pCamera->GetPosition() - this->pCamera->GetLookVector();
 
-	this->mUp = this->pCamera->GetUpVector();
-	this->mLookAt = this->pCamera->GetLookVector();
+	up = this->pCamera->GetUpVector();
 
 	this->mDistance = XMVectorGetX(
-		XMVector3Length(this->mDirection)
+		XMVector3Length(dir)
 	);
 
-	this->mDirection = XMVector3Normalize(this->mDirection);
+	dir = XMVector3Normalize(dir);
+
+	XMStoreFloat3(&this->mUp, up);
+	XMStoreFloat3(&this->mDirection, dir);
 
 	return true;
 }
 
 void CameraRotateStrategy::Zoom(int zoom)
 {
+	this->mAnimate = false;
+
 	float d = this->mDistance;
 	d -= zoom * this->mZoomSpeed;
 
@@ -51,18 +57,21 @@ void CameraRotateStrategy::Zoom(int zoom)
 		d = this->mMaxDistance;
 	}
 
-	XMVECTOR v = this->pCamera->GetLookVector();
-	this->pCamera->SetCameraPosition(v + (this->mDirection * d));
-
 	this->mDistance = d;
+	this->mUpdatePosition();
 }
 
 void CameraRotateStrategy::Move(Position move)
 {
+	XMVECTOR dir = XMLoadFloat3(&this->mDirection);
+	XMVECTOR up = XMLoadFloat3(&this->mUp);
+
+	this->mAnimate = false;
+
 	XMVECTOR right = XMVector3Normalize(
 		XMVector3Cross(
-			this->mUp,
-			this->mDirection
+			up,
+			dir
 		)
 	);
 
@@ -70,15 +79,15 @@ void CameraRotateStrategy::Move(Position move)
 	right = XMVector3Normalize(DirectX::XMVectorSetY(right, 0));
 
 
-	this->mUp = XMVector3Normalize(
+	up = XMVector3Normalize(
 		DirectX::XMVector3Cross(
-			this->mDirection,
+			dir,
 			right
 		)
 	);
 
 	// Avoid movement being to high up and low
-	float y = XMVectorGetY(this->mDirection);
+	float y = XMVectorGetY(dir);
 	
 	if (y < this->mMinHeight && move.y < 0)
 		move.y = 0;
@@ -89,29 +98,71 @@ void CameraRotateStrategy::Move(Position move)
 
 	// Move along the right and up vectors based on mouse movement
 	XMVECTOR newPos = this->pCamera->GetPosition()
-		+ (right		* move.x * this->mMoveSpeed * this->mDistance)
-		+ (this->mUp	* move.y * this->mMoveSpeed * this->mDistance);
+		+ (right		* (float)move.x * this->mMoveSpeed * this->mDistance)
+		+ (up	* (float)move.y * this->mMoveSpeed * this->mDistance);
 
 	// Get new direction based on a normalized vector 
 	// from point (look at) to new position
-	this->mDirection = XMVector3Normalize(
-		newPos - this->mLookAt
+	dir = XMVector3Normalize(
+		newPos - this->pCamera->GetLookVector()
 	);
 
-	XMVECTOR v = this->pCamera->GetLookVector();
-	this->pCamera->SetCameraPosition(v + (this->mDirection * this->mDistance));
+	XMStoreFloat3(&this->mDirection, dir);
+	XMStoreFloat3(&this->mUp, up);
+
+	this->mUpdatePosition();
+
+}
+
+void CameraRotateStrategy::FocusRoom(Room *pRoom, bool animate)
+{
+	this->mAnimate = animate;
+
+	if (this->mAnimate)
+		this->mNewPosition = pRoom->GetRoomCenter();
+	else
+	{
+		this->mDistance = this->mMinDistance;
+		this->pCamera->SetLookVector(pRoom->GetRoomCenter());
+		this->mUpdatePosition();
+	}
+
 }
 
 void CameraRotateStrategy::HandleChangeInCamera()
 {
+	XMVECTOR dir = XMLoadFloat3(&this->mDirection);
+
 	// Update member variables if camera data has changed
 
-	this->mDirection =
+	dir =
 		this->pCamera->GetPosition() - this->pCamera->GetLookVector();
 
 	this->mDistance = XMVectorGetX(
-		XMVector3Length(this->mDirection)
+		XMVector3Length(dir)
 	);
 
-	this->mDirection = XMVector3Normalize(this->mDirection);
+	dir = XMVector3Normalize(dir);
+
+	XMStoreFloat3(&this->mDirection, dir);
+}
+
+void CameraRotateStrategy::AnimateToNewPosition()
+{
+	XMVECTOR dir = XMLoadFloat3(&this->mNewPosition) - this->pCamera->GetLookVector();
+	this->pCamera->SetLookVector((dir * 0.2f) + this->pCamera->GetLookVector());
+	this->mDistance -= (this->mDistance - this->mMinDistance) * 0.2f;
+
+	if (XMVectorGetX(XMVector3Length(dir)) < 0.0f && this->mDistance <= this->mMinDistance)
+	{
+		this->mDistance = this->mMinDistance;
+		this->mAnimate = false;
+	}
+
+	this->mUpdatePosition();
+}
+
+void CameraRotateStrategy::mUpdatePosition()
+{
+	this->pCamera->SetCameraPosition(this->pCamera->GetLookVector() + (XMLoadFloat3(&this->mDirection) * this->mDistance));
 }

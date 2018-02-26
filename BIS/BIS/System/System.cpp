@@ -170,12 +170,13 @@ void System::mDraw()
 
 void System::mHandleInput()
 {
+	static Room* last_picked_room = nullptr; 
+	Room *picked_room = nullptr;
 
 	if (
 		this->mpTopViewPanel->IsMouseInsidePanel() &&
 		!this->mpMenuPanel->IsMouseInsidePanel())
 	{
-		static Room* last_picked_room = nullptr;
 
 		Picking::GetWorldRay(
 			this->mpTopViewPanel->GetActiveCamera(),
@@ -183,16 +184,13 @@ void System::mHandleInput()
 			Mouse::GetYPercentage(),
 			this->mRay);
 
-		Room *picked_room = this->mBoat.GetPickedRoom(this->mRay);
+		picked_room = this->mBoat.GetPickedRoom(this->mRay);
 		if (picked_room)
 		{
 			if (Mouse::IsButtonPressed(Buttons::Left))
 			{
 				this->mpMenuPanel->OpenAt(picked_room);
-				this->mpTopViewPanel->GetActiveCamera()->MoveCamera(
-					XMLoadFloat3(&picked_room->GetRoomCenter()) - 
-					this->mpTopViewPanel->GetActiveCamera()->GetPosition(), 1.0f);
-				
+				this->mpTopViewPanel->GetMovableComponent()->FocusCameraOnRoom(picked_room, true);
 			}
 
 			// ___ HOVER EFFECT ___
@@ -204,16 +202,18 @@ void System::mHandleInput()
 				this->mUpdateHover(picked_name, picked_room->GetIndexInDeck(), true);
 				last_picked_room = picked_room;
 			}
-
-
-			else if (picked_room != last_picked_room)
+			else
 			{
 				// Temp solution. Sorry
 				std::string picked_name = picked_room->GetDeckName() + "bounds";
 				std::string last_picked_name = last_picked_room->GetDeckName() + "bounds";
 
+				if (picked_room != last_picked_room)
+				{
+					this->mUpdateHover(last_picked_name, last_picked_room->GetIndexInDeck(), false);
+				}
+
 				this->mUpdateHover(picked_name, picked_room->GetIndexInDeck(), true);
-				this->mUpdateHover(last_picked_name, last_picked_room->GetIndexInDeck(), false);
 
 				last_picked_room = picked_room;
 			}
@@ -225,7 +225,6 @@ void System::mHandleInput()
 			// Temp solution. Sorry
 			std::string last_picked_name = last_picked_room->GetDeckName() + "bounds";
 			this->mUpdateHover(last_picked_name, last_picked_room->GetIndexInDeck(), false);
-			last_picked_room = picked_room;
 		}
 
 
@@ -244,7 +243,9 @@ void System::mHandleInput()
 		{
 			this->mpTopViewPanel->SetCamera(this->mpTopViewCameraPan);
 		}
-			
+
+		if(last_picked_room)
+			this->mpTopViewPanel->GetMovableComponent()->FocusCameraOnRoom(last_picked_room, false);
 	}
 }
 
@@ -335,6 +336,10 @@ void System::mSetupPanels()
 	this->mpTopViewPanel->AddPixelShader(L"../../GraphicsEngine/PS_Text3D.hlsl");
 	this->mpTopViewPanel->AddPixelShader(L"../../GraphicsEngine/PS_EventBox.hlsl");
 	this->mpTopViewPanel->AddPixelShader(L"../../GraphicsEngine/PS_Boat.hlsl");
+
+	this->mpSideViewPanel->AddPixelShader(L"../../GraphicsEngine/PS_Text3D.hlsl");
+	this->mpSideViewPanel->AddPixelShader(L"../../GraphicsEngine/PS_EventBox.hlsl");
+	this->mpSideViewPanel->AddPixelShader(L"../../GraphicsEngine/PS_Boat.hlsl");
 
 	// Setting up the control panel.
 	this->mpControlPanel->AddTextbox(
@@ -460,12 +465,12 @@ void System::mSetupModels()
 	);
 
 
-	this->mpSideViewPanel->AddMeshObject(&floor_brygg);
-	this->mpSideViewPanel->AddMeshObject(&floor_huvud);
-	this->mpSideViewPanel->AddMeshObject(&floor_tross);
-	this->mpSideViewPanel->AddMeshObject(&bound_brygg, 0, L"../../Models/BlendColor.dds", true);
-	this->mpSideViewPanel->AddMeshObject(&bound_huvud, 0, L"../../Models/BlendColor.dds", true);
-	this->mpSideViewPanel->AddMeshObject(&bound_tross, 0, L"../../Models/BlendColor.dds", true);
+	this->mpSideViewPanel->AddMeshObject(&floor_brygg, 3);
+	this->mpSideViewPanel->AddMeshObject(&floor_huvud, 3);
+	this->mpSideViewPanel->AddMeshObject(&floor_tross, 3);
+	this->mpSideViewPanel->AddMeshObject(&bound_brygg, 2, L"../../Models/BlendColor.dds", true);
+	this->mpSideViewPanel->AddMeshObject(&bound_huvud, 2, L"../../Models/BlendColor.dds", true);
+	this->mpSideViewPanel->AddMeshObject(&bound_tross, 2, L"../../Models/BlendColor.dds", true);
 
 
 	// Scaling and translating the mesh objects in the panels.

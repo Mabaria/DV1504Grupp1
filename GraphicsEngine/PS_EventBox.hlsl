@@ -73,7 +73,7 @@ float4 main(PS_IN input) : SV_TARGET
 		if (IsAtEdge(input.tex))
 		{
 			ambient = 0.0f;
-			diffuse = float4(0.4f, 0.0f, 0.0f, 1.0f);
+			diffuse = float3(0.4f, 0.0f, 0.0f);
 			alpha = 1.0f;
 		}
 	}

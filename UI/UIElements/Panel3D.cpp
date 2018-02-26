@@ -206,7 +206,7 @@ const void Panel3D::AddMeshObject(
 	}
 
 	// If pixel shader ID doesn't exist change it to default
-	if (pixelShaderID >= this->mpPixelShaders.size())
+	if (pixelShaderID >= (int)this->mpPixelShaders.size())
 		pixelShaderID = 0;
 
 	this->mpMeshObjects.back()->SetPixelShaderID(pixelShaderID);
@@ -294,7 +294,7 @@ const void Panel3D::AddMeshObject(MeshObject * meshObject,
 	}
 
 	// If pixel shader ID doesn't exist change it to default
-	if (pixelShaderID >= this->mpPixelShaders.size())
+	if (pixelShaderID >= (int)this->mpPixelShaders.size())
 		pixelShaderID = 0;
 
 	this->mpMeshObjects.back()->SetPixelShaderID(pixelShaderID);
@@ -575,6 +575,11 @@ void Panel3D::Update(Button * attribute)
 Camera * Panel3D::GetActiveCamera()
 {
 	return this->mpCamera;
+}
+
+MovableCameraComponent * Panel3D::GetMovableComponent()
+{
+	return this->mpMovableCameraComponent;
 }
 
 const void Panel3D::Update()

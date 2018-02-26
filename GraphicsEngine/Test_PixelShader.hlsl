@@ -42,11 +42,10 @@ float4 main(PS_IN input) : SV_TARGET
 	float3 ambient = Ambient;
 	float3 diffuse = Diffuse;
 
-	bool use_texture = input.tex.xy != -1.0f ?
-	true : false;
+	bool use_texture = false;
 
 	ambient = use_texture ?
-	texture2d.Sample(ss, input.tex.xy) : ambient;
+	texture2d.Sample(ss, input.tex.xy).xyz : ambient;
 
 	// If events are active for a bounding box
 	bool Are_there_active_events = events.r > 0.0f ?
@@ -55,8 +54,8 @@ float4 main(PS_IN input) : SV_TARGET
 
 	if (use_texture) // When blending is needed
 	{
-		alpha = ambient.rg > 0.8f && ambient.b == 0.0f ? // Blend if yellow
-			0.5f : 1.0f;
+		//alpha = ambient.rg > 0.8f && ambient.b == 0.0f ? // Blend if yellow
+		//	0.5f : 1.0f;
 
 		diffuse -= 0.2f; // Simple fix for ugly edges
 
