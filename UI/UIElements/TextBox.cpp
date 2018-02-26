@@ -81,6 +81,8 @@ void TextBox::SetText(std::string text)
 
 void TextBox::DrawTextBox()
 {
+	// Old text rendering, might be useful to save 
+
 	/*this->D2D1Panel->GetpRenderTarget()->DrawTextW(
 		this->mpTextWchar,
 		wcslen(this->mpTextWchar),
@@ -89,7 +91,8 @@ void TextBox::DrawTextBox()
 		this->mpColor,
 		D2D1_DRAW_TEXT_OPTIONS_CLIP
 	);*/
-	// Draw the bitmap
+
+	// Draw the bitmap to the Direct2D rendertarget
 	this->D2D1Panel->GetpRenderTarget()->DrawBitmap(
 		this->mpTextBitmap,
 		this->mLayoutRect,
@@ -116,7 +119,7 @@ void TextBox::MoveTextBox(int x, int y)
 	this->mpTextLayout->Release();
 	this->mCreateTextLayout();
 
-	this->DrawToBitmap();
+	this->DrawToBitmap(); // Textbox moved, redraw text
 
 }
 

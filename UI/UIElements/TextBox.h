@@ -24,8 +24,11 @@ public:
 	void SetFontName(std::wstring fontName);
 	void SetTextAlignment(DWRITE_TEXT_ALIGNMENT textAlignment);
 
-	void DrawToBitmap();
-	ID2D1Bitmap* GetBitmap() const;
+	void DrawToBitmap(); /* This functions draws to the bitmap ONLY, and does
+						 NOT output anything to the render target in the Direct2D*/
+	ID2D1Bitmap* GetBitmap() const; /* Don't forget to call DrawToBitmap before
+									calling this function if the text has
+									been updated*/
 
 private:
 
