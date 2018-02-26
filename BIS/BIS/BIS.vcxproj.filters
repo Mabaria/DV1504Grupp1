@@ -432,7 +432,7 @@
       <Filter>Source Files\GraphicsEngine</Filter>
     </ClCompile>
     <ClCompile Include="..\..\UI\UIElements\InfoPanel.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

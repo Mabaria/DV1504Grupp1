@@ -159,8 +159,7 @@ void System::Update(Room * pickedRoom)
 	// If a notification object is clicked in the active log panel.
 	else if (this->mpActiveLogPanel->IsMouseInsidePanel())
 	{
-		// Center position on the room that the event is active in.
-		bool test = true;
+		//this->mpTopViewPanel->GetMovableComponent()->FocusCameraOnRoom(pickedRoom, true);
 	}
 }
 
@@ -214,14 +213,12 @@ void System::mHandleInput()
 
 			if (last_picked_room == nullptr)
 			{
-				// Temp solution. Sorry
 				std::string picked_name = picked_room->GetDeckName() + "bounds";
 				this->mUpdateHover(picked_name, picked_room->GetIndexInDeck(), true);
 				last_picked_room = picked_room;
 			}
 			else
 			{
-				// Temp solution. Sorry
 				std::string picked_name = picked_room->GetDeckName() + "bounds";
 				std::string last_picked_name = last_picked_room->GetDeckName() + "bounds";
 
@@ -239,7 +236,6 @@ void System::mHandleInput()
 
 		else if(last_picked_room != nullptr)
 		{
-			// Temp solution. Sorry
 			std::string last_picked_name = last_picked_room->GetDeckName() + "bounds";
 			this->mUpdateHover(last_picked_name, last_picked_room->GetIndexInDeck(), false);
 		}
