@@ -5,8 +5,6 @@
 
 CameraPanStrategy::CameraPanStrategy()
 {
-	this->mStartPosition = { 0.0f, 0.0f, 0.0f };
-
 	this->mMinX = 
 		this->mMinZ = 
 		this->mMaxX = 
@@ -21,15 +19,12 @@ bool CameraPanStrategy::Initialize(Camera & rCamera)
 {
 	CameraMovementStrategy::Initialize(rCamera);
 
-
 	// Keep start position to limit moves outside of desired area
-	this->mStartPosition = this->pCamera->GetPosition();
+	this->mMinX = XMVectorGetX(this->pCamera->GetPosition()) - 2.0f;
+	this->mMinZ = XMVectorGetZ(this->pCamera->GetPosition()) - 2.0f;
 
-	this->mMinX = XMVectorGetX(this->mStartPosition) - 2.0f;
-	this->mMinZ = XMVectorGetZ(this->mStartPosition) - 2.0f;
-
-	this->mMaxX = XMVectorGetX(this->mStartPosition) + 2.0f;
-	this->mMaxZ = XMVectorGetZ(this->mStartPosition) + 2.0f;
+	this->mMaxX = XMVectorGetX(this->pCamera->GetPosition()) + 2.0f;
+	this->mMaxZ = XMVectorGetZ(this->pCamera->GetPosition()) + 2.0f;
 
 	this->mMoveSpeed = 0.0001f;
 
@@ -38,6 +33,8 @@ bool CameraPanStrategy::Initialize(Camera & rCamera)
 
 void CameraPanStrategy::Zoom(int zoom)
 {
+	this->mAnimate = false;
+
 	XMVECTOR pos = this->pCamera->GetPosition();
 	this->mDistance = XMVectorGetY(pos);
 	this->mDistance -= zoom * this->mZoomSpeed;
@@ -59,6 +56,8 @@ void CameraPanStrategy::Zoom(int zoom)
 
 void CameraPanStrategy::Move(Position move)
 {
+	this->mAnimate = false;
+
 	// Make the move
 	this->pCamera->MoveCamera(
 		-move.x * this->mDistance,
@@ -99,8 +98,40 @@ void CameraPanStrategy::Move(Position move)
 	this->pCamera->SetCameraPosition(pos);
 }
 
+void CameraPanStrategy::FocusRoom(Room *pRoom, bool animate)
+{
+	this->mAnimate = animate;
+
+	// Get position for the room picked
+	XMVECTOR new_pos = XMLoadFloat3(&pRoom->GetRoomCenter());
+	this->mDistance = this->mMinDistance;
+	new_pos = XMVectorSetY(new_pos, this->mDistance);
+
+	if (this->mAnimate)
+	{
+		XMStoreFloat3(&this->mNewPosition, new_pos);
+	}
+	else
+	{
+		this->pCamera->SetCameraPosition(new_pos);
+	}
+}
+
 void CameraPanStrategy::HandleChangeInCamera()
 {
+	// If a change has been made to the camera, then update the member variables
+
 	XMVECTOR pos = this->pCamera->GetPosition();
 	this->mDistance = XMVectorGetY(pos);
+}
+
+void CameraPanStrategy::AnimateToNewPosition()
+{
+	// Get direction and move to the position
+
+	XMVECTOR dir = XMLoadFloat3(&this->mNewPosition) - this->pCamera->GetPosition();
+	this->pCamera->MoveCamera(dir, this->mMoveSpeed * 1000.0f);
+
+	if (XMVectorGetX(XMVector3Length(dir)) < 0.0f)
+		this->mAnimate = false;
 }

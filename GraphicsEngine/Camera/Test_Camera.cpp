@@ -78,13 +78,13 @@ void TestCameraMovementOrtographic()
 	Panel3D top_view(2 * 1280 / 3, 2 * 720 / 3, 720 / 3, 0, window.GetWindow(), window_name.c_str());
 
 	// Hela båten tjoff in i panelerna och sen mixtras matriserna med.
-	side_view.AddMeshObject("floor2", floor2.GetIndexVectors(), floor2.GetVertexVectors(), L"");
-	side_view.AddMeshObject("floor1", floor1.GetIndexVectors(), floor1.GetVertexVectors(), L"");
-	side_view.AddMeshObject("floor01", floor01.GetIndexVectors(), floor01.GetVertexVectors(), L"");
+	side_view.AddMeshObject("floor2", floor2.GetIndexVectors(), floor2.GetVertexVectors());
+	side_view.AddMeshObject("floor1", floor1.GetIndexVectors(), floor1.GetVertexVectors());
+	side_view.AddMeshObject("floor01", floor01.GetIndexVectors(), floor01.GetVertexVectors());
 
-	top_view.AddMeshObject("floor2", floor2.GetIndexVectors(), floor2.GetVertexVectors(), L"");
-	top_view.AddMeshObject("floor1", floor1.GetIndexVectors(), floor1.GetVertexVectors(), L"");
-	top_view.AddMeshObject("floor01", floor01.GetIndexVectors(), floor01.GetVertexVectors(), L"");
+	top_view.AddMeshObject("floor2", floor2.GetIndexVectors(), floor2.GetVertexVectors());
+	top_view.AddMeshObject("floor1", floor1.GetIndexVectors(), floor1.GetVertexVectors());
+	top_view.AddMeshObject("floor01", floor01.GetIndexVectors(), floor01.GetVertexVectors());
 
 	float scale = 0.1f;
 	top_view.rGetMeshObject("floor2")->Scale(scale, scale, scale);

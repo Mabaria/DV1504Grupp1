@@ -1,6 +1,5 @@
 #include "../DX/Direct3D.h"
 
-
 D3D11::D3D11()
 {
 	this->mDevice = nullptr;
@@ -259,6 +258,13 @@ bool D3D11::CreateShaders(
 			&pPs_blob,
 			nullptr
 		);
+
+		if (FAILED(hr))
+		{
+			MessageBoxA(NULL, "Class Error: #Direct3D : Pixel Shader Path is not found!", NULL, 0);
+			pPixelShader = nullptr;
+			return false;
+		}
 
 		hr = this->mDevice->CreatePixelShader(
 			pPs_blob->GetBufferPointer(),

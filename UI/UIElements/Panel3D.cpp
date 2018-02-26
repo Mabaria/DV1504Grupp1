@@ -78,11 +78,6 @@ Panel3D::~Panel3D()
 		this->mpGeometryShader->Release();
 		this->mpGeometryShader = nullptr;
 	}
-	if (this->mpPixelShader)
-	{
-		this->mpPixelShader->Release();
-		this->mpPixelShader = nullptr;
-	}
 	if (this->mpInputLayout)
 	{
 		this->mpInputLayout->Release();
@@ -107,6 +102,15 @@ Panel3D::~Panel3D()
 		}
 	}
 
+	for (size_t i = 0; i < this->mpPixelShaders.size(); i++)
+	{
+		if (this->mpPixelShaders[i])
+		{
+			this->mpPixelShaders[i]->Release();
+			this->mpPixelShaders[i] = nullptr;
+		}
+	}
+
 	if (this->mpMovableCameraComponent)
 	{
 		delete this->mpMovableCameraComponent;
@@ -119,10 +123,14 @@ D3D11 & Panel3D::rGetDirect3D()
 	return this->mDirect3D;
 }
 
+// Pixel Shader ID is based on the position in the array it has.
+// Which is in order of time it was added. 
+
 const void Panel3D::AddMeshObject(
 	std::string name,
 	std::vector<std::vector<unsigned int>> indices,
 	std::vector<std::vector<Vertex>> vertices,
+	int pixelShaderID,
 	std::wstring texturePath,
 	bool use_event)
 {
@@ -154,8 +162,6 @@ const void Panel3D::AddMeshObject(
 			1.0f,
 			1.0f };
 		this->mCreateMaterialBuffer(&defaultMat);
-
-
 	}
 
 
@@ -185,10 +191,33 @@ const void Panel3D::AddMeshObject(
 				this->mpMeshObjects.back()->rGetEventBuffer(i)
 			);
 		}
+
+		HoverData hover_data = { false };
+		event_desc.ByteWidth = sizeof(HoverData);
+		event_data.pSysMem = &hover_data;
+
+		for (int i = 0; i < 20; i++)
+		{
+			this->mDirect3D.GetDevice()->CreateBuffer(
+				&event_desc,
+				&event_data,
+				this->mpMeshObjects.back()->rGetHoverBuffer(i)
+			);
+		}
 	}
+
+	// If pixel shader ID doesn't exist change it to default
+	if (pixelShaderID >= (int)this->mpPixelShaders.size())
+		pixelShaderID = 0;
+
+	this->mpMeshObjects.back()->SetPixelShaderID(pixelShaderID);
 }
 
+// Pixel Shader ID is based on the position in the array it has.
+// Which is in order of time it was added. 
+
 const void Panel3D::AddMeshObject(MeshObject * meshObject,
+	int pixelShaderID,
 	std::wstring texturePath,
 	bool use_event)
 {
@@ -234,10 +263,10 @@ const void Panel3D::AddMeshObject(MeshObject * meshObject,
 		EventData data = { 0 };
 
 		D3D11_BUFFER_DESC event_desc = { 0 };
-		event_desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		event_desc.ByteWidth = sizeof(EventData);
-		event_desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-		event_desc.Usage = D3D11_USAGE_DYNAMIC;
+		event_desc.BindFlags		= D3D11_BIND_CONSTANT_BUFFER;
+		event_desc.ByteWidth		= sizeof(EventData);
+		event_desc.CPUAccessFlags	= D3D11_CPU_ACCESS_WRITE;
+		event_desc.Usage			= D3D11_USAGE_DYNAMIC;
 
 		D3D11_SUBRESOURCE_DATA event_data = { 0 };
 		event_data.pSysMem = &data;
@@ -250,7 +279,26 @@ const void Panel3D::AddMeshObject(MeshObject * meshObject,
 				this->mpMeshObjects.back()->rGetEventBuffer(i)
 			);
 		}
+
+		HoverData hover_data = { false };
+		event_desc.ByteWidth = sizeof(HoverData);
+		event_data.pSysMem = &hover_data;
+
+		for (int i = 0; i < 20; i++)
+		{
+			this->mDirect3D.GetDevice()->CreateBuffer(
+				&event_desc,
+				&event_data,
+				this->mpMeshObjects.back()->rGetHoverBuffer(i)
+			);
+		}
 	}
+
+	// If pixel shader ID doesn't exist change it to default
+	if (pixelShaderID >= (int)this->mpPixelShaders.size())
+		pixelShaderID = 0;
+
+	this->mpMeshObjects.back()->SetPixelShaderID(pixelShaderID);
 }
 
 bool Panel3D::CreateShadersAndSetup(
@@ -278,15 +326,38 @@ bool Panel3D::CreateShadersAndSetup(
 		this->mpGeometryShader,
 		nullptr,
 		0);
-	this->mDirect3D.GetContext()->PSSetShader(
-		this->mpPixelShader,
-		nullptr,
-		0);
+
+	this->mpPixelShaders.push_back(this->mpPixelShader);
 
 	// Setting up input assembler.
 	this->mDirect3D.GetContext()->IASetPrimitiveTopology
 	(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	this->mDirect3D.GetContext()->IASetInputLayout(this->mpInputLayout);
+
+	this->AddPixelShader(L"../../GraphicsEngine/PS_Boat.hlsl");
+	this->AddPixelShader(L"../../GraphicsEngine/PS_Text3D.hlsl");
+	this->AddPixelShader(L"../../GraphicsEngine/PS_EventBox.hlsl");
+
+	return result;
+}
+
+bool Panel3D::AddPixelShader(LPCWSTR pixelShaderPath)
+{
+	// Create pixel shader
+	bool result = this->mDirect3D.CreateShaders(
+		L"",
+		L"",
+		pixelShaderPath,
+		nullptr,
+		nullptr,
+		&this->mpPixelShader,
+		nullptr,
+		0,
+		nullptr);
+
+	// If successful then add it to the rest
+	if(result)
+		this->mpPixelShaders.push_back(this->mpPixelShader);
 
 	return result;
 }
@@ -553,6 +624,11 @@ void Panel3D::DrawBitmapToTexture(
 
 }
 
+MovableCameraComponent * Panel3D::GetMovableComponent()
+{
+	return this->mpMovableCameraComponent;
+}
+
 const void Panel3D::Update()
 {
 	bool show_cursor = true;
@@ -600,10 +676,11 @@ const void Panel3D::Draw()
 	UINT offset = 0;
 
 	// For readability.
-	ID3D11Buffer* vertex_buffer = nullptr;
-	ID3D11Buffer* index_buffer = nullptr;
-	ID3D11Buffer* matrix_buffer = nullptr;
-	ID3D11Buffer* material_buffer = nullptr;
+	ID3D11PixelShader *pixel_shader = nullptr;
+	ID3D11Buffer* vertex_buffer		= nullptr;
+	ID3D11Buffer* index_buffer		= nullptr;
+	ID3D11Buffer* matrix_buffer		= nullptr;
+	ID3D11Buffer* material_buffer	= nullptr;
 	UINT numIndices = 0;
 
 	this->mDirect3D.GetContext()->VSSetConstantBuffers(
@@ -622,6 +699,16 @@ const void Panel3D::Draw()
 	// and draws them one by one.
 	for (int i = 0; i < (int)this->mpMeshObjects.size(); i++)
 	{
+		// ___ SET PIXEL SHADER ___
+		ID3D11PixelShader* temp = this->mpPixelShaders[
+			this->mpMeshObjects[i]->GetPixelShaderID()
+		];
+		if (pixel_shader != temp)
+		{
+			pixel_shader = temp;
+			this->mDirect3D.GetContext()->PSSetShader(pixel_shader, nullptr, 0);
+		}
+		// ___ END ___
 
 		matrix_buffer = *this->mpMeshObjects[i]->rGetMatrixBuffer();
 		this->mDirect3D.GetContext()->PSSetShaderResources(
@@ -660,11 +747,16 @@ const void Panel3D::Draw()
 				0, 1, this->mpMeshObjects[i]->rGetEventBuffer(j)
 			);
 
+
 			// Setting the material buffer to the pixel shader.
 			this->mDirect3D.GetContext()->PSSetConstantBuffers(
 				1,
 				1,
 				&material_buffer
+			);
+
+			this->mDirect3D.GetContext()->PSSetConstantBuffers(
+				2, 1, this->mpMeshObjects[i]->rGetHoverBuffer(j)
 			);
 
 

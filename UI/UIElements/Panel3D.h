@@ -11,6 +11,13 @@
 #include "../../GraphicsEngine/DX/Direct2D.h"
 #include "../../GraphicsEngine/Camera/MovableCameraComponent.h"
 
+enum PANEL3D_SHADER_TYPE
+{
+	PANEL3D_SHADER_BOAT = 1,
+	PANEL3D_SHADER_TEXT = 2,
+	PANEL3D_SHADER_EVENT = 3
+};
+
 class Panel3D : public Panel, public Observer<Button>
 {
 public:
@@ -32,10 +39,12 @@ public:
 		std::string name,
 		std::vector<std::vector<unsigned int>> indices,
 		std::vector<std::vector<Vertex>> vertices,
-		std::wstring texturePath,
+		int pixelShaderID = 0,
+		std::wstring texturePath = L"",
 		bool use_event = false);
 
 	const void AddMeshObject(MeshObject *meshObject,
+		int pixelShaderID = 0,
 		std::wstring texturePath = L"",
 		bool use_event = false);
 
@@ -45,6 +54,8 @@ public:
 		LPCWSTR vertexShaderPath,
 		LPCWSTR geometryShaderPath,
 		LPCWSTR pixelShaderPath);
+
+	bool AddPixelShader(LPCWSTR pixelShaderPath);
 
 	const void Update();
 
@@ -65,6 +76,8 @@ public:
 	void Update(Button* attribute);
 
 	Camera* GetActiveCamera();
+
+	MovableCameraComponent* GetMovableComponent();
 
 	void * operator new(size_t i) // To make sure it is 16 bit aligned
 	{
@@ -91,9 +104,11 @@ private:
 
 	ID3D11VertexShader *mpVertexShader;
 	ID3D11GeometryShader *mpGeometryShader;
-	ID3D11PixelShader *mpPixelShader;
 	ID3D11InputLayout *mpInputLayout;
 
+	ID3D11PixelShader *mpPixelShader;
+	std::vector<ID3D11PixelShader*> mpPixelShaders;
+	
 	D3D11_INPUT_ELEMENT_DESC mInputDesc[3];
 
 	Camera *mpCamera;
