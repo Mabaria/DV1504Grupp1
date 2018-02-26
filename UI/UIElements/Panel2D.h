@@ -7,11 +7,11 @@
 #include <vector>
 #include "TextBox.h"
 #include "NotificationList.h"
-struct BitmapInfo
-{
-	ID2D1Bitmap* bitmap = nullptr;
-	std::string name = "";
-};
+//struct BitmapInfo
+//{
+//	ID2D1Bitmap* bitmap = nullptr;
+//	std::string name = "";
+//};
 class Panel2D : public Panel
 {
 public:
@@ -71,6 +71,7 @@ public:
 	bool GetButtonOcclude();
 
 	void ScrollActiveLog();
+	void Scroll();
 	void Update();
 	void Draw();
 
@@ -90,4 +91,6 @@ private:
 	bool mNotificationListIsActive;
 
 	bool mButtonOccludes;
+
+
 };

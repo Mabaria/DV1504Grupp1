@@ -3,11 +3,18 @@
 #include <Windows.h>
 #include <math.h>
 #include "../../IO/Mouse.h"
+#include "../../GraphicsEngine/DX/Direct2D.h"
+#include <locale>
 
 struct Fraction
 {
 	float x;
 	float y;
+};
+struct BitmapInfo
+{
+	ID2D1Bitmap* bitmap = nullptr;
+	std::string name = "";
 };
 
 class Panel
@@ -49,8 +56,12 @@ public:
 	bool IsVisible();
 	void Hide();
 	void Show();
+	
+	// Does not work, do not use.
+	void ShowOnTop();
 
 	HWND *GetPanelWindowHandle();
+
 
 protected:
 	int mWidth;
@@ -63,11 +74,14 @@ protected:
 	int mParentTop;
 	int mParentLeft;
 
+	bool mIsVisible;
+
 	// To compare sizes.
 	HWND mParentWindow;
 	HWND mPanelWindow;
 	LPCTSTR mTitle;
 
+	std::vector<BitmapInfo> mBitmapVector;
 
 
 private:

@@ -7,7 +7,7 @@ D3D11::D3D11()
 	this->mSwapChain = nullptr;
 	this->mBackBuffer = nullptr;
 	this->mDepthBuffer = nullptr;
-	this->mSamplerState = nullptr;
+	this->mSamplerState = nullptr;	
 }
 
 D3D11::D3D11(

@@ -240,6 +240,12 @@
     <ClInclude Include="..\..\GraphicsEngine\Camera\CameraPanStrategy.h">
       <Filter>Header Files\GraphicsEngine</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\GraphicsEngine\CustomTextRenderer.h">
+      <Filter>Header Files\GraphicsEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UI\UIElements\InfoPanel.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BIS.cpp">
@@ -410,6 +416,9 @@
     <ClCompile Include="..\..\UI\GUI\EventMenu.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\GraphicsEngine\CustomTextRenderer.cpp">
+      <Filter>Source Files\GraphicsEngine</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\GraphicsEngine\Camera\MovableCameraComponent.cpp">
       <Filter>Source Files\GraphicsEngine</Filter>
     </ClCompile>
@@ -421,6 +430,9 @@
     </ClCompile>
     <ClCompile Include="..\..\GraphicsEngine\Camera\CameraPanStrategy.cpp">
       <Filter>Source Files\GraphicsEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UI\UIElements\InfoPanel.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -8,6 +8,7 @@
 #include "MeshObject.h"
 #include "../../IO/ObserverPattern/Observer.h"
 #include "../../GraphicsEngine/Camera/MovableCameraComponent.h"
+#include "../../GraphicsEngine/DX/Direct2D.h"
 
 class Panel3D : public Panel, public Observer<Button>
 {
