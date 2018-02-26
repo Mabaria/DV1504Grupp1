@@ -34,6 +34,8 @@ Panel::Panel(int width, int height, int top, int left, HWND handle, LPCTSTR titl
 	this->mParentWidth	= parent_size.right - parent_size.left;
 	this->mParentTop	= parent_size.top;
 	this->mParentLeft	= parent_size.left;
+
+
 }
 
 Panel::~Panel()
@@ -46,7 +48,7 @@ Panel::~Panel()
 			this->mBitmapVector[i].bitmap = nullptr;
 		}
 	}
-	delete this->mDirect2D;
+
 }
 
 const void Panel::SetWidth(int width)
@@ -269,13 +271,7 @@ void Panel::LoadImageToBitmap(std::string imageFilePath, std::string bitmapName)
 		}
 	}
 
-	this->mBitmapVector.push_back(new_bitmap_struct);
-}
 
-ID2D1Bitmap * Panel::GetBitmapByName(std::string bitmapName)
-{
-	ID2D1Bitmap *to_return = nullptr; // Default return is nullptr
-	std::vector<BitmapInfo>::iterator it;
 
 	for (it = this->mBitmapVector.begin();
 		it != this->mBitmapVector.end();

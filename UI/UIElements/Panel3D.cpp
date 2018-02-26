@@ -506,7 +506,7 @@ void Panel3D::Update(Button * attribute)
 	this->mpCamera->Update(attribute);
 }
 
-const Camera * Panel3D::GetActiveCamera()
+Camera * Panel3D::GetActiveCamera()
 {
 	return this->mpCamera;
 }

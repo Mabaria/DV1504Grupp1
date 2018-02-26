@@ -59,11 +59,8 @@ public:
 
 	HWND *GetPanelWindowHandle();
 
-	void LoadImageToBitmap(std::string imageFilePath, std::string bitmapName);
-	ID2D1Bitmap* GetBitmapByName(std::string bitmapName);
 
 protected:
-	Direct2D *mDirect2D;
 	int mWidth;
 	int mHeight;
 	int mTop;
@@ -80,6 +77,7 @@ protected:
 	LPCTSTR mTitle;
 
 	std::vector<BitmapInfo> mBitmapVector;
+
 
 private:
 };

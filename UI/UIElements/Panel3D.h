@@ -64,7 +64,7 @@ public:
 	const void SetCamera(Camera *camera);
 	void Update(Button* attribute);
 
-	const Camera* GetActiveCamera();
+	Camera* GetActiveCamera();
 
 	void * operator new(size_t i) // To make sure it is 16 bit aligned
 	{
