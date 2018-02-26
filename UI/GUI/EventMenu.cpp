@@ -52,8 +52,7 @@ bool EventMenu::Init(int parentWidth,
 	
 	this->InitButtons();
 
-	//! DET GÅR INTE ATT GÖMMA FÖNSTRET I BÖRJAN.
-	this->mpPanel->Hide();
+
 
 	return true;
 }
