@@ -1,7 +1,7 @@
 #include "Panel2D.h"
 #include "../../IO/Mouse.h"
 #include <string>
-
+#include <iostream>
 Panel2D::Panel2D(
 	int width, 
 	int height, 
@@ -71,7 +71,13 @@ void Panel2D::AddButton(
 	this->mButtonVector.push_back(newButton); // Add button
 }
 
-void Panel2D::AddButton(int width, int height, int top, int left, ID2D1Bitmap * bitmap, std::string buttonName)
+void Panel2D::AddButton(
+	int width, 
+	int height, 
+	int top, 
+	int left, 
+	ID2D1Bitmap * bitmap, 
+	std::string buttonName)
 {
 	this->mButtonNames.push_back(buttonName); // Add to names list
 	Button *newButton = new Button(this->mDirect2D,
@@ -254,6 +260,45 @@ void Panel2D::ScrollActiveLog()
 	
 }
 
+void Panel2D::Scroll()
+{
+	float lowest_point	= 0.0f;
+	float highest_point	= (float)INFINITY;
+
+	// Calculate the highest and lowest point.
+	for (int i = 0; i < (int)this->mTextBoxVector.size(); i++)
+	{
+		if (this->mTextBoxVector[i]->GetTextBoxSize().bottom > lowest_point)
+		{
+			lowest_point = this->mTextBoxVector[i]->GetTextBoxSize().bottom;
+		}
+		if (this->mTextBoxVector[i]->GetTextBoxSize().top < highest_point)
+		{
+			highest_point = this->mTextBoxVector[i]->GetTextBoxSize().top;
+		}
+	}
+
+	if ((Mouse::GetScroll() != 0.0f) 
+		&& (lowest_point + highest_point > this->mTop + this->mHeight))
+	{
+		float scroll_speed = Mouse::GetScroll() * 10.0f;
+		// Move the boxes in the direction of the scroll.
+		for (int i = 0; i < (int)mTextBoxVector.size(); i++)
+		{
+			this->mTextBoxVector[i]->MoveTextBox(0, (int)scroll_speed);
+		}
+		// If out of bounds, revert.
+		if ((lowest_point < this->mTop + this->mHeight) 
+			|| (highest_point > this->mTop))
+		{
+			for (int i = 0; i < (int)mTextBoxVector.size(); i++)
+			{
+				this->mTextBoxVector[i]->MoveTextBox(0, -(int)scroll_speed);
+			}
+		}
+	}
+}
+
 void Panel2D::Update()
 {
 	this->UpdateWindowSize();
@@ -267,6 +312,13 @@ void Panel2D::Update()
 		ScrollActiveLog();
 		this->mNotificationList->Update();
 	}
+	
+	if (this->IsMouseInsidePanel())
+	{
+		// Scrolls the panel if necessary.
+		this->Scroll();
+	}
+	
 }
 
 void Panel2D::Draw()

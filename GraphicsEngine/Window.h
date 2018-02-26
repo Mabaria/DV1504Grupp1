@@ -37,6 +37,7 @@ public:
 	~Window();
 
 	void Open();
+	void OpenNormal();
 	void Close();
 	const bool IsOpen() const;
 	bool Update();

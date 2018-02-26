@@ -56,6 +56,9 @@ public:
 	bool IsVisible();
 	void Hide();
 	void Show();
+	
+	// Does not work, do not use.
+	void ShowOnTop();
 
 	HWND *GetPanelWindowHandle();
 
@@ -70,6 +73,8 @@ protected:
 	int mParentHeight;
 	int mParentTop;
 	int mParentLeft;
+
+	bool mIsVisible;
 
 	// To compare sizes.
 	HWND mParentWindow;

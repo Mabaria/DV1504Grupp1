@@ -10,6 +10,7 @@ System::System()
 	this->mpSideViewPanel	= nullptr;
 	this->mpTopViewPanel	= nullptr;
 	this->mpWindow			= nullptr;
+
 }
 
 System::~System()
@@ -61,28 +62,16 @@ System::~System()
 	}
 	for (int i = 0; i < (int)this->mFloors.size(); i++)
 	{
-		if (this->mFloors[i])
-		{
-			delete this->mFloors[i];
-			this->mFloors[i] = nullptr;
-		}
+		delete this->mFloors[i];	
 	}
 	for (int i = 0; i < (int)this->mBounds.size(); i++)
-	{
-		if (this->mBounds[i])
-		{
-			delete this->mBounds[i];
-			this->mBounds[i] = nullptr;
-		}
+	{	
+		delete this->mBounds[i];		
 	}
 
 	for (int i = 0; i < (int)this->mTexts.size(); i++)
-	{
-		if (this->mTexts[i])
-		{
-			delete this->mTexts[i];
-			this->mTexts[i] = nullptr;
-		}
+	{	
+		delete this->mTexts[i];		
 	}
 }
 
@@ -137,6 +126,14 @@ void System::BuildGraphicalUserInterface(
 		this->mpTopViewPanel->GetPanelWindowHandle());
 	this->mpMenuPanel->AddObserver(this);
 
+	this->mpInfoPanel.Init(
+		windowWidth / 3, 
+		windowHeight - 100, 
+		10,
+		windowWidth / 3 + 10,
+		this->mpWindow->GetWindow(),
+		windowName.c_str());
+
 	this->mSetupPanels();
 	this->mSetupModels();
 	this->mSetupBoat();
@@ -166,6 +163,7 @@ void System::mUpdate()
 	this->mpTopViewPanel->Update();
 	this->mpSideViewPanel->Update();
 	this->mpMenuPanel->Update();
+	this->mpInfoPanel.Update();
 }
 
 void System::mDraw()
@@ -175,15 +173,16 @@ void System::mDraw()
 	this->mpTopViewPanel->Draw();
 	this->mpSideViewPanel->Draw();
 	this->mpMenuPanel->Draw();
+	this->mpInfoPanel.Draw();
 }
 
 void System::mHandleInput()
 {
 	if (Mouse::IsButtonPressed(Buttons::Left))
 	{
-		if (
-			this->mpTopViewPanel->IsMouseInsidePanel() && 
-			!this->mpMenuPanel->IsMouseInsidePanel())
+		if (this->mpTopViewPanel->IsMouseInsidePanel() && 
+			!this->mpMenuPanel->IsMouseInsidePanel() &&
+			!this->mpInfoPanel.IsMouseInsidePanel())
 		{
 			Picking::GetWorldRay(
 				this->mpTopViewPanel->GetActiveCamera(),
@@ -220,6 +219,8 @@ void System::mHandleInput()
 void System::mUpdateEvents(Room * room)
 {
 	std::vector<LogEvent*> events_in_room = room->GetActiveEvents();
+	// If there already is an active event of that type in that room
+	// the event is removed.
 	if (!this->mpActiveLogPanel->AddNotification(room, events_in_room.back()))
 	{
 		Event::Type to_remove = this->mpMenuPanel->GetLastClicked();
@@ -228,7 +229,8 @@ void System::mUpdateEvents(Room * room)
 		events_in_room = room->GetActiveEvents();
 	}
 
-	// Temp solution. Sorry
+	// Adds bounds to the deck name to get the name of the 
+	// mesh object holding the bounding boxes for the deck.
 	std::string bounds_name = room->GetDeckName() + "bounds";
 
 	// Saving things for readability.
@@ -321,18 +323,24 @@ void System::mSetupPanels()
 	this->mpControlPanel->LoadImageToBitmap(
 		"../../Models/Button05.png",
 		"Reset");
-
+	this->mpControlPanel->LoadImageToBitmap(
+		"../../Models/Info.png", 
+		"Info");
 
 	this->mpControlPanel->AddButton(70, 70, 10, 10,
 		this->mpControlPanel->GetBitmapByName("Reset"), "Reset");
 	this->mpControlPanel->AddButton(70, 70, 90, 10,
 		this->mpControlPanel->GetBitmapByName("Reset"), "Reset2");
-
+	this->mpControlPanel->AddButton(70, 70, 90, 90,
+		this->mpControlPanel->GetBitmapByName("Info"), "Info");
 
 	this->mpControlPanel->GetButtonByName("Reset")->
 		AddObserver(this->mpSideViewPanel);
 	this->mpControlPanel->GetButtonByName("Reset2")->
 		AddObserver(this->mpTopViewPanel);
+
+	this->mpControlPanel->GetButtonByName("Info")->
+		AddObserver(&this->mpInfoPanel);
 
 	this->mpActiveLogPanel->LoadImageToBitmap(
 		"../../Models/Button01.png",
