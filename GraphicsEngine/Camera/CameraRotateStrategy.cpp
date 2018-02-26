@@ -133,7 +133,7 @@ void CameraRotateStrategy::HandleChangeInCamera()
 {
 	XMVECTOR dir = XMLoadFloat3(&this->mDirection);
 
-	// Update member variables if camera data has changed
+	// Update member variables if camera data has been changed
 
 	dir =
 		this->pCamera->GetPosition() - this->pCamera->GetLookVector();
@@ -149,6 +149,7 @@ void CameraRotateStrategy::HandleChangeInCamera()
 
 void CameraRotateStrategy::AnimateToNewPosition()
 {
+	// Get new vector look at position and move it closer
 	XMVECTOR dir = XMLoadFloat3(&this->mNewPosition) - this->pCamera->GetLookVector();
 	this->pCamera->SetLookVector((dir * 0.2f) + this->pCamera->GetLookVector());
 	this->mDistance -= (this->mDistance - this->mMinDistance) * 0.2f;
