@@ -37,9 +37,6 @@ void Room::SetName(std::string name)
 void Room::SetAABB(const AABB &boundingBox)
 {
 	this->mBoundingBox = boundingBox;
-
-	// Runs here because mBoundingBox doesn't exist prior.
-	this->InitRoomInfo();
 }
 
 float Room::CheckRayCollision(const Ray & rRay)
@@ -167,7 +164,7 @@ std::string Room::WriteString() const
 	return print;
 }
 
-void Room::InitRoomInfo()
+void Room::InitRoomInfo(XMMATRIX matrix)
 {
 	// Takes the mean distance from origin for each of the axes.
 	this->mRoomInfo.centerPosition.x = 
@@ -177,6 +174,12 @@ void Room::InitRoomInfo()
 	this->mRoomInfo.centerPosition.z = 
 		(this->mBoundingBox.z.max + this->mBoundingBox.z.min) / 2.0f;
 	
+	// Applying the deck matrix to the center position
+	// to get it in world space.
+	XMVECTOR center_pos = XMLoadFloat3(&this->mRoomInfo.centerPosition);
+	center_pos = XMVector3Transform(center_pos, matrix);
+	XMStoreFloat3(&this->mRoomInfo.centerPosition, center_pos);
+
 	// Takes the difference between the max and min points for each
 	// of the axes (unsigned).
 	this->mRoomInfo.size.x = std::abs(
