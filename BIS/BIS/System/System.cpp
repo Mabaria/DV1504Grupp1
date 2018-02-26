@@ -269,8 +269,7 @@ void System::mUpdateHover(std::string name, int index, bool activate)
 	this->mpTopViewPanel->rGetMeshObject(name)->SetHover(
 		activate,
 		this->mpTopViewPanel->rGetDirect3D().GetContext(),
-		index
-	);
+		index);
 }
 
 void System::mUpdateEvents(Room * room)
@@ -427,7 +426,7 @@ void System::mSetupPanels()
 	int list_top = 0;
 	int list_left = 0;
 	int title_font_size = 40;
-	int object_font_size = 14;
+	int object_font_size = 28;
 
 	this->mpActiveLogPanel->SetNotificationList(
 		list_top, 
@@ -546,12 +545,12 @@ void System::mSetupModels()
 	this->mpTopViewPanel->rGetMeshObject("Huvuddäckbounds")->Translate(0.0f, 0.0f, 0.0f);
 	this->mpTopViewPanel->rGetMeshObject("Trossdäckbounds")->Translate(0.0f, 0.0f, 0.5f);
 
-	this->mpSideViewPanel->rGetMeshObject("Bryggdäck")->Translate(0.05f, 0.9f, 0.0f);
+	this->mpSideViewPanel->rGetMeshObject("Bryggdäck")->Translate(0.05f, 1.3f, 0.0f);
 	this->mpSideViewPanel->rGetMeshObject("Huvuddäck")->Translate(0.05f, 0.0f, 0.0f);
-	this->mpSideViewPanel->rGetMeshObject("Trossdäck")->Translate(0.05f, -0.9f, 0.0f);
-	this->mpSideViewPanel->rGetMeshObject("Bryggdäckbounds")->Translate(0.05f, 0.9f, 0.0f);
+	this->mpSideViewPanel->rGetMeshObject("Trossdäck")->Translate(0.05f, -1.3f, 0.0f);
+	this->mpSideViewPanel->rGetMeshObject("Bryggdäckbounds")->Translate(0.05f, 1.3f, 0.0f);
 	this->mpSideViewPanel->rGetMeshObject("Huvuddäckbounds")->Translate(0.05f, 0.0f, 0.0f);
-	this->mpSideViewPanel->rGetMeshObject("Trossdäckbounds")->Translate(0.05f, -0.9f, 0.0f);
+	this->mpSideViewPanel->rGetMeshObject("Trossdäckbounds")->Translate(0.05f, -1.3f, 0.0f);
 
 	this->mpSideViewPanel->rGetMeshObject("Bryggdäck")->Scale(0.5f, 0.5f, 0.5f);
 	this->mpSideViewPanel->rGetMeshObject("Huvuddäck")->Scale(0.5f, 0.5f, 0.5f);

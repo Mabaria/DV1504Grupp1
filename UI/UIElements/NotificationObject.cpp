@@ -125,6 +125,8 @@ const std::string NotificationObject::GetStartTime() const
 const std::string NotificationObject::GetNotificationString() const
 {
 	std::string return_string = "";
+	return_string += std::to_string(this->mIndex);
+	return_string += ". ";
 	return_string += this->mRoomName;
 	return_string += "\n";
 	return_string += this->mElapsedTime;
