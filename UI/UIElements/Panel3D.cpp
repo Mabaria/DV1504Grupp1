@@ -333,6 +333,10 @@ bool Panel3D::CreateShadersAndSetup(
 	(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	this->mDirect3D.GetContext()->IASetInputLayout(this->mpInputLayout);
 
+	this->AddPixelShader(L"../../GraphicsEngine/PS_Boat.hlsl");
+	this->AddPixelShader(L"../../GraphicsEngine/PS_Text3D.hlsl");
+	this->AddPixelShader(L"../../GraphicsEngine/PS_EventBox.hlsl");
+
 	return result;
 }
 

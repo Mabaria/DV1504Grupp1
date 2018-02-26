@@ -195,7 +195,6 @@ void System::mHandleInput()
 
 			if (last_picked_room == nullptr)
 			{
-				// Temp solution. Sorry
 				std::string picked_name = picked_room->GetDeckName() + "bounds";
 				this->mUpdateHover(picked_name, picked_room->GetIndexInDeck(), true);
 				last_picked_room = picked_room;
@@ -204,7 +203,6 @@ void System::mHandleInput()
 
 			else if (picked_room != last_picked_room)
 			{
-				// Temp solution. Sorry
 				std::string picked_name = picked_room->GetDeckName() + "bounds";
 				std::string last_picked_name = last_picked_room->GetDeckName() + "bounds";
 
@@ -218,7 +216,6 @@ void System::mHandleInput()
 
 		else if(last_picked_room != nullptr)
 		{
-			// Temp solution. Sorry
 			std::string last_picked_name = last_picked_room->GetDeckName() + "bounds";
 			this->mUpdateHover(last_picked_name, last_picked_room->GetIndexInDeck(), false);
 			last_picked_room = picked_room;
@@ -328,10 +325,6 @@ void System::mSetupPanels()
 		L"",
 		L"../../GraphicsEngine/Test_PixelShader.hlsl");
 
-	this->mpTopViewPanel->AddPixelShader(L"../../GraphicsEngine/PS_Text3D.hlsl");
-	this->mpTopViewPanel->AddPixelShader(L"../../GraphicsEngine/PS_EventBox.hlsl");
-	this->mpTopViewPanel->AddPixelShader(L"../../GraphicsEngine/PS_Boat.hlsl");
-
 	// Setting up the control panel.
 	this->mpControlPanel->AddTextbox(
 		this->mpControlPanel->GetWidth(), 
@@ -425,43 +418,43 @@ void System::mSetupModels()
 	MeshObject bound_huvud("Huvuddäckbounds", this->mBounds[1]);
 	MeshObject bound_tross("Trossdäckbounds", this->mBounds[2]);
 
-	this->mpTopViewPanel->AddMeshObject(&floor_brygg, 3);
-	this->mpTopViewPanel->AddMeshObject(&floor_huvud, 3);
-	this->mpTopViewPanel->AddMeshObject(&floor_tross, 3);
-	this->mpTopViewPanel->AddMeshObject(&bound_brygg, 2, L"../../Models/BlendColor.dds", true);
-	this->mpTopViewPanel->AddMeshObject(&bound_huvud, 2, L"../../Models/BlendColor.dds", true);
-	this->mpTopViewPanel->AddMeshObject(&bound_tross, 2, L"../../Models/BlendColor.dds", true);
+	this->mpTopViewPanel->AddMeshObject(&floor_brygg, PANEL3D_SHADER_BOAT);
+	this->mpTopViewPanel->AddMeshObject(&floor_huvud, PANEL3D_SHADER_BOAT);
+	this->mpTopViewPanel->AddMeshObject(&floor_tross, PANEL3D_SHADER_BOAT);
+	this->mpTopViewPanel->AddMeshObject(&bound_brygg, PANEL3D_SHADER_EVENT, L"../../Models/BlendColor.dds", true);
+	this->mpTopViewPanel->AddMeshObject(&bound_huvud, PANEL3D_SHADER_EVENT, L"../../Models/BlendColor.dds", true);
+	this->mpTopViewPanel->AddMeshObject(&bound_tross, PANEL3D_SHADER_EVENT, L"../../Models/BlendColor.dds", true);
 	
 	Quad quad(true);
 
 	this->mpTopViewPanel->AddMeshObject(
 		"Text3D_Floor01",
 		quad.GetIndices(),
-		quad.GetVertices(), 1,
+		quad.GetVertices(), PANEL3D_SHADER_TEXT,
 		L"../../Models/d01.dds"
 	); 
 	
 	this->mpTopViewPanel->AddMeshObject(
 		"Text3D_Floor1", 
 		quad.GetIndices(),
-		quad.GetVertices(), 1,
+		quad.GetVertices(), PANEL3D_SHADER_TEXT,
 		L"../../Models/d1.dds"
 	);
 	
 	this->mpTopViewPanel->AddMeshObject(
 		"Text3D_Floor2",
 		quad.GetIndices(),
-		quad.GetVertices(), 1,
+		quad.GetVertices(), PANEL3D_SHADER_TEXT,
 		L"../../Models/d2.dds"
 	);
 
 
-	this->mpSideViewPanel->AddMeshObject(&floor_brygg);
-	this->mpSideViewPanel->AddMeshObject(&floor_huvud);
-	this->mpSideViewPanel->AddMeshObject(&floor_tross);
-	this->mpSideViewPanel->AddMeshObject(&bound_brygg, 0, L"../../Models/BlendColor.dds", true);
-	this->mpSideViewPanel->AddMeshObject(&bound_huvud, 0, L"../../Models/BlendColor.dds", true);
-	this->mpSideViewPanel->AddMeshObject(&bound_tross, 0, L"../../Models/BlendColor.dds", true);
+	this->mpSideViewPanel->AddMeshObject(&floor_brygg, PANEL3D_SHADER_BOAT);
+	this->mpSideViewPanel->AddMeshObject(&floor_huvud, PANEL3D_SHADER_BOAT);
+	this->mpSideViewPanel->AddMeshObject(&floor_tross, PANEL3D_SHADER_BOAT);
+	this->mpSideViewPanel->AddMeshObject(&bound_brygg, PANEL3D_SHADER_EVENT, L"../../Models/BlendColor.dds", true);
+	this->mpSideViewPanel->AddMeshObject(&bound_huvud, PANEL3D_SHADER_EVENT, L"../../Models/BlendColor.dds", true);
+	this->mpSideViewPanel->AddMeshObject(&bound_tross, PANEL3D_SHADER_EVENT, L"../../Models/BlendColor.dds", true);
 
 
 	// Scaling and translating the mesh objects in the panels.
