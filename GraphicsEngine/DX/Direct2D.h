@@ -1,12 +1,16 @@
 #pragma once
 #include <d2d1.h>
+#include <d2d1_1.h>
+#include <d3d11.h>
 #include <vector>
 #include <Windows.h>
 #include <wincodec.h>
 #include <dwrite.h>
+#include "../CustomTextRenderer.h"
 #pragma comment(lib, "Dwrite")
 #pragma comment(lib, "windowscodecs")
 #pragma comment(lib, "d2d1")
+#pragma comment (lib, "d3d11.lib")
 
 class Direct2D
 {
@@ -14,6 +18,7 @@ public:
 	Direct2D(HWND window,
 		unsigned int width,
 		unsigned int height);
+	Direct2D();
 	~Direct2D();
 	void CreateRenderTarget(HWND window, unsigned int width, unsigned int height);
 	IWICFormatConverter *GetpFormatConverter();
@@ -24,6 +29,8 @@ public:
 	ID2D1HwndRenderTarget *GetpRenderTarget();
 	IDWriteFactory *GetpTextFactory();
 	const DWRITE_TRIMMING GetTrimmer();
+	
+	CustomTextRenderer *GetpTextRenderer();
 
 	void SetpFormatConverter(IWICFormatConverter* pConverter);
 	void SetpImagingFactory(IWICImagingFactory *pWicFactory);
@@ -41,9 +48,13 @@ private:
 	IDWriteFactory *mpTextFactory;
 	DWRITE_TRIMMING mTrimmer;
 
+
+	CustomTextRenderer* mpTextRenderer;
+
 	void mCreateFactory();
 	void mCreateWicFactory();
 	void mCreateTextFactory();
+	void mCreateTextRenderer();
 	void mInit();
 	void ReleaseCOM(IUnknown *object);
 };

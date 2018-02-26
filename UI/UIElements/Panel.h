@@ -3,11 +3,18 @@
 #include <Windows.h>
 #include <math.h>
 #include "../../IO/Mouse.h"
+#include "../../GraphicsEngine/DX/Direct2D.h"
+#include <locale>
 
 struct Fraction
 {
 	float x;
 	float y;
+};
+struct BitmapInfo
+{
+	ID2D1Bitmap* bitmap = nullptr;
+	std::string name = "";
 };
 
 class Panel
@@ -52,6 +59,7 @@ public:
 
 	HWND *GetPanelWindowHandle();
 
+
 protected:
 	int mWidth;
 	int mHeight;
@@ -68,6 +76,7 @@ protected:
 	HWND mPanelWindow;
 	LPCTSTR mTitle;
 
+	std::vector<BitmapInfo> mBitmapVector;
 
 
 private:

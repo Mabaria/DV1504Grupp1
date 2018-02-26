@@ -24,6 +24,11 @@ public:
 	void SetFontName(std::wstring fontName);
 	void SetTextAlignment(DWRITE_TEXT_ALIGNMENT textAlignment);
 
+	void DrawToBitmap(); /* This functions draws to the bitmap ONLY, and does
+						 NOT output anything to the render target in the Direct2D*/
+	ID2D1Bitmap* GetBitmap() const; /* Don't forget to call DrawToBitmap before
+									calling this function if the text has
+									been updated*/
 
 private:
 
@@ -40,6 +45,15 @@ private:
 	DWRITE_FONT_WEIGHT mFontWeight;
 	std::wstring mFontName;
 
+	/* New additions related to custom text layout */
+
+	IDWriteTextLayout *mpTextLayout;
+	void mCreateTextLayout();
+
+	ID2D1Bitmap *mpTextBitmap;
+	ID2D1BitmapRenderTarget* mpTextRenderTarget;
+
+	/*---------------------------------------------*/
 	void mCreateColor();
 	void mCreateTextFormat();
 	void ReleaseCOM(IUnknown *object);

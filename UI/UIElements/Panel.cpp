@@ -32,10 +32,21 @@ Panel::Panel(int width, int height, int top, int left, HWND handle, LPCTSTR titl
 	this->mParentWidth	= parent_size.right - parent_size.left;
 	this->mParentTop	= parent_size.top;
 	this->mParentLeft	= parent_size.left;
+
+
 }
 
 Panel::~Panel()
 {
+	for (unsigned int i = 0; i < this->mBitmapVector.size(); i++)
+	{
+		if (this->mBitmapVector[i].bitmap)
+		{
+			this->mBitmapVector[i].bitmap->Release();
+			this->mBitmapVector[i].bitmap = nullptr;
+		}
+	}
+
 }
 
 const void Panel::SetWidth(int width)
@@ -211,3 +222,7 @@ HWND *Panel::GetPanelWindowHandle()
 {
 	return &this->mPanelWindow;
 }
+
+
+
+

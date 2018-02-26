@@ -632,7 +632,7 @@ const void Panel3D::Draw()
 				numIndices,	// Number of indices.
 				0,			// Start index location.
 				offset);	// Base vertex location.
-		}
+		}		
 	}
 	this->mDirect3D.GetSwapChain()->Present(1, 0);
 }
