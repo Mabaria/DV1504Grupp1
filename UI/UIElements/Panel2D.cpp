@@ -3,11 +3,11 @@
 #include <string>
 
 Panel2D::Panel2D(
-	int width, 
-	int height, 
-	int top, 
-	int left, 
-	HWND handle, 
+	int width,
+	int height,
+	int top,
+	int left,
+	HWND handle,
 	LPCTSTR title)
 	:Panel(width, height, top, left, handle, title)
 {
@@ -26,7 +26,7 @@ Panel2D::~Panel2D()
 		{
 			delete this->mButtonVector[i];
 		}
-	} 
+	}
 	for (unsigned int i = 0; i < this->mTextBoxVector.size(); i++)
 	{
 		if (this->mTextBoxVector[i])
@@ -73,10 +73,10 @@ void Panel2D::AddButton(int width, int height, int top, int left, ID2D1Bitmap * 
 }
 
 void Panel2D::AddTextbox(
-	int width, 
-	int height, 
-	int top, 
-	int left, 
+	int width,
+	int height,
+	int top,
+	int left,
 	std::string text,
 	std::string name)
 {
@@ -107,8 +107,8 @@ Button * Panel2D::GetButtonByName(std::string name)
 		{
 			to_return = this->mButtonVector[count]; // Return pointer to button
 			it = this->mButtonNames.end() - 1; // Set iterator to end
-			// -1 because incrementation is performed after this.
-			// Incrementing on .end() is a baaad idea.
+											   // -1 because incrementation is performed after this.
+											   // Incrementing on .end() is a baaad idea.
 		}
 	}
 	return to_return;
@@ -143,7 +143,7 @@ TextBox * Panel2D::GetTextBoxByName(std::string name)
 			// Set iterator to end
 			// -1 because incrementation is performed after this.
 			// Incrementing on .end() is a baaad idea.
-			it = this->mTextBoxNames.end() - 1; 
+			it = this->mTextBoxNames.end() - 1;
 		}
 	}
 	return to_return;
@@ -160,14 +160,14 @@ TextBox * Panel2D::GetTextBoxByIndex(unsigned int index)
 }
 
 void Panel2D::SetNotificationList(
-	int posX, 
-	int posY, 
-	int titleFontSize, 
+	int posX,
+	int posY,
+	int titleFontSize,
 	int objectFontSize)
 {
 	this->mNotificationList = new NotificationList(
-		this->mDirect2D, 
-		posX, 
+		this->mDirect2D,
+		posX,
 		posY,
 		titleFontSize,
 		objectFontSize);
@@ -195,8 +195,8 @@ bool Panel2D::AddNotification(Room * room, LogEvent * event)
 		break;
 	}
 	return this->mNotificationList->AddNotification(
-		this->mDirect2D, 
-		room, 
+		this->mDirect2D,
+		room,
 		event,
 		bitmap);
 }
@@ -213,14 +213,14 @@ bool Panel2D::GetButtonOcclude()
 
 void Panel2D::ScrollActiveLog()
 {
-	if (Mouse::GetScroll() != 0 
-		&& this->mNotificationList->GetListHeight() 
-		> this->mDirect2D->GetpRenderTarget()->GetSize().height 
+	if (Mouse::GetScroll() != 0
+		&& this->mNotificationList->GetListHeight()
+	> this->mDirect2D->GetpRenderTarget()->GetSize().height
 		&& this->IsMouseInsidePanel())
 	{
 		this->mNotificationList->MoveLog(Mouse::GetScroll() * 10.0f);
 	}
-	
+
 }
 
 void Panel2D::Update()
@@ -230,7 +230,7 @@ void Panel2D::Update()
 
 	// Updating the notification list only if
 	// the panel has one.
-	if (this->mNotificationListIsActive 
+	if (this->mNotificationListIsActive
 		&& this->mNotificationList->GetNumberOfNotificationObjects())
 	{
 		ScrollActiveLog();
@@ -248,17 +248,17 @@ void Panel2D::Draw()
 			0.9f,
 			1.0f)));
 	// Draw all the buttons in the panel
-	for (std::vector<Button*>::iterator it = 
-		this->mButtonVector.begin(); 
-		it != this->mButtonVector.end(); 
+	for (std::vector<Button*>::iterator it =
+		this->mButtonVector.begin();
+		it != this->mButtonVector.end();
 		it++)
 	{
 		(*it)->DrawButton();
 	}
 	// Draw all the text boxes in the panel
-	for (std::vector<TextBox*>::iterator it = 
-		this->mTextBoxVector.begin(); 
-		it != this->mTextBoxVector.end(); 
+	for (std::vector<TextBox*>::iterator it =
+		this->mTextBoxVector.begin();
+		it != this->mTextBoxVector.end();
 		it++)
 	{
 		(*it)->DrawTextBox();
@@ -275,12 +275,12 @@ void Panel2D::Draw()
 
 void Panel2D::mUpdateButtons()
 {
-	 // For notification list.
+	// For notification list.
 	Button *button = nullptr;
 	this->mButtonOccludes = false;
 	if (this->IsMouseInsidePanel()) /* Check if mouse is inside panel,
-									 if not there is no chance of any buttons
-									 being pressed. */
+									if not there is no chance of any buttons
+									being pressed. */
 	{
 		for (std::vector<Button*>::iterator it = this->mButtonVector.begin();
 			it != this->mButtonVector.end();
@@ -300,7 +300,7 @@ void Panel2D::mUpdateButtons()
 				{
 					(*it)->SetButtonStatus(BUTTON_STATE::CLICKED);
 				}
-				else if(!Mouse::IsButtonDown(Buttons::Left) ||
+				else if (!Mouse::IsButtonDown(Buttons::Left) ||
 					(*it)->GetButtState() != BUTTON_STATE::CLICKED)
 					(*it)->SetButtonStatus(BUTTON_STATE::HOVER);
 			}

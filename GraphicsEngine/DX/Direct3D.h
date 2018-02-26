@@ -13,9 +13,9 @@ using namespace DirectX;
 
 /*
 
-	-- Direct 3D 11 --
+-- Direct 3D 11 --
 
-	API used for 3D rendering
+API used for 3D rendering
 
 */
 
@@ -24,7 +24,7 @@ class D3D11
 public:
 	D3D11();
 	D3D11(
-		const int width, 
+		const int width,
 		const int height);
 	~D3D11();
 
@@ -60,7 +60,7 @@ public:
 	IDXGIDevice *GetDXGIDevice();
 
 private:
-	ID3D11Device *mDevice;
+	ID3D11Device * mDevice;
 	ID3D11DeviceContext *mContext;
 	IDXGISwapChain *mSwapChain;
 	ID3D11RenderTargetView *mBackBuffer;
@@ -75,7 +75,7 @@ private:
 
 	Size mSize;
 	float mClearColor[4];
-	
+
 	void CreateDeviceAndSwapChain(const HWND& window);
 	void CreateRenderTarget();
 };

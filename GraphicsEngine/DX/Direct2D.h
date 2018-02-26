@@ -37,13 +37,13 @@ public:
 	void InitDeviceAndContext(IDXGIDevice *dxgiDevice);
 private:
 
-	IWICFormatConverter *mpConverter;
+	IWICFormatConverter * mpConverter;
 	IWICImagingFactory *mpWicFactory;
 	IWICBitmapDecoder *mpDecoder;
 	IWICBitmapFrameDecode *mpBitmapSrc;
 	ID2D1HwndRenderTarget *mpRenderTarget;
 	ID2D1Factory *mpFactory;
-	
+
 	IDWriteFactory *mpTextFactory;
 	DWRITE_TRIMMING mTrimmer;
 

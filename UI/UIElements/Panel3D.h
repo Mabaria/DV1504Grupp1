@@ -15,22 +15,22 @@ class Panel3D : public Panel, public Observer<Button>
 {
 public:
 	Panel3D(
-		int width, 
-		int height, 
-		int top, 
+		int width,
+		int height,
+		int top,
 		int left,
-		HWND handle, 
+		HWND handle,
 		LPCTSTR title,
 		bool movableCamera = false);
 	~Panel3D();
-	
+
 	D3D11& rGetDirect3D();
 
 	// Creates buffers for and adds mesh 
 	// objects into the vector of mesh objects.
 	const void AddMeshObject(
 		std::string name,
-		std::vector<std::vector<unsigned int>> indices, 
+		std::vector<std::vector<unsigned int>> indices,
 		std::vector<std::vector<Vertex>> vertices,
 		std::wstring texturePath,
 		bool use_event = false);
@@ -93,7 +93,7 @@ private:
 	ID3D11GeometryShader *mpGeometryShader;
 	ID3D11PixelShader *mpPixelShader;
 	ID3D11InputLayout *mpInputLayout;
-	
+
 	D3D11_INPUT_ELEMENT_DESC mInputDesc[3];
 
 	Camera *mpCamera;
@@ -107,7 +107,7 @@ private:
 
 	// Creates the constant buffer for the last added mesh object.
 	const void mCreateMatrixBuffer(
-		XMMATRIX *matrix, 
+		XMMATRIX *matrix,
 		ID3D11Buffer **constantBuffer);
 
 	const void mCreateMaterialBuffer(
@@ -116,7 +116,7 @@ private:
 
 	const void CreateTexture(std::wstring texturePath);
 
-	
+
 	MovableCameraComponent* mpMovableCameraComponent;
 	bool mShowCursor;
 	bool mMovableCamera;

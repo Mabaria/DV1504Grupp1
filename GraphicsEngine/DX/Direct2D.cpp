@@ -4,20 +4,20 @@ Direct2D::Direct2D(HWND window,
 	unsigned int width,
 	unsigned int height)
 {
-	this->mpFactory			= nullptr;
-	this->mpRenderTarget	= nullptr;
-	this->mpWicFactory		= nullptr;
-	this->mpConverter		= nullptr;
-	this->mpDecoder			= nullptr;
-	this->mpBitmapSrc		= nullptr;
-	this->mpTextFactory		= nullptr;
-	this->mpFactory1		= nullptr;
-	this->mpDevice			= nullptr;
-	this->mpContext			= nullptr;
-	this->mTrimmer			= {};
+	this->mpFactory = nullptr;
+	this->mpRenderTarget = nullptr;
+	this->mpWicFactory = nullptr;
+	this->mpConverter = nullptr;
+	this->mpDecoder = nullptr;
+	this->mpBitmapSrc = nullptr;
+	this->mpTextFactory = nullptr;
+	this->mpFactory1 = nullptr;
+	this->mpDevice = nullptr;
+	this->mpContext = nullptr;
+	this->mTrimmer = {};
 	this->mTrimmer.granularity = DWRITE_TRIMMING_GRANULARITY_CHARACTER;
 	this->mInit();
-	this->CreateRenderTarget(window, width, height);	
+	this->CreateRenderTarget(window, width, height);
 }
 
 Direct2D::Direct2D()
@@ -53,10 +53,10 @@ Direct2D::~Direct2D()
 
 void Direct2D::mCreateFactory()
 {
-	 D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED,
+	D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED,
 		&this->mpFactory);
-	 D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED,
-		 &this->mpFactory1);
+	D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED,
+		&this->mpFactory1);
 }
 
 void Direct2D::mInit()
