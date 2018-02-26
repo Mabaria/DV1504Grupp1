@@ -211,6 +211,11 @@ void Panel2D::SetNotificationList(
 	this->mNotificationListIsActive = true;
 }
 
+NotificationList * Panel2D::GetNotificationList()
+{
+	return this->mNotificationList;
+}
+
 bool Panel2D::AddNotification(Room * room, LogEvent * event)
 {
 	ID2D1Bitmap *bitmap = nullptr;
@@ -231,11 +236,13 @@ bool Panel2D::AddNotification(Room * room, LogEvent * event)
 	default:
 		break;
 	}
-	return this->mNotificationList->AddNotification(
-		this->mDirect2D, 
-		room, 
+
+	bool result = this->mNotificationList->AddNotification(
+		this->mDirect2D,
+		room,
 		event,
 		bitmap);
+	return result;
 }
 
 bool Panel2D::RemoveNotification(Room * room, Event::Type type)
@@ -360,6 +367,8 @@ void Panel2D::mUpdateButtons()
 {
 	 // For notification list.
 	Button *button = nullptr;
+	NotificationObject *notification_object = nullptr;
+	//----------------------
 	this->mButtonOccludes = false;
 	if (this->IsMouseInsidePanel()) /* Check if mouse is inside panel,
 									 if not there is no chance of any buttons
@@ -394,15 +403,16 @@ void Panel2D::mUpdateButtons()
 
 		}
 		//! Notification list sets rect status instead of button status.
+		// Notifies system if a notification object is clicked.
 		if (this->mNotificationListIsActive)
 		{
 			for (int i = 0;
 				i < this->mNotificationList->GetNumberOfNotificationObjects();
 				i++)
 			{
-				button = this->mNotificationList->
-					GetNotificationObjectByIndex(i)->
-					GetButton();
+				notification_object = this->mNotificationList->
+					GetNotificationObjectByIndex(i);
+				button = notification_object->GetButton();
 
 				if (Mouse::GetPositionPercentage().x <
 					button->GetBoundingBoxPercentage().right &&
@@ -418,6 +428,8 @@ void Panel2D::mUpdateButtons()
 					if (Mouse::IsButtonPressed(Buttons::Left))
 					{
 						button->SetRectStatus(BUTTON_STATE::CLICKED);
+						notification_object->NotifyObservers
+						(notification_object->GetRoom());
 					}
 					else if (!Mouse::IsButtonDown(Buttons::Left) ||
 						button->GetButtState() != BUTTON_STATE::CLICKED)

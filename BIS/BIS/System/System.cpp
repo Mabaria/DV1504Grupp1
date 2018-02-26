@@ -152,7 +152,17 @@ void System::Run()
 
 void System::Update(Room * pickedRoom)
 {
-	this->mUpdateEvents(pickedRoom);
+	// If a room is clicked in top view panel.
+	if (this->mpTopViewPanel->IsMouseInsidePanel())
+	{
+		this->mUpdateEvents(pickedRoom);
+	}
+	// If a notification object is clicked in the active log panel.
+	else if (this->mpActiveLogPanel->IsMouseInsidePanel())
+	{
+		// Center position on the room that the event is active in.
+		bool test = true;
+	}
 }
 
 void System::mUpdate()
@@ -228,6 +238,14 @@ void System::mUpdateEvents(Room * room)
 		room->ClearEvent(to_remove);
 		events_in_room = room->GetActiveEvents();
 	}
+	// Adding the system as an observer to the newly added notification object.
+	this->mpActiveLogPanel->
+		GetNotificationList()->
+		GetNotificationObjectByIndex(
+			this->mpActiveLogPanel->GetNotificationList()->
+			GetNumberOfNotificationObjects() - 1)->
+		AddObserver(this);
+
 
 	// Adds bounds to the deck name to get the name of the 
 	// mesh object holding the bounding boxes for the deck.

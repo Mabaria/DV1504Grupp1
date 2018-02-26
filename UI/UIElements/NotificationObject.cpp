@@ -10,11 +10,12 @@ NotificationObject::NotificationObject(
 	: mButton(direct2d, bitmap, 0, 0, 0, 0)
 	, mTextBox(direct2d, 0, 0, 0, 0)
 {
-	this->mTimer = event->GetTimer();
-	this->mRoomName = room->GetName();
-	this->mDeckName = room->GetDeckName();
-	this->mStartTime = this->mTimer->WhenTimerStarted();
-	this->mElapsedTime = this->mTimer->GetTimeAsStr();
+	this->mpRoom = room;
+	this->mpTimer = event->GetTimer();
+	this->mRoomName = this->mpRoom->GetName();
+	this->mDeckName = this->mpRoom->GetDeckName();
+	this->mStartTime = this->mpTimer->WhenTimerStarted();
+	this->mElapsedTime = this->mpTimer->GetTimeAsStr();
 	this->mEventType = event->GetType();
 	this->mIndex = index;
 	
@@ -136,6 +137,11 @@ Button * NotificationObject::GetButton()
 	return &this->mButton;
 }
 
+Room * NotificationObject::GetRoom()
+{
+	return this->mpRoom;
+}
+
 const int NotificationObject::GetWidth() const
 {
 	return (int)this->mButton.GetButtonSize().right 
@@ -176,7 +182,7 @@ const void NotificationObject::SetText(std::string text)
 
 void NotificationObject::Update()
 {
-	this->mElapsedTime = this->mTimer->GetTimeAsStr();
+	this->mElapsedTime = this->mpTimer->GetTimeAsStr();
 	this->SetText(this->GetNotificationString());
 }
 
