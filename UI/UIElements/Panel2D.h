@@ -70,6 +70,7 @@ public:
 	bool GetButtonOcclude();
 
 	void ScrollActiveLog();
+	void Scroll();
 	void Update();
 	void Draw();
 
@@ -89,4 +90,6 @@ private:
 	bool mNotificationListIsActive;
 
 	bool mButtonOccludes;
+
+
 };

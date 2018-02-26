@@ -44,6 +44,7 @@ private:
 	unsigned int mFontSize;
 	DWRITE_FONT_WEIGHT mFontWeight;
 	std::wstring mFontName;
+	DWRITE_TEXT_ALIGNMENT mAlignment;
 
 	/* New additions related to custom text layout */
 

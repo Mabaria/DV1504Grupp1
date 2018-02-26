@@ -20,6 +20,7 @@ TextBox::TextBox(
 	this->mpTextBitmap = nullptr;
 	this->mpTextRenderTarget = nullptr;
 	
+	this->mAlignment = DWRITE_TEXT_ALIGNMENT_LEADING;
 	this->mFontWeight = DWRITE_FONT_WEIGHT_NORMAL;
 	this->mCreateColor();
 
@@ -251,6 +252,7 @@ void TextBox::mCreateTextFormat()
 	);
 	this->mpTextFormat->SetTrimming(&this->D2D1Panel->GetTrimmer(), NULL);
 	this->mpTextFormat->SetWordWrapping(DWRITE_WORD_WRAPPING_EMERGENCY_BREAK);
+	this->mpTextFormat->SetTextAlignment(this->mAlignment);
 }
 
 void TextBox::ReleaseCOM(IUnknown * object)

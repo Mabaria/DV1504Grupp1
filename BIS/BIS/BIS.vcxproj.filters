@@ -243,6 +243,9 @@
     <ClInclude Include="..\..\GraphicsEngine\CustomTextRenderer.h">
       <Filter>Header Files\GraphicsEngine</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\UI\UIElements\InfoPanel.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BIS.cpp">
@@ -427,6 +430,9 @@
     </ClCompile>
     <ClCompile Include="..\..\GraphicsEngine\Camera\CameraPanStrategy.cpp">
       <Filter>Source Files\GraphicsEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UI\UIElements\InfoPanel.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
