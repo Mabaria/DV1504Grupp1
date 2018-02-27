@@ -11,6 +11,58 @@ LogEvent::LogEvent(Event::Type type, int roomEventIndex)
 	this->mActiveEventIndex = roomEventIndex;
 }
 
+LogEvent::LogEvent(std::string lineFromLog)
+{
+	std::stringstream ss(lineFromLog);
+	std::string word;
+	std::string number;
+	char scrap;
+
+	Timestamp ts;
+
+	ss >> word; // Get rid of 'e'
+
+	// Fill the start time to timestamp
+	ss >> ts.date.year;
+	ss.get(scrap);
+	ss >> ts.date.month;
+	ss.get(scrap);
+	ss >> ts.date.day;
+	
+	ss >> ts.clock.hour;
+	ss.get(scrap);
+	ss >> ts.clock.minute;
+	ss.get(scrap);
+	ss >> ts.clock.second;
+
+	this->mTimer.SetTimestamp(ts);
+
+	// Get event type
+	ss >> word;
+	this->mType = Event::GetType(word);
+
+	ss >> word; // '|'
+
+	// Get started/stopped
+	ss >> word;
+	// TODO: Make this useful
+
+	ss >> word; // '|'
+
+	// Get name of room
+	this->mRoomName = "";
+	while (!ss.eof())
+	{
+		ss >> word;
+		if (this->mRoomName != "")
+			this->mRoomName += " ";
+		this->mRoomName += word;
+	}
+	
+
+	//ss >> this->mRoomName;
+}
+
 LogEvent::~LogEvent()
 {
 
@@ -94,14 +146,16 @@ std::string LogEvent::GetFileString()
 	std::string type = Event::GetString(this->mType);
 	ss << "\t\t" << type;
 
-	if (type.size() == 8)
-		ss << "\t\t\t\t|\t\t";
-	else if (type.size() == 11)
-		ss << "\t\t\t|\t\t";
+	if (type.size() < 4)
+		ss << "\t\t\t\t|\t";
+	else if (type.size() < 8)
+		ss << "\t\t\t|\t";
+	else if (type.size() < 12)
+		ss << "\t\t|\t";
 	else
-		ss << "\t\t|\t\t";
+		ss << "\t|\t";
 
-	ss << "startad\t\t|\t\t" << this->mRoomName;
+	ss << "startad\t\t|\t" << this->mRoomName;
 
 	return ss.str();
 }

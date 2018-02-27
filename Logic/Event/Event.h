@@ -18,4 +18,5 @@ namespace Event
 
 	std::string GetString(Type type);
 	int GetID(Type type);
+	Event::Type GetType(std::string type);
 }

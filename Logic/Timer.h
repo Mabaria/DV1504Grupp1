@@ -45,6 +45,7 @@ public:
 	const std::string GetMinutesAsStr();
 	const std::string GetHoursAsStr();
 
+	void SetTimestamp(Timestamp ts);
 	Timestamp GetTimestamp() const;
 private:
 	time_t mStartTime;

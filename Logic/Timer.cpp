@@ -141,6 +141,21 @@ const std::string Timer::GetHoursAsStr()
 	return std::string(buffer);
 }
 
+void Timer::SetTimestamp(Timestamp ts)
+{
+	tm tmp;
+
+	tmp.tm_year = ts.date.year - 1900;
+	tmp.tm_mon = ts.date.month - 1;
+	tmp.tm_mday = ts.date.day;
+
+	tmp.tm_hour = ts.clock.hour - 1;
+	tmp.tm_min = ts.clock.minute;
+	tmp.tm_sec = ts.clock.second;
+
+	this->mStartTime = mktime(&tmp);
+}
+
 Timestamp Timer::GetTimestamp() const
 {
 	Timestamp ts;

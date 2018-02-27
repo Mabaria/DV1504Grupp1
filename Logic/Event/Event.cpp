@@ -33,3 +33,17 @@ int Event::GetID(Event::Type type)
 			return (-1);
 	}
 }
+
+Event::Type Event::GetType(std::string type)
+{
+	if (type == "Eldsvåda")
+		return Event::Type::Fire;
+	else if ("Personskada")
+		return Event::Type::Injury;
+	else if ("Vattenläcka")
+		return Event::Type::Water;
+	else if ("Kontaminering")
+		return Event::Type::Gas;
+	else
+		throw ("Invalid type");
+}

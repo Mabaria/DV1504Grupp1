@@ -164,28 +164,12 @@ ActiveEvent* EventLog::GetActiveEventPointer(int index)
 
 void EventLog::SaveToFile(std::string filePath)
 {
-	// TODO: Kom på varför word får konstiga symboler för 'ä', men inte logstring
-
 	std::ofstream file;
 	file.open(filePath);
-	
-	std::string logstring;
-	std::string word = "händelse";
-
-	file << "e  yyyy-mm-dd hh:mm:ss\t\t"
-		//<< this->CorrectName("händelse")
-		<< word
-		<< "\t\t\t\t|\t\tstartad\t\t|\t\trumnamn"
-		<< std::endl << std::endl;
 
 	for (int i = 0; i < (int)this->mpLogEvents.size(); i++)
 	{
-		file << "e  ";
-
-		logstring = this->mpLogEvents[i]->GetFileString();
-		file << logstring << std::endl;
-
-		//file << this->mpLogEvents[i]->GetFileString() << std::endl;
+		file << "e  " << this->mpLogEvents[i]->GetFileString() << std::endl;
 	}
 
 	file.close();
@@ -193,6 +177,24 @@ void EventLog::SaveToFile(std::string filePath)
 
 void EventLog::LoadFromFile(std::string filePath)
 {
+	std::ifstream file(filePath);
+
+	std::string line;
+	std::string word;
+
+	if (file.is_open())
+	{
+		while (getline(file, line))
+		{
+			// Check first char in line
+			switch (line[0])
+			{
+				case 'e':	// Event
+					this->mpLogEvents.push_back(new LogEvent(line));
+					break;
+			}
+		}
+	}
 }
 
 

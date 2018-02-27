@@ -16,6 +16,7 @@ public:
 	
 	LogEvent();
 	LogEvent(Event::Type type, int roomEventIndex = -1);
+	LogEvent(std::string lineFromLog);
 	~LogEvent();
 
 	// Event specific
