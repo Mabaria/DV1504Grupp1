@@ -235,6 +235,13 @@ void System::mHandleInput()
 
 		}
 
+		// Closes the event menu if the user left clicks away from a room
+		// or the event menu.
+		else if (Mouse::IsButtonPressed(Buttons::Left) && this->mpMenuPanel->IsVisible())
+		{
+			this->mpMenuPanel->Close();
+		}
+
 		else if(last_picked_room != nullptr)
 		{
 			std::string last_picked_name = last_picked_room->GetDeckName() + "bounds";
@@ -425,7 +432,7 @@ void System::mSetupPanels()
 	int list_top = 0;
 	int list_left = 0;
 	int title_font_size = 40;
-	int object_font_size = 28;
+	int object_font_size = 26;
 
 	this->mpActiveLogPanel->SetNotificationList(
 		list_top, 
