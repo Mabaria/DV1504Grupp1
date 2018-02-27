@@ -479,7 +479,7 @@ bool Boat::LoadBoundingBoxes(
 
 			// Sets room info in every room, uses deck matrix for center pos.
 			this->mpRooms[this->mpDecks[i]->GetRoomOffset() + j]->
-				InitRoomInfo(*matrixList[i]);
+				InitRoomData(*matrixList[i]);
 		}
 	}
 	return true;
