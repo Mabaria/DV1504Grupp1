@@ -6,9 +6,10 @@
 #include "Panel.h"
 #include "../../GraphicsEngine/DX/Direct3D.h"
 #include "MeshObject.h"
+#include "../../GraphicsEngine/Camera/Camera.h"
 #include "../../IO/ObserverPattern/Observer.h"
-#include "../../GraphicsEngine/Camera/MovableCameraComponent.h"
 #include "../../GraphicsEngine/DX/Direct2D.h"
+#include "../../GraphicsEngine/Camera/MovableCameraComponent.h"
 
 enum PANEL3D_SHADER_TYPE
 {
@@ -21,22 +22,22 @@ class Panel3D : public Panel, public Observer<Button>
 {
 public:
 	Panel3D(
-		int width, 
-		int height, 
-		int top, 
+		int width,
+		int height,
+		int top,
 		int left,
-		HWND handle, 
+		HWND handle,
 		LPCTSTR title,
 		bool movableCamera = false);
 	~Panel3D();
-	
+
 	D3D11& rGetDirect3D();
 
 	// Creates buffers for and adds mesh 
 	// objects into the vector of mesh objects.
 	const void AddMeshObject(
 		std::string name,
-		std::vector<std::vector<unsigned int>> indices, 
+		std::vector<std::vector<unsigned int>> indices,
 		std::vector<std::vector<Vertex>> vertices,
 		int pixelShaderID = 0,
 		std::wstring texturePath = L"",
@@ -88,11 +89,18 @@ public:
 		_aligned_free(p);
 	}
 
-	
+	void BindTextureToBitmap(ID3D11Texture2D *texture);
+	void DrawBitmapToTexture(
+		ID2D1Bitmap *bitmap,
+		float startX,
+		float startY,
+		float widthOfTex,
+		float heightOfTex);
+	//void SetCameraPosition()
 private:
 	D3D11 mDirect3D;
 	std::vector<MeshObject*> mpMeshObjects;
-	
+	//HWND mPanelWindow;
 
 	ID3D11VertexShader *mpVertexShader;
 	ID3D11GeometryShader *mpGeometryShader;
@@ -114,7 +122,7 @@ private:
 
 	// Creates the constant buffer for the last added mesh object.
 	const void mCreateMatrixBuffer(
-		XMMATRIX *matrix, 
+		XMMATRIX *matrix,
 		ID3D11Buffer **constantBuffer);
 
 	const void mCreateMaterialBuffer(
@@ -123,7 +131,7 @@ private:
 
 	const void CreateTexture(std::wstring texturePath);
 
-	
+
 	MovableCameraComponent* mpMovableCameraComponent;
 	bool mShowCursor;
 	bool mMovableCamera;

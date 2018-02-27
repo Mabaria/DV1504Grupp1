@@ -1,23 +1,5 @@
 #include "Direct2D.h"
 
-Direct2D::Direct2D(HWND window,
-	unsigned int width,
-	unsigned int height)
-{
-	this->mpFactory			= nullptr;
-	this->mpRenderTarget	= nullptr;
-	this->mpWicFactory		= nullptr;
-	this->mpConverter		= nullptr;
-	this->mpDecoder			= nullptr;
-	this->mpBitmapSrc		= nullptr;
-	this->mpTextFactory		= nullptr;
-	this->mTrimmer			= {};
-	this->mTrimmer.granularity = DWRITE_TRIMMING_GRANULARITY_CHARACTER;
-	this->mInit();
-	this->CreateRenderTarget(window, width, height);	
-	this->mCreateTextRenderer(); // Render target needs to exist
-}
-
 Direct2D::Direct2D()
 {
 	this->mpFactory = nullptr;
@@ -27,6 +9,9 @@ Direct2D::Direct2D()
 	this->mpDecoder = nullptr;
 	this->mpBitmapSrc = nullptr;
 	this->mpTextFactory = nullptr;
+	this->mpFactory1 = nullptr;
+	this->mpDevice = nullptr;
+	this->mpContext = nullptr;
 	this->mTrimmer = {};
 	this->mTrimmer.granularity = DWRITE_TRIMMING_GRANULARITY_CHARACTER;
 	this->mInit();
@@ -41,14 +26,19 @@ Direct2D::~Direct2D()
 	this->ReleaseCOM(this->mpDecoder);
 	this->ReleaseCOM(this->mpBitmapSrc);
 	this->ReleaseCOM(this->mpTextFactory);
+	this->ReleaseCOM(this->mpFactory1);
+	this->ReleaseCOM(this->mpDevice);
+	this->ReleaseCOM(this->mpContext);
 	this->ReleaseCOM(this->mpTextRenderer);
 	delete this->mpTextRenderer;
 }
 
 void Direct2D::mCreateFactory()
 {
-	 D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED,
+	D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED,
 		&this->mpFactory);
+	D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED,
+		&this->mpFactory1);
 }
 
 void Direct2D::mInit()
@@ -80,6 +70,8 @@ void Direct2D::CreateRenderTarget(
 		&this->mpRenderTarget);
 	this->mpRenderTarget->SetAntialiasMode
 	(D2D1_ANTIALIAS_MODE_PER_PRIMITIVE);
+
+	this->mCreateTextRenderer(); // Render target needs to exist
 }
 
 IWICFormatConverter *Direct2D::GetpFormatConverter()
@@ -122,6 +114,11 @@ const DWRITE_TRIMMING Direct2D::GetTrimmer()
 	return this->mTrimmer;
 }
 
+ID2D1DeviceContext * Direct2D::GetpContext()
+{
+	return this->mpContext;
+}
+
 
 CustomTextRenderer * Direct2D::GetpTextRenderer()
 {
@@ -148,6 +145,13 @@ void Direct2D::SetpBitmapSrc(IWICBitmapFrameDecode * pBitmapSrc)
 	this->mpBitmapSrc = pBitmapSrc;
 }
 
+void Direct2D::InitDeviceAndContext(IDXGIDevice * dxgiDevice)
+{
+	this->mpFactory1->CreateDevice(dxgiDevice, &this->mpDevice);
+	this->mpDevice->CreateDeviceContext(
+		D2D1_DEVICE_CONTEXT_OPTIONS_NONE,
+		&this->mpContext);
+}
 
 void Direct2D::mCreateWicFactory()
 {

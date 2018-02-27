@@ -12,11 +12,11 @@ class Panel2D : public Panel
 {
 public:
 	Panel2D(
-		int width, 
-		int height, 
-		int top, 
-		int left, 
-		HWND handle, 
+		int width,
+		int height,
+		int top,
+		int left,
+		HWND handle,
 		LPCTSTR title);
 	~Panel2D();
 
@@ -39,16 +39,15 @@ public:
 
 	Button* GetButtonByName(std::string name);
 	Button* GetButtonByIndex(unsigned int index);
-	ID2D1Bitmap* GetBitmapByName(std::string bitmapName);
-	void LoadImageToBitmap(std::string imageFilePath, std::string bitmapName);
+
 
 
 	// Text box stuff.
 	void AddTextbox(
-		int width, 
-		int height, 
-		int top, 
-		int left, 
+		int width,
+		int height,
+		int top,
+		int left,
 		std::string text,
 		std::string name);
 
@@ -57,7 +56,7 @@ public:
 
 	// Notification object/list stuff.
 	void SetNotificationList(
-		int posX, 
+		int posX,
 		int posY,
 		int titleFontSize,
 		int objectFontSize);
@@ -77,13 +76,13 @@ public:
 	void Draw();
 
 private:
-	Direct2D *mDirect2D;
-	
+
+
 	void mUpdateButtons();
 
 	std::vector<Button*> mButtonVector;
 	std::vector<std::string> mButtonNames;
-	std::vector<BitmapInfo> mBitmapVector;
+
 
 	std::vector<TextBox*> mTextBoxVector;
 	std::vector<std::string> mTextBoxNames;
