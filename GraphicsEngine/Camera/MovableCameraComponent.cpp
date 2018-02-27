@@ -76,12 +76,16 @@ bool MovableCameraComponent::Update()
 	{
 		this->mpStrategy->Move(this->mMouseDiff);
 		flag = true;
-	}
-	
-	if(this->mpStrategy->Animate())
-		this->mpStrategy->AnimateToNewPosition();
+	}	
 
 	return !flag;
+}
+
+bool MovableCameraComponent::UpdateAnimation()
+{
+	if (this->mpStrategy->Animate())
+		this->mpStrategy->AnimateToNewPosition();
+	return this->mpStrategy->Animate();
 }
 
 void MovableCameraComponent::FocusCameraOnRoom(Room * pRoom, bool use_animation)

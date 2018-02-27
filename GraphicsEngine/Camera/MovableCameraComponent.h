@@ -12,6 +12,7 @@ public:
 
 	bool Initialize(Camera& rCamera);
 	bool Update();
+	bool UpdateAnimation();
 	void FocusCameraOnRoom(Room* pRoom, bool use_animation);
 
 private:

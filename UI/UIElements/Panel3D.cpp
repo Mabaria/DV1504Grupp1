@@ -650,14 +650,17 @@ const void Panel3D::Update()
 	}
 	this->UpdateWindowSize();
 
-			show_cursor = this->mpMovableCameraComponent->Update();
 	if (this->IsMouseInsidePanel())
 	{
 
 		if (this->mMovableCamera)
 		{
+			show_cursor = this->mpMovableCameraComponent->Update();
 		}
 	}
+
+	// Updates animation if necessary
+	this->mpMovableCameraComponent->UpdateAnimation();
 
 	if (this->mShowCursor != show_cursor)
 	{
