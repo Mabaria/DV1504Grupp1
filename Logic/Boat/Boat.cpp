@@ -174,6 +174,11 @@ Room* Boat::GetPickedRoom(Ray ray)
 	//return nullptr;
 }
 
+int Boat::GetRoomCount() const
+{
+	return (int)this->mpRooms.size();
+}
+
 
 
 

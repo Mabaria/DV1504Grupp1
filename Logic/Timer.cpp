@@ -149,7 +149,7 @@ void Timer::SetTimestamp(Timestamp ts)
 	tmp.tm_mon = ts.date.month - 1;
 	tmp.tm_mday = ts.date.day;
 
-	tmp.tm_hour = ts.clock.hour - 1;
+	tmp.tm_hour = ts.clock.hour;
 	tmp.tm_min = ts.clock.minute;
 	tmp.tm_sec = ts.clock.second;
 

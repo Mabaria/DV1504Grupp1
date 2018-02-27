@@ -175,7 +175,7 @@ void EventLog::SaveToFile(std::string filePath)
 	file.close();
 }
 
-void EventLog::LoadFromFile(std::string filePath)
+bool EventLog::LoadFromFile(std::string filePath)
 {
 	std::ifstream file(filePath);
 
@@ -195,6 +195,10 @@ void EventLog::LoadFromFile(std::string filePath)
 			}
 		}
 	}
+	else
+		return false;
+	
+	return true;
 }
 
 

@@ -35,6 +35,7 @@ public:
 	Room* GetRoomPointer(std::string roomName, std::string deckName);
 	Room* GetRoomPointerAt(int index);
 	Room* GetPickedRoom(Ray ray);
+	int GetRoomCount() const;
 
 
 	// Log specific

@@ -53,7 +53,7 @@ public:
 	
 	// Disk specific
 	void SaveToFile(std::string filePath);
-	void LoadFromFile(std::string filePath);
+	bool LoadFromFile(std::string filePath);
 
 private:
 

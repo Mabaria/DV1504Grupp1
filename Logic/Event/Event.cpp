@@ -38,11 +38,11 @@ Event::Type Event::GetType(std::string type)
 {
 	if (type == "Eldsvåda")
 		return Event::Type::Fire;
-	else if ("Personskada")
+	else if (type == "Personskada")
 		return Event::Type::Injury;
-	else if ("Vattenläcka")
+	else if (type == "Vattenläcka")
 		return Event::Type::Water;
-	else if ("Kontaminering")
+	else if (type == "Kontaminering")
 		return Event::Type::Gas;
 	else
 		throw ("Invalid type");
