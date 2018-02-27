@@ -191,8 +191,7 @@ void System::mHandleInput()
 	static Room* last_picked_room = nullptr; 
 	Room *picked_room = nullptr;
 
-	if (
-		this->mpTopViewPanel->IsMouseInsidePanel() &&
+	if (this->mpTopViewPanel->IsMouseInsidePanel() &&
 		!this->mpMenuPanel->IsMouseInsidePanel())
 	{
 
