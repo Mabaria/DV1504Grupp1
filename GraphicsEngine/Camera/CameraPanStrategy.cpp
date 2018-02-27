@@ -132,6 +132,6 @@ void CameraPanStrategy::AnimateToNewPosition()
 	XMVECTOR dir = XMLoadFloat3(&this->mNewPosition) - this->pCamera->GetPosition();
 	this->pCamera->MoveCamera(dir, this->mMoveSpeed * 1000.0f);
 
-	if (XMVectorGetX(XMVector3Length(dir)) < 0.0f)
+	if (XMVectorGetX(XMVector3Length(dir)) <= 0.01f)
 		this->mAnimate = false;
 }
