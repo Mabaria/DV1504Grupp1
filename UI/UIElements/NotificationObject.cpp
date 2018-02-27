@@ -18,6 +18,8 @@ NotificationObject::NotificationObject(
 	this->mElapsedTime = this->mpTimer->GetTimeAsStr();
 	this->mEventType = event->GetType();
 	this->mIndex = index;
+	this->mIsNew = true;
+	this->mNewColorCounter = 0.0f;
 	
 	this->mTextBox.SetFontSize(fontSize);
 	this->mTextBox.SetFontWeight(DWRITE_FONT_WEIGHT_BOLD);
@@ -182,6 +184,16 @@ const void NotificationObject::SetText(std::string text)
 	this->mTextBox.SetText(text);
 }
 
+const void NotificationObject::SetIfNewStatus(bool status)
+{
+	this->mIsNew = status;
+}
+
+const bool NotificationObject::GetIfNewStatus()
+{
+	return this->mIsNew;
+}
+
 void NotificationObject::Update()
 {
 	this->mElapsedTime = this->mpTimer->GetTimeAsStr();
@@ -190,6 +202,12 @@ void NotificationObject::Update()
 
 void NotificationObject::Draw()
 {
+	if (this->mIsNew)
+	{
+		this->mButton.SetRectColor(
+			sin(this->mNewColorCounter += 0.2f),
+			0, 0);
+	}
 	this->mButton.DrawRect();
 	this->mTextBox.DrawTextBox();
 	this->mButton.DrawButton();
