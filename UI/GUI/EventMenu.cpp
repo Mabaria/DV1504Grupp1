@@ -3,7 +3,7 @@
 
 EventMenu::EventMenu()
 {
-	this->mMenuWidth = 300;
+	this->mMenuWidth = 400;
 	this->mMenuHeight = 300;
 	this->mParentPanelWidth = 0;
 	this->mParentPanelHeight = 0;
@@ -30,6 +30,8 @@ bool EventMenu::Init(int parentWidth,
 {
 	this->mParentPanelWidth = parentWidth;
 	this->mParentPanelHeight = parentHeight;
+
+	this->mMenuHeight = this->mParentPanelHeight;
 
 	this->mpEventLog = pEventLog;
 	this->mpPanel = new Panel2D(
@@ -61,12 +63,12 @@ bool EventMenu::Init(int parentWidth,
 bool EventMenu::OpenAt(Room *pRoom)
 {
 	int margin = this->mParentPanelWidth / 24;
-	int posX = 0;
+	int posX = this->mParentPanelWidth - this->mMenuWidth;
 	int posY = 0;
 	//FPosition mousePos = Mouse::GetPositionPercentage();
 	//mousePos.x = mousePos.x * this->mParentPanelWidth;
 	//mousePos.y = mousePos.y * this->mParentPanelHeight;
-	Position mousePos = Mouse::GetPosition();
+	/*Position mousePos = Mouse::GetPosition();
 
 	if (mousePos.x + margin + this->mMenuWidth < this->mParentPanelWidth)
 		posX = mousePos.x + margin;
@@ -76,7 +78,7 @@ bool EventMenu::OpenAt(Room *pRoom)
 	if (mousePos.y + margin + this->mMenuHeight < this->mParentPanelHeight)
 		posY = mousePos.y + margin;
 	else
-		posY = mousePos.y - margin - this->mMenuHeight;
+		posY = mousePos.y - margin - this->mMenuHeight;*/
 
 	this->mpPanel->SetLeft(posX);
 	this->mpPanel->SetTop(posY);
