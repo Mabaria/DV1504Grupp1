@@ -72,6 +72,15 @@ int Room::GetIndexInDeck() const
 	return this->mIndexInDeck;
 }
 
+/**
+*	Sensor specific
+*/
+
+std::vector<Event::Type> Room::GetInputTypes() const
+{
+	return this->mSensor.GetInputTypes();
+}
+
 
 
 
