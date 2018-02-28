@@ -31,7 +31,7 @@ CrewPanel::CrewPanel()
 CrewPanel::~CrewPanel()
 {
 	delete this->mpPanel;
-	delete this->mSeaMen;
+	delete[] this->mSeaMen;
 }
 
 void CrewPanel::Init(int width, int height, int top, int left, HWND parent, LPCTSTR title)
@@ -64,11 +64,12 @@ void CrewPanel::Init(int width, int height, int top, int left, HWND parent, LPCT
 		SetFontSize(22);
 	this->mpPanel->GetTextBoxByName("title")->
 		SetFontWeight(DWRITE_FONT_WEIGHT_ULTRA_BLACK);
+	this->mCreateTextBoxesAndButtons();
 }
 
 void CrewPanel::Update()
 {
-	
+	this->mpPanel->Update();
 }
 
 void CrewPanel::Update(Button * button)
@@ -83,6 +84,16 @@ void CrewPanel::Update(Button * button)
 		this->mVisible = false;
 		this->mpPanel->Hide();
 	}
+	else if (button->GetButtonColor().r == 1.0f)
+	{
+		button->SetButtonColor(0.0f, 1.0f, 0.0f);
+	}
+	else if (button->GetButtonColor().g == 1.0f)
+	{
+		button->SetButtonColor(1.0f, 0.0f, 0.0f);
+	}
+
+
 }
 
 void CrewPanel::Draw()
@@ -129,6 +140,13 @@ void CrewPanel::mCreateTextBoxesAndButtons()
 			this->mpPanel->GetWidth() / 4 * 3,
 			"gimmeRED",
 			this->mSeaMen[i]+"2");
-		this->mpPanel->GetButtonByName(this->mSeaMen[i]+"2").
+		this->mpPanel->GetButtonByName(this->mSeaMen[i] + "2")->SetButtonColor(
+			0.0f,
+			1.0f,
+			0.0f,
+			0.0f);
+		this->mpPanel->GetButtonByName(this->mSeaMen[i])->AddObserver(this);
+		this->mpPanel->GetButtonByName(this->mSeaMen[i] +
+			"2")->AddObserver(this);
 	}
 }

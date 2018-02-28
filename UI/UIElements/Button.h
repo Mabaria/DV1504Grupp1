@@ -41,6 +41,7 @@ public:
 	void DrawButton();
 	void DrawRect();
 	void DrawFilledRect(float r, float g, float b, float a = 1.f);
+	void DrawFilledRect();
 
 	ID2D1Bitmap* getBitmapPointer();
 	const D2D1_RECT_F GetButtonSize() const;
@@ -61,6 +62,7 @@ public:
 	std::string GetName() const;
 	void SetRectColor(float r, float g, float b, float a = 1.f);
 	void SetButtonColor(float r, float g, float b, float a = 1.f);
+	const D2D1_COLOR_F GetButtonColor() const;
 
 private:
 	

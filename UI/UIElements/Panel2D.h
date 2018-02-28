@@ -60,7 +60,6 @@ public:
 		int posY,
 		int titleFontSize,
 		int objectFontSize);
-
 	// Messing up the coupling slightly to have 
 	// system observe the notification objects.
 	NotificationList *GetNotificationList();
@@ -78,7 +77,7 @@ public:
 	void Update();
 	void Draw();
 
-private:
+protected:
 
 
 	void mUpdateButtons();

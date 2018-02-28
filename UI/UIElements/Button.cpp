@@ -196,6 +196,13 @@ void Button::DrawFilledRect(float r, float g, float b, float a)
 		this->mpFillBrush);
 }
 
+void Button::DrawFilledRect()
+{
+	this->D2D1Panel->GetpRenderTarget()->FillRectangle(
+		this->mButtonSize,
+		this->mpFillBrush);
+}
+
 ID2D1Bitmap* Button::getBitmapPointer()
 {
 	return this->mpBitMap;
@@ -367,6 +374,7 @@ void Button::LoadImageToBitmap(
 			this->mpBitMap->GetSize().width,
 			this->mpBitMap->GetSize().height);
 		this->mBmpLoaded = true;
+		this->D2D1Panel->SetpBitmapDecoder(nullptr);
 	}	
 }
 
@@ -393,6 +401,11 @@ void Button::SetRectColor(float r, float g, float b, float a)
 void Button::SetButtonColor(float r, float g, float b, float a)
 {
 	this->mpFillBrush->SetColor(D2D1::ColorF(r, g, b, a));
+}
+
+const D2D1_COLOR_F Button::GetButtonColor() const
+{
+	return this->mpFillBrush->GetColor();
 }
 
 void Button::ReleaseCOM(IUnknown *object)
