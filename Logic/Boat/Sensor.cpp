@@ -3,6 +3,7 @@
 Sensor::Sensor()
 {
 	this->mActiveEventIndex = -1;
+	this->mpActiveEvent = nullptr;
 }
 
 Sensor::~Sensor()

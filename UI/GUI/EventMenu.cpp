@@ -91,7 +91,7 @@ bool EventMenu::OpenAt(Room *pRoom)
 
 	// TODO: Following functionallity does not work because GetActiveEvents
 	// does not work as intended. Not too important feature anyway
-
+	//std::vector<LogEvent*> test = pRoom->GetActiveEvents();
 	//for (int i = 0; i < pRoom->GetActiveEvents().size(); i++)
 	//{
 	//	switch (pRoom->GetActiveEvents()[i]->GetType())
@@ -224,6 +224,7 @@ void EventMenu::InitButtons()
 {
 	int margin = this->mMenuWidth / 6;
 	int padding = this->mMenuWidth / 6;
+	int actionMargin = this->mMenuWidth / 15;
 	int buttonSize = this->mMenuWidth / 4;
 	this->mpPanel->AddButton(
 		buttonSize,
@@ -253,6 +254,78 @@ void EventMenu::InitButtons()
 		margin + buttonSize + padding,
 		this->mpPanel->GetBitmapByName("InjuryOff"),
 		"Injury");
+
+	this->mpPanel->AddButton(
+		buttonSize,
+		buttonSize,
+		margin + (buttonSize + margin) * 2,
+		actionMargin,
+		this->mpPanel->GetBitmapByName("FireOn"),
+		"PLACEHOLDER1");
+
+	this->mpPanel->AddButton(
+		buttonSize,
+		buttonSize,
+		margin + (buttonSize + margin) * 2 + actionMargin + buttonSize,
+		actionMargin,
+		this->mpPanel->GetBitmapByName("WaterOn"),
+		"PLACEHOLDER2");
+
+	this->mpPanel->AddButton(
+		buttonSize,
+		buttonSize,
+		margin + (buttonSize + margin) * 2,
+		actionMargin + (buttonSize + actionMargin),
+		this->mpPanel->GetBitmapByName("GasOn"),
+		"PLACEHOLDER3");
+
+	this->mpPanel->AddButton(
+		buttonSize,
+		buttonSize,
+		margin + (buttonSize + margin) * 2 + actionMargin + buttonSize,
+		actionMargin + (buttonSize + actionMargin),
+		this->mpPanel->GetBitmapByName("InjuryOn"),
+		"PLACEHOLDER4");
+
+	this->mpPanel->AddButton(
+		buttonSize,
+		buttonSize,
+		margin + (buttonSize + margin) * 2,
+		actionMargin + (buttonSize + actionMargin) * 2,
+		this->mpPanel->GetBitmapByName("GasOn"),
+		"PLACEHOLDER5");
+
+	this->mpPanel->AddButton(
+		buttonSize,
+		buttonSize,
+		margin + (buttonSize + margin) * 2 + actionMargin + buttonSize,
+		actionMargin + (buttonSize + actionMargin) * 2,
+		this->mpPanel->GetBitmapByName("InjuryOn"),
+		"PLACEHOLDER6");
+
+	this->mpPanel->AddButton(
+		buttonSize,
+		buttonSize,
+		margin + (buttonSize + margin) * 2 + (actionMargin + buttonSize) * 2,
+		actionMargin,
+		this->mpPanel->GetBitmapByName("WaterOn"),
+		"PLACEHOLDER7");
+
+	this->mpPanel->AddButton(
+		buttonSize,
+		buttonSize,
+		margin + (buttonSize + margin) * 2 + (actionMargin + buttonSize) * 2,
+		actionMargin + (buttonSize + actionMargin),
+		this->mpPanel->GetBitmapByName("InjuryOn"),
+		"PLACEHOLDER8");
+
+	this->mpPanel->AddButton(
+		buttonSize,
+		buttonSize,
+		margin + (buttonSize + margin) * 2 + (actionMargin + buttonSize) * 2,
+		actionMargin + (buttonSize + actionMargin) * 2,
+		this->mpPanel->GetBitmapByName("InjuryOn"),
+		"PLACEHOLDER9");
 	this->mpPanel->AddButton(
 		this->mMenuWidth / 9,
 		this->mMenuWidth / 9,
