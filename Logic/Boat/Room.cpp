@@ -177,8 +177,8 @@ void Room::InitRoomData(XMMATRIX matrix)
 		this->mBoundingBox.y.max,
 		this->mBoundingBox.z.max
 	};
-	XMVector3Transform(min, matrix);
-	XMVector3Transform(max, matrix);
+	min = XMVector3Transform(min, matrix);
+	max = XMVector3Transform(max, matrix);
 
 	// Creating a new bounding box with transformed extrema.
 	AABB bounding_box;
