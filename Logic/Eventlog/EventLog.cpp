@@ -15,6 +15,11 @@ EventLog::~EventLog()
 	{
 		delete this->mpActiveEvents[i];
 	}
+
+	for (int i = 0; i < (int)this->mpActions.size(); i++)
+	{
+		delete this->mpActions[i];
+	}
 }
 
 
@@ -155,6 +160,16 @@ ActiveEvent* EventLog::GetActiveEventPointer(int index)
 		return nullptr;
 	
 	return this->mpActiveEvents[index];
+}
+
+/**
+*	Action specific
+*/
+
+void EventLog::AddAction(ActionType type, std::string roomName)
+{
+	// TODO
+	this->mpActions.push_back(new Action(type, roomName));
 }
 
 

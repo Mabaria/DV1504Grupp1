@@ -231,6 +231,9 @@
     <ClInclude Include="..\..\Logic\Test_Log.h">
       <Filter>Header Files\Logic\Test</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Logic\Action\Action.h">
+      <Filter>Header Files\Logic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BIS.cpp">
@@ -403,6 +406,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Logic\Test_Log.cpp">
       <Filter>Source Files\Logic\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Logic\Action\Action.cpp">
+      <Filter>Source Files\Logic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

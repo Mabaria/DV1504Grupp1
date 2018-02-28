@@ -5,6 +5,7 @@
 #include "../Eventlog/EventLog.h"
 #include "../Event/Event.h"
 #include "Sensor.h"
+#include "../Action/Action.h"
 
 //#include "Boat.h"
 
@@ -63,6 +64,9 @@ public:
 	void AddInputType(Event::Type type);
 	int GetActiveEventIndex() const;
 	std::vector<LogEvent*> GetActiveEvents() const;
+
+	// Action specific
+	bool AddAction(ActionType type);
 
 	// Disk specific
 	std::string WriteString() const;

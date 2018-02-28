@@ -5,6 +5,7 @@
 
 #include "LogEvent.h"
 #include "ActiveEvent.h"
+#include "../Action/Action.h"
 
 /**
 *	The log will be able to store/load content to/from a file
@@ -44,12 +45,15 @@ public:
 	bool ClearEvent(Event::Type type, int roomIndex);
 	void ClearActiveEvent(int index);
 	std::vector<Event::Type> GetEvents(int roomIndex) const;
-	std::vector<Event::Type> GetEvents(std::string roomName) const;
+	//std::vector<Event::Type> GetEvents(std::string roomName) const;
 	int GetEventCount() const;
 	int GetActiveEventCount() const;
 
 	LogEvent* GetEventPointer(int index);
 	ActiveEvent* GetActiveEventPointer(int index);
+
+	// Action specific
+	void AddAction(ActionType type, std::string roomName);
 	
 	// Disk specific
 	void SaveToFile(std::string filePath);
@@ -62,4 +66,5 @@ private:
 
 	std::vector<LogEvent*> mpLogEvents;	// Containing all events in the system
 	std::vector<ActiveEvent*> mpActiveEvents;
+	std::vector<Action*> mpActions;
 };

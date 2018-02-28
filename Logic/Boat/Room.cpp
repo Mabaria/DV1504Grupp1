@@ -148,6 +148,16 @@ std::vector<LogEvent*> Room::GetActiveEvents() const
 	return this->mSensor.GetActiveEvents();
 }
 
+/**
+*	Action specific
+*/
+
+bool AddAction(ActionType type)
+{
+	// TODO
+	return false;
+}
+
 
 
 /**

@@ -25,6 +25,23 @@ struct Timestamp
 {
 	DateDesc date;
 	ClockDesc clock;
+
+	bool operator<(const Timestamp &other)
+	{
+		if (this->date.year >= other.date.year)
+			return false;
+		if (this->date.month >= other.date.month)
+			return false;
+		if (this->date.day >= other.date.day)
+			return false;
+		if (this->clock.hour >= other.clock.hour)
+			return false;
+		if (this->clock.minute >= other.clock.minute)
+			return false;
+		if (this->clock.second >= other.clock.second)
+			return false;
+		return true;
+	}
 };
 
 class Timer
