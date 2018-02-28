@@ -6,6 +6,9 @@
 #include "../../IO/ObserverPattern/Observer.h"
 class EventMenu : public Observer<Button>, public Observable<Room>
 {
+	enum ACTION_MODE {
+		STANDARD, NUMBERS
+	};
 public:
 	EventMenu();
 	~EventMenu();
@@ -37,6 +40,9 @@ private:
 
 	// For removing events.
 	Event::Type mLastClicked;
+
+	ACTION_MODE mActionMode;
+	void mSwapActionMode();
 
 	void InitButtons();
 };

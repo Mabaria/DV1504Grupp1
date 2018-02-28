@@ -14,6 +14,8 @@ EventMenu::EventMenu()
 	this->mpEventLog = nullptr;
 	this->mpPanel = nullptr;
 	this->mpActiveRoom = nullptr;
+
+	this->mActionMode = STANDARD;
 }
 
 EventMenu::~EventMenu()
@@ -196,10 +198,14 @@ void EventMenu::Update( Button *attribute)
 		if (button_name.compare("Exit") == 0)
 		{
 			this->mpPanel->Hide();
+			if (this->mActionMode == NUMBERS) {
+				this->mSwapActionMode(); // Menu closing, reset buttons
+			}
 			this->mVisible = false;
 		}
 		else
 		{
+
 			if (button_name.compare("Fire") == 0)
 			{
 				this->mpActiveRoom->AddPlotterEvent(Event::Fire);
@@ -224,44 +230,91 @@ void EventMenu::Update( Button *attribute)
 				this->mLastClicked = Event::Injury;
 				this->NotifyObservers(this->mpActiveRoom);
 			}
-			else if (button_name.compare("Injured_Treated") == 0)
+			else if (this->mActionMode == STANDARD)
 			{
-				//TODO Add new action object
-				//! THIS SYMBOL REQUIRES A NUMBER
+				if (button_name.compare("Injured_Moved") == 0)
+				{
+					this->mSwapActionMode();
+				}
+				else if (button_name.compare("Injured_Treated") == 0)
+				{
+					this->mSwapActionMode();
+				}
+				else if (button_name.compare("Injured_Reported") == 0)
+				{
+					this->mSwapActionMode();
+				}
+				else if (button_name.compare("Hole_In_Bulk") == 0)
+				{
+					//TODO Add new action object
+				}
+				else if (button_name.compare("Ventilation_In") == 0)
+				{
+					//TODO Add new action object
+				}
+				else if (button_name.compare("Ventilation_Out") == 0)
+				{
+					//TODO Add new action object
+				}
+				else if (button_name.compare("Cooling_Wall") == 0)
+				{
+					//TODO Add new action object
+				}
+				else if (button_name.compare("Supporting_Wall") == 0)
+				{
+					//TODO Add new action object
+				}
+				else if (button_name.compare("Damaged_Bulk") == 0)
+				{
+					//TODO Add new action object
+				}
 			}
-			else if (button_name.compare("Injured_Treated") == 0)
-			{
-				//TODO Add new action object
-				//! THIS SYMBOL REQUIRES A NUMBER
-			}
-			else if (button_name.compare("Injured_Reported") == 0)
-			{
-				//TODO Add new action object
-				//! THIS SYMBOL REQUIRES A NUMBER
-			}
-			else if (button_name.compare("Hole_In_Bulk") == 0)
-			{
-				//TODO Add new action object
-			}
-			else if (button_name.compare("Ventilation_In") == 0)
-			{
-				//TODO Add new action object
-			}
-			else if (button_name.compare("Ventilation_Out") == 0)
-			{
-				//TODO Add new action object
-			}
-			else if (button_name.compare("Cooling_Wall") == 0)
-			{
-				//TODO Add new action object
-			}
-			else if (button_name.compare("Supporting_Wall") == 0)
-			{
-				//TODO Add new action object
-			}
-			else if (button_name.compare("Damaged_Bulk") == 0)
-			{
-				//TODO Add new action object
+			else { //! ActionMode == NUMBERS
+				if (button_name.compare("Injured_Moved") == 0)
+				{
+					//TODO Add new action object
+					this->mSwapActionMode();
+				}
+				else if (button_name.compare("Injured_Treated") == 0)
+				{
+					//TODO Add new action object
+					this->mSwapActionMode();
+				}
+				else if (button_name.compare("Injured_Reported") == 0)
+				{
+					//TODO Add new action object
+					this->mSwapActionMode();
+				}
+				else if (button_name.compare("Hole_In_Bulk") == 0)
+				{
+					//TODO Add new action object
+					this->mSwapActionMode();
+				}
+				else if (button_name.compare("Ventilation_In") == 0)
+				{
+					//TODO Add new action object
+					this->mSwapActionMode();
+				}
+				else if (button_name.compare("Ventilation_Out") == 0)
+				{
+					//TODO Add new action object
+					this->mSwapActionMode();
+				}
+				else if (button_name.compare("Cooling_Wall") == 0)
+				{
+					//TODO Add new action object
+					this->mSwapActionMode();
+				}
+				else if (button_name.compare("Supporting_Wall") == 0)
+				{
+					//TODO Add new action object
+					this->mSwapActionMode();
+				}
+				else if (button_name.compare("Damaged_Bulk") == 0)
+				{
+					//TODO Add new action object
+					this->mSwapActionMode();
+				}
 			}
 		}
 	}
@@ -270,6 +323,71 @@ void EventMenu::Update( Button *attribute)
 Event::Type EventMenu::GetLastClicked()
 {
 	return this->mLastClicked;
+}
+
+void EventMenu::mSwapActionMode()
+{
+	if (this->mActionMode == STANDARD)
+	{
+		this->mActionMode = NUMBERS;
+		this->mpPanel->GetButtonByName("Injured_Moved")->SetBitmap(
+			this->mpPanel->GetBitmapByName("FireOn"));
+
+		this->mpPanel->GetButtonByName("Injured_Treated")->SetBitmap(
+			this->mpPanel->GetBitmapByName("FireOn"));
+
+		this->mpPanel->GetButtonByName("Injured_Reported")->SetBitmap(
+			this->mpPanel->GetBitmapByName("FireOn"));
+
+		this->mpPanel->GetButtonByName("Hole_In_Bulk")->SetBitmap(
+			this->mpPanel->GetBitmapByName("FireOn"));
+
+		this->mpPanel->GetButtonByName("Ventilation_In")->SetBitmap(
+			this->mpPanel->GetBitmapByName("FireOn"));
+
+		this->mpPanel->GetButtonByName("Ventilation_Out")->SetBitmap(
+			this->mpPanel->GetBitmapByName("FireOn"));
+
+		this->mpPanel->GetButtonByName("Cooling_Wall")->SetBitmap(
+			this->mpPanel->GetBitmapByName("FireOn"));
+
+		this->mpPanel->GetButtonByName("Supporting_Wall")->SetBitmap(
+			this->mpPanel->GetBitmapByName("FireOn"));
+
+		this->mpPanel->GetButtonByName("Damaged_Bulk")->SetBitmap(
+			this->mpPanel->GetBitmapByName("FireOn"));
+	}
+	else {
+		this->mActionMode = STANDARD;
+
+		// Reset all button bitmaps
+		this->mpPanel->GetButtonByName("Injured_Moved")->SetBitmap(
+			this->mpPanel->GetBitmapByName("Action1"));
+
+		this->mpPanel->GetButtonByName("Injured_Treated")->SetBitmap(
+			this->mpPanel->GetBitmapByName("Action2"));
+
+		this->mpPanel->GetButtonByName("Injured_Reported")->SetBitmap(
+			this->mpPanel->GetBitmapByName("Action3"));
+
+		this->mpPanel->GetButtonByName("Hole_In_Bulk")->SetBitmap(
+			this->mpPanel->GetBitmapByName("Action4"));
+
+		this->mpPanel->GetButtonByName("Ventilation_In")->SetBitmap(
+			this->mpPanel->GetBitmapByName("Action5"));
+
+		this->mpPanel->GetButtonByName("Ventilation_Out")->SetBitmap(
+			this->mpPanel->GetBitmapByName("Action6"));
+
+		this->mpPanel->GetButtonByName("Cooling_Wall")->SetBitmap(
+			this->mpPanel->GetBitmapByName("Action7"));
+
+		this->mpPanel->GetButtonByName("Supporting_Wall")->SetBitmap(
+			this->mpPanel->GetBitmapByName("Action8"));
+
+		this->mpPanel->GetButtonByName("Damaged_Bulk")->SetBitmap(
+			this->mpPanel->GetBitmapByName("Action9"));
+	}
 }
 
 void EventMenu::InitButtons()
@@ -404,5 +522,14 @@ void EventMenu::InitButtons()
 	this->mpPanel->GetButtonByName("Exit")->AddObserver(this);
 
 	//TODO ADD ACTION BUTTON OBSERVERS HERE
+	this->mpPanel->GetButtonByName("Injured_Moved")->AddObserver(this);
+	this->mpPanel->GetButtonByName("Injured_Treated")->AddObserver(this);
+	this->mpPanel->GetButtonByName("Injured_Reported")->AddObserver(this);
+	this->mpPanel->GetButtonByName("Hole_In_Bulk")->AddObserver(this);
+	this->mpPanel->GetButtonByName("Ventilation_In")->AddObserver(this);
+	this->mpPanel->GetButtonByName("Ventilation_Out")->AddObserver(this);
+	this->mpPanel->GetButtonByName("Cooling_Wall")->AddObserver(this);
+	this->mpPanel->GetButtonByName("Supporting_Wall")->AddObserver(this);
+	this->mpPanel->GetButtonByName("Damaged_Bulk")->AddObserver(this);
 
 }
