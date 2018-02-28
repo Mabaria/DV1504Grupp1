@@ -11,7 +11,7 @@ namespace BoatTester
 	void WriteTest();
 	void TestBoat();
 	
-	Boat* CreateBoat(EventLog *pEventLog);
+	Boat* CreateBoat();
 	
 	bool ReadFile(Boat *boat, std::string filePath);
 	void WriteFile(Boat *boat, std::string filePath);

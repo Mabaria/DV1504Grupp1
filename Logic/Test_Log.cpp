@@ -6,39 +6,31 @@ bool Test_Log::MainTest()
 	std::cout << std::endl << std::endl;
 	
 	Boat *myBoat = new Boat;
-	EventLog *myLog = new EventLog;
 
-	myBoat->SetEventLog(myLog);
-	myBoat->ReadFile("../../Savefiles/data.boat");
+	myBoat->LoadFromFile_Boat("../../Savefiles/data.boat");
 	
 	// Add an event to each room in boat
-	Test_Log::FillLog(myBoat, myLog);
-
-	// One event has been added to each room. The amount of events
-	// should now be the same as the amount of rooms.
-	if (myLog->GetEventCount() != myBoat->GetRoomCount())
-		return false;
+	Test_Log::FillLog(myBoat);
 
 	// Save log to file
 	std::cout << "\nSaving log to file 'Savefiles/testlog_first.log'...";
-	myLog->SaveToFile("../../Savefiles/testlog_first.log");
+	myBoat->SaveToFile_Log("../../Savefiles/testlog_first.log");
 	std::cout << "done!" << std::endl;
 	
-	// Scrap current log
-	delete myLog;
-	
-	// Create a new log
-	myLog = new EventLog;
+	// Scrap current log and create a new one
+	delete myBoat;
+	myBoat = new Boat;
+	myBoat->LoadFromFile_Boat("../../Savefiles/data.boat");
 
 	// Read log from file
 	std::cout << "Loading log from file 'Savefiles/testlog_first.log'...";
-	if (!myLog->LoadFromFile("../../Savefiles/testlog_first.log"))
+	if (!myBoat->LoadFromFile_Log("../../Savefiles/testlog_first.log"))
 		return false;
 	std::cout << "done!" << std::endl;
 	
 	// Save log to a new file
 	std::cout << "Saving log to new file 'Savefiles/testlog_second.log'...";
-	myLog->SaveToFile("../../Savefiles/testlog_second.log");
+	myBoat->SaveToFile_Log("../../Savefiles/testlog_second.log");
 	std::cout << "done!" << std::endl << std::endl;
 
 	// Compare the two .log files
@@ -60,14 +52,13 @@ bool Test_Log::MainTest()
 		
 	getchar();
 
-	delete myLog;
 	delete myBoat;
 
 	return true;
 }
 
 // Log
-void Test_Log::FillLog(Boat *pBoat, EventLog *pLog)
+void Test_Log::FillLog(Boat *pBoat)
 {
 	Room* myRoom;
 	Event::Type type;

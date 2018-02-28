@@ -29,27 +29,24 @@ public:
 	Deck* GetDeckPointer(std::string name);
 
 	// Room specific
-	void AddRoom(std::string roomName,
+	bool AddRoom(std::string roomName,
 		std::string deckName,
-		std::vector<Event::Type> inputs);
-	Room* GetRoomPointer(std::string roomName, std::string deckName);
-	Room* GetRoomPointerAt(int index);
+		int inputs);
+	Room* GetRoomPointer(std::string name);
+	Room* GetRoomPointerAt(int index_Boat);
 	Room* GetPickedRoom(Ray ray);
 	int GetRoomCount() const;
 
-
 	// Log specific
-	void SetEventLog(EventLog *pEventLog);
-
-	// Event specific
-	bool CreateAutoEvent(Event::Type type, std::string roomName, std::string deckName);
-	bool CreatePlotEvent(Event::Type type, std::string roomName, std::string deckName);
-	bool ClearEvent(Event::Type type, std::string roomName, std::string deckName);
-	std::vector<Event::Type> GetEventsInRoom(std::string roomName, std::string deckName);
+	int GetEventCount() const;
+	int GetActionCount() const;
 
 	// Disk specific
-	void WriteFile(std::string filePath) const;
-	bool ReadFile(std::string filePath);
+	void SaveToFile_Boat(std::string filePath) const;
+	bool LoadFromFile_Boat(std::string filePath);
+
+	void SaveToFile_Log(std::string filePath) const;
+	bool LoadFromFile_Log(std::string filePath);
 
 	// Room data specific
 	bool LoadBoundingBoxes(
@@ -60,25 +57,25 @@ public:
 private:
 	
 	// Returns -1 if item is not found
-	int GetRoomIndex(std::string roomName, std::string deckName);
+	int GetRoomIndex_Boat(std::string roomName);
+	int GetRoomIndex_Deck(std::string roomName);
 	int GetDeckIndex(std::string deckName);
 
-	RoomDesc FillRoomDescFromLine(std::string line);
-	DeckDesc FillDeckDescFromLine(std::string line);
+	// Functions for reading from disk
 	std::string GetNameFromLine(std::string line, char until = NULL);
 
 	std::string GetDeckNameByRoomIndex(int index);
 
+	// Boat information
 	std::string mModelName;
 
+	// Structure
 	std::vector<Deck*> mpDecks;
-	std::vector<Room*> mpRooms;
 
+	// Bounding volumes
 	std::vector<AABB> mBoundingAABB;
 	std::vector<DirectX::XMMATRIX> mFloorMatrix;
 	std::vector<DirectX::XMMATRIX> mInverseFloorMatrix;
 
-	EventLog *mpEventLog;
-
-	std::string CorrectName(std::string name);
+	EventLog mEventLog;
 };

@@ -15,22 +15,22 @@ class LogEvent
 public:
 	
 	LogEvent();
-	LogEvent(Event::Type type, int roomEventIndex = -1);
+	LogEvent(Event::Type type, std::string roomName);
 	LogEvent(std::string lineFromLog);
 	~LogEvent();
 
 	// Event specific
 	void SetType(Event::Type type);
 	Event::Type GetType() const;
+	bool IsActive() const;
+	void SetInactive();
 
 	// Log specific
-	void SetActiveEventIndex(int index);
-	int GetActiveEventIndex() const;
-
 	std::string GetFileString();
 
 	// Room specific
 	void SetRoomName(std::string name);
+	std::string GetRoomName() const;
 
 	// Time specific
 	void StartTimer();
@@ -44,8 +44,8 @@ public:
 private:
 
 	Timer mTimer;
-	int mActiveEventIndex;
-	Event::Type mType;
 
+	bool mActive;
+	Event::Type mType;
 	std::string mRoomName;
 };

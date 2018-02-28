@@ -2,13 +2,14 @@
 
 LogEvent::LogEvent()
 {
-
+	this->mActive = true;
 }
 
-LogEvent::LogEvent(Event::Type type, int roomEventIndex)
+LogEvent::LogEvent(Event::Type type, std::string roomName)
 {
+	this->mActive = true;
 	this->mType = type;
-	this->mActiveEventIndex = roomEventIndex;
+	this->mRoomName = roomName;
 }
 
 LogEvent::LogEvent(std::string lineFromLog)
@@ -61,6 +62,8 @@ LogEvent::LogEvent(std::string lineFromLog)
 	
 
 	//ss >> this->mRoomName;
+
+	this->mActive = true;
 }
 
 LogEvent::~LogEvent()
@@ -82,21 +85,21 @@ Event::Type LogEvent::GetType() const
 	return this->mType;
 }
 
+bool LogEvent::IsActive() const
+{
+	return this->mActive;
+}
+
+void LogEvent::SetInactive()
+{
+	this->mActive = false;
+}
+
 
 
 /**
 *	Log specific
 */
-
-void LogEvent::SetActiveEventIndex(int index)
-{
-	this->mActiveEventIndex = index;
-}
-
-int LogEvent::GetActiveEventIndex() const
-{
-	return this->mActiveEventIndex;
-}
 
 std::string LogEvent::GetFileString()
 {
@@ -167,6 +170,11 @@ std::string LogEvent::GetFileString()
 void LogEvent::SetRoomName(std::string name)
 {
 	this->mRoomName = name;
+}
+
+std::string LogEvent::GetRoomName() const
+{
+	return this->mRoomName;
 }
 
 

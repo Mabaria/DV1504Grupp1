@@ -47,3 +47,18 @@ Event::Type Event::GetType(std::string type)
 	else
 		throw ("Invalid type");
 }
+
+Event::Type Event::GetType(int id)
+{
+	switch (id)
+	{
+		case 0:
+			return Event::Type::Fire;
+		case 1:
+			return Event::Type::Injury;
+		case 2:
+			return Event::Type::Water;
+		case 3:
+			return Event::Type::Gas;
+	}
+}

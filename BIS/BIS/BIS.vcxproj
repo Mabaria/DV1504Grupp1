@@ -44,6 +44,7 @@
     <ClCompile Include="..\..\Logic\Boat\Boat.cpp" />
     <ClCompile Include="..\..\Logic\Boat\Deck.cpp" />
     <ClCompile Include="..\..\Logic\Boat\Room.cpp" />
+    <ClCompile Include="..\..\Logic\Boat\RoomLog.cpp" />
     <ClCompile Include="..\..\Logic\Boat\Sensor.cpp" />
     <ClCompile Include="..\..\Logic\Eventlog\ActiveEvent.cpp" />
     <ClCompile Include="..\..\Logic\Eventlog\EventLog.cpp" />
@@ -95,6 +96,7 @@
     <ClInclude Include="..\..\Logic\Boat\Boat.h" />
     <ClInclude Include="..\..\Logic\Boat\Deck.h" />
     <ClInclude Include="..\..\Logic\Boat\Room.h" />
+    <ClInclude Include="..\..\Logic\Boat\RoomLog.h" />
     <ClInclude Include="..\..\Logic\Boat\Sensor.h" />
     <ClInclude Include="..\..\Logic\Eventlog\ActiveEvent.h" />
     <ClInclude Include="..\..\Logic\Eventlog\EventLog.h" />

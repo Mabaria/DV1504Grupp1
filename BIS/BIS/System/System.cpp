@@ -465,7 +465,7 @@ void System::mSetupModels()
 
 void System::mSetupBoat()
 {
-	this->mBoat.ReadFile("../../SaveFiles/data.boat");
+	this->mBoat.LoadFromFile_Boat("../../SaveFiles/data.boat");
 
 	// Creating the mesh and matrix list that boat 
 	// needs to load bounding boxes to the rooms.
@@ -487,9 +487,4 @@ void System::mSetupBoat()
 	};
 
 	this->mBoat.LoadBoundingBoxes(mesh_list, floor_matrix_list, 3);
-
-	/**
-	*	Send corresponding pointers
-	*/
-	this->mBoat.SetEventLog(&this->mEventLog);
 }

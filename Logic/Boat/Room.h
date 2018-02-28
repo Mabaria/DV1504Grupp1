@@ -3,22 +3,21 @@
 #include <string>
 #include "../../IO/Picking.h"
 #include "../Eventlog/EventLog.h"
+#include "RoomLog.h"
 #include "../Event/Event.h"
 #include "Sensor.h"
 #include "../Action/Action.h"
 
 //#include "Boat.h"
 
-struct RoomDesc
+struct Desc_Room
 {
-	int indexInBoat;
-	int indexInDeck;
-	int deckIndex;
-	int activeIndex;
-	ActiveEvent *pActiveEvent;
+	int inputs;
+	int index_Boat;
+	int index_Deck;
+	int index_DeckInBoat;
 	std::string name;
 	std::string deckName;
-	std::vector<Event::Type> inputTypes;
 	EventLog *pEventLog;
 };
 
@@ -28,15 +27,16 @@ class Room
 public:
 
 	Room();
-	Room(RoomDesc desc);
+	Room(Desc_Room desc);
 	~Room();
 
 	// Room specific
-	void SetIndex(int index);
+	void SetIndex_Boat(int index);
+	void SetIndex_Deck(int index);
 	void SetName(std::string name);
 	void SetAABB(const AABB &boundingBox);
 	std::string GetName() const;
-	void InitFromDesc(RoomDesc desc);
+	void InitFromDesc(Desc_Room desc);
 	int GetIndexInBoat() const;
 	int GetIndexInDeck() const;
 
@@ -45,11 +45,9 @@ public:
 	// Deck specific
 	void SetDeckName(std::string name);
 	std::string GetDeckName() const;
-	int GetDeckIndex() const;
-
-	// Log specific
-	void SetActiveEvent(int index, ActiveEvent *pActiveEvent);
-	void SetEventLog(EventLog *pEventLog);
+	int GetIndex_Boat() const;
+	int GetIndex_Deck() const;
+	int GetIndex_DeckInBoat() const;
 
 	// Event specific
 	bool AddSensorEvent(Event::Type type);	/* This function will only add
@@ -62,21 +60,23 @@ public:
 	bool ClearEvent(Event::Type type);
 
 	void AddInputType(Event::Type type);
-	int GetActiveEventIndex() const;
-	std::vector<LogEvent*> GetActiveEvents() const;
+	std::vector<LogEvent*> GetActiveEvents();
 
 	// Action specific
 	bool AddAction(ActionType type);
+	bool ClearAction(ActionType type);
 
 	// Disk specific
-	std::string WriteString() const;
+	std::string GetString() const;
+	static Desc_Room FillRoomDescFromLine(std::string line);
+	static std::string CorrectName(std::string name);
 
 private:
 
 	// Room specific
-	int mIndexInBoat;
-	int mIndexInDeck;
-	int mDeckIndex;
+	int mIndex_Boat;
+	int mIndex_Deck;
+	int mIndex_DeckInBoat;
 	std::string mName;
 	AABB mBoundingBox;
 
@@ -85,4 +85,7 @@ private:
 
 	// Sensor specific
 	Sensor mSensor;
+
+	// Log specific
+	RoomLog mRoomLog;
 };

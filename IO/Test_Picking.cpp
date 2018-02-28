@@ -6,7 +6,7 @@ bool TestPickingOnBoat()
 
 	// Read and create rooms/decks from file
 	Boat boat;
-	boat.ReadFile("../../Savefiles/data.boat");
+	boat.LoadFromFile_Boat("../../Savefiles/data.boat");
 
 	// Create window with panel
 	Window window(L"HELLO", 1920, 1080);

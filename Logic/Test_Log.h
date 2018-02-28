@@ -15,7 +15,7 @@ namespace Test_Log
 
 	// Log
 	bool MainTest(); // To test all, call this function
-	void FillLog(Boat *pBoat, EventLog *pLog);
+	void FillLog(Boat *pBoat);
 
 	// Disk
 	bool CompareFiles(std::string filePath1, std::string filePath2);

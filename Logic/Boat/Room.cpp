@@ -2,12 +2,12 @@
 
 Room::Room()
 {
-	this->mIndexInBoat = -1;
-	this->mIndexInDeck = -1;
-	this->mDeckIndex = -1;
+	this->mIndex_Boat = -1;
+	this->mIndex_Deck = -1;
+	this->mIndex_DeckInBoat = -1;
 }
 
-Room::Room(RoomDesc desc)
+Room::Room(Desc_Room desc)
 {
 	this->InitFromDesc(desc);
 }
@@ -23,16 +23,19 @@ Room::~Room()
 *	Room specific
 */
 
-void Room::SetIndex(int index)
+void Room::SetIndex_Boat(int index)
 {
-	this->mIndexInBoat = index;
-	this->mSensor.SetRoomIndex(this->mIndexInBoat);
+	this->mIndex_Boat = index;
+}
+
+void Room::SetIndex_Deck(int index)
+{
+	this->mIndex_Deck = index;
 }
 
 void Room::SetName(std::string name)
 {
 	this->mName = name;
-	this->mSensor.SetRoomName(this->mName);
 }
 
 void Room::SetAABB(const AABB &boundingBox)
@@ -50,28 +53,26 @@ std::string Room::GetName() const
 	return this->mName;
 }
 
-void Room::InitFromDesc(RoomDesc desc)
+void Room::InitFromDesc(Desc_Room desc)
 {
+	this->mSensor.SetInputTypes(desc.inputs);
+	this->mIndex_Boat = desc.index_Boat;
+	this->mIndex_Deck = desc.index_Deck;
+	this->mIndex_DeckInBoat = desc.index_DeckInBoat;
 	this->mName = desc.name;
-	this->mIndexInBoat = desc.indexInBoat;
-	this->mIndexInDeck = desc.indexInDeck;
-	this->mDeckIndex = desc.deckIndex;
 	this->mDeckName = desc.deckName;
-	this->mSensor.SetRoomIndex(desc.indexInBoat);
-	this->mSensor.SetRoomName(this->mName);
-	this->mSensor.SetEventLog(desc.pEventLog);
-	this->mSensor.SetInputTypes(desc.inputTypes);
-	this->mSensor.SetActiveEvent(desc.activeIndex, desc.pActiveEvent);
+	this->mRoomLog.SetEventLogPtr(desc.pEventLog);
+	this->mRoomLog.SetRoomName(desc.name);
 }
 
 int Room::GetIndexInBoat() const
 {
-	return this->mIndexInBoat;
+	return this->mIndex_Boat;
 }
 
 int Room::GetIndexInDeck() const
 {
-	return this->mIndexInDeck;
+	return this->mIndex_Deck;
 }
 
 
@@ -91,25 +92,19 @@ std::string Room::GetDeckName() const
 	return this->mDeckName;
 }
 
-int Room::GetDeckIndex() const
+int Room::GetIndex_Boat() const
 {
-	return this->mDeckIndex;
+	return this->mIndex_Boat;
 }
 
-
-
-/**
-*	Log specific
-*/
-
-void Room::SetActiveEvent(int index, ActiveEvent *pActiveEvent)
+int Room::GetIndex_Deck() const
 {
-	this->mSensor.SetActiveEvent(index, pActiveEvent);
+	return this->mIndex_Deck;
 }
 
-void Room::SetEventLog(EventLog *pEventLog)
+int Room::GetIndex_DeckInBoat() const
 {
-	this->mSensor.SetEventLog(pEventLog);
+	return this->mIndex_DeckInBoat;
 }
 
 
@@ -120,17 +115,23 @@ void Room::SetEventLog(EventLog *pEventLog)
 
 bool Room::AddSensorEvent(Event::Type type)
 {
-	return this->mSensor.AutoTrigger(type);
+	if (this->mSensor.CanDetect(type))
+	{
+		return this->mRoomLog.AddEvent(type);
+	}
+
+	// If sensor can't detect given type
+	return false;
 }
 
 bool Room::AddPlotterEvent(Event::Type type)
 {
-	return this->mSensor.PlotTrigger(type);
+	return this->mRoomLog.AddEvent(type);
 }
 
 bool Room::ClearEvent(Event::Type type)
 {
-	return this->mSensor.ClearEvent(type);
+	return this->mRoomLog.ClearEvent(type);
 }
 
 void Room::AddInputType(Event::Type type)
@@ -138,15 +139,12 @@ void Room::AddInputType(Event::Type type)
 	this->mSensor.AddInputType(type);
 }
 
-int Room::GetActiveEventIndex() const
+std::vector<LogEvent*> Room::GetActiveEvents()
 {
-	return this->mSensor.GetActiveEventIndex();
+	return this->mRoomLog.GetActiveEvents();
 }
 
-std::vector<LogEvent*> Room::GetActiveEvents() const
-{
-	return this->mSensor.GetActiveEvents();
-}
+
 
 /**
 *	Action specific
@@ -158,20 +156,91 @@ bool AddAction(ActionType type)
 	return false;
 }
 
+bool ClearAction(ActionType type)
+{
+	// TODO
+	return false;
+}
+
 
 
 /**
 *	Disk specific
 */
 
-std::string Room::WriteString() const
+std::string Room::GetString() const
 {
-	std::string print = "";
+	std::stringstream ss;
 
-	print += "r ";
-	print += this->mName;
-	print += " / ";
-	print += this->mSensor.WriteString();
+	ss << "r ";
+	ss << this->mName;
+	ss << " / ";
+	ss << this->mSensor.GetInputTypes();
 
-	return print;
+	return ss.str();
+}
+
+Desc_Room Room::FillRoomDescFromLine(std::string line)
+{
+	Desc_Room desc;
+
+	std::stringstream buffer;
+	std::string roomName, word;
+
+	buffer.str(line);
+
+	/**
+	*	Get room name
+	*/
+	roomName = "";
+	buffer >> word; // Get 'r'
+	buffer >> word;
+
+	while (word != "/")
+	{
+		if (roomName != "")
+		roomName += " ";
+		roomName +=	word;
+
+		buffer >> word;
+	}
+	desc.name = Room::CorrectName(roomName);
+
+	/**
+	*	Get sensor data
+	*/
+	buffer >> desc.inputs;	// Input types (stored as int)
+	
+	return desc;
+}
+
+std::string Room::CorrectName(std::string name)
+{
+	std::string newName = "";
+
+	for (int i = 0; i < (int)name.size(); i++)
+	{
+		int c = name[i];
+		
+		switch (name[i])
+		{
+		case -91: // ¥
+			newName += "å";
+			break;
+		case -92: // ¤
+			newName += "ä";
+			break;
+		case -74: // ¶
+			newName += "ö";
+			break;
+
+		case -61: // Character skip
+			break;
+
+		default:
+			newName += name[i];
+			break;
+		}
+	}
+	return newName;
 }

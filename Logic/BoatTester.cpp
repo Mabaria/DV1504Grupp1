@@ -2,15 +2,12 @@
 
 void BoatTester::WriteTest()
 {
-	EventLog *pEventLog;
 	Boat *pBoat;
-
-	pEventLog = new EventLog;
 
 	/**
 	*	Create boat
 	*/
-	pBoat = CreateBoat(pEventLog);
+	pBoat = CreateBoat();
 
 	/**
 	*	Write boat to file
@@ -18,22 +15,19 @@ void BoatTester::WriteTest()
 	WriteFile(pBoat, "../../SaveFiles/WriteTest.boat");
 
 	delete pBoat;
-	delete pEventLog;
 }
 
 void BoatTester::TestBoat()
 {
-	EventLog *pEventLog;
 	Boat *pBoat;
-
-	pEventLog = new EventLog;
+	Room *pRoom;
 
 	std::string prefix = "  * ";
 
 	/**
 	*	Create boat
 	*/
-	pBoat = CreateBoat(pEventLog);
+	pBoat = CreateBoat();
 
 
 
@@ -43,39 +37,43 @@ void BoatTester::TestBoat()
 	PrintHeader("Creating events to sensors");
 
 	std::cout << "Adding Fire to 'Maskinrum' in 'Huvuddäck'" << std::endl;
-	pBoat->CreateAutoEvent(Event::Fire, "Maskinrum", "Huvuddäck");
+	pRoom = pBoat->GetRoomPointer("Maskinrum");
+	pRoom->AddSensorEvent(Event::Type::Fire);
 
 	// Sensor is set not to register water
 	std::cout << "Adding Water to 'Maskinrum' in 'Huvuddäck'" << std::endl;
-	pBoat->CreateAutoEvent(Event::Water, "Maskinrum", "Huvuddäck");
+	pRoom = pBoat->GetRoomPointer("Maskinrum");
+	pRoom->AddSensorEvent(Event::Type::Water);
 
 	std::cout << "Adding Gas to 'Maskinrum' in 'Huvuddäck'" << std::endl;
-	pBoat->CreateAutoEvent(Event::Gas, "Maskinrum", "Huvuddäck");
+	pRoom = pBoat->GetRoomPointer("Maskinrum");
+	pRoom->AddSensorEvent(Event::Type::Gas);
 
 
 
 	/**
 	*	Check auto event
 	*/
-	std::vector<Event::Type> events;
+	std::vector<LogEvent*> events;
 
-	events = pBoat->GetEventsInRoom("Maskinrum", "Huvuddäck");
 	std::cout << "\nChecking events in 'Maskinrum' in 'Huvuddäck':" << std::endl;
 	std::cout << "(Should be Fire and Gas only)" << std::endl;
+	pRoom = pBoat->GetRoomPointer("Maskinrum");
+	events = pRoom->GetActiveEvents();
 
 	std::cout << prefix << "Fire...";
-	if (events[0] != Event::Fire)
+	if (events[0]->GetType() != Event::Fire)
 		throw ("Error expected Fire");
 	std::cout << "ok!" << std::endl;
 
 	std::cout << prefix << "Gas...";
-	if (events[1] != Event::Gas)
+	if (events[1]->GetType() != Event::Gas)
 		throw ("Error expected Gas");
 	std::cout << "ok!" << std::endl;
 
 	if (events.size() != 2) // Should not register Event::Water
 		throw ("Error: sensor detecting types it shouldn't");
-	if (!(events[0] == Event::Fire && events[1] == Event::Gas))
+	if (!(events[0]->GetType() == Event::Fire && events[1]->GetType() == Event::Gas))
 		throw ("Error wrong auto events");
 
 
@@ -86,32 +84,40 @@ void BoatTester::TestBoat()
 	PrintHeader("Creating events from plotter");
 
 	std::cout << "Adding Fire to 'Skyddsrum' in 'Trossdäck'" << std::endl;
-	pBoat->CreatePlotEvent(Event::Fire, "Skyddsrum", "Trossdäck");
+	pRoom = pBoat->GetRoomPointer("Skyddsrum");
+	pRoom->AddPlotterEvent(Event::Type::Fire);
+
+	std::cout << "Adding Injury to 'Skyddsrum' in 'Trossdäck'" << std::endl;
+	pRoom = pBoat->GetRoomPointer("Skyddsrum");
+	pRoom->AddPlotterEvent(Event::Type::Injury);
 	
 	std::cout << "Adding Water to 'Skyddsrum' in 'Trossdäck'" << std::endl;
-	pBoat->CreatePlotEvent(Event::Water, "Skyddsrum", "Trossdäck");
+	pRoom = pBoat->GetRoomPointer("Skyddsrum");
+	pRoom->AddPlotterEvent(Event::Type::Water);
 
 	std::cout << "Adding Gas to 'Skyddsrum' in 'Trossdäck'" << std::endl;
-	pBoat->CreatePlotEvent(Event::Gas, "Skyddsrum", "Trossdäck");
+	pRoom = pBoat->GetRoomPointer("Skyddsrum");
+	pRoom->AddPlotterEvent(Event::Type::Gas);
 
 
 
 	/**
 	*	Check plot event
 	*/
-	events = pBoat->GetEventsInRoom("Skyddsrum", "Trossdäck");
 	std::cout << "\nChecking events in 'Skyddsrum' in 'Trossdäck':" << std::endl;
+	pRoom = pBoat->GetRoomPointer("Skyddsrum");
+	events = pRoom->GetActiveEvents();
 
-	if (events.size() != 3)
+	if (events.size() != 4)
 		throw ("Error unexpected number of plot events handled");
 
 	std::string type;
 	for (int i = 0; i < 3; i++)
 	{
-		type = Event::GetString((Event::Type)i);
+		type = Event::GetString(Event::GetType(i));
 		std::cout << prefix << "" << type << "...";
 
-		if (events[i] != (Event::Type)i)
+		if (events[i]->GetType() != Event::GetType(i))
 			throw ("Error expected " + type);
 
 		std::cout << "ok!" << std::endl;
@@ -132,7 +138,6 @@ void BoatTester::TestBoat()
 	*/
 	delete pBoat;
 	pBoat = new Boat;
-	pBoat->SetEventLog(pEventLog);
 	if (!ReadFile(pBoat, "../../SaveFiles/Testboat1.boat"))
 	{
 		throw ("Error reading file");
@@ -155,48 +160,52 @@ void BoatTester::TestBoat()
 	if (!CompareFiles("../../SaveFiles/Testboat1.boat", "../../SaveFiles/Testboat2.boat"))
 		throw ("Error missmatching files from Write and Read");
 
-
+	/**
+	*	Add four events
+	*/
+	pRoom = pBoat->GetRoomPointer("Skyddsrum");
+	pRoom->AddSensorEvent(Event::Type::Fire);
+	pRoom->AddSensorEvent(Event::Type::Injury); // Sensor can't detect
+	pRoom->AddSensorEvent(Event::Type::Water);	// Sensor can't detect
+	pRoom->AddSensorEvent(Event::Type::Gas);
 
 	/**
 	*	Clear event
 	*/
-	pBoat->ClearEvent(Event::Fire, "Skyddsrum", "Trossdäck");
-	pBoat->ClearEvent(Event::Gas, "Skyddsrum", "Trossdäck");
-	pBoat->ClearEvent(Event::Water, "Skyddsrum", "Trossdäck");
+	pRoom->ClearEvent(Event::Type::Fire);
+	pRoom->ClearEvent(Event::Type::Gas);
+	pRoom->ClearEvent(Event::Type::Injury);
+	pRoom->ClearEvent(Event::Type::Water);
 	
 
 
 	/**
 	*	Check cleared events
 	*/
-	events = pBoat->GetEventsInRoom("Skyddsrum", "Trossdäck");
+	events = pRoom->GetActiveEvents();
 
 	if (events.size() != 0)
-		throw ("Error unexpected amount of events after clearing");
+		throw ("Error unexpected amount of events in room after clearing");
 
 
 
 	/**
 	*	Check eventlog
 	*/
-	int eventCount;			// Should be 5 (6 events -1 that didn't register)
-	int activeEventCount;	// Should be 1 (one room is cleared)
+	int eventCount;			// Should be 2 (4 events -2 that wasn't detected by sensor)
 
-	eventCount = pEventLog->GetEventCount();
-	activeEventCount = pEventLog->GetActiveEventCount();
+	eventCount = pBoat->GetEventCount();
 
-	if (eventCount != 5)
+	if (eventCount != 2)
 		throw ("Error unexpected amount of events in total");
-	if (activeEventCount != 1)
-		throw ("Error unexpected amount of active events");
 
 
 	PrintHeader("Testing completed!");
 	delete pBoat;
-	delete pEventLog;
 }
 
-Boat* BoatTester::CreateBoat(EventLog *pEventLog) {
+Boat* BoatTester::CreateBoat()
+{
 	std::string prefix = "  * ";
 
 	PrintHeader("Building boat 'Testskepp'");
@@ -204,7 +213,7 @@ Boat* BoatTester::CreateBoat(EventLog *pEventLog) {
 	Boat *newBoat = new Boat;
 	newBoat->SetModelName("Testskepp");
 
-	std::vector<Event::Type> inputs = {Event::Fire, Event::Gas};
+	int inputs = 9;
 
 	std::cout << "Creating deck 'Bryggdäck'...";
 	newBoat->AddDeck("Bryggdäck");
@@ -291,7 +300,6 @@ Boat* BoatTester::CreateBoat(EventLog *pEventLog) {
 	std::cout << std::endl;
 
 	std::cout << "\nAdding pointer from EventLog to Boat...";
-	newBoat->SetEventLog(pEventLog);
 	std::cout << "done!" << std::endl;
 
 	return newBoat;
@@ -301,7 +309,7 @@ bool BoatTester::ReadFile(Boat *pBoat, std::string filePath)
 {
 	PrintHeader("Read boat from file");
 
-	if (!pBoat->ReadFile(filePath))
+	if (!pBoat->LoadFromFile_Boat(filePath))
 		return false;
 
 	return true;
@@ -311,7 +319,7 @@ void BoatTester::WriteFile(Boat *pBoat, std::string filePath)
 {
 	PrintHeader("Write boat to file");
 
-	pBoat->WriteFile(filePath);
+	pBoat->SaveToFile_Boat(filePath);
 }
 
 bool BoatTester::CompareFiles(std::string filePath1, std::string filePath2)

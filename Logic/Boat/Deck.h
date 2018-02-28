@@ -3,44 +3,51 @@
 #include <string>
 #include <vector>
 #include "Room.h"
+#include "../Eventlog/EventLog.h"
 
 /**
 *	Deck is a simple structure that holds offset and length of its own rooms in
 * the Boat room list.
 */
 
-struct DeckDesc
+struct Desc_Deck
 {
 	int index;
 	int roomOffset;
 	std::string name;
+	EventLog *pEventLog;
 };
+
 
 class Deck
 {
 public:
 
 	Deck();
-	Deck(DeckDesc desc);
+	Deck(Desc_Deck desc);
 	~Deck();
 	
 	// Deck specific
 	void SetIndex(int index);
 	void SetName(std::string name);
-	void InitFromDesc(DeckDesc desc);
+	void InitFromDesc(Desc_Deck desc);
 	std::string GetName() const;
 
 	// Room specific
-	void AddRoom(Room *pRoom, int index = -1);
-	void SetRoomCount(int count);
+	bool AddRoom(std::string name, int inputs);
+	bool AddRoom(std::string line);
 	void SetRoomOffset(int index);
-	void PushRoomOffset(int value = 1);
 	int GetRoomCount() const;
 	int GetRoomOffset() const;
-	Room* GetRoomPointerAt(int index);
+	int GetRoomIndex_Boat(std::string name) const;
+	int GetRoomIndex_Deck(std::string name) const;
+	Room* GetRoomPointer(std::string name) const;
+	Room* GetRoomPointerAt(int index) const;
 
 	// Disk specific
 	std::string GetString() const;
+	std::string GetRoomStringAt(int index) const;
+	static Desc_Deck FillDeckDescFromLine(std::string line);
 
 private:
 
@@ -49,7 +56,10 @@ private:
 	std::string mName;
 
 	// Room specific
-	int mRoomCount;
 	int mRoomOffset;
 	std::vector<Room*> mpRooms;
+	
+	// Log specific
+	EventLog *mpEventLog;
 };
+
