@@ -52,7 +52,15 @@ bool EventMenu::Init(int parentWidth,
 	this->mpPanel->LoadImageToBitmap("../../Models/Button09.png", "FireOn");
 	this->mpPanel->LoadImageToBitmap("../../Models/Exit.png", "Exit");
 
-	this->mpPanel->LoadImageToBitmap("../../Models/Symbols.png", "Symbols");
+	this->mpPanel->LoadImageToBitmap("../../Models/Action1.png", "Action1");
+	this->mpPanel->LoadImageToBitmap("../../Models/Action2.png", "Action2");
+	this->mpPanel->LoadImageToBitmap("../../Models/Action3.png", "Action3");
+	this->mpPanel->LoadImageToBitmap("../../Models/Action4.png", "Action4");
+	this->mpPanel->LoadImageToBitmap("../../Models/Action5.png", "Action5");
+	this->mpPanel->LoadImageToBitmap("../../Models/Action6.png", "Action6");
+	this->mpPanel->LoadImageToBitmap("../../Models/Action7.png", "Action7");
+	this->mpPanel->LoadImageToBitmap("../../Models/Action8.png", "Action8");
+	this->mpPanel->LoadImageToBitmap("../../Models/Action9.png", "Action9");
 	
 	this->InitButtons();
 
@@ -138,7 +146,7 @@ bool EventMenu::Update()
 		this->mButtonFocus = false;
 		this->mDraggingWindow = false;
 	}
-
+	//! Dragging removed due to new menu format
 	//if (this->mDraggingWindow)
 	//{
 	//	int left = Mouse::GetExactX() - this->mDragX;
@@ -196,23 +204,65 @@ void EventMenu::Update( Button *attribute)
 			{
 				this->mpActiveRoom->AddPlotterEvent(Event::Fire);
 				this->mLastClicked = Event::Fire;
+				this->NotifyObservers(this->mpActiveRoom);
 			}
 			else if (button_name.compare("Gas") == 0)
 			{
 				this->mpActiveRoom->AddPlotterEvent(Event::Gas);
 				this->mLastClicked = Event::Gas;
+				this->NotifyObservers(this->mpActiveRoom);
 			}
-			if (button_name.compare("Water") == 0)
+			else if (button_name.compare("Water") == 0)
 			{
 				this->mpActiveRoom->AddPlotterEvent(Event::Water);
 				this->mLastClicked = Event::Water;
+				this->NotifyObservers(this->mpActiveRoom);
 			}
 			else if (button_name.compare("Injury") == 0)
 			{
 				this->mpActiveRoom->AddPlotterEvent(Event::Injury);
 				this->mLastClicked = Event::Injury;
+				this->NotifyObservers(this->mpActiveRoom);
 			}
-			this->NotifyObservers(this->mpActiveRoom);
+			else if (button_name.compare("Injured_Treated") == 0)
+			{
+				//TODO Add new action object
+				//! THIS SYMBOL REQUIRES A NUMBER
+			}
+			else if (button_name.compare("Injured_Treated") == 0)
+			{
+				//TODO Add new action object
+				//! THIS SYMBOL REQUIRES A NUMBER
+			}
+			else if (button_name.compare("Injured_Reported") == 0)
+			{
+				//TODO Add new action object
+				//! THIS SYMBOL REQUIRES A NUMBER
+			}
+			else if (button_name.compare("Hole_In_Bulk") == 0)
+			{
+				//TODO Add new action object
+			}
+			else if (button_name.compare("Ventilation_In") == 0)
+			{
+				//TODO Add new action object
+			}
+			else if (button_name.compare("Ventilation_Out") == 0)
+			{
+				//TODO Add new action object
+			}
+			else if (button_name.compare("Cooling_Wall") == 0)
+			{
+				//TODO Add new action object
+			}
+			else if (button_name.compare("Supporting_Wall") == 0)
+			{
+				//TODO Add new action object
+			}
+			else if (button_name.compare("Damaged_Bulk") == 0)
+			{
+				//TODO Add new action object
+			}
 		}
 	}
 }
@@ -224,39 +274,40 @@ Event::Type EventMenu::GetLastClicked()
 
 void EventMenu::InitButtons()
 {
-	int margin = this->mMenuWidth / 6;
-	int padding = this->mMenuWidth / 6;
+	int margin = this->mMenuWidth / 10;
+	int padding = this->mMenuWidth / 9;
 	int actionMargin = this->mMenuWidth / 15;
 	int buttonSize = this->mMenuWidth / 4;
+	int eventButtonSize = this->mMenuWidth / 3;
 
 	// Event buttons
 
 	this->mpPanel->AddButton(
-		buttonSize,
-		buttonSize,
+		eventButtonSize,
+		eventButtonSize,
 		margin,
 		margin,
 		this->mpPanel->GetBitmapByName("FireOff"),
 		"Fire");
 	this->mpPanel->AddButton(
-		buttonSize,
-		buttonSize,
-		margin + buttonSize + padding,
+		eventButtonSize,
+		eventButtonSize,
+		margin + eventButtonSize + padding,
 		margin,
 		this->mpPanel->GetBitmapByName("WaterOff"),
 		"Water"); 
 	this->mpPanel->AddButton(
-		buttonSize,
-		buttonSize,
+		eventButtonSize,
+		eventButtonSize,
 		margin,
-		margin + buttonSize + padding,
+		this->mMenuWidth - margin - eventButtonSize,
 		this->mpPanel->GetBitmapByName("GasOff"),
 		"Gas");
 	this->mpPanel->AddButton(
-		buttonSize,
-		buttonSize,
-		margin + buttonSize + padding,
-		margin + buttonSize + padding,
+		eventButtonSize,
+		eventButtonSize,
+		margin + eventButtonSize + padding,
+		this->mMenuWidth - margin - eventButtonSize,
 		this->mpPanel->GetBitmapByName("InjuryOff"),
 		"Injury");
 
@@ -269,74 +320,74 @@ void EventMenu::InitButtons()
 	this->mpPanel->AddButton(
 		buttonSize,
 		buttonSize,
-		margin + (buttonSize + margin) * 2,
+		margin + (eventButtonSize + margin) * 2,
 		actionMargin,
-		this->mpPanel->GetBitmapByName("InjuryOn"),
+		this->mpPanel->GetBitmapByName("Action1"),
 		"Injured_Moved");
 
 	this->mpPanel->AddButton(
 		buttonSize,
 		buttonSize,
-		margin + (buttonSize + margin) * 2,
+		margin + (eventButtonSize + margin) * 2,
 		(this->mMenuWidth / 2) - (buttonSize / 2),
-		this->mpPanel->GetBitmapByName("InjuryOn"),
+		this->mpPanel->GetBitmapByName("Action2"),
 		"Injured_Treated");
 
 	this->mpPanel->AddButton(
 		buttonSize,
 		buttonSize,
-		margin + (buttonSize + margin) * 2,
+		margin + (eventButtonSize + margin) * 2,
 		this->mMenuWidth - buttonSize - actionMargin,
-		this->mpPanel->GetBitmapByName("InjuryOn"),
+		this->mpPanel->GetBitmapByName("Action3"),
 		"Injured_Reported");
 
 	this->mpPanel->AddButton(
 		buttonSize,
 		buttonSize,
-		margin + (buttonSize + margin) * 2 + actionMargin + buttonSize,
+		margin + (eventButtonSize + margin) * 2 + actionMargin + buttonSize,
 		actionMargin,
-		this->mpPanel->GetBitmapByName("GasOn"),
+		this->mpPanel->GetBitmapByName("Action4"),
 		"Hole_In_Bulk");
 
 
 	this->mpPanel->AddButton(
 		buttonSize,
 		buttonSize,
-		margin + (buttonSize + margin) * 2 + actionMargin + buttonSize,
+		margin + (eventButtonSize + margin) * 2 + actionMargin + buttonSize,
 		(this->mMenuWidth / 2) - (buttonSize / 2),
-		this->mpPanel->GetBitmapByName("GasOn"),
+		this->mpPanel->GetBitmapByName("Action5"),
 		"Ventilation_In");
 
 	this->mpPanel->AddButton(
 		buttonSize,
 		buttonSize,
-		margin + (buttonSize + margin) * 2 + actionMargin + buttonSize,
+		margin + (eventButtonSize + margin) * 2 + actionMargin + buttonSize,
 		this->mMenuWidth - buttonSize - actionMargin,
-		this->mpPanel->GetBitmapByName("GasOn"),
+		this->mpPanel->GetBitmapByName("Action6"),
 		"Ventilation_Out");
 
 	this->mpPanel->AddButton(
 		buttonSize,
 		buttonSize,
-		margin + (buttonSize + margin) * 2 + (actionMargin + buttonSize) * 2,
+		margin + (eventButtonSize + margin) * 2 + (actionMargin + buttonSize) * 2,
 		actionMargin,
-		this->mpPanel->GetBitmapByName("FireOn"),
+		this->mpPanel->GetBitmapByName("Action7"),
 		"Cooling_Wall");
 
 	this->mpPanel->AddButton(
 		buttonSize,
 		buttonSize,
-		margin + (buttonSize + margin) * 2 + (actionMargin + buttonSize) * 2,
+		margin + (eventButtonSize + margin) * 2 + (actionMargin + buttonSize) * 2,
 		(this->mMenuWidth / 2) - (buttonSize / 2),
-		this->mpPanel->GetBitmapByName("FireOn"),
+		this->mpPanel->GetBitmapByName("Action8"),
 		"Supporting_Wall");
 
 	this->mpPanel->AddButton(
 		buttonSize,
 		buttonSize,
-		margin + (buttonSize + margin) * 2 + (actionMargin + buttonSize) * 2,
+		margin + (eventButtonSize + margin) * 2 + (actionMargin + buttonSize) * 2,
 		this->mMenuWidth - buttonSize - actionMargin,
-		this->mpPanel->GetBitmapByName("FireOn"),
+		this->mpPanel->GetBitmapByName("Action9"),
 		"Damaged_Bulk");
 
 	this->mpPanel->AddButton(
@@ -352,5 +403,6 @@ void EventMenu::InitButtons()
 	this->mpPanel->GetButtonByName("Injury")->AddObserver(this);
 	this->mpPanel->GetButtonByName("Exit")->AddObserver(this);
 
-	//! ADD ACTION BUTTON OBSERVERS HERE
+	//TODO ADD ACTION BUTTON OBSERVERS HERE
+
 }
