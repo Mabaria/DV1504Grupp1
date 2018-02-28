@@ -152,7 +152,18 @@ void System::Run()
 
 void System::Update(Room * pickedRoom)
 {
-	this->mUpdateEvents(pickedRoom);
+	// If a room is clicked in top view panel.
+	if (this->mpTopViewPanel->IsMouseInsidePanel())
+	{
+		this->mUpdateEvents(pickedRoom);
+	}
+	// If a notification object is clicked in the active log panel.
+	else if (this->mpActiveLogPanel->IsMouseInsidePanel())
+	{
+		this->mpTopViewPanel->
+			GetMovableComponent()->
+			FocusCameraOnRoom(pickedRoom, true);
+	}
 }
 
 void System::mUpdate()
@@ -181,8 +192,7 @@ void System::mHandleInput()
 	static Room* last_picked_room = nullptr; 
 	Room *picked_room = nullptr;
 
-	if (
-		this->mpTopViewPanel->IsMouseInsidePanel() &&
+	if (this->mpTopViewPanel->IsMouseInsidePanel() &&
 		!this->mpMenuPanel->IsMouseInsidePanel())
 	{
 
@@ -233,6 +243,13 @@ void System::mHandleInput()
 
 		}
 
+		// Closes the event menu if the user left clicks away from a room
+		// or the event menu.
+		else if (Mouse::IsButtonPressed(Buttons::Left) && this->mpMenuPanel->IsVisible())
+		{
+			this->mpMenuPanel->Close();
+		}
+
 		else if(last_picked_room != nullptr)
 		{
 			std::string last_picked_name = last_picked_room->GetDeckName() + "bounds";
@@ -266,8 +283,7 @@ void System::mUpdateHover(std::string name, int index, bool activate)
 	this->mpTopViewPanel->rGetMeshObject(name)->SetHover(
 		activate,
 		this->mpTopViewPanel->rGetDirect3D().GetContext(),
-		index
-	);
+		index);
 }
 
 void System::mUpdateRoomInfo()
@@ -321,6 +337,16 @@ void System::mUpdateEvents(Room * room)
 		this->mpActiveLogPanel->RemoveNotification(room, to_remove);
 		room->ClearEvent(to_remove);
 		events_in_room = room->GetActiveEvents();
+	}
+	// Adding the system as an observer to the newly added notification object.
+	else
+	{
+		this->mpActiveLogPanel->
+			GetNotificationList()->
+			GetNotificationObjectByIndex(
+				this->mpActiveLogPanel->GetNotificationList()->
+				GetNumberOfNotificationObjects() - 1)->
+			AddObserver(this);
 	}
 
 	// Adds bounds to the deck name to get the name of the 
@@ -488,7 +514,7 @@ void System::mSetupPanels()
 	int list_top = 0;
 	int list_left = 0;
 	int title_font_size = 40;
-	int object_font_size = 14;
+	int object_font_size = 26;
 
 	this->mpActiveLogPanel->SetNotificationList(
 		list_top, 
@@ -607,12 +633,12 @@ void System::mSetupModels()
 	this->mpTopViewPanel->rGetMeshObject("Huvuddäckbounds")->Translate(0.0f, 0.0f, 0.0f);
 	this->mpTopViewPanel->rGetMeshObject("Trossdäckbounds")->Translate(0.0f, 0.0f, 0.5f);
 
-	this->mpSideViewPanel->rGetMeshObject("Bryggdäck")->Translate(0.05f, 0.9f, 0.0f);
+	this->mpSideViewPanel->rGetMeshObject("Bryggdäck")->Translate(0.05f, 1.3f, 0.0f);
 	this->mpSideViewPanel->rGetMeshObject("Huvuddäck")->Translate(0.05f, 0.0f, 0.0f);
-	this->mpSideViewPanel->rGetMeshObject("Trossdäck")->Translate(0.05f, -0.9f, 0.0f);
-	this->mpSideViewPanel->rGetMeshObject("Bryggdäckbounds")->Translate(0.05f, 0.9f, 0.0f);
+	this->mpSideViewPanel->rGetMeshObject("Trossdäck")->Translate(0.05f, -1.3f, 0.0f);
+	this->mpSideViewPanel->rGetMeshObject("Bryggdäckbounds")->Translate(0.05f, 1.3f, 0.0f);
 	this->mpSideViewPanel->rGetMeshObject("Huvuddäckbounds")->Translate(0.05f, 0.0f, 0.0f);
-	this->mpSideViewPanel->rGetMeshObject("Trossdäckbounds")->Translate(0.05f, -0.9f, 0.0f);
+	this->mpSideViewPanel->rGetMeshObject("Trossdäckbounds")->Translate(0.05f, -1.3f, 0.0f);
 
 	this->mpSideViewPanel->rGetMeshObject("Bryggdäck")->Scale(0.5f, 0.5f, 0.5f);
 	this->mpSideViewPanel->rGetMeshObject("Huvuddäck")->Scale(0.5f, 0.5f, 0.5f);

@@ -385,6 +385,16 @@ std::string Button::GetName() const
 	return this->mName;
 }
 
+void Button::SetRectColor(float r, float g, float b, float a)
+{
+	this->mpRectBrush->SetColor(D2D1::ColorF(r, g, b, a));
+}
+
+void Button::SetButtonColor(float r, float g, float b, float a)
+{
+	this->mpFillBrush->SetColor(D2D1::ColorF(r, g, b, a));
+}
+
 void Button::ReleaseCOM(IUnknown *object)
 {
 	if (object)

@@ -659,6 +659,9 @@ const void Panel3D::Update()
 		}
 	}
 
+	// Updates animation if necessary
+	this->mpMovableCameraComponent->UpdateAnimation();
+
 	if (this->mShowCursor != show_cursor)
 	{
 		this->mShowCursor = show_cursor;

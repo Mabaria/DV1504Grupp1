@@ -59,6 +59,8 @@ public:
 
 	void SetOpacity(float opacity);
 	std::string GetName() const;
+	void SetRectColor(float r, float g, float b, float a = 1.f);
+	void SetButtonColor(float r, float g, float b, float a = 1.f);
 
 private:
 	

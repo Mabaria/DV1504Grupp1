@@ -10,13 +10,16 @@ NotificationObject::NotificationObject(
 	: mButton(direct2d, bitmap, 0, 0, 0, 0)
 	, mTextBox(direct2d, 0, 0, 0, 0)
 {
-	this->mTimer = event->GetTimer();
-	this->mRoomName = room->GetName();
-	this->mDeckName = room->GetDeckName();
-	this->mStartTime = this->mTimer->WhenTimerStarted();
-	this->mElapsedTime = this->mTimer->GetTimeAsStr();
+	this->mpRoom = room;
+	this->mpTimer = event->GetTimer();
+	this->mRoomName = this->mpRoom->GetName();
+	this->mDeckName = this->mpRoom->GetDeckName();
+	this->mStartTime = this->mpTimer->WhenTimerStarted();
+	this->mElapsedTime = this->mpTimer->GetTimeAsStr();
 	this->mEventType = event->GetType();
 	this->mIndex = index;
+	this->mIsNew = true;
+	this->mNewColorCounter = 0.0f;
 	
 	this->mTextBox.SetFontSize(fontSize);
 	this->mTextBox.SetFontWeight(DWRITE_FONT_WEIGHT_BOLD);
@@ -124,6 +127,8 @@ const std::string NotificationObject::GetStartTime() const
 const std::string NotificationObject::GetNotificationString() const
 {
 	std::string return_string = "";
+	return_string += std::to_string(this->mIndex);
+	return_string += ". ";
 	return_string += this->mRoomName;
 	return_string += "\n";
 	return_string += this->mElapsedTime;
@@ -134,6 +139,11 @@ const std::string NotificationObject::GetNotificationString() const
 Button * NotificationObject::GetButton()
 {
 	return &this->mButton;
+}
+
+Room * NotificationObject::GetRoom()
+{
+	return this->mpRoom;
 }
 
 const int NotificationObject::GetWidth() const
@@ -174,14 +184,30 @@ const void NotificationObject::SetText(std::string text)
 	this->mTextBox.SetText(text);
 }
 
+const void NotificationObject::SetIfNewStatus(bool status)
+{
+	this->mIsNew = status;
+}
+
+const bool NotificationObject::GetIfNewStatus()
+{
+	return this->mIsNew;
+}
+
 void NotificationObject::Update()
 {
-	this->mElapsedTime = this->mTimer->GetTimeAsStr();
+	this->mElapsedTime = this->mpTimer->GetTimeAsStr();
 	this->SetText(this->GetNotificationString());
 }
 
 void NotificationObject::Draw()
 {
+	if (this->mIsNew)
+	{
+		this->mButton.SetRectColor(
+			sin(this->mNewColorCounter += 0.2f),
+			0, 0);
+	}
 	this->mButton.DrawRect();
 	this->mTextBox.DrawTextBox();
 	this->mButton.DrawButton();

@@ -165,6 +165,12 @@ bool EventMenu::Draw() const
 	return true;
 }
 
+void EventMenu::Close()
+{
+	this->mVisible = false;
+	this->mpPanel->Hide();
+}
+
 bool EventMenu::IsMouseInsidePanel()
 {
 	return this->mpPanel->IsMouseInsidePanel();
