@@ -290,6 +290,16 @@ void D3D11::Clear()
 	);
 }
 
+void D3D11::ClearDepth()
+{
+	this->mContext->ClearDepthStencilView(
+		this->mDepthBuffer,
+		D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL,
+		1.0f,
+		0
+	);
+}
+
 
 void D3D11::CreateDeviceAndSwapChain(const HWND& window)
 {
