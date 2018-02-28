@@ -71,7 +71,10 @@ public:
 	bool GetButtonOcclude();
 
 	void ScrollActiveLog();
+
+	// Deprecated.
 	void Scroll();
+
 	void Update();
 	void Draw();
 
