@@ -291,13 +291,15 @@ void System::mUpdateEvents(Room * room)
 		events_in_room = room->GetActiveEvents();
 	}
 	// Adding the system as an observer to the newly added notification object.
-	this->mpActiveLogPanel->
-		GetNotificationList()->
-		GetNotificationObjectByIndex(
-			this->mpActiveLogPanel->GetNotificationList()->
-			GetNumberOfNotificationObjects() - 1)->
-		AddObserver(this);
-
+	else
+	{
+		this->mpActiveLogPanel->
+			GetNotificationList()->
+			GetNotificationObjectByIndex(
+				this->mpActiveLogPanel->GetNotificationList()->
+				GetNumberOfNotificationObjects() - 1)->
+			AddObserver(this);
+	}
 
 	// Adds bounds to the deck name to get the name of the 
 	// mesh object holding the bounding boxes for the deck.
