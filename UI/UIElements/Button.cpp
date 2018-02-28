@@ -25,6 +25,9 @@ Button::Button(
 	this->D2D1Panel = D2D1Panel;
 	this->mCurrState = BUTTON_STATE::RESET;
 	this->mBitmapLoadedByFilePath = true;
+	this->D2D1Panel->GetpRenderTarget()->CreateSolidColorBrush(
+		D2D1::ColorF(D2D1::ColorF(1.f, 0.f, 0.f, 1.0f)),
+		&this->mpFillBrush);
 	
 	this->CreateButton(
 		imageFilePath, 
@@ -66,7 +69,7 @@ Button::Button(
 		D2D1::ColorF(D2D1::ColorF(0.75f, 0.75f, 0.75f, 1.0f)),
 		&this->mpRectBrush);
 	this->D2D1Panel->GetpRenderTarget()->CreateSolidColorBrush(
-		D2D1::ColorF(D2D1::ColorF(1.f, 1.f, 1.f, 1.0f)),
+		D2D1::ColorF(D2D1::ColorF(1.f, 0.f, 0.f, 1.0f)),
 		&this->mpFillBrush);
 	this->mButtonSize = D2D1::RectF(
 		(float)left,
@@ -173,7 +176,7 @@ void Button::DrawButton()
 	{
 		this->D2D1Panel->GetpRenderTarget()->FillRectangle(
 			this->mButtonSize,
-			mpFailBrush);
+			this->mpFillBrush);
 	}
 }
 

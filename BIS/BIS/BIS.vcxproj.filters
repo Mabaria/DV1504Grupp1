@@ -246,6 +246,9 @@
     <ClInclude Include="..\..\UI\UIElements\InfoPanel.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\UI\UIElements\CrewPanel.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BIS.cpp">
@@ -432,7 +435,10 @@
       <Filter>Source Files\GraphicsEngine</Filter>
     </ClCompile>
     <ClCompile Include="..\..\UI\UIElements\InfoPanel.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UI\UIElements\CrewPanel.cpp">
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

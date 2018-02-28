@@ -59,6 +59,7 @@ public:
 
 	void SetOpacity(float opacity);
 	std::string GetName() const;
+
 private:
 	
 	Direct2D *D2D1Panel;
