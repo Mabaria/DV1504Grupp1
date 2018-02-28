@@ -391,10 +391,10 @@ void System::mSetupPanels()
 	// Setting up the control panel.
 
 	this->mpControlPanel->AddTextbox(
-		this->mpControlPanel->GetWidth() / 2.0f, 
+		this->mpControlPanel->GetWidth() / 2, 
 		60,
 		0, 
-		this->mpControlPanel->GetWidth() / 2.0f + 20,
+		this->mpControlPanel->GetWidth() / 2 + 20,
 		"Markerat rum:", 
 		"title");
 	this->mpControlPanel->GetTextBoxByName("title")->SetFontSize(35);
@@ -404,10 +404,10 @@ void System::mSetupPanels()
 	(DWRITE_TEXT_ALIGNMENT_CENTER);*/
 
 	this->mpControlPanel->AddTextbox(
-		this->mpControlPanel->GetWidth() / 2.0f,
+		this->mpControlPanel->GetWidth() / 2,
 		120,
 		50,
-		this->mpControlPanel->GetWidth() / 2.0f + 20,
+		this->mpControlPanel->GetWidth() / 2 + 20,
 		"Inget rum markerat",
 		"roominfo");
 
