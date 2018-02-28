@@ -16,14 +16,13 @@ MeshObject::MeshObject(std::string name,
 	this->mModelMatrix = XMMatrixIdentity();
 	this->mpMatrixBuffer	= nullptr;
 	this->mpTextureView		= nullptr;
-	for (int i = 0; i < 20; i++)
-	{
-		this->mpEventBuffers[i] = nullptr;
-	}
 
 	for (int i = 0; i < 20; i++)
 	{
 		this->mpHoverBuffers[i] = nullptr;
+		this->mpEventBuffers[i] = nullptr;
+		this->mIsHovered[i] = false;
+		this->mIsSelected[i] = false;
 	}
 }
 
@@ -261,8 +260,11 @@ ID3D11Buffer ** MeshObject::rGetHoverBuffer(const unsigned int index)
 
 void MeshObject::SetHover(const bool hover, ID3D11DeviceContext * context, unsigned int index)
 {
+	this->mIsHovered[index] = hover;
+
 	HoverData data = { false };
-	data.IsEffectActive = hover;
+	data.IsEffectActive = this->mIsHovered[index];
+	data.IsSelected = this->mIsSelected[index];
 
 	D3D11_MAPPED_SUBRESOURCE data_ptr{};
 	context->Map(
@@ -274,6 +276,26 @@ void MeshObject::SetHover(const bool hover, ID3D11DeviceContext * context, unsig
 
 	memcpy(data_ptr.pData, &data, sizeof(HoverData));
 	context->Unmap(this->mpHoverBuffers[index], 0);
+}
+
+void MeshObject::SetSelected(const bool selected, ID3D11DeviceContext * pContext, unsigned int index)
+{
+	this->mIsSelected[index] = selected;
+
+	HoverData data = { false };
+	data.IsEffectActive = this->mIsHovered[index];
+	data.IsSelected = this->mIsSelected[index];
+
+	D3D11_MAPPED_SUBRESOURCE data_ptr{};
+	pContext->Map(
+		this->mpHoverBuffers[index],
+		0,
+		D3D11_MAP_WRITE_DISCARD,
+		0,
+		&data_ptr);
+
+	memcpy(data_ptr.pData, &data, sizeof(HoverData));
+	pContext->Unmap(this->mpHoverBuffers[index], 0);
 }
 
 MaterialHandler * MeshObject::pGetMaterialHandler()
