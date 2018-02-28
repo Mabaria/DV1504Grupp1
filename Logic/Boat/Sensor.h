@@ -26,6 +26,8 @@ public:
 
 	bool ClearEvent(Event::Type type);
 
+	std::vector<Event::Type> GetInputTypes() const;
+
 
 	// Log specific
 	void SetEventLog(EventLog *pEventLog);

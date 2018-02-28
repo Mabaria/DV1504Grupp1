@@ -4,6 +4,12 @@
 #include "CameraPanStrategy.h"
 #include "CameraRotateStrategy.h"
 
+enum CAMERA_MOVEMENT
+{
+	CAMERA_MOVEMENT_PAN = 0,
+	CAMERA_MOVEMENT_ROTATE = 1,
+};
+
 class MovableCameraComponent
 {
 public:
@@ -13,6 +19,7 @@ public:
 	bool Initialize(Camera& rCamera);
 	bool Update();
 	void FocusCameraOnRoom(Room* pRoom, bool use_animation);
+	CAMERA_MOVEMENT GetMovement();
 
 private:
 
@@ -23,5 +30,7 @@ private:
 
 	Position mMouseOrigin;
 	Position mMouseDiff;
+
+	CAMERA_MOVEMENT mMovement;
 };
 

@@ -9,6 +9,7 @@
 #include "../../GraphicsEngine/Camera/Camera.h"
 #include "../../IO/ObserverPattern/Observer.h"
 #include "../../GraphicsEngine/DX/Direct2D.h"
+#include "../../GraphicsEngine/Actions.h"
 #include "../../GraphicsEngine/Camera/MovableCameraComponent.h"
 
 enum PANEL3D_SHADER_TYPE
@@ -135,4 +136,6 @@ private:
 	MovableCameraComponent* mpMovableCameraComponent;
 	bool mShowCursor;
 	bool mMovableCamera;
+
+	Actions mActions;
 };
