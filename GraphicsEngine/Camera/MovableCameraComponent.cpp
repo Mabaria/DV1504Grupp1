@@ -18,12 +18,16 @@ MovableCameraComponent::~MovableCameraComponent()
 		delete this->mpStrategy;
 		this->mpStrategy = nullptr;
 	}
+
+	this->pCamera->RemoveObserver(this);
 }
 
 bool MovableCameraComponent::Initialize(Camera& rCamera)
 {
+	this->pCamera = &rCamera;
+
 	// Camera movement for orthographic doesn't exits
-	if (rCamera.GetProjectionMode() == ORTHOGRAPHIC)
+	if (this->pCamera->GetProjectionMode() == ORTHOGRAPHIC)
 	{
 		MessageBoxA(NULL, 
 			"Class Error: #MOVABLE_CAMERA_COMPONENT : Camera is not perspective!", 
@@ -45,6 +49,8 @@ bool MovableCameraComponent::Initialize(Camera& rCamera)
 
 	if (this->mpStrategy)
 		this->mpStrategy->Initialize(rCamera);
+
+	this->pCamera->AddObserver(this);
 
 	return true;
 }
@@ -79,6 +85,18 @@ bool MovableCameraComponent::Update()
 	}	
 
 	return !flag;
+}
+
+void MovableCameraComponent::Update(std::string * msg)
+{
+	// Reset Camera
+	if (this->mpStrategy)
+	{
+		if (msg->compare("reset") == 0)
+		{
+			this->mpStrategy->Reset();
+		}
+	}
 }
 
 bool MovableCameraComponent::UpdateAnimation()

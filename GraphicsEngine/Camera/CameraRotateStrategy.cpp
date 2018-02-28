@@ -129,6 +129,12 @@ void CameraRotateStrategy::FocusRoom(Room *pRoom, bool animate)
 
 }
 
+void CameraRotateStrategy::Reset()
+{
+	this->mAnimate = false;
+	this->HandleChangeInCamera();
+}
+
 void CameraRotateStrategy::HandleChangeInCamera()
 {
 	XMVECTOR dir = XMLoadFloat3(&this->mDirection);

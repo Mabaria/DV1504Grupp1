@@ -30,7 +30,7 @@ after swapping you have to set the related variables for the type you are swappi
 or else you are gonna have a bad time.
 */
 
-class Camera : public Observer<Button> {
+class Camera : public Observer<Button>, public Observable<std::string> {
 public:
 	Camera(const DirectX::XMVECTOR &r_position,
 		const DirectX::XMVECTOR &r_up_vector,
