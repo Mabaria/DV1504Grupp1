@@ -288,11 +288,11 @@ void Panel2D::Update()
 		this->mNotificationList->Update();
 	}
 	
-	if (this->IsMouseInsidePanel())
-	{
-		// Scrolls the panel if necessary.
-		this->Scroll();
-	}
+	//if (this->IsMouseInsidePanel())
+	//{
+	//	// Scrolls the panel if necessary.
+	//	this->Scroll();
+	//}
 	
 }
 
