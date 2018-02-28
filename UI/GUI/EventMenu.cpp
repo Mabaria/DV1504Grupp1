@@ -275,7 +275,7 @@ void EventMenu::InitButtons()
 		buttonSize,
 		buttonSize,
 		margin + (buttonSize + margin) * 2,
-		actionMargin + (buttonSize + actionMargin),
+		(this->mMenuWidth / 2) - (buttonSize / 2),
 		this->mpPanel->GetBitmapByName("GasOn"),
 		"PLACEHOLDER3");
 
@@ -283,7 +283,7 @@ void EventMenu::InitButtons()
 		buttonSize,
 		buttonSize,
 		margin + (buttonSize + margin) * 2 + actionMargin + buttonSize,
-		actionMargin + (buttonSize + actionMargin),
+		(this->mMenuWidth / 2) - (buttonSize / 2),
 		this->mpPanel->GetBitmapByName("InjuryOn"),
 		"PLACEHOLDER4");
 
@@ -291,7 +291,7 @@ void EventMenu::InitButtons()
 		buttonSize,
 		buttonSize,
 		margin + (buttonSize + margin) * 2,
-		actionMargin + (buttonSize + actionMargin) * 2,
+		this->mMenuWidth - buttonSize - actionMargin,
 		this->mpPanel->GetBitmapByName("GasOn"),
 		"PLACEHOLDER5");
 
@@ -299,7 +299,7 @@ void EventMenu::InitButtons()
 		buttonSize,
 		buttonSize,
 		margin + (buttonSize + margin) * 2 + actionMargin + buttonSize,
-		actionMargin + (buttonSize + actionMargin) * 2,
+		this->mMenuWidth - buttonSize - actionMargin,
 		this->mpPanel->GetBitmapByName("InjuryOn"),
 		"PLACEHOLDER6");
 
@@ -315,7 +315,7 @@ void EventMenu::InitButtons()
 		buttonSize,
 		buttonSize,
 		margin + (buttonSize + margin) * 2 + (actionMargin + buttonSize) * 2,
-		actionMargin + (buttonSize + actionMargin),
+		(this->mMenuWidth / 2) - (buttonSize / 2),
 		this->mpPanel->GetBitmapByName("InjuryOn"),
 		"PLACEHOLDER8");
 
@@ -323,7 +323,7 @@ void EventMenu::InitButtons()
 		buttonSize,
 		buttonSize,
 		margin + (buttonSize + margin) * 2 + (actionMargin + buttonSize) * 2,
-		actionMargin + (buttonSize + actionMargin) * 2,
+		this->mMenuWidth - buttonSize - actionMargin,
 		this->mpPanel->GetBitmapByName("InjuryOn"),
 		"PLACEHOLDER9");
 	this->mpPanel->AddButton(
