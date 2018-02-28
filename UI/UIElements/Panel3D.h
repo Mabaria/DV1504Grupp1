@@ -98,6 +98,10 @@ public:
 		float widthOfTex,
 		float heightOfTex);
 	//void SetCameraPosition()
+
+
+	void AddAction(float x, float y, ActionData data);
+
 private:
 	D3D11 mDirect3D;
 	std::vector<MeshObject*> mpMeshObjects;

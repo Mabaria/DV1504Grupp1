@@ -628,6 +628,11 @@ void Panel3D::DrawBitmapToTexture(
 
 }
 
+void Panel3D::AddAction(float x, float y, ActionData data)
+{
+	this->mActions.AddAction(x, y, data);
+}
+
 MovableCameraComponent * Panel3D::GetMovableComponent()
 {
 	return this->mpMovableCameraComponent;

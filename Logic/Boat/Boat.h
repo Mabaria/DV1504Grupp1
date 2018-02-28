@@ -36,6 +36,10 @@ public:
 	Room* GetRoomPointerAt(int index);
 	Room* GetPickedRoom(Ray ray);
 
+	// Same as GetPickedRoom() although it returns the position in which
+	// the click hits as an XMFLOAT3 if it hits a room.
+	// No hit returns {-100, -100, -100}.
+	XMFLOAT3 GetPickedPosition(Ray ray);
 
 	// Log specific
 	void SetEventLog(EventLog *pEventLog);

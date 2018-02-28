@@ -207,8 +207,8 @@ void System::mHandleInput()
 		{
 			if (Mouse::IsButtonPressed(Buttons::Left))
 			{
-				this->mpMenuPanel->OpenAt(picked_room);
-				this->mpTopViewPanel->GetMovableComponent()->FocusCameraOnRoom(picked_room, true);
+				//this->mpMenuPanel->OpenAt(picked_room);
+				//this->mpTopViewPanel->GetMovableComponent()->FocusCameraOnRoom(picked_room, true);
 
 				// Save last clicked room to be used for Room Info
 				if (this->mpLastClickedRoom != picked_room)
@@ -216,8 +216,13 @@ void System::mHandleInput()
 					this->mpLastClickedRoom = picked_room;
 					this->mUpdateRoomInfo();
 				}
-			}
 
+				XMFLOAT3 picked_position = this->mBoat.GetPickedPosition(this->mRay);
+				XMVECTOR picked_xmvec = XMLoadFloat3(&picked_position);
+				picked_xmvec = XMVector3Normalize(picked_xmvec);
+				XMStoreFloat3(&picked_position, picked_xmvec);
+				this->mpTopViewPanel->AddAction(picked_position.x, picked_position.z, Icon_Cooling_Wall);
+			}
 			// ___ HOVER EFFECT ___
 
 			if (last_picked_room == nullptr)
