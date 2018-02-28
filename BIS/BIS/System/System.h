@@ -28,6 +28,7 @@ private:
 	void mHandleInput();
 
 	void mUpdateHover(std::string name, int index, bool activate);
+	void mUpdateRoomInfo();
 
 	void mUpdateEvents(Room *room);
 
@@ -56,4 +57,6 @@ private:
 	EventLog mEventLog;
 	Boat mBoat;
 	Ray mRay;
+
+	Room* mpLastClickedRoom;
 };

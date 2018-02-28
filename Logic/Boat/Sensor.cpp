@@ -108,6 +108,11 @@ bool Sensor::ClearEvent(Event::Type type)
 	return true;
 }
 
+std::vector<Event::Type> Sensor::GetInputTypes() const
+{
+	return this->mInputTypes;
+}
+
 
 
 /**

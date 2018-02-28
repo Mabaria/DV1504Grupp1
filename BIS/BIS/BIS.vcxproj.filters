@@ -96,9 +96,6 @@
     <ClInclude Include="..\..\GraphicsEngine\Parsing\Mesh.h">
       <Filter>Header Files\GraphicsEngine</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\GraphicsEngine\Camera\Camera.h">
-      <Filter>Header Files\GraphicsEngine</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\GraphicsEngine\Test_Button.h">
       <Filter>Header Files\GraphicsEngine\Test</Filter>
     </ClInclude>
@@ -238,6 +235,12 @@
       <Filter>Header Files\GraphicsEngine</Filter>
     </ClInclude>
     <ClInclude Include="..\..\GraphicsEngine\Camera\CameraPanStrategy.h">
+      <Filter>Header Files\GraphicsEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\GraphicsEngine\Actions.h">
+      <Filter>Header Files\GraphicsEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\GraphicsEngine\Camera\Camera.h">
       <Filter>Header Files\GraphicsEngine</Filter>
     </ClInclude>
     <ClInclude Include="..\..\GraphicsEngine\CustomTextRenderer.h">
@@ -419,6 +422,9 @@
     <ClCompile Include="..\..\GraphicsEngine\CustomTextRenderer.cpp">
       <Filter>Source Files\GraphicsEngine</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\GraphicsEngine\Actions.cpp">
+      <Filter>Source Files\GraphicsEngine</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\GraphicsEngine\Camera\MovableCameraComponent.cpp">
       <Filter>Source Files\GraphicsEngine</Filter>
     </ClCompile>
@@ -454,6 +460,15 @@
       <Filter>Shader Files</Filter>
     </FxCompile>
     <FxCompile Include="..\..\GraphicsEngine\Test_VertexShader.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\GraphicsEngine\Shaders\Action_VertexShader.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\GraphicsEngine\Shaders\Action_GeometryShader.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\GraphicsEngine\Shaders\Action_PixelShader.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
     <FxCompile Include="..\..\GraphicsEngine\PS_Text3D.hlsl">
