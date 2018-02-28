@@ -235,6 +235,13 @@ void System::mHandleInput()
 
 		}
 
+		// Closes the event menu if the user left clicks away from a room
+		// or the event menu.
+		else if (Mouse::IsButtonPressed(Buttons::Left) && this->mpMenuPanel->IsVisible())
+		{
+			this->mpMenuPanel->Close();
+		}
+
 		else if(last_picked_room != nullptr)
 		{
 			std::string last_picked_name = last_picked_room->GetDeckName() + "bounds";
@@ -284,13 +291,15 @@ void System::mUpdateEvents(Room * room)
 		events_in_room = room->GetActiveEvents();
 	}
 	// Adding the system as an observer to the newly added notification object.
-	this->mpActiveLogPanel->
-		GetNotificationList()->
-		GetNotificationObjectByIndex(
-			this->mpActiveLogPanel->GetNotificationList()->
-			GetNumberOfNotificationObjects() - 1)->
-		AddObserver(this);
-
+	else
+	{
+		this->mpActiveLogPanel->
+			GetNotificationList()->
+			GetNotificationObjectByIndex(
+				this->mpActiveLogPanel->GetNotificationList()->
+				GetNumberOfNotificationObjects() - 1)->
+			AddObserver(this);
+	}
 
 	// Adds bounds to the deck name to get the name of the 
 	// mesh object holding the bounding boxes for the deck.
@@ -425,7 +434,7 @@ void System::mSetupPanels()
 	int list_top = 0;
 	int list_left = 0;
 	int title_font_size = 40;
-	int object_font_size = 28;
+	int object_font_size = 26;
 
 	this->mpActiveLogPanel->SetNotificationList(
 		list_top, 

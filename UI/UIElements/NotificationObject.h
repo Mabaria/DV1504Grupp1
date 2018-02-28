@@ -41,6 +41,8 @@ public:
 
 	const void Move(int x, int y);
 	const void SetText(std::string text);
+	const void SetIfNewStatus(bool status);
+	const bool GetIfNewStatus();
 
 	void Update();
 	void Draw();
@@ -51,6 +53,8 @@ private:
 	Timer *mpTimer;
 	Room *mpRoom;
 
+	bool mIsNew;
+	float mNewColorCounter;
 
 	std::string mRoomName;
 	std::string mDeckName;

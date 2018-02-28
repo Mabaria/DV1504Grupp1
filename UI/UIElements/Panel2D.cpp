@@ -288,11 +288,11 @@ void Panel2D::Update()
 		this->mNotificationList->Update();
 	}
 	
-	if (this->IsMouseInsidePanel())
-	{
-		// Scrolls the panel if necessary.
-		this->Scroll();
-	}
+	//if (this->IsMouseInsidePanel())
+	//{
+	//	// Scrolls the panel if necessary.
+	//	this->Scroll();
+	//}
 	
 }
 
@@ -401,7 +401,10 @@ void Panel2D::mUpdateButtons()
 					}
 					else if (!Mouse::IsButtonDown(Buttons::Left) ||
 						button->GetButtState() != BUTTON_STATE::CLICKED)
+					{
 						button->SetRectStatus(BUTTON_STATE::HOVER);
+						notification_object->SetIfNewStatus(false);
+					}
 				}
 				else
 				{
