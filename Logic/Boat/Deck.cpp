@@ -5,7 +5,7 @@ Deck::Deck()
 	mpEventLog = nullptr;
 }
 
-Deck::Deck(Desc_Deck desc)
+Deck::Deck(Deck::Desc desc)
 {
 	this->InitFromDesc(desc);
 }
@@ -34,7 +34,7 @@ void Deck::SetName(std::string name)
 	this->mName = name;
 }
 
-void Deck::InitFromDesc(Desc_Deck desc)
+void Deck::InitFromDesc(Deck::Desc desc)
 {
 	this->mIndex = desc.index;
 	this->mRoomOffset = desc.roomOffset;
@@ -55,7 +55,7 @@ std::string Deck::GetName() const
 
 bool Deck::AddRoom(std::string name, int inputs)
 {
-	Desc_Room desc;
+	Room::Desc desc;
 	
 	desc.inputs = inputs;
 	desc.index_Boat = (int)this->mpRooms.size() + this->mRoomOffset;
@@ -72,7 +72,7 @@ bool Deck::AddRoom(std::string name, int inputs)
 
 bool Deck::AddRoom(std::string line)
 {
-	Desc_Room desc = Room::FillRoomDescFromLine(line);
+	Room::Desc desc = Room::FillRoomDescFromLine(line);
 
 	desc.index_Boat = this->mIndex + (int)this->mpRooms.size();
 	desc.index_Deck = (int)this->mpRooms.size();
@@ -161,9 +161,9 @@ std::string Deck::GetRoomStringAt(int index) const
 	return this->mpRooms[index]->GetString();
 }
 
-Desc_Deck Deck::FillDeckDescFromLine(std::string line)
+Deck::Desc Deck::FillDeckDescFromLine(std::string line)
 {
-	Desc_Deck desc;
+	Deck::Desc desc;
 
 	std::stringstream ss(line);
 	std::string name, word;

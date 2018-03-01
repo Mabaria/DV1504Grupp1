@@ -180,9 +180,6 @@
     <ClInclude Include="..\..\Logic\Eventlog\EventLog.h">
       <Filter>Header Files\Logic</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Logic\Eventlog\ActiveEvent.h">
-      <Filter>Header Files\Logic</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Logic\Event\Event.h">
       <Filter>Header Files\Logic</Filter>
     </ClInclude>
@@ -231,10 +228,10 @@
     <ClInclude Include="..\..\Logic\Test_Log.h">
       <Filter>Header Files\Logic\Test</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Logic\Action\Action.h">
+    <ClInclude Include="..\..\Logic\Boat\RoomLog.h">
       <Filter>Header Files\Logic</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Logic\Boat\RoomLog.h">
+    <ClInclude Include="..\..\Logic\Eventlog\LogAction.h">
       <Filter>Header Files\Logic</Filter>
     </ClInclude>
   </ItemGroup>
@@ -350,9 +347,6 @@
     <ClCompile Include="..\..\Logic\Eventlog\EventLog.cpp">
       <Filter>Source Files\Logic</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Logic\Eventlog\ActiveEvent.cpp">
-      <Filter>Source Files\Logic</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Logic\Event\Event.cpp">
       <Filter>Source Files\Logic</Filter>
     </ClCompile>
@@ -410,10 +404,10 @@
     <ClCompile Include="..\..\Logic\Test_Log.cpp">
       <Filter>Source Files\Logic\Test</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Logic\Action\Action.cpp">
+    <ClCompile Include="..\..\Logic\Boat\RoomLog.cpp">
       <Filter>Source Files\Logic</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Logic\Boat\RoomLog.cpp">
+    <ClCompile Include="..\..\Logic\Eventlog\LogAction.cpp">
       <Filter>Source Files\Logic</Filter>
     </ClCompile>
   </ItemGroup>

@@ -62,27 +62,45 @@ std::vector<LogEvent*> RoomLog::GetActiveEvents()
 *	Action specific
 */
  
-bool RoomLog::AddAction(ActionType type)
+bool RoomLog::AddAction(LogAction::Type type, float pos_x, float pos_z)
 {
-	// TODO
-	return false;
+	LogAction *pNewAction = this->mpEventLog->AddAction(
+		type,
+		this->mRoomName,
+		pos_x,
+		pos_z);
+
+	this->mpActions.push_back(pNewAction);
+	return true;
 }
 
-bool RoomLog::ClearAction(ActionType type)
-{
-	// TODO
-	return false;
-}
+// FIXME when Graphical pointers exists
+
+//bool RoomLog::ClearAction(GraphicalAction *pAction)
+//{
+//	for (int i = 0; i < (int)this->mpActions.size(); i++)
+//	{
+//		if (this->mpActions[i]->GetGraphicalActionPointer() == pAction)
+//		{
+//			this->mpActions[i]->SetInactive();
+//			return true;
+//		}
+//	}
+//
+//	return false;
+//}
 
 int RoomLog::GetActionCount() const
 {
 	return (int)this->mpActions.size();
 }
 
-std::vector<Action*> RoomLog::GetActiveActions()
+std::vector<LogAction*> RoomLog::GetActiveActions()
 {
 	return this->mpActions;
 }
+
+
 
 /**
 *	Room specific

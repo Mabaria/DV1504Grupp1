@@ -36,7 +36,7 @@ void Boat::SetModelName(std::string name)
 
 void Boat::AddDeck(std::string name)
 {
-	Desc_Deck desc;
+	Deck::Desc desc;
 
 	int offset = 0;
 	for (int i = 0; i < (int)this->mpDecks.size(); i++)
@@ -258,7 +258,7 @@ bool Boat::LoadFromFile_Boat(std::string filePath)
 
 				case 'd': // Deck specific line
 				{
-					Desc_Deck desc;
+					Deck::Desc desc;
 					
 					desc = Deck::FillDeckDescFromLine(line);
 					

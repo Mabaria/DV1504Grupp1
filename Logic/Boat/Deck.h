@@ -10,27 +10,28 @@
 * the Boat room list.
 */
 
-struct Desc_Deck
-{
-	int index;
-	int roomOffset;
-	std::string name;
-	EventLog *pEventLog;
-};
-
-
 class Deck
 {
 public:
 
+	struct Desc
+	{
+		int index;
+		int roomOffset;
+		std::string name;
+		EventLog *pEventLog;
+	};
+
+
+
 	Deck();
-	Deck(Desc_Deck desc);
+	Deck(Deck::Desc desc);
 	~Deck();
 	
 	// Deck specific
 	void SetIndex(int index);
 	void SetName(std::string name);
-	void InitFromDesc(Desc_Deck desc);
+	void InitFromDesc(Deck::Desc desc);
 	std::string GetName() const;
 
 	// Room specific
@@ -47,7 +48,7 @@ public:
 	// Disk specific
 	std::string GetString() const;
 	std::string GetRoomStringAt(int index) const;
-	static Desc_Deck FillDeckDescFromLine(std::string line);
+	static Deck::Desc FillDeckDescFromLine(std::string line);
 
 private:
 

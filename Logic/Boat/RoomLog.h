@@ -23,11 +23,11 @@ public:
 	std::vector<LogEvent*> GetActiveEvents();
 
 	// Action specific
-	bool AddAction(ActionType type);
-	bool ClearAction(ActionType type);
+	bool AddAction(LogAction::Type type, ActionPointer *pActionPointer);
+	//bool ClearAction(GraphicalAction *pAction); // FIXME when Graphical pointers exists
 
 	int GetActionCount() const;
-	std::vector<Action*> GetActiveActions();
+	std::vector<LogAction*> GetActiveActions();
 
 	// Room specific
 	void SetRoomName(std::string name);
@@ -38,7 +38,9 @@ public:
 private:
 
 	std::vector<LogEvent*> mpEvents;
-	std::vector<Action*> mpActions;
+	std::vector<LogAction*> mpActions;
 	EventLog *mpEventLog;
 	std::string mRoomName;
+
+	Actions *mpGraphicalActions;
 };

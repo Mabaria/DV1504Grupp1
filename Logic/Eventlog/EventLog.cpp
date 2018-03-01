@@ -46,10 +46,13 @@ LogEvent* EventLog::GetEventPointer(int index)
 *	Action specific
 */
 
-Action* EventLog::AddAction(ActionType type, std::string roomName)
+LogAction* EventLog::AddAction(
+	LogAction::Type type,
+	std::string roomName,
+	float pos_x,
+	float pos_z)
 {
-	// TODO
-	this->mpActions.push_back(new Action(type, roomName));
+	this->mpActions.push_back(new LogAction(type, roomName, pos_x, pos_z));
 	return this->mpActions.back();
 }
 

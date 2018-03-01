@@ -4,16 +4,15 @@
 #include <fstream>
 
 #include "LogEvent.h"
-#include "ActiveEvent.h"
-#include "../Action/Action.h"
+#include "LogAction.h"
 
 /**
 *	The log will be able to store/load content to/from a file
 *	In the file, events are listed in rows. One row = one event
 *
 *	Example:
-* 23.01.2018 14:29 Fire	started in Room4, Deck2
-* 23.01.2018 14:31 Fire stopped in Room4, Deck2
+* 23-01-2018 14:29:21	Fire	|	started		|		Room4
+* 23-01-2018 14:31:32	Water	|	stopped		|		Room1
 *	
 */
 
@@ -42,7 +41,11 @@ public:
 	LogEvent* GetEventPointer(int index);
 
 	// Action specific
-	Action* AddAction(ActionType type, std::string roomName);
+	LogAction* AddAction(
+		LogAction::Type type,
+		std::string roomName,
+		float pos_x,
+		float pos_z);
 	int GetActionCount() const;
 	
 	// Disk specific
@@ -51,5 +54,5 @@ public:
 
 private:
 	std::vector<LogEvent*> mpLogEvents;	// Containing all events in the system
-	std::vector<Action*> mpActions;
+	std::vector<LogAction*> mpActions;
 };

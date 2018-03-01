@@ -7,7 +7,7 @@ Room::Room()
 	this->mIndex_DeckInBoat = -1;
 }
 
-Room::Room(Desc_Room desc)
+Room::Room(Room::Room::Desc desc)
 {
 	this->InitFromDesc(desc);
 }
@@ -53,7 +53,7 @@ std::string Room::GetName() const
 	return this->mName;
 }
 
-void Room::InitFromDesc(Desc_Room desc)
+void Room::InitFromDesc(Room::Desc desc)
 {
 	this->mSensor.SetInputTypes(desc.inputs);
 	this->mIndex_Boat = desc.index_Boat;
@@ -150,17 +150,16 @@ std::vector<LogEvent*> Room::GetActiveEvents()
 *	Action specific
 */
 
-bool AddAction(ActionType type)
-{
-	// TODO
-	return false;
-}
+//bool Room::AddAction(LogAction::Type type, GraphicalAction *pAction)
+//{
+//	return this->mRoomLog.AddAction(type, pAction);
+//}
 
-bool ClearAction(ActionType type)
-{
-	// TODO
-	return false;
-}
+// FIXME when Graphical actions exists
+//bool ClearAction(GraphicalAction *pAction)
+//{
+//	return this->mRoomLog.ClearAction(pAction);
+//}
 
 
 
@@ -180,9 +179,9 @@ std::string Room::GetString() const
 	return ss.str();
 }
 
-Desc_Room Room::FillRoomDescFromLine(std::string line)
+Room::Desc Room::FillRoomDescFromLine(std::string line)
 {
-	Desc_Room desc;
+	Room::Desc desc;
 
 	std::stringstream buffer;
 	std::string roomName, word;

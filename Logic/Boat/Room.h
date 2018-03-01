@@ -6,28 +6,27 @@
 #include "RoomLog.h"
 #include "../Event/Event.h"
 #include "Sensor.h"
-#include "../Action/Action.h"
-
-//#include "Boat.h"
-
-struct Desc_Room
-{
-	int inputs;
-	int index_Boat;
-	int index_Deck;
-	int index_DeckInBoat;
-	std::string name;
-	std::string deckName;
-	EventLog *pEventLog;
-};
-
+#include "../Eventlog/LogAction.h"
 
 class Room
 {
 public:
 
+	struct Desc
+	{
+		int inputs;
+		int index_Boat;
+		int index_Deck;
+		int index_DeckInBoat;
+		std::string name;
+		std::string deckName;
+		EventLog *pEventLog;
+	};
+
+
+
 	Room();
-	Room(Desc_Room desc);
+	Room(Room::Desc desc);
 	~Room();
 
 	// Room specific
@@ -36,7 +35,7 @@ public:
 	void SetName(std::string name);
 	void SetAABB(const AABB &boundingBox);
 	std::string GetName() const;
-	void InitFromDesc(Desc_Room desc);
+	void InitFromDesc(Room::Desc desc);
 	int GetIndexInBoat() const;
 	int GetIndexInDeck() const;
 
@@ -63,12 +62,12 @@ public:
 	std::vector<LogEvent*> GetActiveEvents();
 
 	// Action specific
-	bool AddAction(ActionType type);
-	bool ClearAction(ActionType type);
+	//bool AddAction(LogAction::Type type, GraphicalAction *pAction); // FIXME
+	//bool ClearAction(GraphicalAction *pAction); // FIXME when Graphical actions exists
 
 	// Disk specific
 	std::string GetString() const;
-	static Desc_Room FillRoomDescFromLine(std::string line);
+	static Room::Desc FillRoomDescFromLine(std::string line);
 	static std::string CorrectName(std::string name);
 
 private:
