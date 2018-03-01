@@ -96,7 +96,11 @@ void MovableCameraComponent::Update(std::string * msg)
 	{
 		if (msg->compare("reset") == 0)
 		{
-			this->mpStrategy->Reset();
+			this->mpStrategy->Reset(false);
+		}
+		if (msg->compare("resetA") == 0)
+		{
+			this->mpStrategy->Reset(true);
 		}
 	}
 }

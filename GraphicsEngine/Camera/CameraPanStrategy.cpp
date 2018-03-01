@@ -118,13 +118,21 @@ void CameraPanStrategy::FocusRoom(Room *pRoom, bool animate)
 	}
 }
 
-void CameraPanStrategy::Reset()
+void CameraPanStrategy::Reset(bool animate)
 {
 	// Get default values and animate to it
-
-	this->mAnimate = true;
-	XMVECTOR new_pos = this->pCamera->GetDefaultValues().pos;
-	XMStoreFloat3(&this->mNewPosition, new_pos);
+	if (animate)
+	{
+		this->mAnimate = true;
+		XMVECTOR new_pos = this->pCamera->GetDefaultValues().pos;
+		XMStoreFloat3(&this->mNewPosition, new_pos);
+	}
+	else
+	{
+		this->mAnimate = false;
+		this->pCamera->Reset();
+		this->HandleChangeInCamera();
+	}
 }
 
 void CameraPanStrategy::HandleChangeInCamera()
