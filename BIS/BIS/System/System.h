@@ -10,7 +10,7 @@
 #include "../../../IO/Keyboard.h"
 #include "../../../UI/UIElements/CrewPanel.h"
 
-class System : public Observer<Room>
+class System : public Observer<Room>, public Observer<Button>
 {
 public:
 	System();
@@ -27,6 +27,8 @@ private:
 	void mUpdate();
 	void mDraw();
 	void mHandleInput();
+
+	void Update(Button * attribute);
 
 	void mUpdateHover(std::string name, int index, bool activate);
 	void mUpdateRoomInfo();
@@ -48,7 +50,7 @@ private:
 	std::vector<Mesh*> mBounds;
 
 	Camera *mpTopViewCameraPan;
-	Camera *mpTopViewCamera;
+	Camera *mpTopViewCameraRotate;
 	Camera *mpSideViewCamera;
 	Window *mpWindow;
 

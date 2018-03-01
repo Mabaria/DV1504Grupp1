@@ -140,6 +140,6 @@ void CameraPanStrategy::AnimateToNewPosition()
 	this->pCamera->MoveCamera(dir, this->mMoveSpeed * 1500.0f);
 	this->mDistance = XMVectorGetY(this->pCamera->GetPosition());
 
-	if (XMVectorGetX(XMVector3Length(dir)) <= 0.01f)
+	if (XMVectorGetX(XMVector3Length(dir)) <= 0.00f)
 		this->mAnimate = false;
 }

@@ -160,7 +160,7 @@ void CameraRotateStrategy::AnimateToNewPosition()
 	this->pCamera->SetLookVector((dir * 0.2f) + this->pCamera->GetLookVector());
 	this->mDistance -= (this->mDistance - this->mMinDistance) * 0.2f;
 
-	if (XMVectorGetX(XMVector3Length(dir)) <= 0.01f && this->mDistance <= this->mMinDistance)
+	if (XMVectorGetX(XMVector3Length(dir)) <= 0.00f && this->mDistance <= this->mMinDistance)
 	{
 		this->mDistance = this->mMinDistance;
 		this->mAnimate = false;

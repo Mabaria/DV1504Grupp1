@@ -4,7 +4,7 @@ System::System()
 {
 	this->mpActiveLogPanel	= nullptr;
 	this->mpControlPanel	= nullptr;
-	this->mpTopViewCamera	= nullptr;
+	this->mpTopViewCameraRotate = nullptr;
 	this->mpSideViewCamera	= nullptr;
 	this->mpMenuPanel		= nullptr;
 	this->mpSideViewPanel	= nullptr;
@@ -36,10 +36,10 @@ System::~System()
 		delete this->mpTopViewPanel;
 		this->mpTopViewPanel = nullptr;
 	}
-	if (this->mpTopViewCamera)
+	if (this->mpTopViewCameraRotate)
 	{
-		delete this->mpTopViewCamera;
-		this->mpTopViewCamera = nullptr;
+		delete this->mpTopViewCameraRotate;
+		this->mpTopViewCameraRotate = nullptr;
 	}
 	if (this->mpTopViewCameraPan)
 	{
@@ -213,6 +213,7 @@ void System::mHandleInput()
 			Mouse::GetYPercentage(),
 			this->mRay);
 
+		// Returns nullptr if picked position isn't a room
 		picked_room = this->mBoat.GetPickedRoom(this->mRay);
 		if (picked_room)
 		{
@@ -221,44 +222,60 @@ void System::mHandleInput()
 				this->mpMenuPanel->OpenAt(picked_room);
 				this->mpTopViewPanel->GetMovableComponent()->FocusCameraOnRoom(picked_room, true);
 
+				// Turn on selected effect if clicked room was actually a room
+				if (picked_room != nullptr)
+				{
+					std::string picked_name = picked_room->GetDeckName() + "bounds";
+					this->mpTopViewPanel->rGetMeshObject(picked_name)->SetSelected(
+						true,
+						this->mpTopViewPanel->rGetDirect3D().GetContext(),
+						picked_room->GetIndexInDeck()
+					);
+				}
+
 				// Save last clicked room to be used for Room Info
 				if (this->mpLastClickedRoom != picked_room)
 				{
+					// Turn off selected effect if last room existed
+					if (this->mpLastClickedRoom != nullptr)
+					{
+						std::string picked_name = this->mpLastClickedRoom->GetDeckName() + "bounds";
+						this->mpTopViewPanel->rGetMeshObject(picked_name)->SetSelected(
+							false,
+							this->mpTopViewPanel->rGetDirect3D().GetContext(),
+							this->mpLastClickedRoom->GetIndexInDeck()
+						);
+					}
+
 					this->mpLastClickedRoom = picked_room;
 					this->mUpdateRoomInfo();
 				}
+
+				XMFLOAT3 picked_position = this->mBoat.GetPickedPosition(this->mRay);
+				this->mpTopViewPanel->AddAction(picked_position.x, picked_position.z, Icon_Cooling_Wall);
 			}
-
-			// ___ HOVER EFFECT ___
-
-			if (last_picked_room == nullptr)
-			{
-				std::string picked_name = picked_room->GetDeckName() + "bounds";
-				this->mUpdateHover(picked_name, picked_room->GetIndexInDeck(), true);
-				last_picked_room = picked_room;
-			}
-			else
-			{
-				std::string picked_name = picked_room->GetDeckName() + "bounds";
-				std::string last_picked_name = last_picked_room->GetDeckName() + "bounds";
-
-				if (picked_room != last_picked_room)
-				{
-					this->mUpdateHover(last_picked_name, last_picked_room->GetIndexInDeck(), false);
-				}
-
-				this->mUpdateHover(picked_name, picked_room->GetIndexInDeck(), true);
-
-				last_picked_room = picked_room;
-			}
-
 		}
-
 		// Closes the event menu if the user left clicks away from a room
 		// or the event menu.
 		else if (Mouse::IsButtonPressed(Buttons::Left) && this->mpMenuPanel->IsVisible())
 		{
 			this->mpMenuPanel->Close();
+		}
+		
+
+		//// ___ HOVER EFFECT ___
+
+		if (picked_room)
+		{
+			if(last_picked_room != nullptr)
+			{
+				std::string last_picked_name = last_picked_room->GetDeckName() + "bounds";
+				this->mUpdateHover(last_picked_name, last_picked_room->GetIndexInDeck(), false);
+			}
+
+			// Turn on hover effect for picked room
+			std::string picked_name = picked_room->GetDeckName() + "bounds";
+			this->mUpdateHover(picked_name, picked_room->GetIndexInDeck(), true);
 		}
 
 		else if(last_picked_room != nullptr)
@@ -267,25 +284,26 @@ void System::mHandleInput()
 			this->mUpdateHover(last_picked_name, last_picked_room->GetIndexInDeck(), false);
 		}
 
+		last_picked_room = picked_room;
 
-		// ___ END ___ (HOVER EFFECT)
+		//// ___ END ___ (HOVER EFFECT)
 	}
+}
 
-	
-	
-	if (Keyboard::IsKeyPressed(Keys::One))
+void System::Update(Button * attribute)
+{
+	if (attribute->GetName().compare("ChangeCamera") == 0)
 	{
-		if (this->mpTopViewPanel->GetActiveCamera() != this->mpTopViewCamera)
+		if (this->mpTopViewPanel->GetActiveCamera() != this->mpTopViewCameraRotate)
 		{
-			this->mpTopViewPanel->SetCamera(this->mpTopViewCamera);
+			this->mpTopViewCameraRotate->Update(nullptr);
+			this->mpTopViewPanel->SetCamera(this->mpTopViewCameraRotate);
 		}
 		else if (this->mpTopViewPanel->GetActiveCamera() != this->mpTopViewCameraPan)
 		{
+			this->mpTopViewCameraPan->Update(nullptr);
 			this->mpTopViewPanel->SetCamera(this->mpTopViewCameraPan);
 		}
-
-		if(last_picked_room)
-			this->mpTopViewPanel->GetMovableComponent()->FocusCameraOnRoom(last_picked_room, false);
 	}
 }
 
@@ -389,8 +407,11 @@ void System::mUpdateEvents(Room * room)
 
 void System::mSetupPanels()
 {
+	// Adding action support for topView
+	this->mpTopViewPanel->InitActions();
+
 	// Creating and setting the cameras.
-	this->mpTopViewCamera = new Camera (
+	this->mpTopViewCameraRotate = new Camera (
 		{ -0.02f, 6.19f, 2.99f, 0.0f },
 		{ 0.0f, 1.0f, 0.0f, 0.0f },
 		{ 0.0f, 0.00000001f, 0.0f, 0.0f },
@@ -472,6 +493,10 @@ void System::mSetupPanels()
 	this->mpControlPanel->LoadImageToBitmap(
 		"../../Models/Clipboard.png",
 		"Crew");
+	this->mpControlPanel->LoadImageToBitmap(
+		"../../Models/ChangeCamera.png",
+		"ChangeCamera"
+	);
 
 	this->mpControlPanel->AddButton(30, 30,
 		this->mpControlPanel->GetHeight() / 2 + 50,
@@ -500,6 +525,8 @@ void System::mSetupPanels()
 		this->mpControlPanel->GetBitmapByName("Info"), "Info");
 	this->mpControlPanel->AddButton(70, 70, 90, 170,
 		this->mpControlPanel->GetBitmapByName("Crew"), "Crew");
+	this->mpControlPanel->AddButton(70, 70, 10, 90,
+		this->mpControlPanel->GetBitmapByName("ChangeCamera"), "ChangeCamera");
 
 	this->mpControlPanel->GetButtonByName("Reset")->
 		AddObserver(this->mpSideViewPanel);
@@ -510,6 +537,9 @@ void System::mSetupPanels()
 		AddObserver(&this->mpInfoPanel);
 	this->mpControlPanel->GetButtonByName("Crew")->
 		AddObserver(&this->mpCrewPanel);
+
+	this->mpControlPanel->GetButtonByName("ChangeCamera")
+		->AddObserver(this);
 
 	// Setting up the active log panel. (top, left, titleFontSize, objectFontSize)
 
