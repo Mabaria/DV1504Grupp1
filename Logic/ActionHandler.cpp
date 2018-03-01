@@ -22,7 +22,10 @@ void ActionHandler::Update(ObserverInfo * pObsInf)
 
 void ActionHandler::AddAction(float x, float z)
 {
-	this->mpActions->AddAction(x, z, this->mLastEvent.actionData);
+	if (this->mLastEvent.actionData != No_Action)
+	{
+		this->mpActions->AddAction(x, z, this->mLastEvent.actionData);
+	}
 }
 
 void ActionHandler::SwitchWaitingState()

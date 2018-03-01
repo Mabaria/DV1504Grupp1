@@ -33,8 +33,10 @@ enum ActionData : uint32_t
 	No_Action = 9001
 };
 
+
 class Actions {
 public:
+
 	struct ActionPtr
 	{
 		int index;
