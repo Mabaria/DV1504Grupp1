@@ -1,5 +1,7 @@
 #pragma once
 #include "Panel2D.h"
+#include "../../Logic/Timer.h"
+#include <iostream>
 
 class CrewPanel : public Observer<Button>
 {
@@ -21,10 +23,11 @@ public:
 
 private:
 	Panel2D * mpPanel;
-
+	Timer mtimer;
 	bool mVisible, mButtonFocus, mDraggingWindow;
 	int mDragX, mDragY;
 	std::string *mSeaMen;
+	int mFontSize;
 
 	void mCreateTextBoxesAndButtons();
 	

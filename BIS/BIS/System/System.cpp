@@ -203,7 +203,8 @@ void System::mHandleInput()
 	Room *picked_room = nullptr;
 
 	if (this->mpTopViewPanel->IsMouseInsidePanel() &&
-		!this->mpMenuPanel->IsMouseInsidePanel())
+		!this->mpMenuPanel->IsMouseInsidePanel() &&
+		!this->mpCrewPanel.IsMouseInsidePanel())
 	{
 
 		Picking::GetWorldRay(
@@ -469,7 +470,7 @@ void System::mSetupPanels()
 		"../../Models/Info.png",
 		"Info");
 	this->mpControlPanel->LoadImageToBitmap(
-		"../../Models/Info.png",
+		"../../Models/Clipboard.png",
 		"Crew");
 
 	this->mpControlPanel->AddButton(30, 30,
@@ -497,7 +498,7 @@ void System::mSetupPanels()
 		this->mpControlPanel->GetBitmapByName("Reset"), "Reset2");
 	this->mpControlPanel->AddButton(70, 70, 90, 90,
 		this->mpControlPanel->GetBitmapByName("Info"), "Info");
-	this->mpControlPanel->AddButton(70, 70, 10, 90,
+	this->mpControlPanel->AddButton(70, 70, 90, 170,
 		this->mpControlPanel->GetBitmapByName("Crew"), "Crew");
 
 	this->mpControlPanel->GetButtonByName("Reset")->

@@ -25,9 +25,9 @@ Button::Button(
 	this->D2D1Panel = D2D1Panel;
 	this->mCurrState = BUTTON_STATE::RESET;
 	this->mBitmapLoadedByFilePath = true;
-	this->D2D1Panel->GetpRenderTarget()->CreateSolidColorBrush(
+	/*this->D2D1Panel->GetpRenderTarget()->CreateSolidColorBrush(
 		D2D1::ColorF(D2D1::ColorF(1.f, 0.f, 0.f, 1.0f)),
-		&this->mpFillBrush);
+		&this->mpFillBrush);*/
 	
 	this->CreateButton(
 		imageFilePath, 
@@ -276,11 +276,14 @@ void Button::SetButtonStatus(BUTTON_STATE buttState)
 		this->mCurrState = buttState;
 		if (this->mBmpLoaded)
 		{
-			this->mBitmapRenderSize = D2D1::RectF(
-				this->mWidth * buttState,
-				0,
-				this->mWidth* (buttState + 1),
-				this->mpBitMap->GetSize().height);
+			if (this->mpBitMap->GetSize().width != this->mWidth)
+			{
+				this->mBitmapRenderSize = D2D1::RectF(
+					this->mWidth * buttState,
+					0,
+					this->mWidth* (buttState + 1),
+					this->mpBitMap->GetSize().height);
+			}
 			if (buttState == 2)
 			{
 				this->NotifyObservers(this);
@@ -374,8 +377,12 @@ void Button::LoadImageToBitmap(
 			this->mpBitMap->GetSize().width,
 			this->mpBitMap->GetSize().height);
 		this->mBmpLoaded = true;
-		this->D2D1Panel->SetpBitmapDecoder(nullptr);
 	}	
+}
+
+void Button::SetRenderWidth(float width)
+{
+	this->mWidth = width;
 }
 
 BUTTON_STATE Button::GetButtState() const

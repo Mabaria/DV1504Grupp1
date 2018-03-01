@@ -42,6 +42,7 @@ public:
 	void DrawRect();
 	void DrawFilledRect(float r, float g, float b, float a = 1.f);
 	void DrawFilledRect();
+	
 
 	ID2D1Bitmap* getBitmapPointer();
 	const D2D1_RECT_F GetButtonSize() const;
@@ -56,6 +57,7 @@ public:
 	void SetRectStatus(BUTTON_STATE rectState);
 	void SetBitmap(ID2D1Bitmap* bitmapPointer);
 	void LoadImageToBitmap(std::string imageFilePath);
+	void SetRenderWidth(float width);
 	BUTTON_STATE GetButtState() const;
 
 	void SetOpacity(float opacity);
