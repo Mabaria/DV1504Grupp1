@@ -310,4 +310,9 @@ ID2D1Bitmap * Panel::GetBitmapByName(std::string bitmapName)
 	return to_return;
 }
 
+Direct2D * Panel::GetDirect2D()
+{
+	return this->mDirect2D;
+}
+
 

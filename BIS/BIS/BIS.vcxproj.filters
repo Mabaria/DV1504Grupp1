@@ -252,6 +252,9 @@
     <ClInclude Include="..\..\Logic\ActionHandler.h">
       <Filter>Header Files\Logic</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\UI\UIElements\CrewPanel.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BIS.cpp">
@@ -445,6 +448,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Logic\ActionHandler.cpp">
       <Filter>Source Files\Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UI\UIElements\CrewPanel.cpp">
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
