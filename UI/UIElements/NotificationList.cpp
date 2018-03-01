@@ -158,7 +158,10 @@ const int NotificationList::GetNumberOfNotificationObjects() const
 
 const int NotificationList::GetListHeight() const
 {
-	return this->mListBottom - this->mListTop;
+	return this->mListBottom 
+		- this->mListTop 
+		+ this->mTitle.GetTextBoxSize().bottom 
+		- this->mTitle.GetTextBoxSize().top;
 }
 
 void NotificationList::MoveLog(float speed)
@@ -197,7 +200,6 @@ void NotificationList::Update()
 	for (int i = 0; i < (int)this->mObjects.size(); i++)
 	{
 		this->mObjects[i]->Update();
-
 	}
 
 	// List top and list bottom

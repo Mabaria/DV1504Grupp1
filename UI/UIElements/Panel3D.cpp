@@ -64,6 +64,8 @@ Panel3D::Panel3D(int width, int height, int top, int left,
 	this->mMovableCamera = false;
 	this->mShowCursor = true;
 	this->mMovableCamera = movableCamera;
+
+	this->mActions.Init(&this->mDirect3D);
 }
 
 Panel3D::~Panel3D()
@@ -548,6 +550,7 @@ const void Panel3D::UpdateMatrixBuffer(int index)
 const void Panel3D::SetCamera(Camera * camera)
 {
 	this->mpCamera = camera;
+	this->mActions.SetCamera(camera);
 
 	if (!this->mpViewBuffer)
 	{
@@ -570,6 +573,7 @@ const void Panel3D::SetCamera(Camera * camera)
 	this->mpMovableCameraComponent = new MovableCameraComponent();
 	this->mpMovableCameraComponent->Initialize(*this->mpCamera);
 	this->mMovableCamera = true;
+	this->mActions.SetMoveableCamera(this->mpMovableCameraComponent);
 }
 
 void Panel3D::Update(Button * attribute)
@@ -624,6 +628,11 @@ void Panel3D::DrawBitmapToTexture(
 
 }
 
+void Panel3D::AddAction(float x, float y, ActionData data)
+{
+	this->mActions.AddAction(x, y, data);
+}
+
 MovableCameraComponent * Panel3D::GetMovableComponent()
 {
 	return this->mpMovableCameraComponent;
@@ -672,7 +681,25 @@ const void Panel3D::Update()
 const void Panel3D::Draw()
 {
 	this->mDirect3D.Clear();
+	//!!! I ADDED THIS
+	this->mDirect3D.GetContext()->VSSetShader(
+		this->mpVertexShader,
+		nullptr,
+		0);
+	this->mDirect3D.GetContext()->GSSetShader(
+		this->mpGeometryShader,
+		nullptr,
+		0);
+	this->mDirect3D.GetContext()->PSSetShader(
+		this->mpPixelShader,
+		nullptr,
+		0);
 
+	// Setting up input assembler.
+	this->mDirect3D.GetContext()->IASetPrimitiveTopology
+	(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	this->mDirect3D.GetContext()->IASetInputLayout(this->mpInputLayout);
+	
 	// Stride (vertex size) and offset are
 	// declared because they have to be referenced.
 	UINT stride = (UINT)sizeof(Vertex);
@@ -685,7 +712,7 @@ const void Panel3D::Draw()
 	ID3D11Buffer* matrix_buffer		= nullptr;
 	ID3D11Buffer* material_buffer	= nullptr;
 	UINT numIndices = 0;
-
+	
 	this->mDirect3D.GetContext()->VSSetConstantBuffers(
 		1,
 		1,
@@ -697,7 +724,7 @@ const void Panel3D::Draw()
 		1,
 		&this->mpProjBuffer
 	);
-
+	
 	// Takes every set of buffers from every mesh object in the panel
 	// and draws them one by one.
 	for (int i = 0; i < (int)this->mpMeshObjects.size(); i++)
@@ -771,6 +798,11 @@ const void Panel3D::Draw()
 				offset);	// Base vertex location.
 		}
 	}
+
+	// Clear the depth buffer and draw the actions
+	this->mDirect3D.ClearDepth();
+	this->mActions.Draw();
+
 	this->mDirect3D.GetSwapChain()->Present(1, 0);
 
 }

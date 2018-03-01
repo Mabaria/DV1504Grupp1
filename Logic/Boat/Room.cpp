@@ -44,6 +44,11 @@ float Room::CheckRayCollision(const Ray & rRay)
 	return Picking::IsRayIntersectingAABB(rRay, this->mBoundingBox);
 }
 
+float Room::CheckWorldRayCollision(const Ray & rRay)
+{
+	return Picking::IsRayIntersectingAABB(rRay, this->mWorldBoundingBox);
+}
+
 std::string Room::GetName() const
 {
 	return this->mName;
@@ -70,6 +75,15 @@ int Room::GetIndexInBoat() const
 int Room::GetIndexInDeck() const
 {
 	return this->mIndexInDeck;
+}
+
+/**
+*	Sensor specific
+*/
+
+std::vector<Event::Type> Room::GetInputTypes() const
+{
+	return this->mSensor.GetInputTypes();
 }
 
 
@@ -189,6 +203,9 @@ void Room::InitRoomData(XMMATRIX matrix)
 	bounding_box.y.max = XMVectorGetY(max);
 	bounding_box.z.max = XMVectorGetZ(max);
  
+	// Saving this bounding box for picking purposes.
+	this->mWorldBoundingBox = bounding_box;
+
 	// Takes the mean distance from origin for each of the axes.
 	this->mRoomData.centerPosition.x = 
 		(bounding_box.x.max + bounding_box.x.min) / 2.0f;

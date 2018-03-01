@@ -10,6 +10,7 @@ System::System()
 	this->mpSideViewPanel	= nullptr;
 	this->mpTopViewPanel	= nullptr;
 	this->mpWindow			= nullptr;
+	this->mpLastClickedRoom  = nullptr;
 
 }
 
@@ -208,8 +209,18 @@ void System::mHandleInput()
 			{
 				this->mpMenuPanel->OpenAt(picked_room);
 				this->mpTopViewPanel->GetMovableComponent()->FocusCameraOnRoom(picked_room, true);
-			}
 
+				// Save last clicked room to be used for Room Info
+				if (this->mpLastClickedRoom != picked_room)
+				{
+					this->mpLastClickedRoom = picked_room;
+					this->mUpdateRoomInfo();
+				}
+
+				XMFLOAT3 picked_position = this->mBoat.GetPickedPosition(this->mRay);
+				
+				this->mpTopViewPanel->AddAction(picked_position.x, picked_position.z, Icon_Cooling_Wall);
+			}
 			// ___ HOVER EFFECT ___
 
 			if (last_picked_room == nullptr)
@@ -276,6 +287,46 @@ void System::mUpdateHover(std::string name, int index, bool activate)
 		activate,
 		this->mpTopViewPanel->rGetDirect3D().GetContext(),
 		index);
+}
+
+void System::mUpdateRoomInfo()
+{
+	std::string new_info_text;
+	new_info_text = this->mpLastClickedRoom->GetName() + "\n" +
+		this->mpLastClickedRoom->GetDeckName() + "\n" +
+		"Sensorer: ";
+
+
+	this->mpControlPanel->GetButtonByName("fireSensor")->SetOpacity(0.0f);
+	this->mpControlPanel->GetButtonByName("waterSensor")->SetOpacity(0.0f);
+	this->mpControlPanel->GetButtonByName("gasSensor")->SetOpacity(0.0f);
+
+	// Get the sensors in the room
+	std::vector<Event::Type> sensors = this->mpLastClickedRoom->GetInputTypes();
+
+	for (std::vector<Event::Type>::iterator it = sensors.begin(); it != sensors.end();
+		it++)
+	{
+		if (*it == 0)
+		{
+			this->mpControlPanel->GetButtonByName("fireSensor")->SetOpacity(1.0f);
+
+		}
+		// Event 1 is currently injury
+		else if (*it == 2)
+		{
+			this->mpControlPanel->GetButtonByName("waterSensor")->SetOpacity(1.0f);
+		
+		}
+		else if (*it == 3)
+		{
+			this->mpControlPanel->GetButtonByName("gasSensor")->SetOpacity(1.0f);
+
+		}
+
+	}
+	this->mpControlPanel->GetTextBoxByName("roominfo")->SetText(
+		new_info_text);
 }
 
 void System::mUpdateEvents(Room * room)
@@ -367,18 +418,30 @@ void System::mSetupPanels()
 		L"../../GraphicsEngine/Test_PixelShader.hlsl");
 
 	// Setting up the control panel.
+
 	this->mpControlPanel->AddTextbox(
-		this->mpControlPanel->GetWidth(), 
+		this->mpControlPanel->GetWidth() / 2, 
 		60,
 		0, 
-		0, 
-		"Kontrollpanel", 
+		this->mpControlPanel->GetWidth() / 2 + 20,
+		"Markerat rum:", 
 		"title");
-	this->mpControlPanel->GetTextBoxByName("title")->SetFontSize(40);
+	this->mpControlPanel->GetTextBoxByName("title")->SetFontSize(35);
 	this->mpControlPanel->GetTextBoxByName("title")->SetFontWeight
 	(DWRITE_FONT_WEIGHT_NORMAL);
-	this->mpControlPanel->GetTextBoxByName("title")->SetTextAlignment
-	(DWRITE_TEXT_ALIGNMENT_CENTER);
+	/*this->mpControlPanel->GetTextBoxByName("title")->SetTextAlignment
+	(DWRITE_TEXT_ALIGNMENT_CENTER);*/
+
+	this->mpControlPanel->AddTextbox(
+		this->mpControlPanel->GetWidth() / 2,
+		120,
+		50,
+		this->mpControlPanel->GetWidth() / 2 + 20,
+		"Inget rum markerat",
+		"roominfo");
+
+	this->mpControlPanel->GetTextBoxByName("roominfo")->SetFontSize(30);
+
 
 	this->mpControlPanel->LoadImageToBitmap(
 		"../../Models/Button01.png",
@@ -396,8 +459,27 @@ void System::mSetupPanels()
 		"../../Models/Button05.png",
 		"Reset");
 	this->mpControlPanel->LoadImageToBitmap(
-		"../../Models/Info.png", 
+		"../../Models/Info.png",
 		"Info");
+
+	this->mpControlPanel->AddButton(30, 30,
+		this->mpControlPanel->GetHeight() / 2 + 50,
+		this->mpControlPanel->GetWidth() / 2 + 150,
+		this->mpControlPanel->GetBitmapByName("Fire"), "fireSensor");
+	this->mpControlPanel->GetButtonByName("fireSensor")->SetOpacity(0.0f);
+
+	this->mpControlPanel->AddButton(30, 30,
+		this->mpControlPanel->GetHeight() / 2 + 50,
+		this->mpControlPanel->GetWidth() / 2 + 190,
+		this->mpControlPanel->GetBitmapByName("Water"), "waterSensor");
+	this->mpControlPanel->GetButtonByName("waterSensor")->SetOpacity(0.0f);
+
+	this->mpControlPanel->AddButton(30, 30,
+		this->mpControlPanel->GetHeight() / 2 + 50,
+		this->mpControlPanel->GetWidth() / 2 + 230,
+		this->mpControlPanel->GetBitmapByName("Gas"), "gasSensor");
+	this->mpControlPanel->GetButtonByName("gasSensor")->SetOpacity(0.0f);
+
 
 	this->mpControlPanel->AddButton(70, 70, 10, 10,
 		this->mpControlPanel->GetBitmapByName("Reset"), "Reset");
@@ -414,6 +496,8 @@ void System::mSetupPanels()
 	this->mpControlPanel->GetButtonByName("Info")->
 		AddObserver(&this->mpInfoPanel);
 
+	// Setting up the active log panel. (top, left, titleFontSize, objectFontSize)
+
 	this->mpActiveLogPanel->LoadImageToBitmap(
 		"../../Models/Button01.png",
 		"Injury");
@@ -430,7 +514,6 @@ void System::mSetupPanels()
 		"../../Models/Button05.png",
 		"Reset");
 
-	// Setting up the active log panel. (top, left, titleFontSize, objectFontSize)
 	int list_top = 0;
 	int list_left = 0;
 	int title_font_size = 40;

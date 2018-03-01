@@ -232,7 +232,6 @@ void Panel2D::ScrollActiveLog()
 	{
 		this->mNotificationList->MoveLog(Mouse::GetScroll() * 10.0f);
 	}
-
 }
 
 void Panel2D::Scroll()
@@ -286,14 +285,7 @@ void Panel2D::Update()
 	{
 		ScrollActiveLog();
 		this->mNotificationList->Update();
-	}
-	
-	//if (this->IsMouseInsidePanel())
-	//{
-	//	// Scrolls the panel if necessary.
-	//	this->Scroll();
-	//}
-	
+	}	
 }
 
 void Panel2D::Draw()
