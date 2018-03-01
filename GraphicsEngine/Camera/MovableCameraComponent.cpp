@@ -3,7 +3,7 @@
 MovableCameraComponent::MovableCameraComponent()
 {
 	this->mpStrategy	= nullptr;
-	this->mBtnToMove	= Buttons::ScrollPress;
+	this->mBtnToMove	= Buttons::Right;
 
 	this->mMouseDiff.x	= 0;
 	this->mMouseDiff.y	= 0;
