@@ -210,7 +210,7 @@ void System::mHandleInput()
 			{
 				this->mpMenuPanel->OpenAt(picked_room);
 				this->mpTopViewPanel->GetMovableComponent()->FocusCameraOnRoom(picked_room, true);
-				
+
 				// Turn on selected effect if clicked room was actually a room
 				if (picked_room != nullptr)
 				{
@@ -239,21 +239,24 @@ void System::mHandleInput()
 					this->mpLastClickedRoom = picked_room;
 					this->mUpdateRoomInfo();
 				}
-			}
 
 				XMFLOAT3 picked_position = this->mBoat.GetPickedPosition(this->mRay);
-				
 				this->mpTopViewPanel->AddAction(picked_position.x, picked_position.z, Icon_Cooling_Wall);
 			}
-			// ___ HOVER EFFECT ___
+		}
+		// Closes the event menu if the user left clicks away from a room
+		// or the event menu.
+		else if (Mouse::IsButtonPressed(Buttons::Left) && this->mpMenuPanel->IsVisible())
+		{
+			this->mpMenuPanel->Close();
+		}
+		
 
-			if (last_picked_room == nullptr)
-			{
-				std::string picked_name = picked_room->GetDeckName() + "bounds";
-				this->mUpdateHover(picked_name, picked_room->GetIndexInDeck(), true);
-				last_picked_room = picked_room;
-			}
-			else
+		//// ___ HOVER EFFECT ___
+
+		if (picked_room)
+		{
+			if(last_picked_room != nullptr)
 			{
 				std::string last_picked_name = last_picked_room->GetDeckName() + "bounds";
 				this->mUpdateHover(last_picked_name, last_picked_room->GetIndexInDeck(), false);
@@ -264,13 +267,6 @@ void System::mHandleInput()
 			this->mUpdateHover(picked_name, picked_room->GetIndexInDeck(), true);
 		}
 
-		// Closes the event menu if the user left clicks away from a room
-		// or the event menu.
-		else if (Mouse::IsButtonPressed(Buttons::Left) && this->mpMenuPanel->IsVisible())
-		{
-			this->mpMenuPanel->Close();
-		}
-
 		else if(last_picked_room != nullptr)
 		{
 			std::string last_picked_name = last_picked_room->GetDeckName() + "bounds";
@@ -279,9 +275,8 @@ void System::mHandleInput()
 
 		last_picked_room = picked_room;
 
-		// ___ END ___ (HOVER EFFECT)
+		//// ___ END ___ (HOVER EFFECT)
 	}
-
 }
 
 void System::Update(Button * attribute)
