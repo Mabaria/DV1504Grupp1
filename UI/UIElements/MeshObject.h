@@ -20,8 +20,10 @@ struct EventData
 
 struct HoverData
 {
-	bool IsEffectActive;
-	bool pad[15];
+	int IsEffectActive;
+	int IsSelected;
+	int pad0;
+	int pad1;
 };
 
 class MeshObject
@@ -42,7 +44,7 @@ public:
 	const void Translate(float x, float y, float z);
 	const void Rotate(float pitch, float yaw, float roll);
 	const void Scale(float x, float y, float z);
-	
+
 	// Data getters retrieve the full vector of vectors of data.
 	const std::vector<std::vector<unsigned int>>	GetIndices() const;
 	const std::vector<std::vector<Vertex>>			GetVertices() const;
@@ -83,6 +85,10 @@ public:
 		ID3D11DeviceContext* context,
 		unsigned int index);
 
+	void SetSelected(const bool selected,
+		ID3D11DeviceContext *pContext,
+		unsigned int index);
+
 	MaterialHandler* pGetMaterialHandler();
 	int GetMaterialIndexForIndexBuffer(unsigned int indexBufferIndex) const;
 
@@ -109,8 +115,6 @@ private:
 	std::vector<ID3D11Buffer*> mpIndexBuffers;
 	std::vector<ID3D11Buffer*> mpVertexBuffers;
 	std::vector<ID3D11Buffer*> mpMaterialBuffers;
-	ID3D11Buffer *mpHoverBuffers[20];
-	ID3D11Buffer* mpEventBuffers[20];
 	ID3D11Buffer *mpMatrixBuffer;
 
 	ID3D11ShaderResourceView *mpTextureView;
@@ -121,4 +125,9 @@ private:
 	int mPixelShaderID;		// Pixel Shader to use
 
 	XMMATRIX mModelMatrix;
+
+	ID3D11Buffer *mpHoverBuffers[20];
+	ID3D11Buffer* mpEventBuffers[20];
+	bool mIsHovered[20];
+	bool mIsSelected[20];
 };
