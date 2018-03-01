@@ -4,12 +4,12 @@
 #define TEX_WIDTH 1.0f / (float)ICON_WIDTH
 #define TEX_HEIGHT 1.0f / (float)ICON_HEIGHT
 
-#define ICON_SIZE 0.025f
+#define ICON_SIZE 0.15f
 
 cbuffer GSData : register(b0)
 {
 	float3 cameraPos;
-	uint cameraData;
+	float cameraData;
 }
 
 struct GSInput
@@ -38,9 +38,20 @@ void main(
 	// Retrieves the turn data from the data chunk
 	uint turn = (input[0].data >> 4) & 7;
 
+	// Extracting what camera mode it is
+	uint cameraMode;
+	float aspect = cameraData;
+	if (cameraData < 0)
+	{
+		cameraMode = 0;
+		aspect *= -1.0f;
+	}
+	else
+		cameraMode = 1;
+
 	// If we're not paning and the icon is not stationary, rotate icon
 	// depending on what direction the camera is looking
-	if (cameraData == 1 && turn != 4)
+	if (cameraMode == 1 && turn != 4)
 	{
 		float2 dir = normalize(cameraPos.xz - input[0].wpos.xz);
 		float2 dir2 = normalize(float2(1.0f, 0.0f));
@@ -58,28 +69,29 @@ void main(
 	// This section is a test to base the size of the action icon
 	// on the Z-distance of the camera. Will most likely be scrapped to
 	// make picking easier and more manageble.
-	float size;
-	if (input[0].pos.z < 3.f)
-		size = 0.07f;
-	else
-		size = ICON_SIZE * input[0].pos.z;
+	//float size;
+	//if (input[0].pos.z < 3.f)
+	//	size = 0.07f;
+	//else
+	//	size = ICON_SIZE * input[0].pos.z;
+	float size = ICON_SIZE;
 
 	// Define up and right vectors depending on rotation
 	if (turn == 0 || turn == 4)
 	{
 		rightVec = float4(size, 0.0f, 0.0f, 0.0f);
-		upVec = float4(0.0f, size * 2.0f, 0.0f, 0.0f);
+		upVec = float4(0.0f, size * aspect, 0.0f, 0.0f);
 	}
 	else if (turn == 1) {
-		rightVec = float4(0.0f, -size * 2.0f, 0.0f, 0.0f);
+		rightVec = float4(0.0f, -size * aspect, 0.0f, 0.0f);
 		upVec = float4(size, 0.0f, 0.0f, 0.0f);
 	}
 	else if (turn == 2) {
 		rightVec = float4(-size, 0.0f, 0.0f, 0.0f);
-		upVec = float4(0.0f, -size * 2.0f, 0.0f, 0.0f);
+		upVec = float4(0.0f, -size * aspect, 0.0f, 0.0f);
 	}
 	else {
-		rightVec = float4(0.0f, size * 2.0f, 0.0f, 0.0f);
+		rightVec = float4(0.0f, size * aspect, 0.0f, 0.0f);
 		upVec = float4(-size, 0.0f, 0.0f, 0.0f);
 	}
 

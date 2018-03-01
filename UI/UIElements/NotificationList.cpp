@@ -158,7 +158,10 @@ const int NotificationList::GetNumberOfNotificationObjects() const
 
 const int NotificationList::GetListHeight() const
 {
-	return this->mListBottom - this->mListTop;
+	return this->mListBottom 
+		- this->mListTop 
+		+ this->mTitle.GetTextBoxSize().bottom 
+		- this->mTitle.GetTextBoxSize().top;
 }
 
 void NotificationList::MoveLog(float speed)
@@ -197,7 +200,6 @@ void NotificationList::Update()
 	for (int i = 0; i < (int)this->mObjects.size(); i++)
 	{
 		this->mObjects[i]->Update();
-
 	}
 
 	// List top and list bottom
@@ -222,6 +224,12 @@ void NotificationList::UpdateBorders()
 
 void NotificationList::Draw()
 {
+	static float color_ticker = 0.0f;
+	if (this->mObjects.size() == 0)
+	{
+		this->mTitleFrame.DrawFilledRect(0.10f, 0.27f, 0.40f, 1.0f);
+	}
+	bool tick_up = false;
 	for (int i = 0; i < (int)this->mObjects.size(); i++)
 	{
 		//! O P T I M I Z A T I O N
@@ -231,8 +239,20 @@ void NotificationList::Draw()
 			< (int)this->mpRenderTarget->GetSize().height)
 		{
 			this->mObjects[i]->Draw();
+			this->mTitleFrame.DrawFilledRect(0.10f, 0.27f, 0.40f, 1.0f);
+		}
+		else if ((int)this->mObjects[i]->GetButton()->GetButtonSize().top
+			> (int)this->mpRenderTarget->GetSize().height &&
+			this->mObjects[i]->GetIfNewStatus())
+		{
+			tick_up = true;
 		}
 	}
-	this->mTitleFrame.DrawFilledRect(0.10f, 0.27f, 0.40f, 1.0f);
+	if (tick_up)
+	{
+		this->mTitleFrame.DrawFilledRect(
+			sin(color_ticker += 0.2f),
+			0, 0);
+	}
 	this->mTitle.DrawTextBox();
 }

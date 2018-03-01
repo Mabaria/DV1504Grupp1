@@ -22,7 +22,7 @@ struct RoomDesc
 	EventLog *pEventLog;
 };
 
-struct RoomInfo
+struct RoomData
 {
 	XMFLOAT3 centerPosition;
 	XMFLOAT3 size;
@@ -47,6 +47,8 @@ public:
 	int GetIndexInDeck() const;
 
 	float CheckRayCollision(const Ray &rRay);
+
+	float CheckWorldRayCollision(const Ray &rRay);
 
 	// Sensor specific
 	std::vector<Event::Type> GetInputTypes() const;
@@ -77,11 +79,11 @@ public:
 	// Disk specific
 	std::string WriteString() const;
 
-	void InitRoomInfo(XMMATRIX matrix);
+	void InitRoomData(XMMATRIX matrix);
 
 	// Returns a RoomInfo struct containing center position,
 	// size and distance to corner.
-	const RoomInfo GetRoomInfo() const;
+	const RoomData GetRoomData() const;
 
 	// Returns the room center position.
 	const XMFLOAT3 GetRoomCenter() const;
@@ -103,6 +105,8 @@ private:
 	std::string mName;
 	AABB mBoundingBox;
 
+	AABB mWorldBoundingBox;
+
 	// Deck specific
 	std::string mDeckName;
 
@@ -110,5 +114,5 @@ private:
 	Sensor mSensor;
 
 	// Room info for camera purposes.
-	RoomInfo mRoomInfo;
+	RoomData mRoomData;
 };

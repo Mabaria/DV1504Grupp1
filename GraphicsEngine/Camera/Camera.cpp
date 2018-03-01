@@ -359,6 +359,16 @@ LOOK_MODE Camera::GetLookMode() const
 	return this->mLookMode;
 }
 
+float Camera::GetAspectRatio() const
+{
+	return this->mAspectRatio;
+}
+
+DirectX::XMVECTOR Camera::GetRightVector() const
+{
+	return DirectX::XMVector3Cross(this->mUpVector, this->GetLookToVector());
+}
+
 DirectX::XMMATRIX Camera::GetViewMatrix() const
 {
 	return this->mViewMatrix;
@@ -478,4 +488,5 @@ void Camera::Update(Button * attribute)
 {
 	// Reset the camera when prompted by button
 	this->mReset();
+	this->NotifyObservers(&std::string("reset"));
 }

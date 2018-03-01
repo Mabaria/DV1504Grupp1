@@ -7,7 +7,7 @@ CameraMovementStrategy::CameraMovementStrategy()
 	this->mZoomSpeed	= 0.5f;
 
 	this->mDistance		= 5.0f;
-	this->mMaxDistance	= 10.0f;
+	this->mMaxDistance	= 6.0f;
 	this->mMinDistance	= 2.0f;
 
 	this->pCamera		= nullptr;

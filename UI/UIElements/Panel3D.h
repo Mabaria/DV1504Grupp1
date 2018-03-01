@@ -98,6 +98,11 @@ public:
 		float widthOfTex,
 		float heightOfTex);
 	//void SetCameraPosition()
+
+
+	void AddAction(float x, float y, ActionData data);
+
+	void InitActions();
 private:
 	D3D11 mDirect3D;
 	std::vector<MeshObject*> mpMeshObjects;
@@ -137,5 +142,5 @@ private:
 	bool mShowCursor;
 	bool mMovableCamera;
 
-	Actions mActions;
+	Actions *mpActions;
 };

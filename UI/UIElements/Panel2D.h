@@ -1,17 +1,13 @@
 #pragma once
 
 #include <Windows.h>
+#include <vector>
 #include "Panel.h"
 #include "Button.h"
-#include "../../GraphicsEngine/DX/Direct2D.h"
-#include <vector>
 #include "TextBox.h"
 #include "NotificationList.h"
-//struct BitmapInfo
-//{
-//	ID2D1Bitmap* bitmap = nullptr;
-//	std::string name = "";
-//};
+#include "../../GraphicsEngine/DX/Direct2D.h"
+
 class Panel2D : public Panel
 {
 public:
@@ -64,13 +60,21 @@ public:
 		int posY,
 		int titleFontSize,
 		int objectFontSize);
+
+	// Messing up the coupling slightly to have 
+	// system observe the notification objects.
+	NotificationList *GetNotificationList();
+
 	bool AddNotification(Room *room, LogEvent *event);
 	bool RemoveNotification(Room *room, Event::Type type);
 
 	bool GetButtonOcclude();
 
 	void ScrollActiveLog();
+
+	// Deprecated.
 	void Scroll();
+
 	void Update();
 	void Draw();
 
