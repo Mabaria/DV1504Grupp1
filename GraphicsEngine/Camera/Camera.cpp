@@ -490,3 +490,14 @@ void Camera::Update(Button * attribute)
 	this->mReset();
 	this->NotifyObservers(&std::string("reset"));
 }
+
+void Camera::Reset()
+{
+	//this->mReset();
+	this->NotifyObservers(&std::string("reset"));
+}
+
+CAMERA_DEFAULT_VALUES Camera::GetDefaultValues()
+{
+	return this->mDefaultValues;
+}

@@ -23,5 +23,7 @@ private:
 	float mMaxHeight;
 	float mMinHeight;
 
+	bool mZoomIn;
+
 	void mUpdatePosition();
 };

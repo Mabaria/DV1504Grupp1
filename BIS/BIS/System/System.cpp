@@ -256,6 +256,7 @@ void System::mHandleInput()
 		else if (Mouse::IsButtonPressed(Buttons::Left) && this->mpMenuPanel->IsVisible())
 		{
 			this->mpMenuPanel->Close();
+			this->mpTopViewPanel->GetActiveCamera()->Reset();
 		}
 		
 
@@ -292,14 +293,14 @@ void System::Update(Button * attribute)
 	{
 		if (this->mpTopViewPanel->GetActiveCamera() != this->mpTopViewCameraRotate)
 		{
-			this->mpTopViewCameraRotate->Update(nullptr);
 			this->mpTopViewPanel->SetCamera(this->mpTopViewCameraRotate);
 		}
 		else if (this->mpTopViewPanel->GetActiveCamera() != this->mpTopViewCameraPan)
 		{
-			this->mpTopViewCameraPan->Update(nullptr);
 			this->mpTopViewPanel->SetCamera(this->mpTopViewCameraPan);
 		}
+
+		this->mpTopViewPanel->GetActiveCamera()->Reset();
 	}
 }
 
@@ -412,14 +413,14 @@ void System::mSetupPanels()
 		{ 0.0f, 1.0f, 0.0f, 0.0f },
 		{ 0.0f, 0.00000001f, 0.0f, 0.0f },
 		XM_PI / 15.0f, 16.0f / 9.0f,
-		0.1f, 20.0f, LOOK_AT, PERSPECTIVE);
+		0.1f, 11.0f, LOOK_AT, PERSPECTIVE);
 
 	this->mpTopViewCameraPan = new Camera(
 		{ 0.0f, 7.0f, 0.15f, 0.0f },
 		{ 0.0f, 1.0f, 0.0f, 0.0f },
 		{ 0.0f, -10.0f, -0.25f, 0.0f },
 		XM_PI / 15.0f, 16.0f / 9.0f,
-		0.1f, 20.0f, LOOK_TO, PERSPECTIVE);
+		0.1f, 11.0f, LOOK_TO, PERSPECTIVE);
 
 	this->mpSideViewCamera = new Camera(
 		{ -0.0251480788f, 1.28821635f, 3.78684092f, 0.0f },
