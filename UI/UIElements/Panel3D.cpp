@@ -65,7 +65,7 @@ Panel3D::Panel3D(int width, int height, int top, int left,
 	this->mShowCursor = true;
 	this->mMovableCamera = movableCamera;
 
-	this->mActions.Init(&this->mDirect3D);
+	this->mpActions = nullptr;
 }
 
 Panel3D::~Panel3D()
@@ -118,6 +118,8 @@ Panel3D::~Panel3D()
 		delete this->mpMovableCameraComponent;
 		this->mpMovableCameraComponent = nullptr;
 	}
+	if (this->mpActions != nullptr)
+		delete this->mpActions;
 }
 
 D3D11 & Panel3D::rGetDirect3D()
@@ -550,7 +552,8 @@ const void Panel3D::UpdateMatrixBuffer(int index)
 const void Panel3D::SetCamera(Camera * camera)
 {
 	this->mpCamera = camera;
-	this->mActions.SetCamera(camera);
+	if(this->mpActions != nullptr)
+		this->mpActions->SetCamera(camera);
 
 	if (!this->mpViewBuffer)
 	{
@@ -573,7 +576,8 @@ const void Panel3D::SetCamera(Camera * camera)
 	this->mpMovableCameraComponent = new MovableCameraComponent();
 	this->mpMovableCameraComponent->Initialize(*this->mpCamera);
 	this->mMovableCamera = true;
-	this->mActions.SetMoveableCamera(this->mpMovableCameraComponent);
+	if (this->mpActions != nullptr)
+		this->mpActions->SetMoveableCamera(this->mpMovableCameraComponent);
 }
 
 void Panel3D::Update(Button * attribute)
@@ -633,6 +637,15 @@ void Panel3D::AddAction(float x, float y, ActionData data)
 	this->mActions.AddAction(x, y, data);
 }
 
+void Panel3D::InitActions()
+{
+	if (this->mpActions == nullptr)
+	{
+		this->mpActions = new Actions();
+		this->mpActions->Init(&this->mDirect3D);
+	}
+}
+
 MovableCameraComponent * Panel3D::GetMovableComponent()
 {
 	return this->mpMovableCameraComponent;
@@ -675,6 +688,15 @@ const void Panel3D::Update()
 	{
 		this->mShowCursor = show_cursor;
 		ShowCursor(this->mShowCursor);
+	}
+
+	// Action picking
+	if (this->mpActions != nullptr && Mouse::IsButtonPressed(Buttons::Right))
+	{
+		Actions::ActionPtr *target = this->mpActions->PickAction();
+		if (target != nullptr)
+			this->mpActions->RemoveAction(&target);
+
 	}
 }
 
@@ -801,7 +823,8 @@ const void Panel3D::Draw()
 
 	// Clear the depth buffer and draw the actions
 	this->mDirect3D.ClearDepth();
-	this->mActions.Draw();
+	if (this->mpActions != nullptr)
+		this->mpActions->Draw();
 
 	this->mDirect3D.GetSwapChain()->Present(1, 0);
 

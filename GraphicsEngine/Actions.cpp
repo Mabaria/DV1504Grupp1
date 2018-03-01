@@ -115,20 +115,19 @@ bool Actions::Init(D3D11 *pDirect3D)
 	// when "tempList" goes out of scope. The Action class takes care
 	// of this in its destructor.
 
-	ActionPtr *tempList[30];
-	for (int i = 0; i < 30; i++)
+	//ActionPtr *tempList[30];
+	for (int i = 0; i < this->mcMaxEvents; i++)
 	{
-		uint32_t hello = Icon_Injured_Reported | Rotation_Stationary;
-		tempList[i] = this->AddAction(
+		/*tempList[i] = */this->AddAction(
 			(float)(rand() % 1000) / 500.f - 1.0f,
 			(float)(rand() % 1000) / 500.f - 1.0f,
-			Icon_Injured_Moved | Rotation_0 | Number_4);
+			Icon_Injured_Moved | Rotation_0 | Number_9);
 		// Feel free to experiment with your own combination of flags
 	}
-	for (int i = 0; i < 25; i++)
-	{
-		this->RemoveAction(&tempList[i]);
-	}
+	//for (int i = 0; i < 25; i++)
+	//{
+	//	this->RemoveAction(&tempList[i]);
+	//}
 	// ------- END OF TEST -------
 
 	return true;
@@ -183,6 +182,68 @@ void Actions::RemoveAction(ActionPtr **pActionPtr)
 		(*pActionPtr) = nullptr;
 		this->mVertexArrayUpdated = true;
 	}
+}
+
+Actions::ActionPtr *Actions::PickAction()
+{
+	Ray ray;
+	Picking::GetWorldRay(
+		this->pCamera,
+		Mouse::GetXPercentage(),
+		Mouse::GetYPercentage(),
+		ray);
+
+	DirectX::XMVECTOR camPos = this->pCamera->GetPosition();
+	DirectX::XMVECTOR camDir =
+		DirectX::XMVector3Normalize(this->pCamera->GetLookVector());
+
+	float size = 0.027f;
+
+	ActionPtr *result = nullptr;
+	float distance = 10000.f;
+
+	for (int i = 0; i < this->mVertexSize; i++)
+	{
+		DirectX::XMVECTOR actionPos = XMVectorSet(
+			this->mpVertexArray[i].x,
+			this->mpVertexArray[i].y,
+			this->mpVertexArray[i].z,
+			0.0f);
+		DirectX::XMVECTOR actionDir = actionPos - camPos;
+		float actionDistance =
+			DirectX::XMVectorGetX(DirectX::XMVector3Length(actionDir));
+
+		DirectX::XMVECTOR rayDir = DirectX::XMVector3Dot(
+			ray.direction,
+			actionDir) * ray.direction;
+
+		DirectX::XMVECTOR planeDir = rayDir - actionDir;
+
+		DirectX::XMVECTOR planeUp = DirectX::XMVector3Normalize(
+			DirectX::XMVector3Cross(
+				this->pCamera->GetRightVector(),
+				DirectX::XMVector3Normalize(actionDir)));
+		DirectX::XMVECTOR planeRight = DirectX::XMVector3Normalize(
+			DirectX::XMVector3Cross(
+				DirectX::XMVector3Normalize(actionDir),
+				planeUp));
+		planeRight *= -1.0f;
+
+		float x = DirectX::XMVectorGetX(DirectX::XMVector3Dot(
+			planeDir,
+			planeRight));
+		float z = DirectX::XMVectorGetX(DirectX::XMVector3Dot(
+			planeDir,
+			planeUp));
+
+		if (fabs(x) < size && fabs(z) < size && actionDistance < distance)
+		{
+			std::cout << "Action Picking hit nr: " << i << std::endl;
+			result = this->mpVertexPtrArray[i];
+			distance = actionDistance;
+		}
+	}
+	return result;
 }
 
 void Actions::Draw()
@@ -303,7 +364,7 @@ bool Actions::CreateResources()
 	// this class.
 	CameraData tempData = {
 		{ 0.0f, 0.0f, 0.0f },
-		0 };
+		0.0f };
 
 	// Create buffer for camera data
 	D3D11_BUFFER_DESC desc = { 0 };
@@ -394,7 +455,12 @@ bool Actions::UpdateGSBuffer()
 	CameraData cameraData;
 	XMVECTOR cameraPos = pCamera->GetPosition();
 	DirectX::XMStoreFloat3(&cameraData.position, cameraPos);
-	cameraData.data = (UINT)this->pMovableCamera->GetMovement();
+	float aspect = this->pCamera->GetAspectRatio();
+	if (this->pMovableCamera->GetMovement() == 0)
+		aspect *= -1.0f;
+	cameraData.aspectAndData = aspect;
+	//cameraData.data = (UINT)this->pMovableCamera->GetMovement();
+	//cameraData.aspect = this->pCamera->GetAspectRatio();
 
 	memcpy(
 		mappedResource.pData,
