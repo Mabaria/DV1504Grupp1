@@ -127,7 +127,6 @@ void CrewPanel::Update(Button * button)
 		{
 			std::string temp = this->mtimer.WhenTimerStarted();
 			temp.insert(10, "\n\t\t\t\t  ");
-			std::cout << temp;
 			this->mpPanel->GetTextBoxByName(button->GetName())->SetText
 			(button->GetName() + "\t\t\t\t  " + temp);
 		}

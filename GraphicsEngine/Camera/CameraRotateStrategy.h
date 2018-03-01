@@ -12,7 +12,7 @@ public:
 	virtual void Zoom(int zoom);
 	virtual void Move(Position move);
 	virtual void FocusRoom(Room *pRoom, bool animate);
-	virtual void Reset();
+	virtual void Reset(bool animate);
 	virtual void HandleChangeInCamera();
 	virtual void AnimateToNewPosition();
 
@@ -22,6 +22,8 @@ private:
 
 	float mMaxHeight;
 	float mMinHeight;
+
+	bool mZoomIn;
 
 	void mUpdatePosition();
 };

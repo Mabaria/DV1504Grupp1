@@ -103,6 +103,7 @@ public:
 	void AddAction(float x, float y, ActionData data);
 
 	void InitActions();
+	Actions *pGetActions();
 private:
 	D3D11 mDirect3D;
 	std::vector<MeshObject*> mpMeshObjects;

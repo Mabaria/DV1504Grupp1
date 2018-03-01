@@ -7,8 +7,19 @@
 #include "../../UI/UIElements/Button.h"
 #include "../../UI/UIElements/TextBox.h"
 #include "../../GraphicsEngine/DX/Direct2D.h"
+#include "../../GraphicsEngine/Actions.h"
 
-class NotificationObject : public Observable<Room>
+
+#ifndef OBSERVER_INFO
+#define OBSERVER_INFO
+struct ObserverInfo
+{
+	Room *pRoom = nullptr;
+	uint32_t actionData = 0;
+};
+#endif
+
+class NotificationObject : public Observable<ObserverInfo>
 {
 public:
 	NotificationObject(

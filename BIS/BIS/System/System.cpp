@@ -158,19 +158,41 @@ void System::Run()
 	}
 }
 
-void System::Update(Room * pickedRoom)
+void System::Update(ObserverInfo * obsInf)
 {
-	// If a room is clicked in top view panel.
-	if (this->mpTopViewPanel->IsMouseInsidePanel())
+	if (obsInf->actionData == No_Action)
 	{
-		this->mUpdateEvents(pickedRoom);
-	}
-	// If a notification object is clicked in the active log panel.
-	else if (this->mpActiveLogPanel->IsMouseInsidePanel())
-	{
-		this->mpTopViewPanel->
-			GetMovableComponent()->
-			FocusCameraOnRoom(pickedRoom, true);
+		// If a room is clicked in top view panel.
+		if (this->mpTopViewPanel->IsMouseInsidePanel())
+		{
+			this->mUpdateEvents(obsInf->pRoom);
+		}
+		// If a notification object is clicked in the active log panel.
+		else if (this->mpActiveLogPanel->IsMouseInsidePanel())
+		{
+			this->mpTopViewPanel->
+				GetMovableComponent()->
+				FocusCameraOnRoom(obsInf->pRoom, true);
+
+			if (this->mpLastClickedRoom != nullptr)
+			{
+				std::string picked_name = this->mpLastClickedRoom->GetDeckName() + "bounds";
+				this->mpTopViewPanel->rGetMeshObject(picked_name)->SetSelected(
+					false,
+					this->mpTopViewPanel->rGetDirect3D().GetContext(),
+					this->mpLastClickedRoom->GetIndexInDeck()
+				);
+			}
+			this->mpLastClickedRoom = obsInf->pRoom;
+			this->mUpdateRoomInfo();
+			this->mpMenuPanel->SetActiveRoom(this->mpLastClickedRoom);
+			std::string picked_name = this->mpLastClickedRoom->GetDeckName() + "bounds";
+			this->mpTopViewPanel->rGetMeshObject(picked_name)->SetSelected(
+				true,
+				this->mpTopViewPanel->rGetDirect3D().GetContext(),
+				this->mpLastClickedRoom->GetIndexInDeck()
+			);
+		}
 	}
 }
 
@@ -204,6 +226,7 @@ void System::mHandleInput()
 
 	if (this->mpTopViewPanel->IsMouseInsidePanel() &&
 		!this->mpMenuPanel->IsMouseInsidePanel() &&
+		!this->mpInfoPanel.IsMouseInsidePanel() &&
 		!this->mpCrewPanel.IsMouseInsidePanel())
 	{
 
@@ -215,13 +238,32 @@ void System::mHandleInput()
 
 		// Returns nullptr if picked position isn't a room
 		picked_room = this->mBoat.GetPickedRoom(this->mRay);
+		
+		if (Mouse::IsButtonPressed(Buttons::Left) && this->mActionHandler.IsWaiting())
+		{
+			if (picked_room)
+			{
+				XMFLOAT3 picked_position = this->mBoat.GetPickedPosition(this->mRay);
+				this->mActionHandler.AddAction(picked_position.x, picked_position.z);
+			}
+			this->mActionHandler.SwitchWaitingState();
+		}
+		// Temp action removal.
+		else if (Mouse::IsButtonPressed(Buttons::Left))
+		{
+			Actions *actions = this->mpTopViewPanel->pGetActions();
+			Actions::ActionPtr *act_ptr = actions->PickAction();
+			actions->RemoveAction(&act_ptr);
+		}
+
 		if (picked_room)
 		{
 			if (Mouse::IsButtonPressed(Buttons::Left))
 			{
 				this->mpMenuPanel->OpenAt(picked_room);
+			
 				this->mpTopViewPanel->GetMovableComponent()->FocusCameraOnRoom(picked_room, true);
-
+			
 				// Turn on selected effect if clicked room was actually a room
 				if (picked_room != nullptr)
 				{
@@ -250,9 +292,6 @@ void System::mHandleInput()
 					this->mpLastClickedRoom = picked_room;
 					this->mUpdateRoomInfo();
 				}
-
-				XMFLOAT3 picked_position = this->mBoat.GetPickedPosition(this->mRay);
-				this->mpTopViewPanel->AddAction(picked_position.x, picked_position.z, Icon_Cooling_Wall);
 			}
 		}
 		// Closes the event menu if the user left clicks away from a room
@@ -260,6 +299,7 @@ void System::mHandleInput()
 		else if (Mouse::IsButtonPressed(Buttons::Left) && this->mpMenuPanel->IsVisible())
 		{
 			this->mpMenuPanel->Close();
+			this->mpTopViewPanel->GetActiveCamera()->Reset();
 		}
 		
 
@@ -296,14 +336,14 @@ void System::Update(Button * attribute)
 	{
 		if (this->mpTopViewPanel->GetActiveCamera() != this->mpTopViewCameraRotate)
 		{
-			this->mpTopViewCameraRotate->Update(nullptr);
 			this->mpTopViewPanel->SetCamera(this->mpTopViewCameraRotate);
 		}
 		else if (this->mpTopViewPanel->GetActiveCamera() != this->mpTopViewCameraPan)
 		{
-			this->mpTopViewCameraPan->Update(nullptr);
 			this->mpTopViewPanel->SetCamera(this->mpTopViewCameraPan);
 		}
+
+		this->mpTopViewPanel->GetActiveCamera()->Reset();
 	}
 }
 
@@ -416,21 +456,21 @@ void System::mSetupPanels()
 		{ 0.0f, 1.0f, 0.0f, 0.0f },
 		{ 0.0f, 0.00000001f, 0.0f, 0.0f },
 		XM_PI / 15.0f, 16.0f / 9.0f,
-		0.1f, 20.0f, LOOK_AT, PERSPECTIVE);
+		0.1f, 11.0f, LOOK_AT, PERSPECTIVE);
 
 	this->mpTopViewCameraPan = new Camera(
 		{ 0.0f, 7.0f, 0.15f, 0.0f },
 		{ 0.0f, 1.0f, 0.0f, 0.0f },
 		{ 0.0f, -10.0f, -0.25f, 0.0f },
 		XM_PI / 15.0f, 16.0f / 9.0f,
-		0.1f, 20.0f, LOOK_TO, PERSPECTIVE);
+		0.1f, 11.0f, LOOK_TO, PERSPECTIVE);
 
 	this->mpSideViewCamera = new Camera(
 		{ -0.0251480788f, 1.28821635f, 3.78684092f, 0.0f },
 		{ 0.0f, 1.0f, 0.0f, 0.0f },
 		{ 0.000001f, 0.0f, 0.0f, 0.0f },
 		120.f, 32.f/9.f,
-		0.1f, 25.0f, LOOK_AT, PERSPECTIVE);
+		0.1f, 8.0f, LOOK_AT, PERSPECTIVE);
 
 	this->mpTopViewPanel->SetCamera(this->mpTopViewCameraPan);
 	this->mpSideViewPanel->SetCamera(this->mpSideViewCamera);
@@ -570,7 +610,8 @@ void System::mSetupPanels()
 		title_font_size,
 		object_font_size);
 
-
+	this->mActionHandler.Init(this->mpTopViewPanel->pGetActions());
+	this->mpMenuPanel->AddObserver(&this->mActionHandler);
 }
 
 void System::mSetupModels()
@@ -603,24 +644,24 @@ void System::mSetupModels()
 	Quad quad(true);
 
 	this->mpTopViewPanel->AddMeshObject(
-		"Text3D_Floor01",
+		"Text3D_Floor3",
 		quad.GetIndices(),
 		quad.GetVertices(), PANEL3D_SHADER_TEXT,
-		L"../../Models/d01.dds"
+		L"../../Models/d3.dds"
 	); 
 	
 	this->mpTopViewPanel->AddMeshObject(
-		"Text3D_Floor1", 
-		quad.GetIndices(),
-		quad.GetVertices(), PANEL3D_SHADER_TEXT,
-		L"../../Models/d1.dds"
-	);
-	
-	this->mpTopViewPanel->AddMeshObject(
-		"Text3D_Floor2",
+		"Text3D_Floor2", 
 		quad.GetIndices(),
 		quad.GetVertices(), PANEL3D_SHADER_TEXT,
 		L"../../Models/d2.dds"
+	);
+	
+	this->mpTopViewPanel->AddMeshObject(
+		"Text3D_Floor1",
+		quad.GetIndices(),
+		quad.GetVertices(), PANEL3D_SHADER_TEXT,
+		L"../../Models/d1.dds"
 	);
 
 
@@ -636,33 +677,33 @@ void System::mSetupModels()
 	float scale = 0.1f;
 
 
-	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor01")->
-		Scale(scale * 2.0f, scale * 1.2f, scale * 3.5f);
-
-	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor01")->
-		Rotate(XM_PI / 2.0f, XM_PI, 0.0f);
-
-	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor01")->
-		Translate(0.85f, 0.0f, -0.5f);
-
-
-	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor1")->
+	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor3")->
 		Scale(scale * 1.0f, scale * 1.2f, scale * 3.5f);
 
-	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor1")->
+	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor3")->
+		Rotate(XM_PI / 2.0f, XM_PI, 0.0f);
+
+	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor3")->
+		Translate(0.85f, 0.0f, -0.45f);
+
+
+	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor2")->
+		Scale(scale * 1.0f, scale * 1.2f, scale * 3.5f);
+
+	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor2")->
 		Rotate(XM_PI / 2.0, XM_PI, 0.0f);
 
-	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor1")->
+	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor2")->
 		Translate(0.85f, 0.0f, 0.05f);
 
 
-	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor2")->
+	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor1")->
 		Scale(scale * 1.0f, scale * 1.2f, scale * 3.5f);
 
-	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor2")->
+	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor1")->
 		Rotate(XM_PI / 2.0f, XM_PI, 0.0f);
 
-	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor2")->
+	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor1")->
 		Translate(0.85f, 0.0f, 0.55f);
 
 	
