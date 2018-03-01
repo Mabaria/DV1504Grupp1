@@ -196,7 +196,8 @@ void System::mHandleInput()
 	Room *picked_room = nullptr;
 
 	if (this->mpTopViewPanel->IsMouseInsidePanel() &&
-		!this->mpMenuPanel->IsMouseInsidePanel())
+		!this->mpMenuPanel->IsMouseInsidePanel() &&
+		!this->mpInfoPanel.IsMouseInsidePanel())
 	{
 
 		Picking::GetWorldRay(
@@ -207,7 +208,7 @@ void System::mHandleInput()
 
 		// Returns nullptr if picked position isn't a room
 		picked_room = this->mBoat.GetPickedRoom(this->mRay);
-
+		
 		if (Mouse::IsButtonPressed(Buttons::Left) && this->mActionHandler.IsWaiting())
 		{
 			if (picked_room)
@@ -230,8 +231,9 @@ void System::mHandleInput()
 			if (Mouse::IsButtonPressed(Buttons::Left))
 			{
 				this->mpMenuPanel->OpenAt(picked_room);
+			
 				this->mpTopViewPanel->GetMovableComponent()->FocusCameraOnRoom(picked_room, true);
-
+			
 				// Turn on selected effect if clicked room was actually a room
 				if (picked_room != nullptr)
 				{
