@@ -304,6 +304,9 @@ void System::mUpdateEvents(Room * room)
 
 void System::mSetupPanels()
 {
+	// Adding action support for topView
+	this->mpTopViewPanel->InitActions();
+
 	// Creating and setting the cameras.
 	this->mpTopViewCamera = new Camera (
 		{ -0.02f, 6.19f, 2.99f, 0.0f },

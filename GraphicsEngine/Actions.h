@@ -2,6 +2,7 @@
 #include "DX/Direct3D.h"
 #include "Camera/Camera.h"
 #include "Camera/MovableCameraComponent.h"
+#include "../IO/Picking.h"
 
 enum ActionData : uint32_t
 {
@@ -49,6 +50,7 @@ public:
 	void SetMoveableCamera(MovableCameraComponent *pMovableCamera);
 	ActionPtr *AddAction(float x, float y, uint32_t data);
 	void RemoveAction(ActionPtr **pActionPtr);
+	ActionPtr *PickAction();
 	void Draw();
 private:
 	struct ActionVertex
@@ -59,7 +61,7 @@ private:
 	struct CameraData
 	{
 		XMFLOAT3 position;
-		uint32_t data;
+		float aspectAndData;
 	};
 	const int mcMaxEvents = 500;
 

@@ -126,6 +126,9 @@ public:
 	DirectX::XMVECTOR GetLookVector() const;
 	DirectX::XMVECTOR GetLookToVector() const;
 	LOOK_MODE GetLookMode() const;
+	float GetAspectRatio() const;
+
+	DirectX::XMVECTOR GetRightVector() const;
 
 	DirectX::XMMATRIX GetViewMatrix() const;
 	DirectX::XMMATRIX GetTransposedViewMatrix() const;
