@@ -36,6 +36,27 @@ public:
 	void SetpBitmapDecoder(IWICBitmapDecoder *pDecoder);
 	void SetpBitmapSrc(IWICBitmapFrameDecode *pBitmapSrc);
 	void InitDeviceAndContext(IDXGIDevice *dxgiDevice);
+
+	void DrawLine(
+		float startX,
+		float startY,
+		float endX,
+		float endY,
+		float lineThickness,
+		float r,
+		float g,
+		float b,
+		float a = 1.f);
+	void DrawRect(
+		float left,
+		float top,
+		float right,
+		float bottom,
+		float lineThickness,
+		float r,
+		float g,
+		float b,
+		float a = 1.f);
 private:
 
 	IWICFormatConverter * mpConverter;
