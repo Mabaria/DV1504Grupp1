@@ -15,6 +15,7 @@ cbuffer MATERIAL_BUFFER : register(b1)
 cbuffer HOVER_BUFFER : register(b2)
 {
 	bool is_hover_effect_active;
+	bool is_selected_effect_active;
 }
 
 struct PS_IN
@@ -51,7 +52,7 @@ float4 main(PS_IN input) : SV_TARGET
 			if (IsInsideStep(input.tex, i, nr_of_events))
 			{
 				ambient = GetEvent(events[i]);
-				diffuse = diffuse * 0.0f;
+				diffuse = 0.0f;
 				
 				break;
 			}
@@ -68,12 +69,23 @@ float4 main(PS_IN input) : SV_TARGET
 		alpha = 0.0f;
 	}
 
-	if (is_hover_effect_active)
+	
+
+	if (is_selected_effect_active)
 	{
 		if (IsAtEdge(input.tex))
 		{
 			ambient = 0.0f;
-			diffuse = float3(0.4f, 0.0f, 0.0f);
+			diffuse = float3(0.1f, 0.1f, 0.3f);
+			alpha = 1.0f;
+		}
+	}
+	else if (is_hover_effect_active)
+	{
+		if (IsAtEdge(input.tex))
+		{
+			ambient = 0.0f;
+			diffuse = float3(0.3f, 0.1f, 0.1f);
 			alpha = 1.0f;
 		}
 	}
