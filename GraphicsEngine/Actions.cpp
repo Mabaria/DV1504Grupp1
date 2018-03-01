@@ -116,14 +116,14 @@ bool Actions::Init(D3D11 *pDirect3D)
 	// of this in its destructor.
 
 	//ActionPtr *tempList[30];
-	for (int i = 0; i < this->mcMaxEvents; i++)
-	{
-		/*tempList[i] = */this->AddAction(
-			(float)(rand() % 1000) / 500.f - 1.0f,
-			(float)(rand() % 1000) / 500.f - 1.0f,
-			Icon_Injured_Moved | Rotation_0 | Number_9);
-		// Feel free to experiment with your own combination of flags
-	}
+	//for (int i = 0; i < this->mcMaxEvents; i++)
+	//{
+	//	/*tempList[i] = */this->AddAction(
+	//		(float)(rand() % 1000) / 500.f - 1.0f,
+	//		(float)(rand() % 1000) / 500.f - 1.0f,
+	//		Icon_Injured_Moved | Rotation_0 | Number_9);
+	//	// Feel free to experiment with your own combination of flags
+	//}
 	//for (int i = 0; i < 25; i++)
 	//{
 	//	this->RemoveAction(&tempList[i]);

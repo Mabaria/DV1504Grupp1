@@ -634,7 +634,7 @@ void Panel3D::DrawBitmapToTexture(
 
 void Panel3D::AddAction(float x, float y, ActionData data)
 {
-	this->mActions.AddAction(x, y, data);
+	this->mpActions->AddAction(x, y, data);
 }
 
 void Panel3D::InitActions()
@@ -690,14 +690,14 @@ const void Panel3D::Update()
 		ShowCursor(this->mShowCursor);
 	}
 
-	// Action picking
-	if (this->mpActions != nullptr && Mouse::IsButtonPressed(Buttons::Right))
-	{
-		Actions::ActionPtr *target = this->mpActions->PickAction();
-		if (target != nullptr)
-			this->mpActions->RemoveAction(&target);
+	//// Action picking
+	//if (this->mpActions != nullptr && Mouse::IsButtonPressed(Buttons::Right))
+	//{
+	//	Actions::ActionPtr *target = this->mpActions->PickAction();
+	//	if (target != nullptr)
+	//		this->mpActions->RemoveAction(&target);
 
-	}
+	//}
 }
 
 const void Panel3D::Draw()
