@@ -174,8 +174,45 @@ Room* Boat::GetPickedRoom(Ray ray)
 	//return nullptr;
 }
 
+XMFLOAT3 Boat::GetPickedPosition(Ray ray)
+{
+	float tMain, t;
 
+	XMFLOAT3 picked_position = { -100.0f, -100.0f, -100.0f };
+	int picked_deck = -1;
+	tMain = -1; // Assume miss and prove collision
+				//hitIndex = -1;
 
+	Room *hitRoom = nullptr;
+
+	// Check all rooms for collision
+	for (int i = 0; i < (int)this->mpDecks.size(); i++)
+	{
+		for (int j = 0; j < this->mpDecks[i]->GetRoomCount(); j++)
+		{
+			t = this->mpDecks[i]->GetRoomPointerAt(j)->CheckWorldRayCollision(ray);
+
+			if (
+				(tMain == -1 && t >= 0) ||	// First hit
+				(t >= 0 && t < tMain))	// Hit and closer than previous
+			{
+				picked_deck = i;
+				tMain = t;
+				hitRoom = this->mpDecks[i]->GetRoomPointerAt(j);
+			}
+		}
+	}
+	if ((tMain > 0.0f) && (picked_deck > -1))
+	{		
+		// Calculates the hit position and stores it in the return value.
+		XMVECTOR pos = ray.origin + tMain * ray.direction;
+
+		XMStoreFloat3(&picked_position,	pos);
+	}
+
+	return picked_position;
+	//return hitRoom->GetRoomCenter();
+}
 
 /**
 *	Log specific
@@ -479,7 +516,7 @@ bool Boat::LoadBoundingBoxes(
 
 			// Sets room info in every room, uses deck matrix for center pos.
 			this->mpRooms[this->mpDecks[i]->GetRoomOffset() + j]->
-				InitRoomInfo(*matrixList[i]);
+				InitRoomData(*matrixList[i]);
 		}
 	}
 	return true;

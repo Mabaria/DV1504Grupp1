@@ -632,6 +632,11 @@ void Panel3D::DrawBitmapToTexture(
 
 }
 
+void Panel3D::AddAction(float x, float y, ActionData data)
+{
+	this->mActions.AddAction(x, y, data);
+}
+
 void Panel3D::InitActions()
 {
 	if (this->mpActions == nullptr)
@@ -675,6 +680,9 @@ const void Panel3D::Update()
 			show_cursor = this->mpMovableCameraComponent->Update();
 		}
 	}
+
+	// Updates animation if necessary
+	this->mpMovableCameraComponent->UpdateAnimation();
 
 	if (this->mShowCursor != show_cursor)
 	{

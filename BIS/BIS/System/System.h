@@ -9,7 +9,7 @@
 #include "../../../UI/UIElements/InfoPanel.h"
 #include "../../../IO/Keyboard.h"
 
-class System : public Observer<Room>
+class System : public Observer<Room>, public Observer<Button>
 {
 public:
 	System();
@@ -27,7 +27,10 @@ private:
 	void mDraw();
 	void mHandleInput();
 
+	void Update(Button * attribute);
+
 	void mUpdateHover(std::string name, int index, bool activate);
+	void mUpdateRoomInfo();
 
 	void mUpdateEvents(Room *room);
 
@@ -46,7 +49,7 @@ private:
 	std::vector<Mesh*> mBounds;
 
 	Camera *mpTopViewCameraPan;
-	Camera *mpTopViewCamera;
+	Camera *mpTopViewCameraRotate;
 	Camera *mpSideViewCamera;
 	Window *mpWindow;
 
@@ -56,4 +59,6 @@ private:
 	EventLog mEventLog;
 	Boat mBoat;
 	Ray mRay;
+
+	Room* mpLastClickedRoom;
 };

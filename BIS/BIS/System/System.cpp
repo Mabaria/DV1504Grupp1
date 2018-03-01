@@ -4,12 +4,13 @@ System::System()
 {
 	this->mpActiveLogPanel	= nullptr;
 	this->mpControlPanel	= nullptr;
-	this->mpTopViewCamera	= nullptr;
+	this->mpTopViewCameraRotate = nullptr;
 	this->mpSideViewCamera	= nullptr;
 	this->mpMenuPanel		= nullptr;
 	this->mpSideViewPanel	= nullptr;
 	this->mpTopViewPanel	= nullptr;
 	this->mpWindow			= nullptr;
+	this->mpLastClickedRoom  = nullptr;
 
 }
 
@@ -35,10 +36,10 @@ System::~System()
 		delete this->mpTopViewPanel;
 		this->mpTopViewPanel = nullptr;
 	}
-	if (this->mpTopViewCamera)
+	if (this->mpTopViewCameraRotate)
 	{
-		delete this->mpTopViewCamera;
-		this->mpTopViewCamera = nullptr;
+		delete this->mpTopViewCameraRotate;
+		this->mpTopViewCameraRotate = nullptr;
 	}
 	if (this->mpTopViewCameraPan)
 	{
@@ -151,7 +152,18 @@ void System::Run()
 
 void System::Update(Room * pickedRoom)
 {
-	this->mUpdateEvents(pickedRoom);
+	// If a room is clicked in top view panel.
+	if (this->mpTopViewPanel->IsMouseInsidePanel())
+	{
+		this->mUpdateEvents(pickedRoom);
+	}
+	// If a notification object is clicked in the active log panel.
+	else if (this->mpActiveLogPanel->IsMouseInsidePanel())
+	{
+		this->mpTopViewPanel->
+			GetMovableComponent()->
+			FocusCameraOnRoom(pickedRoom, true);
+	}
 }
 
 void System::mUpdate()
@@ -180,8 +192,7 @@ void System::mHandleInput()
 	static Room* last_picked_room = nullptr; 
 	Room *picked_room = nullptr;
 
-	if (
-		this->mpTopViewPanel->IsMouseInsidePanel() &&
+	if (this->mpTopViewPanel->IsMouseInsidePanel() &&
 		!this->mpMenuPanel->IsMouseInsidePanel())
 	{
 
@@ -198,8 +209,18 @@ void System::mHandleInput()
 			{
 				this->mpMenuPanel->OpenAt(picked_room);
 				this->mpTopViewPanel->GetMovableComponent()->FocusCameraOnRoom(picked_room, true);
-			}
 
+				// Save last clicked room to be used for Room Info
+				if (this->mpLastClickedRoom != picked_room)
+				{
+					this->mpLastClickedRoom = picked_room;
+					this->mUpdateRoomInfo();
+				}
+
+				XMFLOAT3 picked_position = this->mBoat.GetPickedPosition(this->mRay);
+				
+				this->mpTopViewPanel->AddAction(picked_position.x, picked_position.z, Icon_Cooling_Wall);
+			}
 			// ___ HOVER EFFECT ___
 
 			if (last_picked_room == nullptr)
@@ -225,6 +246,13 @@ void System::mHandleInput()
 
 		}
 
+		// Closes the event menu if the user left clicks away from a room
+		// or the event menu.
+		else if (Mouse::IsButtonPressed(Buttons::Left) && this->mpMenuPanel->IsVisible())
+		{
+			this->mpMenuPanel->Close();
+		}
+
 		else if(last_picked_room != nullptr)
 		{
 			std::string last_picked_name = last_picked_room->GetDeckName() + "bounds";
@@ -235,21 +263,22 @@ void System::mHandleInput()
 		// ___ END ___ (HOVER EFFECT)
 	}
 
-	
-	
-	if (Keyboard::IsKeyPressed(Keys::One))
+}
+
+void System::Update(Button * attribute)
+{
+	if (attribute->GetName().compare("ChangeCamera") == 0)
 	{
-		if (this->mpTopViewPanel->GetActiveCamera() != this->mpTopViewCamera)
+		if (this->mpTopViewPanel->GetActiveCamera() != this->mpTopViewCameraRotate)
 		{
-			this->mpTopViewPanel->SetCamera(this->mpTopViewCamera);
+			this->mpTopViewCameraRotate->Update(nullptr);
+			this->mpTopViewPanel->SetCamera(this->mpTopViewCameraRotate);
 		}
 		else if (this->mpTopViewPanel->GetActiveCamera() != this->mpTopViewCameraPan)
 		{
+			this->mpTopViewCameraPan->Update(nullptr);
 			this->mpTopViewPanel->SetCamera(this->mpTopViewCameraPan);
 		}
-
-		if(last_picked_room)
-			this->mpTopViewPanel->GetMovableComponent()->FocusCameraOnRoom(last_picked_room, false);
 	}
 }
 
@@ -258,8 +287,47 @@ void System::mUpdateHover(std::string name, int index, bool activate)
 	this->mpTopViewPanel->rGetMeshObject(name)->SetHover(
 		activate,
 		this->mpTopViewPanel->rGetDirect3D().GetContext(),
-		index
-	);
+		index);
+}
+
+void System::mUpdateRoomInfo()
+{
+	std::string new_info_text;
+	new_info_text = this->mpLastClickedRoom->GetName() + "\n" +
+		this->mpLastClickedRoom->GetDeckName() + "\n" +
+		"Sensorer: ";
+
+
+	this->mpControlPanel->GetButtonByName("fireSensor")->SetOpacity(0.0f);
+	this->mpControlPanel->GetButtonByName("waterSensor")->SetOpacity(0.0f);
+	this->mpControlPanel->GetButtonByName("gasSensor")->SetOpacity(0.0f);
+
+	// Get the sensors in the room
+	std::vector<Event::Type> sensors = this->mpLastClickedRoom->GetInputTypes();
+
+	for (std::vector<Event::Type>::iterator it = sensors.begin(); it != sensors.end();
+		it++)
+	{
+		if (*it == 0)
+		{
+			this->mpControlPanel->GetButtonByName("fireSensor")->SetOpacity(1.0f);
+
+		}
+		// Event 1 is currently injury
+		else if (*it == 2)
+		{
+			this->mpControlPanel->GetButtonByName("waterSensor")->SetOpacity(1.0f);
+		
+		}
+		else if (*it == 3)
+		{
+			this->mpControlPanel->GetButtonByName("gasSensor")->SetOpacity(1.0f);
+
+		}
+
+	}
+	this->mpControlPanel->GetTextBoxByName("roominfo")->SetText(
+		new_info_text);
 }
 
 void System::mUpdateEvents(Room * room)
@@ -273,6 +341,16 @@ void System::mUpdateEvents(Room * room)
 		this->mpActiveLogPanel->RemoveNotification(room, to_remove);
 		room->ClearEvent(to_remove);
 		events_in_room = room->GetActiveEvents();
+	}
+	// Adding the system as an observer to the newly added notification object.
+	else
+	{
+		this->mpActiveLogPanel->
+			GetNotificationList()->
+			GetNotificationObjectByIndex(
+				this->mpActiveLogPanel->GetNotificationList()->
+				GetNumberOfNotificationObjects() - 1)->
+			AddObserver(this);
 	}
 
 	// Adds bounds to the deck name to get the name of the 
@@ -308,7 +386,7 @@ void System::mSetupPanels()
 	this->mpTopViewPanel->InitActions();
 
 	// Creating and setting the cameras.
-	this->mpTopViewCamera = new Camera (
+	this->mpTopViewCameraRotate = new Camera (
 		{ -0.02f, 6.19f, 2.99f, 0.0f },
 		{ 0.0f, 1.0f, 0.0f, 0.0f },
 		{ 0.0f, 0.00000001f, 0.0f, 0.0f },
@@ -344,18 +422,30 @@ void System::mSetupPanels()
 		L"../../GraphicsEngine/Test_PixelShader.hlsl");
 
 	// Setting up the control panel.
+
 	this->mpControlPanel->AddTextbox(
-		this->mpControlPanel->GetWidth(), 
+		this->mpControlPanel->GetWidth() / 2, 
 		60,
 		0, 
-		0, 
-		"Kontrollpanel", 
+		this->mpControlPanel->GetWidth() / 2 + 20,
+		"Markerat rum:", 
 		"title");
-	this->mpControlPanel->GetTextBoxByName("title")->SetFontSize(40);
+	this->mpControlPanel->GetTextBoxByName("title")->SetFontSize(35);
 	this->mpControlPanel->GetTextBoxByName("title")->SetFontWeight
 	(DWRITE_FONT_WEIGHT_NORMAL);
-	this->mpControlPanel->GetTextBoxByName("title")->SetTextAlignment
-	(DWRITE_TEXT_ALIGNMENT_CENTER);
+	/*this->mpControlPanel->GetTextBoxByName("title")->SetTextAlignment
+	(DWRITE_TEXT_ALIGNMENT_CENTER);*/
+
+	this->mpControlPanel->AddTextbox(
+		this->mpControlPanel->GetWidth() / 2,
+		120,
+		50,
+		this->mpControlPanel->GetWidth() / 2 + 20,
+		"Inget rum markerat",
+		"roominfo");
+
+	this->mpControlPanel->GetTextBoxByName("roominfo")->SetFontSize(30);
+
 
 	this->mpControlPanel->LoadImageToBitmap(
 		"../../Models/Button01.png",
@@ -373,8 +463,31 @@ void System::mSetupPanels()
 		"../../Models/Button05.png",
 		"Reset");
 	this->mpControlPanel->LoadImageToBitmap(
-		"../../Models/Info.png", 
+		"../../Models/Info.png",
 		"Info");
+	this->mpControlPanel->LoadImageToBitmap(
+		"../../Models/ChangeCamera.png",
+		"ChangeCamera"
+	);
+
+	this->mpControlPanel->AddButton(30, 30,
+		this->mpControlPanel->GetHeight() / 2 + 50,
+		this->mpControlPanel->GetWidth() / 2 + 150,
+		this->mpControlPanel->GetBitmapByName("Fire"), "fireSensor");
+	this->mpControlPanel->GetButtonByName("fireSensor")->SetOpacity(0.0f);
+
+	this->mpControlPanel->AddButton(30, 30,
+		this->mpControlPanel->GetHeight() / 2 + 50,
+		this->mpControlPanel->GetWidth() / 2 + 190,
+		this->mpControlPanel->GetBitmapByName("Water"), "waterSensor");
+	this->mpControlPanel->GetButtonByName("waterSensor")->SetOpacity(0.0f);
+
+	this->mpControlPanel->AddButton(30, 30,
+		this->mpControlPanel->GetHeight() / 2 + 50,
+		this->mpControlPanel->GetWidth() / 2 + 230,
+		this->mpControlPanel->GetBitmapByName("Gas"), "gasSensor");
+	this->mpControlPanel->GetButtonByName("gasSensor")->SetOpacity(0.0f);
+
 
 	this->mpControlPanel->AddButton(70, 70, 10, 10,
 		this->mpControlPanel->GetBitmapByName("Reset"), "Reset");
@@ -382,6 +495,8 @@ void System::mSetupPanels()
 		this->mpControlPanel->GetBitmapByName("Reset"), "Reset2");
 	this->mpControlPanel->AddButton(70, 70, 90, 90,
 		this->mpControlPanel->GetBitmapByName("Info"), "Info");
+	this->mpControlPanel->AddButton(70, 70, 10, 90,
+		this->mpControlPanel->GetBitmapByName("ChangeCamera"), "ChangeCamera");
 
 	this->mpControlPanel->GetButtonByName("Reset")->
 		AddObserver(this->mpSideViewPanel);
@@ -391,6 +506,11 @@ void System::mSetupPanels()
 	this->mpControlPanel->GetButtonByName("Info")->
 		AddObserver(&this->mpInfoPanel);
 
+	this->mpControlPanel->GetButtonByName("ChangeCamera")
+		->AddObserver(this);
+
+	// Setting up the active log panel. (top, left, titleFontSize, objectFontSize)
+
 	this->mpActiveLogPanel->LoadImageToBitmap(
 		"../../Models/Button01.png",
 		"Injury");
@@ -407,11 +527,10 @@ void System::mSetupPanels()
 		"../../Models/Button05.png",
 		"Reset");
 
-	// Setting up the active log panel. (top, left, titleFontSize, objectFontSize)
 	int list_top = 0;
 	int list_left = 0;
 	int title_font_size = 40;
-	int object_font_size = 14;
+	int object_font_size = 26;
 
 	this->mpActiveLogPanel->SetNotificationList(
 		list_top, 
@@ -530,12 +649,12 @@ void System::mSetupModels()
 	this->mpTopViewPanel->rGetMeshObject("Huvuddäckbounds")->Translate(0.0f, 0.0f, 0.0f);
 	this->mpTopViewPanel->rGetMeshObject("Trossdäckbounds")->Translate(0.0f, 0.0f, 0.5f);
 
-	this->mpSideViewPanel->rGetMeshObject("Bryggdäck")->Translate(0.05f, 0.9f, 0.0f);
+	this->mpSideViewPanel->rGetMeshObject("Bryggdäck")->Translate(0.05f, 1.3f, 0.0f);
 	this->mpSideViewPanel->rGetMeshObject("Huvuddäck")->Translate(0.05f, 0.0f, 0.0f);
-	this->mpSideViewPanel->rGetMeshObject("Trossdäck")->Translate(0.05f, -0.9f, 0.0f);
-	this->mpSideViewPanel->rGetMeshObject("Bryggdäckbounds")->Translate(0.05f, 0.9f, 0.0f);
+	this->mpSideViewPanel->rGetMeshObject("Trossdäck")->Translate(0.05f, -1.3f, 0.0f);
+	this->mpSideViewPanel->rGetMeshObject("Bryggdäckbounds")->Translate(0.05f, 1.3f, 0.0f);
 	this->mpSideViewPanel->rGetMeshObject("Huvuddäckbounds")->Translate(0.05f, 0.0f, 0.0f);
-	this->mpSideViewPanel->rGetMeshObject("Trossdäckbounds")->Translate(0.05f, -0.9f, 0.0f);
+	this->mpSideViewPanel->rGetMeshObject("Trossdäckbounds")->Translate(0.05f, -1.3f, 0.0f);
 
 	this->mpSideViewPanel->rGetMeshObject("Bryggdäck")->Scale(0.5f, 0.5f, 0.5f);
 	this->mpSideViewPanel->rGetMeshObject("Huvuddäck")->Scale(0.5f, 0.5f, 0.5f);
