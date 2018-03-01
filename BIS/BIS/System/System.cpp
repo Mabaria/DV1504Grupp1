@@ -4,7 +4,7 @@ System::System()
 {
 	this->mpActiveLogPanel	= nullptr;
 	this->mpControlPanel	= nullptr;
-	this->mpTopViewCamera	= nullptr;
+	this->mpTopViewCameraRotate = nullptr;
 	this->mpSideViewCamera	= nullptr;
 	this->mpMenuPanel		= nullptr;
 	this->mpSideViewPanel	= nullptr;
@@ -36,10 +36,10 @@ System::~System()
 		delete this->mpTopViewPanel;
 		this->mpTopViewPanel = nullptr;
 	}
-	if (this->mpTopViewCamera)
+	if (this->mpTopViewCameraRotate)
 	{
-		delete this->mpTopViewCamera;
-		this->mpTopViewCamera = nullptr;
+		delete this->mpTopViewCameraRotate;
+		this->mpTopViewCameraRotate = nullptr;
 	}
 	if (this->mpTopViewCameraPan)
 	{
@@ -263,21 +263,22 @@ void System::mHandleInput()
 		// ___ END ___ (HOVER EFFECT)
 	}
 
-	
-	
-	if (Keyboard::IsKeyPressed(Keys::One))
+}
+
+void System::Update(Button * attribute)
+{
+	if (attribute->GetName().compare("ChangeCamera") == 0)
 	{
-		if (this->mpTopViewPanel->GetActiveCamera() != this->mpTopViewCamera)
+		if (this->mpTopViewPanel->GetActiveCamera() != this->mpTopViewCameraRotate)
 		{
-			this->mpTopViewPanel->SetCamera(this->mpTopViewCamera);
+			this->mpTopViewCameraRotate->Update(nullptr);
+			this->mpTopViewPanel->SetCamera(this->mpTopViewCameraRotate);
 		}
 		else if (this->mpTopViewPanel->GetActiveCamera() != this->mpTopViewCameraPan)
 		{
+			this->mpTopViewCameraPan->Update(nullptr);
 			this->mpTopViewPanel->SetCamera(this->mpTopViewCameraPan);
 		}
-
-		if(last_picked_room)
-			this->mpTopViewPanel->GetMovableComponent()->FocusCameraOnRoom(last_picked_room, false);
 	}
 }
 
@@ -382,7 +383,7 @@ void System::mUpdateEvents(Room * room)
 void System::mSetupPanels()
 {
 	// Creating and setting the cameras.
-	this->mpTopViewCamera = new Camera (
+	this->mpTopViewCameraRotate = new Camera (
 		{ -0.02f, 6.19f, 2.99f, 0.0f },
 		{ 0.0f, 1.0f, 0.0f, 0.0f },
 		{ 0.0f, 0.00000001f, 0.0f, 0.0f },
@@ -461,6 +462,10 @@ void System::mSetupPanels()
 	this->mpControlPanel->LoadImageToBitmap(
 		"../../Models/Info.png",
 		"Info");
+	this->mpControlPanel->LoadImageToBitmap(
+		"../../Models/ChangeCamera.png",
+		"ChangeCamera"
+	);
 
 	this->mpControlPanel->AddButton(30, 30,
 		this->mpControlPanel->GetHeight() / 2 + 50,
@@ -487,6 +492,8 @@ void System::mSetupPanels()
 		this->mpControlPanel->GetBitmapByName("Reset"), "Reset2");
 	this->mpControlPanel->AddButton(70, 70, 90, 90,
 		this->mpControlPanel->GetBitmapByName("Info"), "Info");
+	this->mpControlPanel->AddButton(70, 70, 10, 90,
+		this->mpControlPanel->GetBitmapByName("ChangeCamera"), "ChangeCamera");
 
 	this->mpControlPanel->GetButtonByName("Reset")->
 		AddObserver(this->mpSideViewPanel);
@@ -495,6 +502,9 @@ void System::mSetupPanels()
 
 	this->mpControlPanel->GetButtonByName("Info")->
 		AddObserver(&this->mpInfoPanel);
+
+	this->mpControlPanel->GetButtonByName("ChangeCamera")
+		->AddObserver(this);
 
 	// Setting up the active log panel. (top, left, titleFontSize, objectFontSize)
 
