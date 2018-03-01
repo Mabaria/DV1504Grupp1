@@ -9,6 +9,9 @@ class EventMenu : public Observer<Button>, public Observable<Room>
 	enum ACTION_MODE {
 		STANDARD, NUMBERS
 	};
+	enum INJURY_TYPE {
+		MOVED, TREATED, REPORTED
+	};
 public:
 	EventMenu();
 	~EventMenu();
@@ -43,6 +46,8 @@ private:
 
 	ACTION_MODE mActionMode;
 	void mSwapActionMode();
+	INJURY_TYPE mInjuryType;
+
 
 	void InitButtons();
 };

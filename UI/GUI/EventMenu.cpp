@@ -16,6 +16,7 @@ EventMenu::EventMenu()
 	this->mpActiveRoom = nullptr;
 
 	this->mActionMode = STANDARD;
+	this->mInjuryType = REPORTED;
 }
 
 EventMenu::~EventMenu()
@@ -234,14 +235,17 @@ void EventMenu::Update( Button *attribute)
 			{
 				if (button_name.compare("Injured_Moved") == 0)
 				{
+					this->mInjuryType = MOVED;
 					this->mSwapActionMode();
 				}
 				else if (button_name.compare("Injured_Treated") == 0)
 				{
+					this->mInjuryType = TREATED;
 					this->mSwapActionMode();
 				}
 				else if (button_name.compare("Injured_Reported") == 0)
 				{
+					this->mInjuryType = REPORTED;
 					this->mSwapActionMode();
 				}
 				else if (button_name.compare("Hole_In_Bulk") == 0)
@@ -270,47 +274,50 @@ void EventMenu::Update( Button *attribute)
 				}
 			}
 			else { //! ActionMode == NUMBERS
-				if (button_name.compare("Injured_Moved") == 0)
+				// Injury action has been selected, and these buttons now
+				// correspond to the amount of injured people to draw the symbol
+				// with, from 1-9
+				if (button_name.compare("Injured_Moved") == 0) //! 1
 				{
 					//TODO Add new action object
 					this->mSwapActionMode();
 				}
-				else if (button_name.compare("Injured_Treated") == 0)
+				else if (button_name.compare("Injured_Treated") == 0) //! 2
 				{
 					//TODO Add new action object
 					this->mSwapActionMode();
 				}
-				else if (button_name.compare("Injured_Reported") == 0)
+				else if (button_name.compare("Injured_Reported") == 0) //! 3
 				{
 					//TODO Add new action object
 					this->mSwapActionMode();
 				}
-				else if (button_name.compare("Hole_In_Bulk") == 0)
+				else if (button_name.compare("Hole_In_Bulk") == 0) //! 4
 				{
 					//TODO Add new action object
 					this->mSwapActionMode();
 				}
-				else if (button_name.compare("Ventilation_In") == 0)
+				else if (button_name.compare("Ventilation_In") == 0) //! 5
 				{
 					//TODO Add new action object
 					this->mSwapActionMode();
 				}
-				else if (button_name.compare("Ventilation_Out") == 0)
+				else if (button_name.compare("Ventilation_Out") == 0) //! 6
 				{
 					//TODO Add new action object
 					this->mSwapActionMode();
 				}
-				else if (button_name.compare("Cooling_Wall") == 0)
+				else if (button_name.compare("Cooling_Wall") == 0) //! 7
 				{
 					//TODO Add new action object
 					this->mSwapActionMode();
 				}
-				else if (button_name.compare("Supporting_Wall") == 0)
+				else if (button_name.compare("Supporting_Wall") == 0) //! 8
 				{
 					//TODO Add new action object
 					this->mSwapActionMode();
 				}
-				else if (button_name.compare("Damaged_Bulk") == 0)
+				else if (button_name.compare("Damaged_Bulk") == 0) //! 9
 				{
 					//TODO Add new action object
 					this->mSwapActionMode();
