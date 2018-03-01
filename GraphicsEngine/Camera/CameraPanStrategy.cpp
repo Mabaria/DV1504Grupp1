@@ -117,6 +117,13 @@ void CameraPanStrategy::FocusRoom(Room *pRoom, bool animate)
 	}
 }
 
+void CameraPanStrategy::Reset()
+{
+	// Get position for the reseted camera position
+	this->HandleChangeInCamera();
+	this->mAnimate = false;
+}
+
 void CameraPanStrategy::HandleChangeInCamera()
 {
 	// If a change has been made to the camera, then update the member variables
@@ -130,8 +137,9 @@ void CameraPanStrategy::AnimateToNewPosition()
 	// Get direction and move to the position
 
 	XMVECTOR dir = XMLoadFloat3(&this->mNewPosition) - this->pCamera->GetPosition();
-	this->pCamera->MoveCamera(dir, this->mMoveSpeed * 1000.0f);
+	this->pCamera->MoveCamera(dir, this->mMoveSpeed * 1500.0f);
+	this->mDistance = XMVectorGetY(this->pCamera->GetPosition());
 
-	if (XMVectorGetX(XMVector3Length(dir)) < 0.0f)
+	if (XMVectorGetX(XMVector3Length(dir)) <= 0.01f)
 		this->mAnimate = false;
 }
