@@ -217,7 +217,13 @@ void System::mHandleInput()
 			}
 			this->mActionHandler.SwitchWaitingState();
 		}
-
+		// Temp action removal.
+		else if (Mouse::IsButtonPressed(Buttons::Left))
+		{
+			Actions *actions = this->mpTopViewPanel->pGetActions();
+			Actions::ActionPtr *act_ptr = actions->PickAction();
+			actions->RemoveAction(&act_ptr);
+		}
 
 		if (picked_room)
 		{
