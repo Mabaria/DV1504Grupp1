@@ -48,6 +48,8 @@ public:
 
 	float CheckRayCollision(const Ray &rRay);
 
+	float CheckWorldRayCollision(const Ray &rRay);
+
 	// Sensor specific
 	std::vector<Event::Type> GetInputTypes() const;
 
@@ -102,6 +104,8 @@ private:
 	int mDeckIndex;
 	std::string mName;
 	AABB mBoundingBox;
+
+	AABB mWorldBoundingBox;
 
 	// Deck specific
 	std::string mDeckName;

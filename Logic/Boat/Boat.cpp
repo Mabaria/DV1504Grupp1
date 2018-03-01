@@ -188,16 +188,9 @@ XMFLOAT3 Boat::GetPickedPosition(Ray ray)
 	// Check all rooms for collision
 	for (int i = 0; i < (int)this->mpDecks.size(); i++)
 	{
-		Ray wRay;
-		wRay.origin = DirectX::XMVector3TransformCoord(
-			ray.origin,
-			this->mInverseFloorMatrix[i]);
-		wRay.direction = DirectX::XMVector3TransformNormal(
-			ray.direction,
-			this->mInverseFloorMatrix[i]);
 		for (int j = 0; j < this->mpDecks[i]->GetRoomCount(); j++)
 		{
-			t = this->mpDecks[i]->GetRoomPointerAt(j)->CheckRayCollision(wRay);
+			t = this->mpDecks[i]->GetRoomPointerAt(j)->CheckWorldRayCollision(ray);
 
 			if (
 				(tMain == -1 && t >= 0) ||	// First hit
@@ -210,29 +203,16 @@ XMFLOAT3 Boat::GetPickedPosition(Ray ray)
 		}
 	}
 	if ((tMain > 0.0f) && (picked_deck > -1))
-	{
-		// Creates a ray in world space to use with the smallest hit t.
-		Ray r;
-		r.origin = DirectX::XMVector3TransformCoord(
-			ray.origin,
-			this->mInverseFloorMatrix[picked_deck]);
-		r.direction = DirectX::XMVector3TransformNormal(
-			ray.direction,
-			this->mInverseFloorMatrix[picked_deck]);
-		
+	{		
 		// Calculates the hit position and stores it in the return value.
-		XMVECTOR local_pos = r.origin + tMain * r.direction;
-		local_pos = XMVector3Transform(local_pos, this->mFloorMatrix[picked_deck]);
+		XMVECTOR pos = ray.origin + tMain * ray.direction;
 
-		XMStoreFloat3(&picked_position,	local_pos);
+		XMStoreFloat3(&picked_position,	pos);
 	}
 
 	return picked_position;
 	//return hitRoom->GetRoomCenter();
 }
-
-
-
 
 /**
 *	Log specific
