@@ -6,8 +6,10 @@
 #include "RoomLog.h"
 #include "../Event/Event.h"
 #include "Sensor.h"
+#include <DirectXMath.h>
 #include "../Eventlog/LogAction.h"
 
+using namespace DirectX;
 class Room
 {
 public:
@@ -23,6 +25,12 @@ public:
 		EventLog *pEventLog;
 	};
 
+struct RoomData
+{
+	XMFLOAT3 centerPosition;
+	XMFLOAT3 size;
+	float distanceToCorner;
+};
 
 
 	Room();
@@ -40,6 +48,11 @@ public:
 	int GetIndexInDeck() const;
 
 	float CheckRayCollision(const Ray &rRay);
+
+	float CheckWorldRayCollision(const Ray &rRay);
+
+	// Sensor specific
+	std::vector<Event::Type> GetInputTypes() const;
 
 	// Deck specific
 	void SetDeckName(std::string name);
@@ -70,6 +83,23 @@ public:
 	static Room::Desc FillRoomDescFromLine(std::string line);
 	static std::string CorrectName(std::string name);
 
+	void InitRoomData(XMMATRIX matrix);
+
+	// Returns a RoomInfo struct containing center position,
+	// size and distance to corner.
+	const RoomData GetRoomData() const;
+
+	// Returns the room center position.
+	const XMFLOAT3 GetRoomCenter() const;
+
+	// Returns the distance from the center position
+	// to the corner of the bounding box.
+	const float GetDistanceToCorner() const;
+
+	// Returns a vector containing the size of the 
+	// bounding box in all directions.
+	const XMFLOAT3 GetRoomSize() const;
+
 private:
 
 	// Room specific
@@ -79,11 +109,16 @@ private:
 	std::string mName;
 	AABB mBoundingBox;
 
+	AABB mWorldBoundingBox;
+
 	// Deck specific
 	std::string mDeckName;
 
 	// Sensor specific
 	Sensor mSensor;
+
+	// Room info for camera purposes.
+	RoomData mRoomData;
 
 	// Log specific
 	RoomLog mRoomLog;

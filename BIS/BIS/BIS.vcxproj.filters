@@ -96,9 +96,6 @@
     <ClInclude Include="..\..\GraphicsEngine\Parsing\Mesh.h">
       <Filter>Header Files\GraphicsEngine</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\GraphicsEngine\Camera\Camera.h">
-      <Filter>Header Files\GraphicsEngine</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\GraphicsEngine\Test_Button.h">
       <Filter>Header Files\GraphicsEngine\Test</Filter>
     </ClInclude>
@@ -223,6 +220,30 @@
       <Filter>Header Files\Test</Filter>
     </ClInclude>
     <ClInclude Include="..\..\UI\GUI\EventMenu.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\GraphicsEngine\Camera\CameraMovementStrategy.h">
+      <Filter>Header Files\GraphicsEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\GraphicsEngine\Camera\MovableCameraComponent.h">
+      <Filter>Header Files\GraphicsEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\GraphicsEngine\Camera\CameraRotateStrategy.h">
+      <Filter>Header Files\GraphicsEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\GraphicsEngine\Camera\CameraPanStrategy.h">
+      <Filter>Header Files\GraphicsEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\GraphicsEngine\Actions.h">
+      <Filter>Header Files\GraphicsEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\GraphicsEngine\Camera\Camera.h">
+      <Filter>Header Files\GraphicsEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\GraphicsEngine\CustomTextRenderer.h">
+      <Filter>Header Files\GraphicsEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UI\UIElements\InfoPanel.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Logic\Test_Log.h">
@@ -401,6 +422,27 @@
     <ClCompile Include="..\..\UI\GUI\EventMenu.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\GraphicsEngine\CustomTextRenderer.cpp">
+      <Filter>Source Files\GraphicsEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\GraphicsEngine\Actions.cpp">
+      <Filter>Source Files\GraphicsEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\GraphicsEngine\Camera\MovableCameraComponent.cpp">
+      <Filter>Source Files\GraphicsEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\GraphicsEngine\Camera\CameraMovementStrategy.cpp">
+      <Filter>Source Files\GraphicsEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\GraphicsEngine\Camera\CameraRotateStrategy.cpp">
+      <Filter>Source Files\GraphicsEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\GraphicsEngine\Camera\CameraPanStrategy.cpp">
+      <Filter>Source Files\GraphicsEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UI\UIElements\InfoPanel.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Logic\Test_Log.cpp">
       <Filter>Source Files\Logic\Test</Filter>
     </ClCompile>
@@ -430,6 +472,24 @@
       <Filter>Shader Files</Filter>
     </FxCompile>
     <FxCompile Include="..\..\GraphicsEngine\Test_VertexShader.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\GraphicsEngine\Shaders\Action_VertexShader.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\GraphicsEngine\Shaders\Action_GeometryShader.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\GraphicsEngine\Shaders\Action_PixelShader.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\GraphicsEngine\PS_Text3D.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\GraphicsEngine\PS_EventBox.hlsl">
+      <Filter>Shader Files</Filter>
+    </FxCompile>
+    <FxCompile Include="..\..\GraphicsEngine\PS_Boat.hlsl">
       <Filter>Shader Files</Filter>
     </FxCompile>
   </ItemGroup>

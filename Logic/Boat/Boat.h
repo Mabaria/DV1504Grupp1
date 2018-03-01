@@ -37,6 +37,11 @@ public:
 	Room* GetPickedRoom(Ray ray);
 	int GetRoomCount() const;
 
+	// Same as GetPickedRoom() although it returns the position in which
+	// the click hits as an XMFLOAT3 if it hits a room.
+	// No hit returns {-100, -100, -100}.
+	XMFLOAT3 GetPickedPosition(Ray ray);
+
 	// Log specific
 	int GetEventCount() const;
 	int GetActionCount() const;

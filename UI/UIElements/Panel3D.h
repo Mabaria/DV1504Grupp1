@@ -8,32 +8,44 @@
 #include "MeshObject.h"
 #include "../../GraphicsEngine/Camera/Camera.h"
 #include "../../IO/ObserverPattern/Observer.h"
+#include "../../GraphicsEngine/DX/Direct2D.h"
+#include "../../GraphicsEngine/Actions.h"
+#include "../../GraphicsEngine/Camera/MovableCameraComponent.h"
+
+enum PANEL3D_SHADER_TYPE
+{
+	PANEL3D_SHADER_BOAT = 1,
+	PANEL3D_SHADER_TEXT = 2,
+	PANEL3D_SHADER_EVENT = 3
+};
 
 class Panel3D : public Panel, public Observer<Button>
 {
 public:
 	Panel3D(
-		int width, 
-		int height, 
-		int top, 
+		int width,
+		int height,
+		int top,
 		int left,
-		HWND handle, 
+		HWND handle,
 		LPCTSTR title,
 		bool movableCamera = false);
 	~Panel3D();
-	
+
 	D3D11& rGetDirect3D();
 
 	// Creates buffers for and adds mesh 
 	// objects into the vector of mesh objects.
 	const void AddMeshObject(
 		std::string name,
-		std::vector<std::vector<unsigned int>> indices, 
+		std::vector<std::vector<unsigned int>> indices,
 		std::vector<std::vector<Vertex>> vertices,
-		std::wstring texturePath,
+		int pixelShaderID = 0,
+		std::wstring texturePath = L"",
 		bool use_event = false);
 
 	const void AddMeshObject(MeshObject *meshObject,
+		int pixelShaderID = 0,
 		std::wstring texturePath = L"",
 		bool use_event = false);
 
@@ -43,6 +55,8 @@ public:
 		LPCWSTR vertexShaderPath,
 		LPCWSTR geometryShaderPath,
 		LPCWSTR pixelShaderPath);
+
+	bool AddPixelShader(LPCWSTR pixelShaderPath);
 
 	const void Update();
 
@@ -62,6 +76,10 @@ public:
 	const void SetCamera(Camera *camera);
 	void Update(Button* attribute);
 
+	Camera* GetActiveCamera();
+
+	MovableCameraComponent* GetMovableComponent();
+
 	void * operator new(size_t i) // To make sure it is 16 bit aligned
 	{
 		return _aligned_malloc(i, 16);
@@ -72,16 +90,30 @@ public:
 		_aligned_free(p);
 	}
 
-	
+	void BindTextureToBitmap(ID3D11Texture2D *texture);
+	void DrawBitmapToTexture(
+		ID2D1Bitmap *bitmap,
+		float startX,
+		float startY,
+		float widthOfTex,
+		float heightOfTex);
+	//void SetCameraPosition()
+
+
+	void AddAction(float x, float y, ActionData data);
+
+	void InitActions();
 private:
 	D3D11 mDirect3D;
 	std::vector<MeshObject*> mpMeshObjects;
-	
+	//HWND mPanelWindow;
 
 	ID3D11VertexShader *mpVertexShader;
 	ID3D11GeometryShader *mpGeometryShader;
-	ID3D11PixelShader *mpPixelShader;
 	ID3D11InputLayout *mpInputLayout;
+
+	ID3D11PixelShader *mpPixelShader;
+	std::vector<ID3D11PixelShader*> mpPixelShaders;
 	
 	D3D11_INPUT_ELEMENT_DESC mInputDesc[3];
 
@@ -96,7 +128,7 @@ private:
 
 	// Creates the constant buffer for the last added mesh object.
 	const void mCreateMatrixBuffer(
-		XMMATRIX *matrix, 
+		XMMATRIX *matrix,
 		ID3D11Buffer **constantBuffer);
 
 	const void mCreateMaterialBuffer(
@@ -105,19 +137,10 @@ private:
 
 	const void CreateTexture(std::wstring texturePath);
 
-	Buttons mBtnToPan;
 
-	XMVECTOR mDirection;
-	FPosition mMouseOrigin;
-	FPosition mMouseDiff;
+	MovableCameraComponent* mpMovableCameraComponent;
 	bool mShowCursor;
-
-	float mOrthographicMaxView;
-
-	float mSpeed;
-	float mRadius;
-
-	const void UpdateMouse();
-	const bool UpdateCamera();
 	bool mMovableCamera;
+
+	Actions *mpActions;
 };

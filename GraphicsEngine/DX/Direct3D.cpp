@@ -1,6 +1,5 @@
 #include "../DX/Direct3D.h"
 
-
 D3D11::D3D11()
 {
 	this->mDevice = nullptr;
@@ -8,11 +7,12 @@ D3D11::D3D11()
 	this->mSwapChain = nullptr;
 	this->mBackBuffer = nullptr;
 	this->mDepthBuffer = nullptr;
+	this->mpDXGIDevice = nullptr;
 	this->mSamplerState = nullptr;
 }
 
 D3D11::D3D11(
-	const int width, 
+	const int width,
 	const int height)
 {
 	this->mSize.width = width;
@@ -22,6 +22,7 @@ D3D11::D3D11(
 	this->mContext = nullptr;
 	this->mSwapChain = nullptr;
 	this->mBackBuffer = nullptr;
+	this->mpDXGIDevice = nullptr;
 	this->mDepthBuffer = nullptr;
 
 	this->mModeDesc = { 0 };
@@ -53,15 +54,19 @@ D3D11::~D3D11()
 	this->ReleaseCOM(this->mBackBuffer);
 	this->ReleaseCOM(this->mDepthBuffer);
 	this->ReleaseCOM(this->mSamplerState);
+	this->ReleaseCOM(this->mpDXGIDevice);
 }
 
 void D3D11::Init(HWND window)
 {
+
 	this->CreateDeviceAndSwapChain(window);
 	this->CreateRenderTarget();
 
 	this->mContext->RSSetViewports(1, &this->mViewport);
 	this->ChangeSize(this->mSize);
+
+	this->mDevice->QueryInterface(&this->mpDXGIDevice);
 
 	D3D11_SAMPLER_DESC sampler_desc{};
 	sampler_desc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
@@ -70,7 +75,7 @@ void D3D11::Init(HWND window)
 	sampler_desc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 
 	if (FAILED(this->mDevice->CreateSamplerState(
-		&sampler_desc, 
+		&sampler_desc,
 		&this->mSamplerState)))
 	{
 		MessageBoxA(NULL, "Error creating sampler state.", NULL, MB_OK);
@@ -81,13 +86,22 @@ void D3D11::Init(HWND window)
 
 	ID3D11BlendState *blend_state = nullptr;
 	D3D11_BLEND_DESC blend_desc{};
+	blend_desc.AlphaToCoverageEnable = false;
+	blend_desc.IndependentBlendEnable = false;
+
 	blend_desc.RenderTarget[0].BlendEnable = TRUE;
 	blend_desc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+
+	// Blend Factor Color
 	blend_desc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
 	blend_desc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
-	blend_desc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+
+	// Blend Factor Alpha
 	blend_desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ZERO;
 	blend_desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+
+	// Blend Operation
+	blend_desc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
 	blend_desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
 
 	if (FAILED(this->mDevice->CreateBlendState(&blend_desc, &blend_state)))
@@ -113,7 +127,7 @@ void D3D11::ChangeClearColor(
 
 void D3D11::ChangeSize(const float width, const float height)
 {
-	this->mModeDesc.Width  = this->mSize.width  = (UINT)width;
+	this->mModeDesc.Width = this->mSize.width = (UINT)width;
 	this->mModeDesc.Height = this->mSize.height = (UINT)height;
 	this->mSwapChain->ResizeTarget(&this->mModeDesc);
 }
@@ -142,6 +156,11 @@ void D3D11::ReleaseCOM(IUnknown *object)
 		object->Release();
 		object = nullptr;
 	}
+}
+
+IDXGIDevice * D3D11::GetDXGIDevice()
+{
+	return this->mpDXGIDevice;
 }
 
 bool D3D11::CreateShaders(
@@ -240,6 +259,13 @@ bool D3D11::CreateShaders(
 			nullptr
 		);
 
+		if (FAILED(hr))
+		{
+			MessageBoxA(NULL, "Class Error: #Direct3D : Pixel Shader Path is not found!", NULL, 0);
+			pPixelShader = nullptr;
+			return false;
+		}
+
 		hr = this->mDevice->CreatePixelShader(
 			pPs_blob->GetBufferPointer(),
 			pPs_blob->GetBufferSize(),
@@ -252,7 +278,7 @@ bool D3D11::CreateShaders(
 
 	return true;
 }
-	// Clear render target and depth buffer 
+// Clear render target and depth buffer 
 void D3D11::Clear()
 {
 	this->mContext->ClearRenderTargetView(this->mBackBuffer, this->mClearColor);
@@ -264,26 +290,49 @@ void D3D11::Clear()
 	);
 }
 
+void D3D11::ClearDepth()
+{
+	this->mContext->ClearDepthStencilView(
+		this->mDepthBuffer,
+		D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL,
+		1.0f,
+		0
+	);
+}
+
 
 void D3D11::CreateDeviceAndSwapChain(const HWND& window)
 {
-	DXGI_SWAP_CHAIN_DESC swap_chain_desc	= { 0 };
-	swap_chain_desc.BufferCount				= 1;
-	swap_chain_desc.BufferDesc.Width		= this->mSize.width;
-	swap_chain_desc.BufferDesc.Height		= this->mSize.height;
-	swap_chain_desc.BufferDesc.Format		= DXGI_FORMAT_R8G8B8A8_UNORM;
-	swap_chain_desc.BufferUsage				= DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	swap_chain_desc.OutputWindow			= window;
-	swap_chain_desc.SampleDesc				= this->mSampleDesc;
-	swap_chain_desc.Windowed				= TRUE;
+	UINT creationFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
+
+	D3D_FEATURE_LEVEL featureLevels[] =
+	{
+		D3D_FEATURE_LEVEL_11_1,
+		D3D_FEATURE_LEVEL_11_0,
+		D3D_FEATURE_LEVEL_10_1,
+		D3D_FEATURE_LEVEL_10_0,
+		D3D_FEATURE_LEVEL_9_3,
+		D3D_FEATURE_LEVEL_9_2,
+		D3D_FEATURE_LEVEL_9_1
+	};
+
+	DXGI_SWAP_CHAIN_DESC swap_chain_desc = { 0 };
+	swap_chain_desc.BufferCount = 1;
+	swap_chain_desc.BufferDesc.Width = this->mSize.width;
+	swap_chain_desc.BufferDesc.Height = this->mSize.height;
+	swap_chain_desc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	swap_chain_desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	swap_chain_desc.OutputWindow = window;
+	swap_chain_desc.SampleDesc = this->mSampleDesc;
+	swap_chain_desc.Windowed = TRUE;
 
 	HRESULT hr = D3D11CreateDeviceAndSwapChain(
 		NULL,
 		D3D_DRIVER_TYPE_HARDWARE,
 		NULL,
-		D3D11_CREATE_DEVICE_DEBUG,
-		NULL,
-		NULL,
+		D3D11_CREATE_DEVICE_DEBUG | creationFlags,
+		featureLevels,
+		ARRAYSIZE(featureLevels),
 		D3D11_SDK_VERSION,
 		&swap_chain_desc,
 		&this->mSwapChain,
@@ -299,19 +348,18 @@ void D3D11::CreateRenderTarget()
 	ID3D11Texture2D *back_buffer_texture = nullptr;
 	this->mSwapChain->GetBuffer(
 		0,
-		__uuidof(ID3D11Texture2D),
-		(LPVOID*)&back_buffer_texture
+		IID_PPV_ARGS(&back_buffer_texture)
 	);
 
 	D3D11_TEXTURE2D_DESC depth_buffer_desc = { 0 };
-	depth_buffer_desc.Width				= this->mSize.width;
-	depth_buffer_desc.Height			= this->mSize.height;
-	depth_buffer_desc.MipLevels			= 1;
-	depth_buffer_desc.ArraySize			= 1;
-	depth_buffer_desc.Format			= DXGI_FORMAT_D24_UNORM_S8_UINT;
-	depth_buffer_desc.SampleDesc		= this->mSampleDesc;
-	depth_buffer_desc.Usage				= D3D11_USAGE_DEFAULT;
-	depth_buffer_desc.BindFlags			= D3D11_BIND_DEPTH_STENCIL;
+	depth_buffer_desc.Width = this->mSize.width;
+	depth_buffer_desc.Height = this->mSize.height;
+	depth_buffer_desc.MipLevels = 1;
+	depth_buffer_desc.ArraySize = 1;
+	depth_buffer_desc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	depth_buffer_desc.SampleDesc = this->mSampleDesc;
+	depth_buffer_desc.Usage = D3D11_USAGE_DEFAULT;
+	depth_buffer_desc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 
 	this->mDevice->CreateTexture2D(
 		&depth_buffer_desc,
@@ -335,8 +383,8 @@ void D3D11::CreateRenderTarget()
 	back_buffer_texture->Release();
 
 	this->mContext->OMSetRenderTargets(
-		1, 
-		&this->mBackBuffer, 
+		1,
+		&this->mBackBuffer,
 		this->mDepthBuffer);
 }
 

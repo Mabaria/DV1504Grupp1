@@ -2,6 +2,7 @@
 
 #include "../Window.h"
 #include <d3d11.h>
+#include <d3d11_1.h>
 #include <d3dcompiler.h>
 #include <DirectXMath.h>
 
@@ -12,9 +13,9 @@ using namespace DirectX;
 
 /*
 
-	-- Direct 3D 11 --
+-- Direct 3D 11 --
 
-	API used for 3D rendering
+API used for 3D rendering
 
 */
 
@@ -23,7 +24,7 @@ class D3D11
 public:
 	D3D11();
 	D3D11(
-		const int width, 
+		const int width,
 		const int height);
 	~D3D11();
 
@@ -42,6 +43,7 @@ public:
 	);
 
 	void Clear();
+	void ClearDepth();
 
 	IDXGISwapChain* GetSwapChain() const;
 	ID3D11DeviceContext* GetContext() const;
@@ -56,9 +58,10 @@ public:
 	const Size& GetSize();
 
 	void ReleaseCOM(IUnknown *object);
+	IDXGIDevice *GetDXGIDevice();
 
 private:
-	ID3D11Device *mDevice;
+	ID3D11Device * mDevice;
 	ID3D11DeviceContext *mContext;
 	IDXGISwapChain *mSwapChain;
 	ID3D11RenderTargetView *mBackBuffer;
@@ -69,9 +72,11 @@ private:
 	DXGI_SAMPLE_DESC mSampleDesc;
 	D3D11_VIEWPORT mViewport;
 
+	IDXGIDevice *mpDXGIDevice;
+
 	Size mSize;
 	float mClearColor[4];
-	
+
 	void CreateDeviceAndSwapChain(const HWND& window);
 	void CreateRenderTarget();
 };

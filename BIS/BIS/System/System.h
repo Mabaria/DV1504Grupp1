@@ -6,8 +6,10 @@
 #include "../../../GraphicsEngine/Quad.h"
 #include "../../../IO/Picking.h"
 #include "../../../UI/GUI/EventMenu.h"
+#include "../../../UI/UIElements/InfoPanel.h"
+#include "../../../IO/Keyboard.h"
 
-class System : public Observer<Room>
+class System : public Observer<Room>, public Observer<Button>
 {
 public:
 	System();
@@ -25,6 +27,11 @@ private:
 	void mDraw();
 	void mHandleInput();
 
+	void Update(Button * attribute);
+
+	void mUpdateHover(std::string name, int index, bool activate);
+	void mUpdateRoomInfo();
+
 	void mUpdateEvents(Room *room);
 
 	void mSetupPanels();
@@ -40,13 +47,18 @@ private:
 
 	std::vector<Mesh*> mFloors;
 	std::vector<Mesh*> mBounds;
-	std::vector<Quad*> mTexts;
 
-	Camera *mpTopViewCamera;
+	Camera *mpTopViewCameraPan;
+	Camera *mpTopViewCameraRotate;
 	Camera *mpSideViewCamera;
 	Window *mpWindow;
+
+	// User guide.
+	InfoPanel mpInfoPanel;
 
 	EventLog mEventLog;
 	Boat mBoat;
 	Ray mRay;
+
+	Room* mpLastClickedRoom;
 };

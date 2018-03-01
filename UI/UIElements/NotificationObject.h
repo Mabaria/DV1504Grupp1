@@ -8,7 +8,7 @@
 #include "../../UI/UIElements/TextBox.h"
 #include "../../GraphicsEngine/DX/Direct2D.h"
 
-class NotificationObject
+class NotificationObject : public Observable<Room>
 {
 public:
 	NotificationObject(
@@ -29,6 +29,7 @@ public:
 	const std::string GetNotificationString() const;
 
 	Button *GetButton();
+	Room *GetRoom();
 
 	const int GetWidth() const;
 	const int GetHeight() const;
@@ -40,6 +41,8 @@ public:
 
 	const void Move(int x, int y);
 	const void SetText(std::string text);
+	const void SetIfNewStatus(bool status);
+	const bool GetIfNewStatus();
 
 	void Update();
 	void Draw();
@@ -47,7 +50,11 @@ public:
 private:
 	Button mButton;
 	TextBox mTextBox;
-	Timer *mTimer;
+	Timer *mpTimer;
+	Room *mpRoom;
+
+	bool mIsNew;
+	float mNewColorCounter;
 
 	std::string mRoomName;
 	std::string mDeckName;
