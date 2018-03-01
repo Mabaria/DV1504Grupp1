@@ -29,7 +29,8 @@ enum ActionData : uint32_t
 	Number_6 = 3072,
 	Number_7 = 3584,
 	Number_8 = 4096,
-	Number_9 = 4608
+	Number_9 = 4608,
+	No_Action = 9001
 };
 
 class Actions {

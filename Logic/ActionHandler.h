@@ -13,7 +13,9 @@ public:
 	virtual reality Init(Actions *pActions);
 	virtual reality Update(ObserverInfo *pObsInf) override;
 	virtual reality AddAction(float x, float z);
+	virtual reality SwitchWaitingState();
 
+	const bool IsWaiting() const;
 private:
 	// Graphical actions.
 	Actions *mpActions;

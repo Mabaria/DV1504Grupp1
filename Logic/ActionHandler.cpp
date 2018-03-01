@@ -23,5 +23,14 @@ void ActionHandler::Update(ObserverInfo * pObsInf)
 void ActionHandler::AddAction(float x, float z)
 {
 	this->mpActions->AddAction(x, z, this->mLastEvent.actionData);
-	this->mWaitingForClick = false;
+}
+
+void ActionHandler::SwitchWaitingState()
+{
+	this->mWaitingForClick = !this->mWaitingForClick;
+}
+
+const bool ActionHandler::IsWaiting() const
+{
+	return this->mWaitingForClick;
 }

@@ -152,7 +152,7 @@ void System::Run()
 
 void System::Update(ObserverInfo * obsInf)
 {
-	if (!obsInf->pButton)
+	if (obsInf->actionData == No_Action)
 	{
 		// If a room is clicked in top view panel.
 		if (this->mpTopViewPanel->IsMouseInsidePanel())
@@ -166,10 +166,6 @@ void System::Update(ObserverInfo * obsInf)
 				GetMovableComponent()->
 				FocusCameraOnRoom(obsInf->pRoom, true);
 		}
-	}
-	else
-	{
-		// Handle actions.
 	}
 }
 
@@ -211,6 +207,18 @@ void System::mHandleInput()
 
 		// Returns nullptr if picked position isn't a room
 		picked_room = this->mBoat.GetPickedRoom(this->mRay);
+
+		if (Mouse::IsButtonPressed(Buttons::Left) && this->mActionHandler.IsWaiting())
+		{
+			if (picked_room)
+			{
+				XMFLOAT3 picked_position = this->mBoat.GetPickedPosition(this->mRay);
+				this->mActionHandler.AddAction(picked_position.x, picked_position.z);
+			}
+			this->mActionHandler.SwitchWaitingState();
+		}
+
+
 		if (picked_room)
 		{
 			if (Mouse::IsButtonPressed(Buttons::Left))
@@ -246,9 +254,6 @@ void System::mHandleInput()
 					this->mpLastClickedRoom = picked_room;
 					this->mUpdateRoomInfo();
 				}
-
-				XMFLOAT3 picked_position = this->mBoat.GetPickedPosition(this->mRay);
-				this->mpTopViewPanel->AddAction(picked_position.x, picked_position.z, Icon_Cooling_Wall);
 			}
 		}
 		// Closes the event menu if the user left clicks away from a room
@@ -559,7 +564,8 @@ void System::mSetupPanels()
 		title_font_size,
 		object_font_size);
 
-
+	this->mActionHandler.Init(this->mpTopViewPanel->pGetActions());
+	this->mpMenuPanel->AddObserver(&this->mActionHandler);
 }
 
 void System::mSetupModels()

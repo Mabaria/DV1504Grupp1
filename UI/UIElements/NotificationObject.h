@@ -15,8 +15,7 @@
 struct ObserverInfo
 {
 	Room *pRoom = nullptr;
-	Button *pButton = nullptr;
-	ActionData actionData = Rotation_Stationary;
+	uint32_t actionData = 0;
 };
 #endif
 
