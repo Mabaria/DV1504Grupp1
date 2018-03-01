@@ -438,7 +438,7 @@ void System::mSetupPanels()
 		{ 0.0f, 1.0f, 0.0f, 0.0f },
 		{ 0.000001f, 0.0f, 0.0f, 0.0f },
 		120.f, 32.f/9.f,
-		0.1f, 25.0f, LOOK_AT, PERSPECTIVE);
+		0.1f, 8.0f, LOOK_AT, PERSPECTIVE);
 
 	this->mpTopViewPanel->SetCamera(this->mpTopViewCameraPan);
 	this->mpSideViewPanel->SetCamera(this->mpSideViewCamera);

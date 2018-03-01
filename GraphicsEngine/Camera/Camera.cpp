@@ -494,7 +494,7 @@ void Camera::Update(Button * attribute)
 void Camera::Reset()
 {
 	//this->mReset();
-	this->NotifyObservers(&std::string("reset"));
+	this->NotifyObservers(&std::string("resetA"));
 }
 
 CAMERA_DEFAULT_VALUES Camera::GetDefaultValues()

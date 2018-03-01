@@ -137,14 +137,23 @@ void CameraRotateStrategy::FocusRoom(Room *pRoom, bool animate)
 	}
 }
 
-void CameraRotateStrategy::Reset()
+void CameraRotateStrategy::Reset(bool animate)
 {
 	// Get default values and animate to it
 
-	this->mAnimate = true;
-	this->mZoomIn = false;
-	XMVECTOR new_pos = this->pCamera->GetDefaultValues().look;
-	XMStoreFloat3(&this->mNewPosition, new_pos);
+	if (animate)
+	{
+		this->mAnimate = true;
+		this->mZoomIn = false;
+		XMVECTOR new_pos = this->pCamera->GetDefaultValues().look;
+		XMStoreFloat3(&this->mNewPosition, new_pos);
+	}
+	else
+	{
+		this->mAnimate = false;
+		this->pCamera->Reset();
+		this->HandleChangeInCamera();
+	}
 }
 
 void CameraRotateStrategy::HandleChangeInCamera()
