@@ -4,7 +4,11 @@
 #include "../../Logic/Boat/Room.h"
 #include "../../UI/UIElements/Panel2D.h"
 #include "../../IO/ObserverPattern/Observer.h"
-class EventMenu : public Observer<Button>, public Observable<Room>
+#include "../../GraphicsEngine/Actions.h"
+
+class EventMenu : 
+	public Observer<Button>, 
+	public Observable<ObserverInfo> 
 {
 	enum ACTION_MODE {
 		STANDARD, NUMBERS

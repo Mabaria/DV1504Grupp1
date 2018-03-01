@@ -173,7 +173,7 @@ bool EventMenu::IsVisible()
 	return this->mpPanel->IsVisible();
 }
 
-void EventMenu::Update( Button *attribute)
+void EventMenu::Update(Button *attribute)
 {
 	if (this->mpPanel->IsVisible())
 	{
@@ -188,30 +188,34 @@ void EventMenu::Update( Button *attribute)
 		}
 		else
 		{
+			ObserverInfo obs_inf;
+			obs_inf.pRoom = this->mpActiveRoom;
+			obs_inf.pButton = nullptr;
+			obs_inf.actionData = Rotation_Stationary;
 
 			if (button_name.compare("Fire") == 0)
 			{
 				this->mpActiveRoom->AddPlotterEvent(Event::Fire);
 				this->mLastClicked = Event::Fire;
-				this->NotifyObservers(this->mpActiveRoom);
+				this->NotifyObservers(&obs_inf);
 			}
 			else if (button_name.compare("Gas") == 0)
 			{
 				this->mpActiveRoom->AddPlotterEvent(Event::Gas);
 				this->mLastClicked = Event::Gas;
-				this->NotifyObservers(this->mpActiveRoom);
+				this->NotifyObservers(&obs_inf);
 			}
 			else if (button_name.compare("Water") == 0)
 			{
 				this->mpActiveRoom->AddPlotterEvent(Event::Water);
 				this->mLastClicked = Event::Water;
-				this->NotifyObservers(this->mpActiveRoom);
+				this->NotifyObservers(&obs_inf);
 			}
 			else if (button_name.compare("Injury") == 0)
 			{
 				this->mpActiveRoom->AddPlotterEvent(Event::Injury);
 				this->mLastClicked = Event::Injury;
-				this->NotifyObservers(this->mpActiveRoom);
+				this->NotifyObservers(&obs_inf);
 			}
 			else if (this->mActionMode == STANDARD)
 			{

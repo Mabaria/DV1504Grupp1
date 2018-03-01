@@ -388,8 +388,10 @@ void Panel2D::mUpdateButtons()
 					if (Mouse::IsButtonPressed(Buttons::Left))
 					{
 						button->SetRectStatus(BUTTON_STATE::CLICKED);
+						ObserverInfo obs_inf;
+						obs_inf.pRoom = notification_object->GetRoom();
 						notification_object->NotifyObservers
-						(notification_object->GetRoom());
+						(&obs_inf);
 					}
 					else if (!Mouse::IsButtonDown(Buttons::Left) ||
 						button->GetButtState() != BUTTON_STATE::CLICKED)

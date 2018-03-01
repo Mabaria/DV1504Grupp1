@@ -150,19 +150,26 @@ void System::Run()
 	}
 }
 
-void System::Update(Room * pickedRoom)
+void System::Update(ObserverInfo * obsInf)
 {
-	// If a room is clicked in top view panel.
-	if (this->mpTopViewPanel->IsMouseInsidePanel())
+	if (!obsInf->pButton)
 	{
-		this->mUpdateEvents(pickedRoom);
+		// If a room is clicked in top view panel.
+		if (this->mpTopViewPanel->IsMouseInsidePanel())
+		{
+			this->mUpdateEvents(obsInf->pRoom);
+		}
+		// If a notification object is clicked in the active log panel.
+		else if (this->mpActiveLogPanel->IsMouseInsidePanel())
+		{
+			this->mpTopViewPanel->
+				GetMovableComponent()->
+				FocusCameraOnRoom(obsInf->pRoom, true);
+		}
 	}
-	// If a notification object is clicked in the active log panel.
-	else if (this->mpActiveLogPanel->IsMouseInsidePanel())
+	else
 	{
-		this->mpTopViewPanel->
-			GetMovableComponent()->
-			FocusCameraOnRoom(pickedRoom, true);
+		// Handle actions.
 	}
 }
 

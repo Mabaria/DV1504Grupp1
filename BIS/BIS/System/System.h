@@ -9,7 +9,7 @@
 #include "../../../UI/UIElements/InfoPanel.h"
 #include "../../../IO/Keyboard.h"
 
-class System : public Observer<Room>, public Observer<Button>
+class System : public Observer<ObserverInfo>, public Observer<Button>
 {
 public:
 	System();
@@ -19,7 +19,7 @@ public:
 		const int windowWidth, 
 		const int windowHeight);
 	void Run();
-	virtual void Update( Room *pickedRoom);
+	virtual void Update(ObserverInfo *pickedRoom);
 
 
 private:
