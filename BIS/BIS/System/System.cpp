@@ -134,6 +134,14 @@ void System::BuildGraphicalUserInterface(
 		this->mpWindow->GetWindow(),
 		windowName.c_str());
 
+	this->mpCrewPanel.Init(
+		5 * windowWidth / 6,
+		5 * windowHeight / 6,
+		windowHeight / 6,
+		0,
+		this->mpWindow->GetWindow(),
+		windowName.c_str());
+
 	this->mSetupPanels();
 	this->mSetupModels();
 	this->mSetupBoat();
@@ -175,6 +183,7 @@ void System::mUpdate()
 	this->mpSideViewPanel->Update();
 	this->mpMenuPanel->Update();
 	this->mpInfoPanel.Update();
+	this->mpCrewPanel.Update();
 }
 
 void System::mDraw()
@@ -185,6 +194,7 @@ void System::mDraw()
 	this->mpSideViewPanel->Draw();
 	this->mpMenuPanel->Draw();
 	this->mpInfoPanel.Draw();
+	this->mpCrewPanel.Draw();
 }
 
 void System::mHandleInput()
@@ -193,7 +203,8 @@ void System::mHandleInput()
 	Room *picked_room = nullptr;
 
 	if (this->mpTopViewPanel->IsMouseInsidePanel() &&
-		!this->mpMenuPanel->IsMouseInsidePanel())
+		!this->mpMenuPanel->IsMouseInsidePanel() &&
+		!this->mpCrewPanel.IsMouseInsidePanel())
 	{
 
 		Picking::GetWorldRay(
@@ -480,6 +491,9 @@ void System::mSetupPanels()
 		"../../Models/Info.png",
 		"Info");
 	this->mpControlPanel->LoadImageToBitmap(
+		"../../Models/Clipboard.png",
+		"Crew");
+	this->mpControlPanel->LoadImageToBitmap(
 		"../../Models/ChangeCamera.png",
 		"ChangeCamera"
 	);
@@ -509,6 +523,8 @@ void System::mSetupPanels()
 		this->mpControlPanel->GetBitmapByName("Reset"), "Reset2");
 	this->mpControlPanel->AddButton(70, 70, 90, 90,
 		this->mpControlPanel->GetBitmapByName("Info"), "Info");
+	this->mpControlPanel->AddButton(70, 70, 90, 170,
+		this->mpControlPanel->GetBitmapByName("Crew"), "Crew");
 	this->mpControlPanel->AddButton(70, 70, 10, 90,
 		this->mpControlPanel->GetBitmapByName("ChangeCamera"), "ChangeCamera");
 
@@ -519,6 +535,8 @@ void System::mSetupPanels()
 
 	this->mpControlPanel->GetButtonByName("Info")->
 		AddObserver(&this->mpInfoPanel);
+	this->mpControlPanel->GetButtonByName("Crew")->
+		AddObserver(&this->mpCrewPanel);
 
 	this->mpControlPanel->GetButtonByName("ChangeCamera")
 		->AddObserver(this);

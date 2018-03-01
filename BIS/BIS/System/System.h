@@ -8,6 +8,7 @@
 #include "../../../UI/GUI/EventMenu.h"
 #include "../../../UI/UIElements/InfoPanel.h"
 #include "../../../IO/Keyboard.h"
+#include "../../../UI/UIElements/CrewPanel.h"
 
 class System : public Observer<Room>, public Observer<Button>
 {
@@ -55,6 +56,9 @@ private:
 
 	// User guide.
 	InfoPanel mpInfoPanel;
+
+	// Personnel Log
+	CrewPanel mpCrewPanel;
 
 	EventLog mEventLog;
 	Boat mBoat;

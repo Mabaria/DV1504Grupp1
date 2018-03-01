@@ -25,6 +25,9 @@ Button::Button(
 	this->D2D1Panel = D2D1Panel;
 	this->mCurrState = BUTTON_STATE::RESET;
 	this->mBitmapLoadedByFilePath = true;
+	/*this->D2D1Panel->GetpRenderTarget()->CreateSolidColorBrush(
+		D2D1::ColorF(D2D1::ColorF(1.f, 0.f, 0.f, 1.0f)),
+		&this->mpFillBrush);*/
 	
 	this->CreateButton(
 		imageFilePath, 
@@ -66,7 +69,7 @@ Button::Button(
 		D2D1::ColorF(D2D1::ColorF(0.75f, 0.75f, 0.75f, 1.0f)),
 		&this->mpRectBrush);
 	this->D2D1Panel->GetpRenderTarget()->CreateSolidColorBrush(
-		D2D1::ColorF(D2D1::ColorF(1.f, 1.f, 1.f, 1.0f)),
+		D2D1::ColorF(D2D1::ColorF(1.f, 0.f, 0.f, 1.0f)),
 		&this->mpFillBrush);
 	this->mButtonSize = D2D1::RectF(
 		(float)left,
@@ -173,7 +176,7 @@ void Button::DrawButton()
 	{
 		this->D2D1Panel->GetpRenderTarget()->FillRectangle(
 			this->mButtonSize,
-			mpFailBrush);
+			this->mpFillBrush);
 	}
 }
 
@@ -188,6 +191,13 @@ void Button::DrawRect()
 void Button::DrawFilledRect(float r, float g, float b, float a)
 {
 	this->mpFillBrush->SetColor(D2D1::ColorF(r,g,b,a));
+	this->D2D1Panel->GetpRenderTarget()->FillRectangle(
+		this->mButtonSize,
+		this->mpFillBrush);
+}
+
+void Button::DrawFilledRect()
+{
 	this->D2D1Panel->GetpRenderTarget()->FillRectangle(
 		this->mButtonSize,
 		this->mpFillBrush);
@@ -266,11 +276,14 @@ void Button::SetButtonStatus(BUTTON_STATE buttState)
 		this->mCurrState = buttState;
 		if (this->mBmpLoaded)
 		{
-			this->mBitmapRenderSize = D2D1::RectF(
-				this->mWidth * buttState,
-				0,
-				this->mWidth* (buttState + 1),
-				this->mpBitMap->GetSize().height);
+			if (this->mpBitMap->GetSize().width != this->mWidth)
+			{
+				this->mBitmapRenderSize = D2D1::RectF(
+					this->mWidth * buttState,
+					0,
+					this->mWidth* (buttState + 1),
+					this->mpBitMap->GetSize().height);
+			}
 			if (buttState == 2)
 			{
 				this->NotifyObservers(this);
@@ -367,6 +380,11 @@ void Button::LoadImageToBitmap(
 	}	
 }
 
+void Button::SetRenderWidth(float width)
+{
+	this->mWidth = width;
+}
+
 BUTTON_STATE Button::GetButtState() const
 {
 	return this->mCurrState;
@@ -390,6 +408,11 @@ void Button::SetRectColor(float r, float g, float b, float a)
 void Button::SetButtonColor(float r, float g, float b, float a)
 {
 	this->mpFillBrush->SetColor(D2D1::ColorF(r, g, b, a));
+}
+
+const D2D1_COLOR_F Button::GetButtonColor() const
+{
+	return this->mpFillBrush->GetColor();
 }
 
 void Button::ReleaseCOM(IUnknown *object)
