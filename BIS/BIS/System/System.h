@@ -8,6 +8,7 @@
 #include "../../../UI/GUI/EventMenu.h"
 #include "../../../UI/UIElements/InfoPanel.h"
 #include "../../../IO/Keyboard.h"
+#include "../../../Logic/ActionHandler.h"
 
 class System : public Observer<ObserverInfo>, public Observer<Button>
 {
@@ -61,4 +62,6 @@ private:
 	Ray mRay;
 
 	Room* mpLastClickedRoom;
+
+	ActionHandler mActionHandler;
 };

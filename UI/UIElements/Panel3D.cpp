@@ -646,6 +646,11 @@ void Panel3D::InitActions()
 	}
 }
 
+Actions * Panel3D::pGetActions()
+{
+	return this->mpActions;
+}
+
 MovableCameraComponent * Panel3D::GetMovableComponent()
 {
 	return this->mpMovableCameraComponent;
