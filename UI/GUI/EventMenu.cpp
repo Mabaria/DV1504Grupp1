@@ -277,6 +277,8 @@ void EventMenu::Update( Button *attribute)
 				// Injury action has been selected, and these buttons now
 				// correspond to the amount of injured people to draw the symbol
 				// with, from 1-9
+				//! this->mInjuryType contains which kind of triangle to use
+				//! MOVED, TREATED or REPORTED
 				if (button_name.compare("Injured_Moved") == 0) //! 1
 				{
 					//TODO Add new action object
@@ -418,7 +420,7 @@ void EventMenu::InitButtons()
 		eventButtonSize,
 		eventButtonSize,
 		margin + eventButtonSize + padding,
-		margin,
+		this->mMenuWidth / 2 - eventButtonSize / 2,
 		this->mpPanel->GetBitmapByName("WaterOff"),
 		"Water"); 
 	this->mpPanel->AddButton(
@@ -428,13 +430,13 @@ void EventMenu::InitButtons()
 		this->mMenuWidth - margin - eventButtonSize,
 		this->mpPanel->GetBitmapByName("GasOff"),
 		"Gas");
-	this->mpPanel->AddButton(
+	/*this->mpPanel->AddButton(
 		eventButtonSize,
 		eventButtonSize,
 		margin + eventButtonSize + padding,
 		this->mMenuWidth - margin - eventButtonSize,
 		this->mpPanel->GetBitmapByName("InjuryOff"),
-		"Injury");
+		"Injury");*/
 
 	// Action buttons
 	// Ordered:
@@ -525,7 +527,7 @@ void EventMenu::InitButtons()
 	this->mpPanel->GetButtonByName("Fire")->AddObserver(this);
 	this->mpPanel->GetButtonByName("Gas")->AddObserver(this);
 	this->mpPanel->GetButtonByName("Water")->AddObserver(this);
-	this->mpPanel->GetButtonByName("Injury")->AddObserver(this);
+	/*this->mpPanel->GetButtonByName("Injury")->AddObserver(this);*/
 	this->mpPanel->GetButtonByName("Exit")->AddObserver(this);
 
 	//TODO ADD ACTION BUTTON OBSERVERS HERE
