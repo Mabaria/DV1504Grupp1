@@ -158,22 +158,31 @@ std::vector<LogEvent*> Room::GetActiveEvents()
 	return this->mRoomLog.GetActiveEvents();
 }
 
+int Room::GetEventCount() const
+{
+	return this->mRoomLog.GetEventCount();
+}
+
 
 
 /**
 *	Action specific
 */
 
-//bool Room::AddAction(LogAction::Type type, GraphicalAction *pAction)
-//{
-//	return this->mRoomLog.AddAction(type, pAction);
-//}
+bool Room::AddAction(LogAction::Desc desc)
+{
+	return this->mRoomLog.AddAction(desc);
+}
 
-// FIXME when Graphical actions exists
-//bool ClearAction(GraphicalAction *pAction)
-//{
-//	return this->mRoomLog.ClearAction(pAction);
-//}
+bool Room::ClearAction(int actionIndex)
+{
+	return this->mRoomLog.ClearAction(actionIndex);
+}
+
+int Room::GetActionCount() const
+{
+	return this->mRoomLog.GetActionCount();
+}
 
 
 
@@ -188,7 +197,7 @@ std::string Room::GetString() const
 	ss << "r ";
 	ss << this->mName;
 	ss << " / ";
-	ss << this->mSensor.GetInputTypes();
+	ss << this->mSensor.GetInputTypes_Int();
 
 	return ss.str();
 }

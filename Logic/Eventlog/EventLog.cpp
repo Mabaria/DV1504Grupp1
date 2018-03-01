@@ -46,13 +46,9 @@ LogEvent* EventLog::GetEventPointer(int index)
 *	Action specific
 */
 
-LogAction* EventLog::AddAction(
-	LogAction::Type type,
-	std::string roomName,
-	float pos_x,
-	float pos_z)
+LogAction* EventLog::AddAction(LogAction::Desc desc)
 {
-	this->mpActions.push_back(new LogAction(type, roomName, pos_x, pos_z));
+	this->mpActions.push_back(new LogAction(desc));
 	return this->mpActions.back();
 }
 

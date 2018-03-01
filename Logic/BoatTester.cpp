@@ -160,45 +160,112 @@ void BoatTester::TestBoat()
 	if (!CompareFiles("../../SaveFiles/Testboat1.boat", "../../SaveFiles/Testboat2.boat"))
 		throw ("Error missmatching files from Write and Read");
 
+	PrintHeader("Testing events");
+
 	/**
 	*	Add four events
 	*/
+	std::cout << "Adding 4 sensor events in 'Skyddsrum' (only two should be detected)...";
 	pRoom = pBoat->GetRoomPointer("Skyddsrum");
 	pRoom->AddSensorEvent(Event::Type::Fire);
 	pRoom->AddSensorEvent(Event::Type::Injury); // Sensor can't detect
 	pRoom->AddSensorEvent(Event::Type::Water);	// Sensor can't detect
 	pRoom->AddSensorEvent(Event::Type::Gas);
+	std::cout << "done!" << std::endl;
+
+	std::cout << "Checking if only 2 events was detected...";
+	if (pRoom->GetEventCount() != 2)
+		throw("Error unexpected amount of events in room after adding events");
+	std::cout << "ok!" << std::endl;
+
+
 
 	/**
 	*	Clear event
 	*/
+	std::cout << "\nClearing 4 events...";
 	pRoom->ClearEvent(Event::Type::Fire);
 	pRoom->ClearEvent(Event::Type::Gas);
 	pRoom->ClearEvent(Event::Type::Injury);
 	pRoom->ClearEvent(Event::Type::Water);
-	
+	std::cout << "done!" << std::endl;
+
 
 
 	/**
 	*	Check cleared events
 	*/
-	events = pRoom->GetActiveEvents();
 
-	if (events.size() != 0)
+	std::cout << "Checking if all events are cleared in '" << pRoom->GetName() << "'...";
+	if (pRoom->GetEventCount() != 0)
 		throw ("Error unexpected amount of events in room after clearing");
+	std::cout << "ok!" << std::endl;
 
 
 
 	/**
 	*	Check eventlog
 	*/
-	int eventCount;			// Should be 2 (4 events -2 that wasn't detected by sensor)
 
-	eventCount = pBoat->GetEventCount();
-
-	if (eventCount != 2)
+	if (pBoat->GetEventCount() != 2) // Should be 2 (4 events - 2 that wasn't detected by sensor)
 		throw ("Error unexpected amount of events in total");
 
+
+	/**
+	*	Test actions
+	*/
+
+	PrintHeader("Test actions");
+
+	std::cout << "Adding 5 actions to '" << pRoom->GetName() << "'...";
+
+	LogAction::Desc actionDesc[5];
+
+	actionDesc[0].actionIndex = 0;
+	actionDesc[0].pos_x = 0.0f;
+	actionDesc[0].pos_z = 0.0f;
+	actionDesc[0].type = LogAction::Type::Cooling_Wall;
+
+	actionDesc[1].actionIndex = 1;
+	actionDesc[1].pos_x = 1.0f;
+	actionDesc[1].pos_z = 1.0f;
+	actionDesc[1].type = LogAction::Type::Damaged_Bulk;
+
+	actionDesc[2].actionIndex = 2;
+	actionDesc[2].pos_x = 2.0f;
+	actionDesc[2].pos_z = 2.0f;
+	actionDesc[2].type = LogAction::Type::Ventilation_In;
+
+	actionDesc[3].actionIndex = 3;
+	actionDesc[3].pos_x = 3.0f;
+	actionDesc[3].pos_z = 3.0f;
+	actionDesc[3].type = LogAction::Type::Hole_In_Bulk;
+
+	actionDesc[4].actionIndex = 4;
+	actionDesc[4].pos_x = 4.0f;
+	actionDesc[4].pos_z = 4.0f;
+	actionDesc[4].type = LogAction::Type::Supporting_Wall;
+
+	for (int i = 0; i < 5; i++)
+	{
+		pRoom->AddAction(actionDesc[i]);
+	}
+	std::cout << "done!" << std::endl;
+
+	std::cout << "Checking if all actions been added...";
+	if (pRoom->GetActionCount() != 5)
+		throw ("Error unexpected amount of actions in total");
+	std::cout << "ok!" << std::endl;
+	
+	std::cout << "\nClearing two actions...";
+	pRoom->ClearAction(3);
+	pRoom->ClearAction(1);
+	std::cout << "done!" << std::endl;
+
+	std::cout << "Checking number of actions still active in room...";
+	if (pRoom->GetActionCount() != 3)
+		throw ("Error unexpected amount of actions after deleting some actions");
+	std::cout << "ok!" << std::endl;
 
 	PrintHeader("Testing completed!");
 	delete pBoat;

@@ -5,17 +5,15 @@ LogAction::LogAction()
 	this->mActive = true;
 }
 
-LogAction::LogAction(
-	LogAction::Type type,
-	std::string roomName) /*, // FIXME
-	Actions *pActions,
-	ActionPointer *pActionPointer)*/
+LogAction::LogAction(LogAction::Desc desc)
 {
 	this->mActive = true;
-	this->mType = type;
-	this->mRoomName = roomName;
-	//this->mpActions = pActions;
-	//this->mpActionPointer = pActionsPointer;
+
+	this->mType = desc.type;
+	this->mRoomName = desc.roomName;
+	this->mActionIndex = desc.actionIndex;
+	this->mPos_x = desc.pos_x;
+	this->mPos_z = desc.pos_z;
 }
 
 LogAction::~LogAction()
@@ -49,10 +47,10 @@ LogAction::Type LogAction::GetType() const
 	return this->mType;
 }
 
-//ActionPointer LogAction::GetActionsPointer() const // FIXME
-//{
-//	return this->mpActionPointer;
-//}
+int LogAction::GetActionIndex() const
+{
+	return this->mActionIndex;
+}
 
 
 

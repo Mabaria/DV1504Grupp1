@@ -14,7 +14,8 @@ public:
 	void RemoveInputType(Event::Type type);
 
 	void SetInputTypes(int types);
-	int GetInputTypes() const;
+	std::vector<Event::Type> GetInputTypes() const;
+	int GetInputTypes_Int() const;
 
 	bool CanDetect(Event::Type type) const;
 	

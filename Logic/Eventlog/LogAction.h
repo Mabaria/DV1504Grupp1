@@ -5,7 +5,6 @@
 
 
 
-
 class LogAction
 {
 public:
@@ -29,13 +28,20 @@ public:
 		Damaged_Bulk
 	};
 
+	struct Desc
+	{
+		// Fill these
+		LogAction::Type type;
+		int actionIndex;
+		float pos_x;
+		float pos_z;
 
+		// This one fills automatically
+		std::string roomName;
+	};
 
 	LogAction();
-	LogAction(
-		LogAction::Type type,
-		std::string roomName); /*, // FIXME
-		ActionPointer *pAction);*/
+	LogAction(LogAction::Desc desc);
 	~LogAction();
 
 	// Action specific
@@ -44,7 +50,7 @@ public:
 	bool IsActive() const;
 	LogAction::Type GetType() const;
 
-	//ActionPointer GetActionPointer() const; // FIXME
+	int GetActionIndex() const;
 
 	// Room specific
 	void SetRoomName(std::string name);
@@ -65,7 +71,7 @@ private:
 	LogAction::Type mType;
 	std::string mRoomName;
 
-	// FIXME
-	//Actions *mpActions;
-	//ActionPointer *mpActionPointer;
+	int mActionIndex;
+	float mPos_x;
+	float mPos_z;
 };

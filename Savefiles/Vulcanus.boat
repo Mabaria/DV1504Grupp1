@@ -1,0 +1,27 @@
+boatmodel Vulcanus
+
+d Bryggdäck
+r slC / 9
+r SkyC / 9
+r Brygga / 9
+
+d Huvuddäck
+r Skyddäck / 4
+r Tvärskepp / 9
+r Gång3 / 5
+r Tambur / 9
+r Omformarrum / 5
+// r CBRN / 13 // Har missat denna i meshen
+
+d Trossdäck
+r Ammdurk / 13
+r Lastrum / 13
+r Maskinrum / 13
+r Gång2 / 13
+r Hjälpmaskinrum / 13
+r MC / 13
+r Apparatrum / 13
+r Gång1 / 13
+r SB Mäss / 13
+r Byssa / 13
+r Skyddsrum / 13

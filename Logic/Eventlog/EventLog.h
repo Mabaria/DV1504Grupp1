@@ -28,6 +28,15 @@ class EventLog
 {
 public:
 
+	struct Desc_Action
+	{
+		LogAction::Type type;
+		std::string roomName;
+		int actionIndex;
+		float pos_x;
+		float pos_y;
+	};
+
 	EventLog();
 	~EventLog();
 
@@ -41,11 +50,7 @@ public:
 	LogEvent* GetEventPointer(int index);
 
 	// Action specific
-	LogAction* AddAction(
-		LogAction::Type type,
-		std::string roomName,
-		float pos_x,
-		float pos_z);
+	LogAction* AddAction(LogAction::Desc desc);
 	int GetActionCount() const;
 	
 	// Disk specific

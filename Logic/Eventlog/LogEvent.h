@@ -2,7 +2,7 @@
 
 #include <sstream>
 #include "../Event/Event.h"
-#include "../../Logic/Timer.h"
+#include "../Timer.h"
 
 /* An event in the log will be able to describe:
 	*	Type (Fire, Water, Gas)

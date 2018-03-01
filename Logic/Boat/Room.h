@@ -1,15 +1,24 @@
 #pragma once
 
 #include <string>
-#include "../../IO/Picking.h"
-#include "../Eventlog/EventLog.h"
-#include "RoomLog.h"
-#include "../Event/Event.h"
-#include "Sensor.h"
 #include <DirectXMath.h>
-#include "../Eventlog/LogAction.h"
+
+#include "../../IO/Picking.h"
+
+#include "RoomLog.h"
+#include "Sensor.h"
+
+#include "../Eventlog/EventLog.h"
 
 using namespace DirectX;
+
+struct RoomData
+{
+	XMFLOAT3 centerPosition;
+	XMFLOAT3 size;
+	float distanceToCorner;
+};
+
 class Room
 {
 public:
@@ -24,14 +33,6 @@ public:
 		std::string deckName;
 		EventLog *pEventLog;
 	};
-
-struct RoomData
-{
-	XMFLOAT3 centerPosition;
-	XMFLOAT3 size;
-	float distanceToCorner;
-};
-
 
 	Room();
 	Room(Room::Desc desc);
@@ -48,7 +49,6 @@ struct RoomData
 	int GetIndexInDeck() const;
 
 	float CheckRayCollision(const Ray &rRay);
-
 	float CheckWorldRayCollision(const Ray &rRay);
 
 	// Sensor specific
@@ -70,13 +70,15 @@ struct RoomData
 											   event without checking the
 											   sensor */
 	bool ClearEvent(Event::Type type);
-
 	void AddInputType(Event::Type type);
 	std::vector<LogEvent*> GetActiveEvents();
+	int GetEventCount() const;
 
 	// Action specific
-	//bool AddAction(LogAction::Type type, GraphicalAction *pAction); // FIXME
-	//bool ClearAction(GraphicalAction *pAction); // FIXME when Graphical actions exists
+	bool AddAction(LogAction::Desc desc); /* No need to fill Desc.roomName
+											 (happens automatically) */
+	bool ClearAction(int actionIndex);
+	int GetActionCount() const;
 
 	// Disk specific
 	std::string GetString() const;

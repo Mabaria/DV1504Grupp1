@@ -4,14 +4,15 @@
 #include <vector>
 #include <fstream>
 #include <sstream>
+
 #include "Deck.h"
 #include "Room.h"
+
 #include "../Eventlog/EventLog.h"
 #include "../Event/Event.h"
-#include "../../IO/Picking.h"
-#include "../../UI/UIElements/MeshObject.h"
 
 #include "../../IO/Picking.h"
+#include "../../UI/UIElements/MeshObject.h"
 
 class Boat
 {
@@ -65,9 +66,6 @@ private:
 	int GetRoomIndex_Boat(std::string roomName);
 	int GetRoomIndex_Deck(std::string roomName);
 	int GetDeckIndex(std::string deckName);
-
-	// Functions for reading from disk
-	std::string GetNameFromLine(std::string line, char until = NULL);
 
 	std::string GetDeckNameByRoomIndex(int index);
 
