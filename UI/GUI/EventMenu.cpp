@@ -88,20 +88,6 @@ bool EventMenu::OpenAt(Room *pRoom)
 	int margin = this->mParentPanelWidth / 24;
 	int posX = this->mParentPanelWidth - this->mMenuWidth;
 	int posY = 0;
-	//FPosition mousePos = Mouse::GetPositionPercentage();
-	//mousePos.x = mousePos.x * this->mParentPanelWidth;
-	//mousePos.y = mousePos.y * this->mParentPanelHeight;
-	/*Position mousePos = Mouse::GetPosition();
-
-	if (mousePos.x + margin + this->mMenuWidth < this->mParentPanelWidth)
-		posX = mousePos.x + margin;
-	else
-		posX = mousePos.x - margin - this->mMenuWidth;
-
-	if (mousePos.y + margin + this->mMenuHeight < this->mParentPanelHeight)
-		posY = mousePos.y + margin;
-	else
-		posY = mousePos.y - margin - this->mMenuHeight;*/
 
 	this->mpPanel->SetLeft(posX);
 	this->mpPanel->SetTop(posY);
@@ -159,25 +145,6 @@ bool EventMenu::Update()
 		this->mButtonFocus = false;
 		this->mDraggingWindow = false;
 	}
-	//! Dragging removed due to new menu format
-	//if (this->mDraggingWindow)
-	//{
-	//	int left = Mouse::GetExactX() - this->mDragX;
-	//	if (left + this->mMenuWidth > this->mParentPanelWidth)
-	//		left = this->mParentPanelWidth - this->mMenuWidth;
-	//	else if (left < 0)
-	//		left = 0;
-
-	//	int top = Mouse::GetExactY() - this->mDragY;
-	//	if (top + this->mMenuHeight > this->mParentPanelHeight)
-	//		top = this->mParentPanelHeight - this->mMenuHeight;
-	//	else if (top < 0)
-	//		top = 0;
-
-	//	this->mpPanel->SetLeft(left);
-	//	this->mpPanel->SetTop(top);
-	//	this->mpPanel->UpdateWindowPos();
-	//}
 	return true;
 }
 
@@ -445,13 +412,6 @@ void EventMenu::InitButtons()
 		this->mMenuWidth - margin - eventButtonSize,
 		this->mpPanel->GetBitmapByName("GasOff"),
 		"Gas");
-	/*this->mpPanel->AddButton(
-		eventButtonSize,
-		eventButtonSize,
-		margin + eventButtonSize + padding,
-		this->mMenuWidth - margin - eventButtonSize,
-		this->mpPanel->GetBitmapByName("InjuryOff"),
-		"Injury");*/
 
 	// Action buttons
 	// Ordered:
@@ -542,7 +502,6 @@ void EventMenu::InitButtons()
 	this->mpPanel->GetButtonByName("Fire")->AddObserver(this);
 	this->mpPanel->GetButtonByName("Gas")->AddObserver(this);
 	this->mpPanel->GetButtonByName("Water")->AddObserver(this);
-	/*this->mpPanel->GetButtonByName("Injury")->AddObserver(this);*/
 	this->mpPanel->GetButtonByName("Exit")->AddObserver(this);
 
 	//TODO ADD ACTION BUTTON OBSERVERS HERE
