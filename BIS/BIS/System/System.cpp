@@ -165,6 +165,25 @@ void System::Update(ObserverInfo * obsInf)
 			this->mpTopViewPanel->
 				GetMovableComponent()->
 				FocusCameraOnRoom(obsInf->pRoom, true);
+
+			if (this->mpLastClickedRoom != nullptr)
+			{
+				std::string picked_name = this->mpLastClickedRoom->GetDeckName() + "bounds";
+				this->mpTopViewPanel->rGetMeshObject(picked_name)->SetSelected(
+					false,
+					this->mpTopViewPanel->rGetDirect3D().GetContext(),
+					this->mpLastClickedRoom->GetIndexInDeck()
+				);
+			}
+			this->mpLastClickedRoom = obsInf->pRoom;
+			this->mUpdateRoomInfo();
+			this->mpMenuPanel->SetActiveRoom(this->mpLastClickedRoom);
+			std::string picked_name = this->mpLastClickedRoom->GetDeckName() + "bounds";
+			this->mpTopViewPanel->rGetMeshObject(picked_name)->SetSelected(
+				true,
+				this->mpTopViewPanel->rGetDirect3D().GetContext(),
+				this->mpLastClickedRoom->GetIndexInDeck()
+			);
 		}
 	}
 }

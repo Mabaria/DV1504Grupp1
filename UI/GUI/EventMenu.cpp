@@ -173,6 +173,11 @@ bool EventMenu::IsVisible()
 	return this->mpPanel->IsVisible();
 }
 
+void EventMenu::SetActiveRoom(Room * room)
+{
+	this->mpActiveRoom = room;
+}
+
 void EventMenu::Update(Button *attribute)
 {
 	if (this->mpPanel->IsVisible())
