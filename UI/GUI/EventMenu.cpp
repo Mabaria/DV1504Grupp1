@@ -3,7 +3,7 @@
 
 EventMenu::EventMenu()
 {
-	this->mMenuWidth = 300;
+	this->mMenuWidth = 400;
 	this->mMenuHeight = 300;
 	this->mParentPanelWidth = 0;
 	this->mParentPanelHeight = 0;
@@ -14,6 +14,9 @@ EventMenu::EventMenu()
 	this->mpEventLog = nullptr;
 	this->mpPanel = nullptr;
 	this->mpActiveRoom = nullptr;
+
+	this->mActionMode = STANDARD;
+	this->mInjuryType = REPORTED;
 }
 
 EventMenu::~EventMenu()
@@ -30,6 +33,8 @@ bool EventMenu::Init(int parentWidth,
 {
 	this->mParentPanelWidth = parentWidth;
 	this->mParentPanelHeight = parentHeight;
+
+	this->mMenuHeight = this->mParentPanelHeight;
 
 	this->mpEventLog = pEventLog;
 	this->mpPanel = new Panel2D(
@@ -49,6 +54,26 @@ bool EventMenu::Init(int parentWidth,
 	this->mpPanel->LoadImageToBitmap("../../Models/Button08.png", "WaterOn");
 	this->mpPanel->LoadImageToBitmap("../../Models/Button09.png", "FireOn");
 	this->mpPanel->LoadImageToBitmap("../../Models/Exit.png", "Exit");
+
+	this->mpPanel->LoadImageToBitmap("../../Models/Action1.png", "Action1");
+	this->mpPanel->LoadImageToBitmap("../../Models/Action2.png", "Action2");
+	this->mpPanel->LoadImageToBitmap("../../Models/Action3.png", "Action3");
+	this->mpPanel->LoadImageToBitmap("../../Models/Action4.png", "Action4");
+	this->mpPanel->LoadImageToBitmap("../../Models/Action5.png", "Action5");
+	this->mpPanel->LoadImageToBitmap("../../Models/Action6.png", "Action6");
+	this->mpPanel->LoadImageToBitmap("../../Models/Action7.png", "Action7");
+	this->mpPanel->LoadImageToBitmap("../../Models/Action8.png", "Action8");
+	this->mpPanel->LoadImageToBitmap("../../Models/Action9.png", "Action9");
+
+	this->mpPanel->LoadImageToBitmap("../../Models/Number1.png", "Number1");
+	this->mpPanel->LoadImageToBitmap("../../Models/Number2.png", "Number2");
+	this->mpPanel->LoadImageToBitmap("../../Models/Number3.png", "Number3");
+	this->mpPanel->LoadImageToBitmap("../../Models/Number4.png", "Number4");
+	this->mpPanel->LoadImageToBitmap("../../Models/Number5.png", "Number5");
+	this->mpPanel->LoadImageToBitmap("../../Models/Number6.png", "Number6");
+	this->mpPanel->LoadImageToBitmap("../../Models/Number7.png", "Number7");
+	this->mpPanel->LoadImageToBitmap("../../Models/Number8.png", "Number8");
+	this->mpPanel->LoadImageToBitmap("../../Models/Number9.png", "Number9");
 	
 	this->InitButtons();
 
@@ -61,22 +86,8 @@ bool EventMenu::Init(int parentWidth,
 bool EventMenu::OpenAt(Room *pRoom)
 {
 	int margin = this->mParentPanelWidth / 24;
-	int posX = 0;
+	int posX = this->mParentPanelWidth - this->mMenuWidth;
 	int posY = 0;
-	//FPosition mousePos = Mouse::GetPositionPercentage();
-	//mousePos.x = mousePos.x * this->mParentPanelWidth;
-	//mousePos.y = mousePos.y * this->mParentPanelHeight;
-	Position mousePos = Mouse::GetPosition();
-
-	if (mousePos.x + margin + this->mMenuWidth < this->mParentPanelWidth)
-		posX = mousePos.x + margin;
-	else
-		posX = mousePos.x - margin - this->mMenuWidth;
-
-	if (mousePos.y + margin + this->mMenuHeight < this->mParentPanelHeight)
-		posY = mousePos.y + margin;
-	else
-		posY = mousePos.y - margin - this->mMenuHeight;
 
 	this->mpPanel->SetLeft(posX);
 	this->mpPanel->SetTop(posY);
@@ -89,7 +100,7 @@ bool EventMenu::OpenAt(Room *pRoom)
 
 	// TODO: Following functionallity does not work because GetActiveEvents
 	// does not work as intended. Not too important feature anyway
-
+	//std::vector<LogEvent*> test = pRoom->GetActiveEvents();
 	//for (int i = 0; i < pRoom->GetActiveEvents().size(); i++)
 	//{
 	//	switch (pRoom->GetActiveEvents()[i]->GetType())
@@ -134,25 +145,6 @@ bool EventMenu::Update()
 		this->mButtonFocus = false;
 		this->mDraggingWindow = false;
 	}
-
-	if (this->mDraggingWindow)
-	{
-		int left = Mouse::GetExactX() - this->mDragX;
-		if (left + this->mMenuWidth > this->mParentPanelWidth)
-			left = this->mParentPanelWidth - this->mMenuWidth;
-		else if (left < 0)
-			left = 0;
-
-		int top = Mouse::GetExactY() - this->mDragY;
-		if (top + this->mMenuHeight > this->mParentPanelHeight)
-			top = this->mParentPanelHeight - this->mMenuHeight;
-		else if (top < 0)
-			top = 0;
-
-		this->mpPanel->SetLeft(left);
-		this->mpPanel->SetTop(top);
-		this->mpPanel->UpdateWindowPos();
-	}
 	return true;
 }
 
@@ -185,36 +177,136 @@ void EventMenu::Update( Button *attribute)
 {
 	if (this->mpPanel->IsVisible())
 	{
-		std::cout << "Clicked on ";
 		std::string button_name = attribute->GetName();
 		if (button_name.compare("Exit") == 0)
 		{
 			this->mpPanel->Hide();
+			if (this->mActionMode == NUMBERS) {
+				this->mSwapActionMode(); // Menu closing, reset buttons
+			}
 			this->mVisible = false;
 		}
 		else
 		{
+
 			if (button_name.compare("Fire") == 0)
 			{
 				this->mpActiveRoom->AddPlotterEvent(Event::Fire);
 				this->mLastClicked = Event::Fire;
+				this->NotifyObservers(this->mpActiveRoom);
 			}
 			else if (button_name.compare("Gas") == 0)
 			{
 				this->mpActiveRoom->AddPlotterEvent(Event::Gas);
 				this->mLastClicked = Event::Gas;
+				this->NotifyObservers(this->mpActiveRoom);
 			}
-			if (button_name.compare("Water") == 0)
+			else if (button_name.compare("Water") == 0)
 			{
 				this->mpActiveRoom->AddPlotterEvent(Event::Water);
 				this->mLastClicked = Event::Water;
+				this->NotifyObservers(this->mpActiveRoom);
 			}
 			else if (button_name.compare("Injury") == 0)
 			{
 				this->mpActiveRoom->AddPlotterEvent(Event::Injury);
 				this->mLastClicked = Event::Injury;
+				this->NotifyObservers(this->mpActiveRoom);
 			}
-			this->NotifyObservers(this->mpActiveRoom);
+			else if (this->mActionMode == STANDARD)
+			{
+				if (button_name.compare("Injured_Moved") == 0)
+				{
+					this->mInjuryType = MOVED;
+					this->mSwapActionMode();
+				}
+				else if (button_name.compare("Injured_Treated") == 0)
+				{
+					this->mInjuryType = TREATED;
+					this->mSwapActionMode();
+				}
+				else if (button_name.compare("Injured_Reported") == 0)
+				{
+					this->mInjuryType = REPORTED;
+					this->mSwapActionMode();
+				}
+				else if (button_name.compare("Hole_In_Bulk") == 0)
+				{
+					//TODO Add new action object
+				}
+				else if (button_name.compare("Ventilation_In") == 0)
+				{
+					//TODO Add new action object
+				}
+				else if (button_name.compare("Ventilation_Out") == 0)
+				{
+					//TODO Add new action object
+				}
+				else if (button_name.compare("Cooling_Wall") == 0)
+				{
+					//TODO Add new action object
+				}
+				else if (button_name.compare("Supporting_Wall") == 0)
+				{
+					//TODO Add new action object
+				}
+				else if (button_name.compare("Damaged_Bulk") == 0)
+				{
+					//TODO Add new action object
+				}
+			}
+			else { //! ActionMode == NUMBERS
+				// Injury action has been selected, and these buttons now
+				// correspond to the amount of injured people to draw the symbol
+				// with, from 1-9
+				//! this->mInjuryType contains which kind of triangle to use
+				//! MOVED, TREATED or REPORTED
+				if (button_name.compare("Injured_Moved") == 0) //! 1
+				{
+					//TODO Add new action object
+					this->mSwapActionMode();
+				}
+				else if (button_name.compare("Injured_Treated") == 0) //! 2
+				{
+					//TODO Add new action object
+					this->mSwapActionMode();
+				}
+				else if (button_name.compare("Injured_Reported") == 0) //! 3
+				{
+					//TODO Add new action object
+					this->mSwapActionMode();
+				}
+				else if (button_name.compare("Hole_In_Bulk") == 0) //! 4
+				{
+					//TODO Add new action object
+					this->mSwapActionMode();
+				}
+				else if (button_name.compare("Ventilation_In") == 0) //! 5
+				{
+					//TODO Add new action object
+					this->mSwapActionMode();
+				}
+				else if (button_name.compare("Ventilation_Out") == 0) //! 6
+				{
+					//TODO Add new action object
+					this->mSwapActionMode();
+				}
+				else if (button_name.compare("Cooling_Wall") == 0) //! 7
+				{
+					//TODO Add new action object
+					this->mSwapActionMode();
+				}
+				else if (button_name.compare("Supporting_Wall") == 0) //! 8
+				{
+					//TODO Add new action object
+					this->mSwapActionMode();
+				}
+				else if (button_name.compare("Damaged_Bulk") == 0) //! 9
+				{
+					//TODO Add new action object
+					this->mSwapActionMode();
+				}
+			}
 		}
 	}
 }
@@ -224,39 +316,182 @@ Event::Type EventMenu::GetLastClicked()
 	return this->mLastClicked;
 }
 
+void EventMenu::mSwapActionMode()
+{
+	if (this->mActionMode == STANDARD)
+	{
+		this->mActionMode = NUMBERS;
+		this->mpPanel->GetButtonByName("Injured_Moved")->SetBitmap(
+			this->mpPanel->GetBitmapByName("Number1"));
+
+		this->mpPanel->GetButtonByName("Injured_Treated")->SetBitmap(
+			this->mpPanel->GetBitmapByName("Number2"));
+
+		this->mpPanel->GetButtonByName("Injured_Reported")->SetBitmap(
+			this->mpPanel->GetBitmapByName("Number3"));
+
+		this->mpPanel->GetButtonByName("Hole_In_Bulk")->SetBitmap(
+			this->mpPanel->GetBitmapByName("Number4"));
+
+		this->mpPanel->GetButtonByName("Ventilation_In")->SetBitmap(
+			this->mpPanel->GetBitmapByName("Number5"));
+
+		this->mpPanel->GetButtonByName("Ventilation_Out")->SetBitmap(
+			this->mpPanel->GetBitmapByName("Number6"));
+
+		this->mpPanel->GetButtonByName("Cooling_Wall")->SetBitmap(
+			this->mpPanel->GetBitmapByName("Number7"));
+
+		this->mpPanel->GetButtonByName("Supporting_Wall")->SetBitmap(
+			this->mpPanel->GetBitmapByName("Number8"));
+
+		this->mpPanel->GetButtonByName("Damaged_Bulk")->SetBitmap(
+			this->mpPanel->GetBitmapByName("Number9"));
+	}
+	else {
+		this->mActionMode = STANDARD;
+
+		// Reset all button bitmaps
+		this->mpPanel->GetButtonByName("Injured_Moved")->SetBitmap(
+			this->mpPanel->GetBitmapByName("Action1"));
+
+		this->mpPanel->GetButtonByName("Injured_Treated")->SetBitmap(
+			this->mpPanel->GetBitmapByName("Action2"));
+
+		this->mpPanel->GetButtonByName("Injured_Reported")->SetBitmap(
+			this->mpPanel->GetBitmapByName("Action3"));
+
+		this->mpPanel->GetButtonByName("Hole_In_Bulk")->SetBitmap(
+			this->mpPanel->GetBitmapByName("Action4"));
+
+		this->mpPanel->GetButtonByName("Ventilation_In")->SetBitmap(
+			this->mpPanel->GetBitmapByName("Action5"));
+
+		this->mpPanel->GetButtonByName("Ventilation_Out")->SetBitmap(
+			this->mpPanel->GetBitmapByName("Action6"));
+
+		this->mpPanel->GetButtonByName("Cooling_Wall")->SetBitmap(
+			this->mpPanel->GetBitmapByName("Action7"));
+
+		this->mpPanel->GetButtonByName("Supporting_Wall")->SetBitmap(
+			this->mpPanel->GetBitmapByName("Action8"));
+
+		this->mpPanel->GetButtonByName("Damaged_Bulk")->SetBitmap(
+			this->mpPanel->GetBitmapByName("Action9"));
+	}
+}
+
 void EventMenu::InitButtons()
 {
-	int margin = this->mMenuWidth / 6;
-	int padding = this->mMenuWidth / 6;
+	int margin = this->mMenuWidth / 10;
+	int padding = this->mMenuWidth / 9;
+	int actionMargin = this->mMenuWidth / 15;
 	int buttonSize = this->mMenuWidth / 4;
+	int eventButtonSize = this->mMenuWidth / 3;
+
+	// Event buttons
+
 	this->mpPanel->AddButton(
-		buttonSize,
-		buttonSize,
+		eventButtonSize,
+		eventButtonSize,
 		margin,
 		margin,
 		this->mpPanel->GetBitmapByName("FireOff"),
 		"Fire");
 	this->mpPanel->AddButton(
-		buttonSize,
-		buttonSize,
-		margin + buttonSize + padding,
-		margin,
+		eventButtonSize,
+		eventButtonSize,
+		margin + eventButtonSize + padding,
+		this->mMenuWidth / 2 - eventButtonSize / 2,
 		this->mpPanel->GetBitmapByName("WaterOff"),
 		"Water"); 
 	this->mpPanel->AddButton(
-		buttonSize,
-		buttonSize,
+		eventButtonSize,
+		eventButtonSize,
 		margin,
-		margin + buttonSize + padding,
+		this->mMenuWidth - margin - eventButtonSize,
 		this->mpPanel->GetBitmapByName("GasOff"),
 		"Gas");
+
+	// Action buttons
+	// Ordered:
+	// 1 2 3
+	// 4 5 6
+	// 7 8 9
+
 	this->mpPanel->AddButton(
 		buttonSize,
 		buttonSize,
-		margin + buttonSize + padding,
-		margin + buttonSize + padding,
-		this->mpPanel->GetBitmapByName("InjuryOff"),
-		"Injury");
+		margin + (eventButtonSize + margin) * 2,
+		actionMargin,
+		this->mpPanel->GetBitmapByName("Action1"),
+		"Injured_Moved");
+
+	this->mpPanel->AddButton(
+		buttonSize,
+		buttonSize,
+		margin + (eventButtonSize + margin) * 2,
+		(this->mMenuWidth / 2) - (buttonSize / 2),
+		this->mpPanel->GetBitmapByName("Action2"),
+		"Injured_Treated");
+
+	this->mpPanel->AddButton(
+		buttonSize,
+		buttonSize,
+		margin + (eventButtonSize + margin) * 2,
+		this->mMenuWidth - buttonSize - actionMargin,
+		this->mpPanel->GetBitmapByName("Action3"),
+		"Injured_Reported");
+
+	this->mpPanel->AddButton(
+		buttonSize,
+		buttonSize,
+		margin + (eventButtonSize + margin) * 2 + actionMargin + buttonSize,
+		actionMargin,
+		this->mpPanel->GetBitmapByName("Action4"),
+		"Hole_In_Bulk");
+
+
+	this->mpPanel->AddButton(
+		buttonSize,
+		buttonSize,
+		margin + (eventButtonSize + margin) * 2 + actionMargin + buttonSize,
+		(this->mMenuWidth / 2) - (buttonSize / 2),
+		this->mpPanel->GetBitmapByName("Action5"),
+		"Ventilation_In");
+
+	this->mpPanel->AddButton(
+		buttonSize,
+		buttonSize,
+		margin + (eventButtonSize + margin) * 2 + actionMargin + buttonSize,
+		this->mMenuWidth - buttonSize - actionMargin,
+		this->mpPanel->GetBitmapByName("Action6"),
+		"Ventilation_Out");
+
+	this->mpPanel->AddButton(
+		buttonSize,
+		buttonSize,
+		margin + (eventButtonSize + margin) * 2 + (actionMargin + buttonSize) * 2,
+		actionMargin,
+		this->mpPanel->GetBitmapByName("Action7"),
+		"Cooling_Wall");
+
+	this->mpPanel->AddButton(
+		buttonSize,
+		buttonSize,
+		margin + (eventButtonSize + margin) * 2 + (actionMargin + buttonSize) * 2,
+		(this->mMenuWidth / 2) - (buttonSize / 2),
+		this->mpPanel->GetBitmapByName("Action8"),
+		"Supporting_Wall");
+
+	this->mpPanel->AddButton(
+		buttonSize,
+		buttonSize,
+		margin + (eventButtonSize + margin) * 2 + (actionMargin + buttonSize) * 2,
+		this->mMenuWidth - buttonSize - actionMargin,
+		this->mpPanel->GetBitmapByName("Action9"),
+		"Damaged_Bulk");
+
 	this->mpPanel->AddButton(
 		this->mMenuWidth / 9,
 		this->mMenuWidth / 9,
@@ -267,6 +502,17 @@ void EventMenu::InitButtons()
 	this->mpPanel->GetButtonByName("Fire")->AddObserver(this);
 	this->mpPanel->GetButtonByName("Gas")->AddObserver(this);
 	this->mpPanel->GetButtonByName("Water")->AddObserver(this);
-	this->mpPanel->GetButtonByName("Injury")->AddObserver(this);
 	this->mpPanel->GetButtonByName("Exit")->AddObserver(this);
+
+	//TODO ADD ACTION BUTTON OBSERVERS HERE
+	this->mpPanel->GetButtonByName("Injured_Moved")->AddObserver(this);
+	this->mpPanel->GetButtonByName("Injured_Treated")->AddObserver(this);
+	this->mpPanel->GetButtonByName("Injured_Reported")->AddObserver(this);
+	this->mpPanel->GetButtonByName("Hole_In_Bulk")->AddObserver(this);
+	this->mpPanel->GetButtonByName("Ventilation_In")->AddObserver(this);
+	this->mpPanel->GetButtonByName("Ventilation_Out")->AddObserver(this);
+	this->mpPanel->GetButtonByName("Cooling_Wall")->AddObserver(this);
+	this->mpPanel->GetButtonByName("Supporting_Wall")->AddObserver(this);
+	this->mpPanel->GetButtonByName("Damaged_Bulk")->AddObserver(this);
+
 }
