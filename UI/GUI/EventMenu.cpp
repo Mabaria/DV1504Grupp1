@@ -64,6 +64,16 @@ bool EventMenu::Init(int parentWidth,
 	this->mpPanel->LoadImageToBitmap("../../Models/Action7.png", "Action7");
 	this->mpPanel->LoadImageToBitmap("../../Models/Action8.png", "Action8");
 	this->mpPanel->LoadImageToBitmap("../../Models/Action9.png", "Action9");
+
+	this->mpPanel->LoadImageToBitmap("../../Models/Number1.png", "Number1");
+	this->mpPanel->LoadImageToBitmap("../../Models/Number2.png", "Number2");
+	this->mpPanel->LoadImageToBitmap("../../Models/Number3.png", "Number3");
+	this->mpPanel->LoadImageToBitmap("../../Models/Number4.png", "Number4");
+	this->mpPanel->LoadImageToBitmap("../../Models/Number5.png", "Number5");
+	this->mpPanel->LoadImageToBitmap("../../Models/Number6.png", "Number6");
+	this->mpPanel->LoadImageToBitmap("../../Models/Number7.png", "Number7");
+	this->mpPanel->LoadImageToBitmap("../../Models/Number8.png", "Number8");
+	this->mpPanel->LoadImageToBitmap("../../Models/Number9.png", "Number9");
 	
 	this->InitButtons();
 
@@ -194,7 +204,6 @@ void EventMenu::Update( Button *attribute)
 {
 	if (this->mpPanel->IsVisible())
 	{
-		std::cout << "Clicked on ";
 		std::string button_name = attribute->GetName();
 		if (button_name.compare("Exit") == 0)
 		{
@@ -340,31 +349,31 @@ void EventMenu::mSwapActionMode()
 	{
 		this->mActionMode = NUMBERS;
 		this->mpPanel->GetButtonByName("Injured_Moved")->SetBitmap(
-			this->mpPanel->GetBitmapByName("FireOn"));
+			this->mpPanel->GetBitmapByName("Number1"));
 
 		this->mpPanel->GetButtonByName("Injured_Treated")->SetBitmap(
-			this->mpPanel->GetBitmapByName("FireOn"));
+			this->mpPanel->GetBitmapByName("Number2"));
 
 		this->mpPanel->GetButtonByName("Injured_Reported")->SetBitmap(
-			this->mpPanel->GetBitmapByName("FireOn"));
+			this->mpPanel->GetBitmapByName("Number3"));
 
 		this->mpPanel->GetButtonByName("Hole_In_Bulk")->SetBitmap(
-			this->mpPanel->GetBitmapByName("FireOn"));
+			this->mpPanel->GetBitmapByName("Number4"));
 
 		this->mpPanel->GetButtonByName("Ventilation_In")->SetBitmap(
-			this->mpPanel->GetBitmapByName("FireOn"));
+			this->mpPanel->GetBitmapByName("Number5"));
 
 		this->mpPanel->GetButtonByName("Ventilation_Out")->SetBitmap(
-			this->mpPanel->GetBitmapByName("FireOn"));
+			this->mpPanel->GetBitmapByName("Number6"));
 
 		this->mpPanel->GetButtonByName("Cooling_Wall")->SetBitmap(
-			this->mpPanel->GetBitmapByName("FireOn"));
+			this->mpPanel->GetBitmapByName("Number7"));
 
 		this->mpPanel->GetButtonByName("Supporting_Wall")->SetBitmap(
-			this->mpPanel->GetBitmapByName("FireOn"));
+			this->mpPanel->GetBitmapByName("Number8"));
 
 		this->mpPanel->GetButtonByName("Damaged_Bulk")->SetBitmap(
-			this->mpPanel->GetBitmapByName("FireOn"));
+			this->mpPanel->GetBitmapByName("Number9"));
 	}
 	else {
 		this->mActionMode = STANDARD;
