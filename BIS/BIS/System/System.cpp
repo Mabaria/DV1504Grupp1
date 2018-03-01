@@ -607,24 +607,24 @@ void System::mSetupModels()
 	Quad quad(true);
 
 	this->mpTopViewPanel->AddMeshObject(
-		"Text3D_Floor01",
+		"Text3D_Floor3",
 		quad.GetIndices(),
 		quad.GetVertices(), PANEL3D_SHADER_TEXT,
-		L"../../Models/d01.dds"
+		L"../../Models/d3.dds"
 	); 
 	
 	this->mpTopViewPanel->AddMeshObject(
-		"Text3D_Floor1", 
-		quad.GetIndices(),
-		quad.GetVertices(), PANEL3D_SHADER_TEXT,
-		L"../../Models/d1.dds"
-	);
-	
-	this->mpTopViewPanel->AddMeshObject(
-		"Text3D_Floor2",
+		"Text3D_Floor2", 
 		quad.GetIndices(),
 		quad.GetVertices(), PANEL3D_SHADER_TEXT,
 		L"../../Models/d2.dds"
+	);
+	
+	this->mpTopViewPanel->AddMeshObject(
+		"Text3D_Floor1",
+		quad.GetIndices(),
+		quad.GetVertices(), PANEL3D_SHADER_TEXT,
+		L"../../Models/d1.dds"
 	);
 
 
@@ -640,33 +640,33 @@ void System::mSetupModels()
 	float scale = 0.1f;
 
 
-	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor01")->
-		Scale(scale * 2.0f, scale * 1.2f, scale * 3.5f);
-
-	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor01")->
-		Rotate(XM_PI / 2.0f, XM_PI, 0.0f);
-
-	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor01")->
-		Translate(0.85f, 0.0f, -0.5f);
-
-
-	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor1")->
+	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor3")->
 		Scale(scale * 1.0f, scale * 1.2f, scale * 3.5f);
 
-	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor1")->
+	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor3")->
+		Rotate(XM_PI / 2.0f, XM_PI, 0.0f);
+
+	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor3")->
+		Translate(0.85f, 0.0f, -0.45f);
+
+
+	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor2")->
+		Scale(scale * 1.0f, scale * 1.2f, scale * 3.5f);
+
+	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor2")->
 		Rotate(XM_PI / 2.0, XM_PI, 0.0f);
 
-	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor1")->
+	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor2")->
 		Translate(0.85f, 0.0f, 0.05f);
 
 
-	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor2")->
+	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor1")->
 		Scale(scale * 1.0f, scale * 1.2f, scale * 3.5f);
 
-	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor2")->
+	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor1")->
 		Rotate(XM_PI / 2.0f, XM_PI, 0.0f);
 
-	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor2")->
+	this->mpTopViewPanel->rGetMeshObject("Text3D_Floor1")->
 		Translate(0.85f, 0.0f, 0.55f);
 
 	
