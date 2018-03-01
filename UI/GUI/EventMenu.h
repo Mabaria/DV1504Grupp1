@@ -25,6 +25,8 @@ public:
 	bool Update();
 	bool Draw() const;
 
+	void Close();
+
 	bool IsMouseInsidePanel();
 	bool IsVisible();
 

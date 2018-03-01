@@ -478,4 +478,5 @@ void Camera::Update(Button * attribute)
 {
 	// Reset the camera when prompted by button
 	this->mReset();
+	this->NotifyObservers(&std::string("reset"));
 }

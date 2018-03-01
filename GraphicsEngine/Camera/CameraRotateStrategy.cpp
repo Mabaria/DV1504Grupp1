@@ -129,6 +129,12 @@ void CameraRotateStrategy::FocusRoom(Room *pRoom, bool animate)
 
 }
 
+void CameraRotateStrategy::Reset()
+{
+	this->mAnimate = false;
+	this->HandleChangeInCamera();
+}
+
 void CameraRotateStrategy::HandleChangeInCamera()
 {
 	XMVECTOR dir = XMLoadFloat3(&this->mDirection);
@@ -154,7 +160,7 @@ void CameraRotateStrategy::AnimateToNewPosition()
 	this->pCamera->SetLookVector((dir * 0.2f) + this->pCamera->GetLookVector());
 	this->mDistance -= (this->mDistance - this->mMinDistance) * 0.2f;
 
-	if (XMVectorGetX(XMVector3Length(dir)) < 0.0f && this->mDistance <= this->mMinDistance)
+	if (XMVectorGetX(XMVector3Length(dir)) <= 0.01f && this->mDistance <= this->mMinDistance)
 	{
 		this->mDistance = this->mMinDistance;
 		this->mAnimate = false;
