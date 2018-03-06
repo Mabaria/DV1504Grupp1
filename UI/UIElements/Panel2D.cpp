@@ -390,12 +390,12 @@ void Panel2D::mUpdateButtons()
 						button->SetRectStatus(BUTTON_STATE::CLICKED);
 						notification_object->NotifyObservers
 						(notification_object->GetRoom());
+						notification_object->SetIfNewStatus(false);
 					}
 					else if (!Mouse::IsButtonDown(Buttons::Left) ||
 						button->GetButtState() != BUTTON_STATE::CLICKED)
 					{
 						button->SetRectStatus(BUTTON_STATE::HOVER);
-						notification_object->SetIfNewStatus(false);
 					}
 				}
 				else
