@@ -110,6 +110,7 @@ public:
 		ID2D1Bitmap **bitmap);
 
 	const void SetActionHover(bool state);
+	const void SetIcon(ActionData data);
 
 private:
 	D3D11 mDirect3D;
@@ -152,8 +153,9 @@ private:
 
 	Actions *mpActions;
 
-	// nullptr if there is no current icon.
 	ID2D1Bitmap *mpIconBitmap;
 	ID2D1Bitmap *mpNumberBitmap;
+	D2D1_RECT_F mCurrentIconRect;
+	D2D1_RECT_F mCurrentNumberRect;
 	bool mActionHover;
 };

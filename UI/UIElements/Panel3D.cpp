@@ -663,7 +663,6 @@ void Panel3D::InitActions()
 		
 		this->LoadImageToBitmap("../../Models/Symbols.dds", "iconBitmap");
 		this->LoadImageToBitmap("../../Models/Numbers.dds", "numberBitmap");
-		
 	}
 }
 
@@ -695,6 +694,50 @@ const void Panel3D::CreateSharedBitmapFromTexture(
 const void Panel3D::SetActionHover(bool state)
 {
 	this->mActionHover = state;
+}
+
+const void Panel3D::SetIcon(ActionData data)
+{
+	// Using magic to extract data from the uint32_t.
+	int rotation_index	= (data >> 4) & 7;
+	int icon_index		= data & 15;
+	int number_index	= (data >> 9) & 15;
+	bool has_number		= number_index == 0 ? false : true;
+
+	// Sizes of the entire bitmap.
+	static D2D1_SIZE_F icon_bitmap_size	= 
+		this->GetBitmapByName("iconBitmap")->GetSize();
+	static D2D1_SIZE_F number_bitmap_size = 
+		this->GetBitmapByName("numberBitmap")->GetSize();
+
+	// Sizes of individual icons/numbers.
+	static D2D1_SIZE_F icon_size = { 
+		icon_bitmap_size.width / 3, 
+		icon_bitmap_size.height / 3 };
+	static D2D1_SIZE_F number_size = { 
+		number_bitmap_size.width / 3, 
+		number_bitmap_size.height / 3 };
+	
+
+	D2D1_RECT_F icon;
+	icon.top	= (icon_index / 3) * icon_size.height;
+	icon.left	= (icon_index % 3) * icon_size.width;
+	icon.bottom = icon.top	+ icon_size.height;
+	icon.right	= icon.left + icon_size.width;
+
+	this->mCurrentIconRect = icon;
+
+	if (has_number)
+	{
+		number_index--;
+		D2D1_RECT_F number;
+		number.top		= (number_index / 3) * number_size.height;
+		number.left		= (number_index % 3) * number_size.width;
+		number.bottom	= number.top + number_size.height;
+		number.right	= number.left + number_size.width;
+
+		this->mCurrentNumberRect = number;
+	}
 }
 
 MovableCameraComponent * Panel3D::GetMovableComponent()
@@ -889,13 +932,16 @@ const void Panel3D::Draw()
 	{
 		this->mpActions->Draw();
 	}
+
+	static float ghost_opacity = 0.4f;
 	if (this->mActionHover)
 	{
 		//TODO Draw chosen icon on mouse position.
+		D2D1_RECT_F ghost_position;
+	
 	}
 
 	this->mDirect3D.GetSwapChain()->Present(1, 0);
-
 }
 
 MeshObject* Panel3D::rGetMeshObject(std::string name)
