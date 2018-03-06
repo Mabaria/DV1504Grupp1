@@ -3,7 +3,7 @@
 MovableCameraComponent::MovableCameraComponent()
 {
 	this->mpStrategy	= nullptr;
-	this->mBtnToMove	= Buttons::ScrollPress;
+	this->mBtnToMove	= Buttons::Right;
 
 	this->mMouseDiff.x	= 0;
 	this->mMouseDiff.y	= 0;
@@ -96,7 +96,11 @@ void MovableCameraComponent::Update(std::string * msg)
 	{
 		if (msg->compare("reset") == 0)
 		{
-			this->mpStrategy->Reset();
+			this->mpStrategy->Reset(false);
+		}
+		if (msg->compare("resetA") == 0)
+		{
+			this->mpStrategy->Reset(true);
 		}
 	}
 }

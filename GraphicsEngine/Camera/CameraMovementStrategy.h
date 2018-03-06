@@ -16,7 +16,7 @@ public:
 	virtual void Zoom(int zoom)							= 0;
 	virtual void Move(Position move)					= 0;
 	virtual void FocusRoom(Room *pRoom, bool animate)	= 0;
-	virtual void Reset()								= 0;
+	virtual void Reset(bool animate)					= 0;
 	virtual void HandleChangeInCamera()					= 0;
 	virtual void AnimateToNewPosition()					= 0;
 

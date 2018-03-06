@@ -1,7 +1,6 @@
 #pragma once
 #include "Panel2D.h"
 #include "../../Logic/Timer.h"
-#include <iostream>
 
 class CrewPanel : public Observer<Button>
 {

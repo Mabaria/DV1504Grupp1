@@ -16,7 +16,7 @@ Panel::Panel(int width, int height, int top, int left, HWND handle, LPCTSTR titl
 		0,
 		this->mTitle,
 		this->mTitle,
-		WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
+		WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_BORDER,
 		this->mLeft,
 		this->mTop,
 		this->mWidth,

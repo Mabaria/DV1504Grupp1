@@ -7,6 +7,8 @@ CameraRotateStrategy::CameraRotateStrategy()
 
 	this->mMaxHeight = 0.8f;
 	this->mMinHeight = 0.3f;
+
+	this->mZoomIn = false;
 }
 
 CameraRotateStrategy::~CameraRotateStrategy()
@@ -118,21 +120,40 @@ void CameraRotateStrategy::FocusRoom(Room *pRoom, bool animate)
 {
 	this->mAnimate = animate;
 
+	XMVECTOR new_pos = XMLoadFloat3(&pRoom->GetRoomCenter());
+	new_pos = XMVectorSetX(new_pos, XMVectorGetX(new_pos) - (pRoom->GetRoomSize().x / 4.0f));
+	
+
 	if (this->mAnimate)
-		this->mNewPosition = pRoom->GetRoomCenter();
+	{
+		XMStoreFloat3(&this->mNewPosition, new_pos); 
+		this->mZoomIn = true;
+	}
 	else
 	{
 		this->mDistance = this->mMinDistance;
 		this->pCamera->SetLookVector(pRoom->GetRoomCenter());
 		this->mUpdatePosition();
 	}
-
 }
 
-void CameraRotateStrategy::Reset()
+void CameraRotateStrategy::Reset(bool animate)
 {
-	this->mAnimate = false;
-	this->HandleChangeInCamera();
+	// Get default values and animate to it
+
+	if (animate)
+	{
+		this->mAnimate = true;
+		this->mZoomIn = false;
+		XMVECTOR new_pos = this->pCamera->GetDefaultValues().look;
+		XMStoreFloat3(&this->mNewPosition, new_pos);
+	}
+	else
+	{
+		this->mAnimate = false;
+		this->pCamera->Reset();
+		this->HandleChangeInCamera();
+	}
 }
 
 void CameraRotateStrategy::HandleChangeInCamera()
@@ -158,11 +179,17 @@ void CameraRotateStrategy::AnimateToNewPosition()
 	// Get new vector look at position and move it closer
 	XMVECTOR dir = XMLoadFloat3(&this->mNewPosition) - this->pCamera->GetLookVector();
 	this->pCamera->SetLookVector((dir * 0.2f) + this->pCamera->GetLookVector());
-	this->mDistance -= (this->mDistance - this->mMinDistance) * 0.2f;
+	
+	// Whether to zoom in or out
+	if (this->mZoomIn)
+		this->mDistance -= (this->mDistance - this->mMinDistance) * 0.2f;
+	else
+		this->mDistance -= (this->mDistance - this->mMaxDistance) * 0.2f;
+	
 
-	if (XMVectorGetX(XMVector3Length(dir)) <= 0.00f && this->mDistance <= this->mMinDistance)
+	if (XMVectorGetX(XMVector3Length(dir)) <= 0.00f)
 	{
-		this->mDistance = this->mMinDistance;
+		this->mDistance = this->mZoomIn ? this->mMinDistance : this->mMaxDistance;
 		this->mAnimate = false;
 	}
 
