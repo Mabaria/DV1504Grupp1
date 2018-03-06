@@ -8,6 +8,16 @@ Panel3D::Panel3D(int width, int height, int top, int left,
 {
 	this->mDirect3D.Init(this->mPanelWindow);
 	this->mDirect2D->InitDeviceAndContext(this->mDirect3D.GetDXGIDevice());
+	
+	// Binding the back buffer from the swap chain
+	// to the direct2d 
+	this->mpBackBuffer = nullptr;
+	this->mDirect3D.GetSwapChain()->GetBuffer(
+		0,
+		__uuidof(ID3D11Texture2D), 
+		(void**)&this->mpBackBuffer);
+	this->BindTextureToBitmap(this->mpBackBuffer);
+	//back_buffer_tex->Release();
 
 	// bfcull test
 	//D3D11_RASTERIZER_DESC rast_desc{};
@@ -649,6 +659,18 @@ void Panel3D::DrawBitmapToTexture(
 
 }
 
+void Panel3D::DrawBitmapToTexture(ID2D1Bitmap * bitmap, D2D1_RECT_F destRect, D2D1_RECT_F sourceRect, float opacity)
+{
+	this->mDirect2D->GetpContext()->BeginDraw();
+	this->mDirect2D->GetpContext()->DrawBitmap(
+		bitmap,
+		destRect,
+		opacity,
+		D2D1_BITMAP_INTERPOLATION_MODE_LINEAR,
+		sourceRect);
+	this->mDirect2D->GetpContext()->EndDraw();
+}
+
 void Panel3D::AddAction(float x, float y, ActionData data)
 {
 	this->mpActions->AddAction(x, y, data);
@@ -661,7 +683,7 @@ void Panel3D::InitActions()
 		this->mpActions = new Actions();
 		this->mpActions->Init(&this->mDirect3D);	
 		
-		this->LoadImageToBitmap("../../Models/Symbols.dds", "iconBitmap");
+		this->LoadImageToBitmap("../../Models/Symbols.png", "iconBitmap");
 		this->LoadImageToBitmap("../../Models/Numbers.dds", "numberBitmap");
 	}
 }
@@ -671,32 +693,12 @@ Actions * Panel3D::pGetActions()
 	return this->mpActions;
 }
 
-const void Panel3D::CreateSharedBitmapFromTexture(
-	ID3D11Texture2D *texture, 
-	ID2D1Bitmap **bitmap)
-{
-	// Getting the DXGI surface from the texture.
-	IDXGISurface *surface = nullptr;
-	texture->QueryInterface(
-		__uuidof(IDXGISurface), 
-		(void**)&surface);
-
-	// Creating the bitmap to share the surface.
-	this->mDirect2D->GetpRenderTarget()->CreateSharedBitmap(
-		__uuidof(IDXGISurface), 
-		(void*)surface, 
-		nullptr, 
-		bitmap);
-
-	surface->Release();
-}
-
 const void Panel3D::SetActionHover(bool state)
 {
 	this->mActionHover = state;
 }
 
-const void Panel3D::SetIcon(ActionData data)
+const void Panel3D::SetIcon(uint32_t data)
 {
 	// Using magic to extract data from the uint32_t.
 	int rotation_index	= (data >> 4) & 7;
@@ -792,17 +794,6 @@ const void Panel3D::Update()
 	//		this->mpActions->RemoveAction(&target);
 
 	//}
-	static bool icon_set = false;
-
-	if (this->mActionHover)
-	{
-		if (!icon_set)
-		{
-			//TODO Set bitmap rect based on action data.
-		}
-		//TODO Mouse position?
-	}
-
 }
 
 const void Panel3D::Draw()
@@ -934,11 +925,19 @@ const void Panel3D::Draw()
 	}
 
 	static float ghost_opacity = 0.4f;
-	if (this->mActionHover)
+	if (this->mActionHover && this->IsMouseInsidePanel())
 	{
 		//TODO Draw chosen icon on mouse position.
 		D2D1_RECT_F ghost_position;
-	
+		Position mouse_pos = Mouse::GetPosition();
+
+
+		this->DrawBitmapToTexture(
+			this->GetBitmapByName("iconBitmap"), 
+			D2D1::RectF(mouse_pos.x, mouse_pos.y, this->mCurrentIconRect.right - this->mCurrentIconRect.left, this->mCurrentIconRect.bottom - this->mCurrentIconRect.top),
+			this->mCurrentIconRect, 
+			ghost_opacity);
+		
 	}
 
 	this->mDirect3D.GetSwapChain()->Present(1, 0);

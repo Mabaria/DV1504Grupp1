@@ -206,6 +206,7 @@ void System::mUpdate()
 	this->mpMenuPanel->Update();
 	this->mpInfoPanel.Update();
 	this->mpCrewPanel.Update();
+	this->mUpdateGhostIcons();
 }
 
 void System::mDraw()
@@ -443,6 +444,28 @@ void System::mUpdateEvents(Room * room)
 		event_data,
 		this->mpSideViewPanel->rGetDirect3D().GetContext(),
 		index_in_deck);
+}
+
+void System::mUpdateGhostIcons()
+{
+	static bool is_updated = false;
+	if (this->mActionHandler.IsWaiting())
+	{
+		if (is_updated)
+		{
+			this->mpTopViewPanel->SetIcon(*this->mActionHandler.GetLastAction());
+			this->mpTopViewPanel->SetActionHover(true);
+			is_updated = true;
+		}
+	}
+	else
+	{
+		if (!is_updated)
+		{
+			this->mpTopViewPanel->SetActionHover(false);
+			is_updated = true;
+		}
+	}
 }
 
 void System::mSetupPanels()

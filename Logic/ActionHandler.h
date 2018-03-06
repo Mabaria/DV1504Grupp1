@@ -14,6 +14,7 @@ public:
 	virtual reality Update(ObserverInfo *pObsInf) override;
 	virtual reality AddAction(float x, float z);
 	virtual reality SwitchWaitingState();
+	uint32_t *GetLastAction();
 
 	const bool IsWaiting() const;
 private:

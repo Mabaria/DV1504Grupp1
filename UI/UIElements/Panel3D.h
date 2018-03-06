@@ -20,6 +20,7 @@ enum PANEL3D_SHADER_TYPE
 };
 
 class Panel3D : public Panel, public Observer<Button>
+	
 {
 public:
 	Panel3D(
@@ -97,6 +98,11 @@ public:
 		float startY,
 		float widthOfTex,
 		float heightOfTex);
+	void DrawBitmapToTexture(
+		ID2D1Bitmap *bitmap,
+		D2D1_RECT_F destRect,
+		D2D1_RECT_F sourceRect,
+		float opacity = 1.0f);
 	//void SetCameraPosition()
 
 
@@ -105,12 +111,8 @@ public:
 	void InitActions();
 	Actions *pGetActions();
 
-	const void CreateSharedBitmapFromTexture(
-		ID3D11Texture2D *texture, 
-		ID2D1Bitmap **bitmap);
-
 	const void SetActionHover(bool state);
-	const void SetIcon(ActionData data);
+	const void SetIcon(uint32_t data);
 
 private:
 	D3D11 mDirect3D;
@@ -153,6 +155,7 @@ private:
 
 	Actions *mpActions;
 
+	ID3D11Texture2D *mpBackBuffer;
 	ID2D1Bitmap *mpIconBitmap;
 	ID2D1Bitmap *mpNumberBitmap;
 	D2D1_RECT_F mCurrentIconRect;
