@@ -434,33 +434,34 @@ void EventMenu::mSwapActionMode()
 
 void EventMenu::InitButtons()
 {
-	int margin = this->mMenuWidth / 10;
 	int padding = this->mMenuWidth / 9;
-	int actionMargin = this->mMenuWidth / 15;
+	int actionMargin = this->mMenuWidth / 14;
 	int buttonSize = this->mMenuWidth / 4;
-	int eventButtonSize = this->mMenuWidth / 3;
+	int topStartPos = this->mMenuHeight / 10;
 
 	// Event buttons
 
 	this->mpPanel->AddButton(
-		eventButtonSize,
-		eventButtonSize,
-		margin,
-		margin,
+		buttonSize,
+		buttonSize,
+		topStartPos,
+		actionMargin,
 		this->mpPanel->GetBitmapByName("FireOff"),
 		"Fire");
+
 	this->mpPanel->AddButton(
-		eventButtonSize,
-		eventButtonSize,
-		margin + eventButtonSize + padding,
-		this->mMenuWidth / 2 - eventButtonSize / 2,
+		buttonSize,
+		buttonSize,
+		topStartPos,
+		this->mMenuWidth / 2 - buttonSize / 2,
 		this->mpPanel->GetBitmapByName("WaterOff"),
 		"Water"); 
+
 	this->mpPanel->AddButton(
-		eventButtonSize,
-		eventButtonSize,
-		margin,
-		this->mMenuWidth - margin - eventButtonSize,
+		buttonSize,
+		buttonSize,
+		topStartPos,
+		this->mMenuWidth - actionMargin - buttonSize,
 		this->mpPanel->GetBitmapByName("GasOff"),
 		"Gas");
 
@@ -470,34 +471,43 @@ void EventMenu::InitButtons()
 	// 4 5 6
 	// 7 8 9
 
-	this->mpPanel->AddButton(
+	/*this->mpPanel->AddButton(
 		buttonSize,
 		buttonSize,
-		margin + (eventButtonSize + margin) * 2,
+		topStartPos + (buttonSize + actionMargin) * 1,
 		actionMargin,
-		this->mpPanel->GetBitmapByName("Action1"),
-		"Injured_Moved");
+		this->mpPanel->GetBitmapByName("Action9"),
+		"Damaged_Bulk");*/
+
 
 	this->mpPanel->AddButton(
 		buttonSize,
 		buttonSize,
-		margin + (eventButtonSize + margin) * 2,
+		topStartPos + (buttonSize + actionMargin) * 1,
+		actionMargin,
+		this->mpPanel->GetBitmapByName("Action7"),
+		"Cooling_Wall");
+
+	this->mpPanel->AddButton(
+		buttonSize,
+		buttonSize,
+		topStartPos + (buttonSize + actionMargin) * 1,
 		(this->mMenuWidth / 2) - (buttonSize / 2),
-		this->mpPanel->GetBitmapByName("Action2"),
-		"Injured_Treated");
+		this->mpPanel->GetBitmapByName("Action8"),
+		"Supporting_Wall");
 
 	this->mpPanel->AddButton(
 		buttonSize,
 		buttonSize,
-		margin + (eventButtonSize + margin) * 2,
+		topStartPos + (buttonSize + actionMargin) * 1,
 		this->mMenuWidth - buttonSize - actionMargin,
-		this->mpPanel->GetBitmapByName("Action3"),
-		"Injured_Reported");
+		this->mpPanel->GetBitmapByName("Action9"),
+		"Damaged_Bulk");
 
 	this->mpPanel->AddButton(
 		buttonSize,
 		buttonSize,
-		margin + (eventButtonSize + margin) * 2 + actionMargin + buttonSize,
+		topStartPos + (buttonSize + actionMargin) * 2 + actionMargin + buttonSize,
 		actionMargin,
 		this->mpPanel->GetBitmapByName("Action4"),
 		"Hole_In_Bulk");
@@ -506,7 +516,7 @@ void EventMenu::InitButtons()
 	this->mpPanel->AddButton(
 		buttonSize,
 		buttonSize,
-		margin + (eventButtonSize + margin) * 2 + actionMargin + buttonSize,
+		topStartPos + (buttonSize + actionMargin) * 2 + actionMargin + buttonSize,
 		(this->mMenuWidth / 2) - (buttonSize / 2),
 		this->mpPanel->GetBitmapByName("Action5"),
 		"Ventilation_In");
@@ -514,7 +524,7 @@ void EventMenu::InitButtons()
 	this->mpPanel->AddButton(
 		buttonSize,
 		buttonSize,
-		margin + (eventButtonSize + margin) * 2 + actionMargin + buttonSize,
+		topStartPos + (buttonSize + actionMargin) * 2 + actionMargin + buttonSize,
 		this->mMenuWidth - buttonSize - actionMargin,
 		this->mpPanel->GetBitmapByName("Action6"),
 		"Ventilation_Out");
@@ -522,26 +532,26 @@ void EventMenu::InitButtons()
 	this->mpPanel->AddButton(
 		buttonSize,
 		buttonSize,
-		margin + (eventButtonSize + margin) * 2 + (actionMargin + buttonSize) * 2,
+		topStartPos + (buttonSize + actionMargin) * 2 + (actionMargin + buttonSize) * 2,
 		actionMargin,
-		this->mpPanel->GetBitmapByName("Action7"),
-		"Cooling_Wall");
+		this->mpPanel->GetBitmapByName("Action1"),
+		"Injured_Moved");
 
 	this->mpPanel->AddButton(
 		buttonSize,
 		buttonSize,
-		margin + (eventButtonSize + margin) * 2 + (actionMargin + buttonSize) * 2,
+		topStartPos + (buttonSize + actionMargin) * 2 + (actionMargin + buttonSize) * 2,
 		(this->mMenuWidth / 2) - (buttonSize / 2),
-		this->mpPanel->GetBitmapByName("Action8"),
-		"Supporting_Wall");
+		this->mpPanel->GetBitmapByName("Action2"),
+		"Injured_Treated");
 
 	this->mpPanel->AddButton(
 		buttonSize,
 		buttonSize,
-		margin + (eventButtonSize + margin) * 2 + (actionMargin + buttonSize) * 2,
+		topStartPos + (buttonSize + actionMargin) * 2 + (actionMargin + buttonSize) * 2,
 		this->mMenuWidth - buttonSize - actionMargin,
-		this->mpPanel->GetBitmapByName("Action9"),
-		"Damaged_Bulk");
+		this->mpPanel->GetBitmapByName("Action3"),
+		"Injured_Reported");
 
 	this->mpPanel->AddButton(
 		this->mMenuWidth / 9,
@@ -550,6 +560,7 @@ void EventMenu::InitButtons()
 		this->mMenuWidth - this->mMenuWidth / 9,
 		this->mpPanel->GetBitmapByName("Exit"),
 		"Exit");
+
 	this->mpPanel->GetButtonByName("Fire")->AddObserver(this);
 	this->mpPanel->GetButtonByName("Gas")->AddObserver(this);
 	this->mpPanel->GetButtonByName("Water")->AddObserver(this);
