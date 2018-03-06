@@ -156,7 +156,7 @@ void EventMenu::UpdateEventButtonImages()
 	std::string data_names[] = { "Fire", "Water", "Gas" };
 
 	// Deactivates all buttons (no event active)
-	int size = floor(sizeof(data_names) / sizeof(std::string));
+	int size = (int)floor(sizeof(data_names) / sizeof(std::string));
 	for (int i = 0; i < size; i++)
 	{
 		if (this->mpPanel->GetButtonByName(data_names[i]))
