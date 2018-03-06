@@ -184,7 +184,7 @@ NotificationList * Panel2D::GetNotificationList()
 	return this->mNotificationList;
 }
 
-bool Panel2D::AddNotification(Room * room, LogEvent * event)
+bool Panel2D::AddNotification(Room * room, LogEvent * event, bool addedBySensor)
 {
 	ID2D1Bitmap *bitmap = nullptr;
 	switch (event->GetType())
@@ -209,7 +209,8 @@ bool Panel2D::AddNotification(Room * room, LogEvent * event)
 		this->mDirect2D,
 		room,
 		event,
-		bitmap);
+		bitmap,
+		addedBySensor);
 	return result;
 }
 
