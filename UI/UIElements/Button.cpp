@@ -415,6 +415,11 @@ const D2D1_COLOR_F Button::GetButtonColor() const
 	return this->mpFillBrush->GetColor();
 }
 
+const float Button::GetOpacity()
+{
+	return this->mOpacity;
+}
+
 void Button::ReleaseCOM(IUnknown *object)
 {
 	if (object)

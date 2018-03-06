@@ -183,6 +183,11 @@ void TextBox::SetTextAlignment(DWRITE_TEXT_ALIGNMENT textAlignment)
 	}
 }
 
+const std::string TextBox::GetText()
+{
+	return this->mTextString;
+}
+
 void TextBox::mCreateTextLayout()
 {
 	HRESULT hr = this->D2D1Panel->GetpTextFactory()->CreateTextLayout(

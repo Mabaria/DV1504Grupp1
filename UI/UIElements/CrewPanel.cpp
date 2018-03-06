@@ -52,6 +52,7 @@ void CrewPanel::Init(int width, int height, int top, int left, HWND parent, LPCT
 	this->mpPanel->LoadImageToBitmap("../../Models/Off.png", "Off");
 	this->mpPanel->LoadImageToBitmap("../../Models/On.png", "On");
 	this->mpPanel->LoadImageToBitmap("../../Models/Grid.png", "Grid");
+	this->mpPanel->LoadImageToBitmap("../../Models/RedSqr.png", "Red");
 
 	this->mpPanel->AddButton(50, 50, 0, this->mpPanel->GetWidth() - 50,
 		this->mpPanel->GetBitmapByName("Exit"), "Exit");
@@ -90,13 +91,36 @@ void CrewPanel::Update(Button * button)
 	{
 		for (int i = 0; i < 22; i++)
 		{
+			// Change the bitmap from on to off
 			this->mpPanel->GetButtonByName(this->mSeaMen[i])->SetBitmap
 			(this->mpPanel->GetBitmapByName("Off"));
+
+			// Sets the opacity of the "skadad" button to 0
 			this->mpPanel->GetButtonByName(this->mSeaMen[i] + "§")->
 				SetOpacity(0.0f);
-			this->mpPanel->GetButtonByName(this->mSeaMen[i] + "§")->
-				SetBitmap(this->mpPanel->GetBitmapByName("On"));
+
+
+			/*First time you clost the window the bitmap for the button behind
+			the time stamp is changed*/
+			if (this->mpPanel->GetButtonByName(this->mSeaMen[i] + "Text")
+				->getBitmapPointer() == this->mpPanel->GetBitmapByName("Grid"))
+			{
+				this->mpPanel->GetButtonByName(this->mSeaMen[i] + "Text")
+					->SetBitmap(this->mpPanel->GetBitmapByName("Red"));
+			}
+
+			// The second time you clost the window you change the opacity
+			// of the button
+			else if (this->mpPanel->GetTextBoxByName
+			(this->mSeaMen[i])->GetText().size() > 5 &&
+				this->mpPanel->GetButtonByName(this->mSeaMen[i] + "Text")
+				->getBitmapPointer() == this->mpPanel->GetBitmapByName("Red"))
+			{
+				this->mpPanel->GetButtonByName(this->mSeaMen[i] + "Text")->
+					SetOpacity(0.5f);
+			}
 		}
+
 		this->mVisible = false;
 		this->mpPanel->Hide();
 	}
@@ -104,12 +128,33 @@ void CrewPanel::Update(Button * button)
 	{
 		for (int i = 0; i < 22; i++)
 		{
+			// Change the bitmap from on to off
 			this->mpPanel->GetButtonByName(this->mSeaMen[i])->SetBitmap
 			(this->mpPanel->GetBitmapByName("Off"));
+
+			// Sets the opacity of the "skadad" button to 0
 			this->mpPanel->GetButtonByName(this->mSeaMen[i] + "§")->
 				SetOpacity(0.0f);
-			this->mpPanel->GetButtonByName(this->mSeaMen[i] + "§")->
-				SetBitmap(this->mpPanel->GetBitmapByName("On"));
+
+			/*First time you clost the window the bitmap for the button behind
+			the time stamp is changed*/			
+			if (this->mpPanel->GetButtonByName(this->mSeaMen[i] + "Text")
+				->getBitmapPointer() == this->mpPanel->GetBitmapByName("Grid"))
+			{
+				this->mpPanel->GetButtonByName(this->mSeaMen[i] + "Text")
+					->SetBitmap(this->mpPanel->GetBitmapByName("Red"));
+			}
+
+			// The second time you clost the window you change the opacity
+			// of the button
+			else if (this->mpPanel->GetTextBoxByName
+			(this->mSeaMen[i])->GetText().size() > 5 &&
+				this->mpPanel->GetButtonByName(this->mSeaMen[i] + "Text")
+				->getBitmapPointer() == this->mpPanel->GetBitmapByName("Red"))
+			{
+				this->mpPanel->GetButtonByName(this->mSeaMen[i] + "Text")->
+					SetOpacity(0.5f);
+			}
 		}
 		this->mVisible = false;
 		this->mpPanel->Hide();
@@ -117,12 +162,19 @@ void CrewPanel::Update(Button * button)
 	else if (button->getBitmapPointer() ==
 		this->mpPanel->GetBitmapByName("Off"))
 	{
+		// if button is off set it to on 
 		button->SetBitmap(this->mpPanel->GetBitmapByName("On"));
-		if (button->GetName().back()=='§')
-		{
-			button->SetOpacity(0.0f);
-		}
+
+		//make the button behind timestamp dr.disrespect(completely transparent)
+		this->mpPanel->GetButtonByName(button->GetName() + "Text")->
+			SetOpacity(0.0f);
+
+		// change the bitmap of the timestamp button to dummy bitmap 
+		this->mpPanel->GetButtonByName(button->GetName() + "Text")->
+			SetBitmap(this->mpPanel->GetBitmapByName("Grid"));
+		
 		this->mtimer.StartTimer();
+		// Set text with time
 		if (button->GetName().back() != '§')
 		{
 			std::string temp = this->mtimer.WhenTimerStarted();
@@ -135,16 +187,27 @@ void CrewPanel::Update(Button * button)
 	else if (button->getBitmapPointer() ==
 		this->mpPanel->GetBitmapByName("On"))
 	{
-		button->SetOpacity(1.0f);
 		button->SetBitmap(this->mpPanel->GetBitmapByName("Off"));
 		this->mtimer.StartTimer();
+		// Remove the time
 		if (button->GetName().back() != '§')
 		{
 			this->mpPanel->GetTextBoxByName(button->GetName())->SetText
 			(button->GetName());
+		}		
+	}
+	// change the "skadad" icon
+	else if (button->getBitmapPointer() ==
+		this->mpPanel->GetBitmapByName("Red"))
+	{
+		if (button->GetOpacity() == 0.0f)
+		{
+			button->SetOpacity(1.0f);
 		}
-		
-		
+		else
+		{
+			button->SetOpacity(0.0f);
+		}
 	}
 
 
@@ -193,17 +256,36 @@ void CrewPanel::mCreateTextBoxesAndButtons()
 			this->mpPanel->GetWidth() / 8,
 			this->mpPanel->GetHeight() / 13 + 1,
 			this->mpPanel->GetHeight() / 12 * (i + 1),
+			this->mpPanel->GetWidth() / 8 * 2,
+			this->mpPanel->GetBitmapByName("Grid"),
+			this->mSeaMen[i]+"Text");
+
+		this->mpPanel->AddButton(
+			this->mpPanel->GetWidth() / 8,
+			this->mpPanel->GetHeight() / 13 + 1,
+			this->mpPanel->GetHeight() / 12 * (i + 1),
 			this->mpPanel->GetWidth() / 8 * 3,
-			this->mpPanel->GetBitmapByName("On"),
+			this->mpPanel->GetBitmapByName("Red"),
 			this->mSeaMen[i]+"§");
+			//seamen name + § because they are on the same row so they need
+			//the same "group name" 
 
 		this->mpPanel->GetButtonByName(this->mSeaMen[i])->AddObserver(this);
+
 		this->mpPanel->GetButtonByName(this->mSeaMen[i] +
 			"§")->AddObserver(this);
+
 		this->mpPanel->GetButtonByName(this->mSeaMen[i] +
 			"§")->SetOpacity(0.0f);
-		this->mpPanel->GetButtonByName(this->mSeaMen[i])->SetRenderWidth(this->mpPanel->GetBitmapByName("Off")->GetSize().width);
-		this->mpPanel->GetButtonByName(this->mSeaMen[i] + "§")->SetRenderWidth(this->mpPanel->GetBitmapByName("On")->GetSize().width);
+
+		this->mpPanel->GetButtonByName(this->mSeaMen[i] +
+			"Text")->SetOpacity(0.0f);
+
+		this->mpPanel->GetButtonByName(this->mSeaMen[i])->SetRenderWidth
+		(this->mpPanel->GetBitmapByName("Off")->GetSize().width);
+
+		this->mpPanel->GetButtonByName(this->mSeaMen[i] + "§")->SetRenderWidth
+		(this->mpPanel->GetBitmapByName("Red")->GetSize().width);
 	}
 	for (int i = 11; i < 22; i++)
 	{
@@ -229,17 +311,34 @@ void CrewPanel::mCreateTextBoxesAndButtons()
 			this->mpPanel->GetWidth() / 8,
 			this->mpPanel->GetHeight() / 13 + 1,
 			this->mpPanel->GetHeight() / 12 * ((i % 11) + 1),
+			this->mpPanel->GetWidth() / 8 * 6,
+			this->mpPanel->GetBitmapByName("Grid"),
+			this->mSeaMen[i] + "Text");
+
+		this->mpPanel->AddButton(
+			this->mpPanel->GetWidth() / 8,
+			this->mpPanel->GetHeight() / 13 + 1,
+			this->mpPanel->GetHeight() / 12 * ((i % 11) + 1),
 			this->mpPanel->GetWidth() / 8 * 7,
-			this->mpPanel->GetBitmapByName("On"),
+			this->mpPanel->GetBitmapByName("Red"),
 			this->mSeaMen[i] + "§");
 
 		this->mpPanel->GetButtonByName(this->mSeaMen[i])->AddObserver(this);
+
 		this->mpPanel->GetButtonByName(this->mSeaMen[i] +
 			"§")->AddObserver(this);
+
 		this->mpPanel->GetButtonByName(this->mSeaMen[i] +
 			"§")->SetOpacity(0.0f);
-		this->mpPanel->GetButtonByName(this->mSeaMen[i])->SetRenderWidth(this->mpPanel->GetBitmapByName("Off")->GetSize().width);
-		this->mpPanel->GetButtonByName(this->mSeaMen[i]+"§")->SetRenderWidth(this->mpPanel->GetBitmapByName("On")->GetSize().width);
+
+		this->mpPanel->GetButtonByName(this->mSeaMen[i] +
+			"Text")->SetOpacity(0.0f);
+
+		this->mpPanel->GetButtonByName(this->mSeaMen[i])->SetRenderWidth
+		(this->mpPanel->GetBitmapByName("Off")->GetSize().width);
+
+		this->mpPanel->GetButtonByName(this->mSeaMen[i]+"§")->SetRenderWidth
+		(this->mpPanel->GetBitmapByName("Red")->GetSize().width);
 	}
 	this->mpPanel->AddButton(
 		this->mpPanel->GetWidth(),
