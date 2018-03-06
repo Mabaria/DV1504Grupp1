@@ -298,33 +298,36 @@ bool Button::SetButtonStatus(BUTTON_STATE buttState)
 
 void Button::SetRectStatus(BUTTON_STATE rectState)
 {
-	if (!(this->mCurrState == rectState))
+	if (!this->mForcedButtState)
 	{
-		this->mCurrState = rectState;
-		switch (rectState)
+		if (!(this->mCurrState == rectState))
 		{
-		case BUTTON_STATE::HOVER:
-			this->mpRectBrush->SetColor(D2D1::ColorF(D2D1::ColorF(
-				0.50f, 
-				0.50f, 
-				0.50f, 
-				1.0f)));
-			break;
-		case BUTTON_STATE::CLICKED:
-			this->mpRectBrush->SetColor(D2D1::ColorF(D2D1::ColorF(
-				0.00f,
-				0.00f,
-				0.00f,
-				1.0f)));
-			this->NotifyObservers(this);
-			break;
-		default:
-			this->mpRectBrush->SetColor(D2D1::ColorF(D2D1::ColorF(
-				0.75f, 
-				0.75f, 
-				0.75f, 
-				1.0f)));
-			break;
+			this->mCurrState = rectState;
+			switch (rectState)
+			{
+			case BUTTON_STATE::HOVER:
+				this->mpRectBrush->SetColor(D2D1::ColorF(D2D1::ColorF(
+					0.50f,
+					0.50f,
+					0.50f,
+					1.0f)));
+				break;
+			case BUTTON_STATE::CLICKED:
+				this->mpRectBrush->SetColor(D2D1::ColorF(D2D1::ColorF(
+					0.00f,
+					0.00f,
+					0.00f,
+					1.0f)));
+				 this->NotifyObservers(this);
+				break;
+			default:
+				this->mpRectBrush->SetColor(D2D1::ColorF(D2D1::ColorF(
+					0.75f,
+					0.75f,
+					0.75f,
+					1.0f)));
+				break;
+			}
 		}
 	}
 }
@@ -421,7 +424,19 @@ const D2D1_COLOR_F Button::GetButtonColor() const
 
 void Button::ForceButtState(BUTTON_STATE newState)
 {
+	//! POSSIBLE SOLUTION, this might also be shit idk
 	this->mCurrState = newState;
+	if (this->mBmpLoaded)
+	{
+		if (this->mpBitMap->GetSize().width != this->mWidth)
+		{
+			this->mBitmapRenderSize = D2D1::RectF(
+				this->mWidth * newState,
+				0,
+				this->mWidth* (newState + 1),
+				this->mpBitMap->GetSize().height);
+		}
+	}
 	this->mForcedButtState = true;
 }
 

@@ -58,6 +58,8 @@ private:
 	void mSwapActionMode();
 	INJURY_TYPE mInjuryType;
 
+	void mClearActionButtStates();
+
 
 	void InitButtons();
 };
