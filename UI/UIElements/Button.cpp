@@ -269,27 +269,31 @@ void Button::MoveIcon(int x, int y)
 		this->mIconSize.bottom + y);
 }
 
-void Button::SetButtonStatus(BUTTON_STATE buttState)
+bool Button::SetButtonStatus(BUTTON_STATE buttState)
 {
-	if (!(this->mCurrState == buttState))
+	if (!this->mForcedButtState)
 	{
-		this->mCurrState = buttState;
-		if (this->mBmpLoaded)
+		if (!(this->mCurrState == buttState))
 		{
-			if (this->mpBitMap->GetSize().width != this->mWidth)
+			this->mCurrState = buttState;
+			if (this->mBmpLoaded)
 			{
-				this->mBitmapRenderSize = D2D1::RectF(
-					this->mWidth * buttState,
-					0,
-					this->mWidth* (buttState + 1),
-					this->mpBitMap->GetSize().height);
-			}
-			if (buttState == 2)
-			{
-				this->NotifyObservers(this);
+				if (this->mpBitMap->GetSize().width != this->mWidth)
+				{
+					this->mBitmapRenderSize = D2D1::RectF(
+						this->mWidth * buttState,
+						0,
+						this->mWidth* (buttState + 1),
+						this->mpBitMap->GetSize().height);
+				}
+				if (buttState == 2)
+				{
+					this->NotifyObservers(this);
+				}
 			}
 		}
 	}
+	return !this->mForcedButtState; // Returns false if the state cannot be changed
 }
 
 void Button::SetRectStatus(BUTTON_STATE rectState)
@@ -413,6 +417,23 @@ void Button::SetButtonColor(float r, float g, float b, float a)
 const D2D1_COLOR_F Button::GetButtonColor() const
 {
 	return this->mpFillBrush->GetColor();
+}
+
+void Button::ForceButtState(BUTTON_STATE newState)
+{
+	this->mCurrState = newState;
+	this->mForcedButtState = true;
+}
+
+bool Button::ToggleForcedButtState()
+{
+	this->mForcedButtState = !this->mForcedButtState;
+	return this->mForcedButtState;
+}
+
+void Button::SetForcedButtState(bool newForcedState)
+{
+	this->mForcedButtState = newForcedState;
 }
 
 void Button::ReleaseCOM(IUnknown *object)
