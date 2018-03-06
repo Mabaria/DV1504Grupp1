@@ -44,7 +44,7 @@ void ActionHandler::RotatePendingAction()
 {
 	
 	uint32_t temp = this->mActionRotation;
-	temp = (temp += 16) % 64; // Rotation is ordered in increments of 16 from 0 to 48;
+	temp = (temp + 16) % 64; // Rotation is ordered in increments of 16 from 0 to 48;
 	this->mActionRotation = (ActionData)temp;
 }
 
