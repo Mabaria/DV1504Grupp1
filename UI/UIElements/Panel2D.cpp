@@ -11,7 +11,6 @@ Panel2D::Panel2D(
 	LPCTSTR title)
 	:Panel(width, height, top, left, handle, title)
 {
-	this->mDirect2D->CreateRenderTarget(this->mPanelWindow, width, height);
 	// Assumes the panel does not have a notification list.
 	this->mNotificationList = nullptr;
 	this->mNotificationListIsActive = false;
@@ -128,7 +127,6 @@ Button * Panel2D::GetButtonByIndex(unsigned int index)
 	}
 	return to_return;
 }
-
 
 TextBox * Panel2D::GetTextBoxByName(std::string name)
 {

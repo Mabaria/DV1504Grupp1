@@ -27,6 +27,8 @@ Panel::Panel(int width, int height, int top, int left, HWND handle, LPCTSTR titl
 		0);
 	ShowWindow(this->mPanelWindow, SW_NORMAL);
 
+	this->mDirect2D->CreateRenderTarget(this->mPanelWindow, width, height);
+	
 	RECT parent_size;
 	GetClientRect(this->mParentWindow, &parent_size);
 

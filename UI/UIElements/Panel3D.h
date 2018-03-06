@@ -104,6 +104,13 @@ public:
 
 	void InitActions();
 	Actions *pGetActions();
+
+	const void CreateSharedBitmapFromTexture(
+		ID3D11Texture2D *texture, 
+		ID2D1Bitmap **bitmap);
+
+	const void SetActionHover(bool state);
+
 private:
 	D3D11 mDirect3D;
 	std::vector<MeshObject*> mpMeshObjects;
@@ -144,4 +151,9 @@ private:
 	bool mMovableCamera;
 
 	Actions *mpActions;
+
+	// nullptr if there is no current icon.
+	ID2D1Bitmap *mpIconBitmap;
+	ID2D1Bitmap *mpNumberBitmap;
+	bool mActionHover;
 };

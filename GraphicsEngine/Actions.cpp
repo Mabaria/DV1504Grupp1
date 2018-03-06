@@ -301,6 +301,16 @@ void Actions::Draw()
 	this->pDirect3D->GetContext()->Draw(this->mVertexSize, 0);
 }
 
+ID3D11ShaderResourceView * Actions::GetIconResource()
+{
+	return this->mpIconResource;
+}
+
+ID3D11ShaderResourceView * Actions::GetNumberResource()
+{
+	return this->mpNumberResource;
+}
+
 bool Actions::CompileShadersAndLayout()
 {
 	// Compiles shaders and input layouts

@@ -66,6 +66,11 @@ Panel3D::Panel3D(int width, int height, int top, int left,
 	this->mMovableCamera = movableCamera;
 
 	this->mpActions = nullptr;
+
+	this->mActionHover = false;
+	this->mpIconBitmap = nullptr;
+	this->mpNumberBitmap = nullptr;
+
 }
 
 Panel3D::~Panel3D()
@@ -119,7 +124,19 @@ Panel3D::~Panel3D()
 		this->mpMovableCameraComponent = nullptr;
 	}
 	if (this->mpActions != nullptr)
+	{
 		delete this->mpActions;
+	}
+	if (this->mpIconBitmap)
+	{
+		this->mpIconBitmap->Release();
+		this->mpIconBitmap = nullptr;
+	}
+	if (this->mpNumberBitmap)
+	{			
+		this->mpNumberBitmap->Release();
+		this->mpNumberBitmap = nullptr;
+	}
 }
 
 D3D11 & Panel3D::rGetDirect3D()
@@ -642,13 +659,42 @@ void Panel3D::InitActions()
 	if (this->mpActions == nullptr)
 	{
 		this->mpActions = new Actions();
-		this->mpActions->Init(&this->mDirect3D);
+		this->mpActions->Init(&this->mDirect3D);	
+		
+		this->LoadImageToBitmap("../../Models/Symbols.dds", "iconBitmap");
+		this->LoadImageToBitmap("../../Models/Numbers.dds", "numberBitmap");
+		
 	}
 }
 
 Actions * Panel3D::pGetActions()
 {
 	return this->mpActions;
+}
+
+const void Panel3D::CreateSharedBitmapFromTexture(
+	ID3D11Texture2D *texture, 
+	ID2D1Bitmap **bitmap)
+{
+	// Getting the DXGI surface from the texture.
+	IDXGISurface *surface = nullptr;
+	texture->QueryInterface(
+		__uuidof(IDXGISurface), 
+		(void**)&surface);
+
+	// Creating the bitmap to share the surface.
+	this->mDirect2D->GetpRenderTarget()->CreateSharedBitmap(
+		__uuidof(IDXGISurface), 
+		(void*)surface, 
+		nullptr, 
+		bitmap);
+
+	surface->Release();
+}
+
+const void Panel3D::SetActionHover(bool state)
+{
+	this->mActionHover = state;
 }
 
 MovableCameraComponent * Panel3D::GetMovableComponent()
@@ -703,6 +749,17 @@ const void Panel3D::Update()
 	//		this->mpActions->RemoveAction(&target);
 
 	//}
+	static bool icon_set = false;
+
+	if (this->mActionHover)
+	{
+		if (!icon_set)
+		{
+			//TODO Set bitmap rect based on action data.
+		}
+		//TODO Mouse position?
+	}
+
 }
 
 const void Panel3D::Draw()
@@ -726,7 +783,7 @@ const void Panel3D::Draw()
 	this->mDirect3D.GetContext()->IASetPrimitiveTopology
 	(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	this->mDirect3D.GetContext()->IASetInputLayout(this->mpInputLayout);
-	
+
 	// Stride (vertex size) and offset are
 	// declared because they have to be referenced.
 	UINT stride = (UINT)sizeof(Vertex);
@@ -734,12 +791,12 @@ const void Panel3D::Draw()
 
 	// For readability.
 	ID3D11PixelShader *pixel_shader = nullptr;
-	ID3D11Buffer* vertex_buffer		= nullptr;
-	ID3D11Buffer* index_buffer		= nullptr;
-	ID3D11Buffer* matrix_buffer		= nullptr;
-	ID3D11Buffer* material_buffer	= nullptr;
+	ID3D11Buffer* vertex_buffer = nullptr;
+	ID3D11Buffer* index_buffer = nullptr;
+	ID3D11Buffer* matrix_buffer = nullptr;
+	ID3D11Buffer* material_buffer = nullptr;
 	UINT numIndices = 0;
-	
+
 	this->mDirect3D.GetContext()->VSSetConstantBuffers(
 		1,
 		1,
@@ -751,7 +808,7 @@ const void Panel3D::Draw()
 		1,
 		&this->mpProjBuffer
 	);
-	
+
 	// Takes every set of buffers from every mesh object in the panel
 	// and draws them one by one.
 	for (int i = 0; i < (int)this->mpMeshObjects.size(); i++)
@@ -829,7 +886,13 @@ const void Panel3D::Draw()
 	// Clear the depth buffer and draw the actions
 	this->mDirect3D.ClearDepth();
 	if (this->mpActions != nullptr)
+	{
 		this->mpActions->Draw();
+	}
+	if (this->mActionHover)
+	{
+		//TODO Draw chosen icon on mouse position.
+	}
 
 	this->mDirect3D.GetSwapChain()->Present(1, 0);
 
