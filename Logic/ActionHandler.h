@@ -15,12 +15,15 @@ public:
 	virtual reality AddAction(float x, float z);
 	virtual reality SwitchWaitingState();
 
+	void RotatePendingAction();
 	const bool IsWaiting() const;
 private:
 	// Graphical actions.
 	Actions *mpActions;
 
+
 	ObserverInfo mLastEvent;
+	ActionData mActionRotation = Rotation_0;
 	bool mWaitingForClick;
 
 	// Logical actions.
