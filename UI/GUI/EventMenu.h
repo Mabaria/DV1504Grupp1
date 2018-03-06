@@ -34,6 +34,8 @@ public:
 	bool IsMouseInsidePanel();
 	bool IsVisible();
 
+	void UpdateEventButtonImages();
+
 	void SetActiveRoom(Room *room);
 
 	virtual void Update(Button* attribute);

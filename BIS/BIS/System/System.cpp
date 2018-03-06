@@ -449,6 +449,8 @@ void System::mUpdateEvents(Room * room)
 		event_data,
 		this->mpSideViewPanel->rGetDirect3D().GetContext(),
 		index_in_deck);
+
+	this->mpMenuPanel->UpdateEventButtonImages();
 }
 
 void System::mSetupPanels()
