@@ -49,8 +49,8 @@ void CrewPanel::Init(int width, int height, int top, int left, HWND parent, LPCT
 	this->mpPanel->Hide();
 	this->mVisible = false;
 	this->mpPanel->LoadImageToBitmap("../../Models/Exit.png", "Exit");
-	this->mpPanel->LoadImageToBitmap("../../Models/RedSqr.png", "Red");
-	this->mpPanel->LoadImageToBitmap("../../Models/GreenSqr.png", "Green");
+	this->mpPanel->LoadImageToBitmap("../../Models/Off.png", "Off");
+	this->mpPanel->LoadImageToBitmap("../../Models/On.png", "On");
 	this->mpPanel->LoadImageToBitmap("../../Models/Grid.png", "Grid");
 
 	this->mpPanel->AddButton(50, 50, 0, this->mpPanel->GetWidth() - 50,
@@ -91,11 +91,11 @@ void CrewPanel::Update(Button * button)
 		for (int i = 0; i < 22; i++)
 		{
 			this->mpPanel->GetButtonByName(this->mSeaMen[i])->SetBitmap
-			(this->mpPanel->GetBitmapByName("Red"));
+			(this->mpPanel->GetBitmapByName("Off"));
 			this->mpPanel->GetButtonByName(this->mSeaMen[i] + "§")->
 				SetOpacity(0.0f);
 			this->mpPanel->GetButtonByName(this->mSeaMen[i] + "§")->
-				SetBitmap(this->mpPanel->GetBitmapByName("Green"));
+				SetBitmap(this->mpPanel->GetBitmapByName("On"));
 		}
 		this->mVisible = false;
 		this->mpPanel->Hide();
@@ -105,19 +105,19 @@ void CrewPanel::Update(Button * button)
 		for (int i = 0; i < 22; i++)
 		{
 			this->mpPanel->GetButtonByName(this->mSeaMen[i])->SetBitmap
-			(this->mpPanel->GetBitmapByName("Red"));
+			(this->mpPanel->GetBitmapByName("Off"));
 			this->mpPanel->GetButtonByName(this->mSeaMen[i] + "§")->
 				SetOpacity(0.0f);
 			this->mpPanel->GetButtonByName(this->mSeaMen[i] + "§")->
-				SetBitmap(this->mpPanel->GetBitmapByName("Green"));
+				SetBitmap(this->mpPanel->GetBitmapByName("On"));
 		}
 		this->mVisible = false;
 		this->mpPanel->Hide();
 	}
 	else if (button->getBitmapPointer() ==
-		this->mpPanel->GetBitmapByName("Red"))
+		this->mpPanel->GetBitmapByName("Off"))
 	{
-		button->SetBitmap(this->mpPanel->GetBitmapByName("Green"));
+		button->SetBitmap(this->mpPanel->GetBitmapByName("On"));
 		if (button->GetName().back()=='§')
 		{
 			button->SetOpacity(0.0f);
@@ -133,10 +133,10 @@ void CrewPanel::Update(Button * button)
 		
 	}
 	else if (button->getBitmapPointer() ==
-		this->mpPanel->GetBitmapByName("Green"))
+		this->mpPanel->GetBitmapByName("On"))
 	{
 		button->SetOpacity(1.0f);
-		button->SetBitmap(this->mpPanel->GetBitmapByName("Red"));
+		button->SetBitmap(this->mpPanel->GetBitmapByName("Off"));
 		this->mtimer.StartTimer();
 		if (button->GetName().back() != '§')
 		{
@@ -186,7 +186,7 @@ void CrewPanel::mCreateTextBoxesAndButtons()
 			this->mpPanel->GetHeight() / 13 + 1,
 			this->mpPanel->GetHeight() / 12 * (i + 1),
 			this->mpPanel->GetWidth() / 8 * 1,
-			this->mpPanel->GetBitmapByName("Red"),
+			this->mpPanel->GetBitmapByName("Off"),
 			this->mSeaMen[i]);
 
 		this->mpPanel->AddButton(
@@ -194,7 +194,7 @@ void CrewPanel::mCreateTextBoxesAndButtons()
 			this->mpPanel->GetHeight() / 13 + 1,
 			this->mpPanel->GetHeight() / 12 * (i + 1),
 			this->mpPanel->GetWidth() / 8 * 3,
-			this->mpPanel->GetBitmapByName("Green"),
+			this->mpPanel->GetBitmapByName("On"),
 			this->mSeaMen[i]+"§");
 
 		this->mpPanel->GetButtonByName(this->mSeaMen[i])->AddObserver(this);
@@ -202,6 +202,8 @@ void CrewPanel::mCreateTextBoxesAndButtons()
 			"§")->AddObserver(this);
 		this->mpPanel->GetButtonByName(this->mSeaMen[i] +
 			"§")->SetOpacity(0.0f);
+		this->mpPanel->GetButtonByName(this->mSeaMen[i])->SetRenderWidth(this->mpPanel->GetBitmapByName("Off")->GetSize().width);
+		this->mpPanel->GetButtonByName(this->mSeaMen[i] + "§")->SetRenderWidth(this->mpPanel->GetBitmapByName("On")->GetSize().width);
 	}
 	for (int i = 11; i < 22; i++)
 	{
@@ -220,7 +222,7 @@ void CrewPanel::mCreateTextBoxesAndButtons()
 			this->mpPanel->GetHeight() / 13 + 1,
 			this->mpPanel->GetHeight() / 12 * ((i % 11) + 1),
 			this->mpPanel->GetWidth() / 8 * 5,
-			this->mpPanel->GetBitmapByName("Red"),
+			this->mpPanel->GetBitmapByName("Off"),
 			this->mSeaMen[i]);
 
 		this->mpPanel->AddButton(
@@ -228,7 +230,7 @@ void CrewPanel::mCreateTextBoxesAndButtons()
 			this->mpPanel->GetHeight() / 13 + 1,
 			this->mpPanel->GetHeight() / 12 * ((i % 11) + 1),
 			this->mpPanel->GetWidth() / 8 * 7,
-			this->mpPanel->GetBitmapByName("Green"),
+			this->mpPanel->GetBitmapByName("On"),
 			this->mSeaMen[i] + "§");
 
 		this->mpPanel->GetButtonByName(this->mSeaMen[i])->AddObserver(this);
@@ -236,6 +238,8 @@ void CrewPanel::mCreateTextBoxesAndButtons()
 			"§")->AddObserver(this);
 		this->mpPanel->GetButtonByName(this->mSeaMen[i] +
 			"§")->SetOpacity(0.0f);
+		this->mpPanel->GetButtonByName(this->mSeaMen[i])->SetRenderWidth(this->mpPanel->GetBitmapByName("Off")->GetSize().width);
+		this->mpPanel->GetButtonByName(this->mSeaMen[i]+"§")->SetRenderWidth(this->mpPanel->GetBitmapByName("On")->GetSize().width);
 	}
 	this->mpPanel->AddButton(
 		this->mpPanel->GetWidth(),
