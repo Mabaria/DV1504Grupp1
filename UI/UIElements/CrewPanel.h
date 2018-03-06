@@ -21,6 +21,10 @@ public:
 	bool IsMouseInsidePanel();
 
 private:
+	struct TimeData {
+		time_t startTime[22];
+	};
+	Timer *mTimers[22];
 	Panel2D * mpPanel;
 	Timer mtimer;
 	bool mVisible, mButtonFocus, mDraggingWindow;
@@ -30,5 +34,6 @@ private:
 
 	void mCreateTextBoxesAndButtons();
 	
-
+	void mInitTimers();
+	void mSaveToDisk();
 };

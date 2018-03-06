@@ -1,4 +1,5 @@
 #include "CrewPanel.h"
+#include <fstream>
 
 CrewPanel::CrewPanel()
 {
@@ -348,4 +349,31 @@ void CrewPanel::mCreateTextBoxesAndButtons()
 		this->mpPanel->GetBitmapByName("Grid"), "Grid");
 	this->mpPanel->GetButtonByName("Grid")->SetRenderWidth
 	(this->mpPanel->GetBitmapByName("Grid")->GetSize().width);
+}
+
+void CrewPanel::mInitTimers()
+{
+	for (int i = 0; i < 22; i++)
+	{
+		this->mTimers[i] = nullptr;
+	}
+}
+
+void CrewPanel::mSaveToDisk()
+{
+	TimeData timeData;
+	ZeroMemory(&timeData, sizeof(TimeData));
+
+	for (int i = 0; i < 22; i++)
+	{
+		if (this->mTimers[i] != nullptr)
+		{
+			timeData.startTime[i] = this->mTimers[i]->GetTimeData();
+		}
+	}
+	std::fstream file("test.dat", std::ios::out | std::ios::binary);
+	if (!file.is_open())
+		return;
+	file.write((char*)&timeData, sizeof(TimeData));
+	file.close();
 }
