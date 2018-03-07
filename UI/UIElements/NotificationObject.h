@@ -28,7 +28,8 @@ public:
 		Direct2D *direct2d, 
 		int index,
 		int fontSize,
-		ID2D1Bitmap *bitmap = nullptr);
+		ID2D1Bitmap *bitmap = nullptr,
+		bool addedBySensor = false);
 	~NotificationObject();
 	
 	const Event::Type GetEventType() const;
@@ -54,6 +55,7 @@ public:
 	const void SetText(std::string text);
 	const void SetIfNewStatus(bool status);
 	const bool GetIfNewStatus();
+	const bool GetIfAddedBySensor();
 
 	void Update();
 	void Draw();
@@ -66,6 +68,7 @@ private:
 
 	bool mIsNew;
 	float mNewColorCounter;
+	bool mAddedBySensor;
 
 	std::string mRoomName;
 	std::string mDeckName;

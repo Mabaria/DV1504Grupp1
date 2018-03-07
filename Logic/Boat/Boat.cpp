@@ -522,6 +522,11 @@ bool Boat::LoadBoundingBoxes(
 	return true;
 }
 
+int Boat::GetNrOfRooms() const
+{
+	return (int)this->mpRooms.size();
+}
+
 std::string Boat::GetNameFromLine(std::string line, char until)
 {
 	std::stringstream buffer;
