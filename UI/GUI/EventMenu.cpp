@@ -296,16 +296,19 @@ void EventMenu::Update(Button *attribute)
 				if (button_name.compare("Injured_Moved") == 0)
 				{
 					this->mInjuryType = MOVED;
+					this->mClearActionButtStates();
 					this->mSwapActionMode();
 				}
 				else if (button_name.compare("Injured_Treated") == 0)
 				{					
 					this->mInjuryType = TREATED;
+					this->mClearActionButtStates();
 					this->mSwapActionMode();
 				}
 				else if (button_name.compare("Injured_Reported") == 0)
 				{
 					this->mInjuryType = REPORTED;
+					this->mClearActionButtStates();
 					this->mSwapActionMode();
 				}
 				else if (button_name.compare("Hole_In_Bulk") == 0)
