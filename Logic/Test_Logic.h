@@ -4,7 +4,7 @@
 #include "Eventlog/EventLog.h"
 #include "Boat/Boat.h"
 
-namespace Test_Log
+namespace Test_Logic
 {
 
 	/**
@@ -15,7 +15,8 @@ namespace Test_Log
 
 	// Log
 	bool MainTest(); // To test all, call this function
-	void FillLog(Boat *pBoat);
+	void FillLog(Boat *pBoat, std::vector<int*> &indices);
+	void ClearSome(Boat *pBoat, std::vector<int*> &indices);
 
 	// Disk
 	bool CompareFiles(std::string filePath1, std::string filePath2);

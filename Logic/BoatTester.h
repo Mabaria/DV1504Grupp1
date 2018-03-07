@@ -6,10 +6,13 @@
 #include "Boat/Boat.h"
 #include "Eventlog/EventLog.h"
 
+#include "Test_Logic.h"
+
 namespace BoatTester
 {
 	void WriteTest();
 	void TestBoat();
+	void TestLog();
 	
 	Boat* CreateBoat();
 	

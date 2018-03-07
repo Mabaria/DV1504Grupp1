@@ -59,7 +59,7 @@ void BoatTester::TestBoat()
 	std::cout << "\nChecking events in 'Maskinrum' in 'Huvuddäck':" << std::endl;
 	std::cout << "(Should be Fire and Gas only)" << std::endl;
 	pRoom = pBoat->GetRoomPointer("Maskinrum");
-	events = pRoom->GetActiveEvents();
+	pRoom->GetActiveEvents(events);
 
 	std::cout << prefix << "Fire...";
 	if (events[0]->GetType() != Event::Fire)
@@ -106,7 +106,7 @@ void BoatTester::TestBoat()
 	*/
 	std::cout << "\nChecking events in 'Skyddsrum' in 'Trossdäck':" << std::endl;
 	pRoom = pBoat->GetRoomPointer("Skyddsrum");
-	events = pRoom->GetActiveEvents();
+	pRoom->GetActiveEvents(events);
 
 	if (events.size() != 4)
 		throw ("Error unexpected number of plot events handled");
@@ -219,29 +219,35 @@ void BoatTester::TestBoat()
 
 	std::cout << "Adding 5 actions to '" << pRoom->GetName() << "'...";
 
+	int *actionIndices[] = {
+		new int(0),
+		new int(1),
+		new int(2),
+		new int(3)};
+
 	LogAction::Desc actionDesc[5];
 
-	actionDesc[0].actionIndex = 0;
+	actionDesc[0].pActionIndex = actionIndices[0];
 	actionDesc[0].pos_x = 0.0f;
 	actionDesc[0].pos_z = 0.0f;
 	actionDesc[0].type = LogAction::Type::Cooling_Wall;
 
-	actionDesc[1].actionIndex = 1;
+	actionDesc[1].pActionIndex = actionIndices[1];
 	actionDesc[1].pos_x = 1.0f;
 	actionDesc[1].pos_z = 1.0f;
 	actionDesc[1].type = LogAction::Type::Damaged_Bulk;
 
-	actionDesc[2].actionIndex = 2;
+	actionDesc[2].pActionIndex = actionIndices[2];
 	actionDesc[2].pos_x = 2.0f;
 	actionDesc[2].pos_z = 2.0f;
 	actionDesc[2].type = LogAction::Type::Ventilation_In;
 
-	actionDesc[3].actionIndex = 3;
+	actionDesc[3].pActionIndex = actionIndices[3];
 	actionDesc[3].pos_x = 3.0f;
 	actionDesc[3].pos_z = 3.0f;
 	actionDesc[3].type = LogAction::Type::Hole_In_Bulk;
 
-	actionDesc[4].actionIndex = 4;
+	actionDesc[4].pActionIndex = actionIndices[4];
 	actionDesc[4].pos_x = 4.0f;
 	actionDesc[4].pos_z = 4.0f;
 	actionDesc[4].type = LogAction::Type::Supporting_Wall;
@@ -258,8 +264,8 @@ void BoatTester::TestBoat()
 	std::cout << "ok!" << std::endl;
 	
 	std::cout << "\nClearing two actions...";
-	pRoom->ClearAction(3);
-	pRoom->ClearAction(1);
+	pRoom->ClearAction(actionIndices[3]);
+	pRoom->ClearAction(actionIndices[1]);
 	std::cout << "done!" << std::endl;
 
 	std::cout << "Checking number of actions still active in room...";
@@ -269,6 +275,12 @@ void BoatTester::TestBoat()
 
 	PrintHeader("Testing completed!");
 	delete pBoat;
+}
+
+void BoatTester::TestLog()
+{
+	if (!Test_Logic::MainTest())
+		throw("Failed log test");
 }
 
 Boat* BoatTester::CreateBoat()

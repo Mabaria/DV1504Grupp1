@@ -153,9 +153,9 @@ void Room::AddInputType(Event::Type type)
 	this->mSensor.AddInputType(type);
 }
 
-std::vector<LogEvent*> Room::GetActiveEvents()
+void Room::GetActiveEvents(std::vector<LogEvent*> &output)
 {
-	return this->mRoomLog.GetActiveEvents();
+	this->mRoomLog.GetActiveEvents(output);
 }
 
 int Room::GetEventCount() const
@@ -174,9 +174,14 @@ bool Room::AddAction(LogAction::Desc desc)
 	return this->mRoomLog.AddAction(desc);
 }
 
-bool Room::ClearAction(int actionIndex)
+bool Room::ClearAction(int *actionIndex)
 {
 	return this->mRoomLog.ClearAction(actionIndex);
+}
+
+void Room::GetActiveActions(std::vector<LogAction*> &output)
+{
+	this->mRoomLog.GetActiveActions(output);
 }
 
 int Room::GetActionCount() const
@@ -226,7 +231,7 @@ Room::Desc Room::FillRoomDescFromLine(std::string line)
 
 		buffer >> word;
 	}
-	desc.name = Room::CorrectName(roomName);
+	desc.name = Name::CorrectName(roomName);
 
 	/**
 	*	Get sensor data
@@ -236,35 +241,15 @@ Room::Desc Room::FillRoomDescFromLine(std::string line)
 	return desc;
 }
 
-std::string Room::CorrectName(std::string name)
+
+void Room::SaveRoomLog(std::string folderPath) const
 {
-	std::string newName = "";
+	this->mRoomLog.SaveToFile(folderPath);
+}
 
-	for (int i = 0; i < (int)name.size(); i++)
-	{
-		int c = name[i];
-		
-		switch (name[i])
-		{
-		case -91: // ¥
-			newName += "å";
-			break;
-		case -92: // ¤
-			newName += "ä";
-			break;
-		case -74: // ¶
-			newName += "ö";
-			break;
-
-		case -61: // Character skip
-			break;
-
-		default:
-			newName += name[i];
-			break;
-		}
-	}
-	return newName;
+bool Room::LoadRoomLog(std::string folderPath)
+{
+	return this->mRoomLog.LoadFromFile(folderPath);
 }
 
 void Room::InitRoomData(XMMATRIX matrix)

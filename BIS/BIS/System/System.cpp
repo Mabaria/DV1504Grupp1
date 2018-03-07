@@ -346,7 +346,8 @@ void System::mUpdateRoomInfo()
 
 void System::mUpdateEvents(Room * room)
 {
-	std::vector<LogEvent*> events_in_room = room->GetActiveEvents();
+	std::vector<LogEvent*> events_in_room;
+	room->GetActiveEvents(events_in_room);
 	// If there already is an active event of that type in that room
 	// the event is removed.
 	if (!this->mpActiveLogPanel->AddNotification(room, events_in_room.back()))
@@ -354,7 +355,7 @@ void System::mUpdateEvents(Room * room)
 		Event::Type to_remove = this->mpMenuPanel->GetLastClicked();
 		this->mpActiveLogPanel->RemoveNotification(room, to_remove);
 		room->ClearEvent(to_remove);
-		events_in_room = room->GetActiveEvents();
+		room->GetActiveEvents(events_in_room);
 	}
 	// Adding the system as an observer to the newly added notification object.
 	else

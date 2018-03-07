@@ -56,7 +56,7 @@
     <ClCompile Include="..\..\Logic\Eventlog\LogEvent.cpp" />
     <ClCompile Include="..\..\Logic\Event\Event.cpp" />
     <ClCompile Include="..\..\IO\Test_Picking.cpp" />
-    <ClCompile Include="..\..\Logic\Test_Log.cpp" />
+    <ClCompile Include="..\..\Logic\Test_Logic.cpp" />
     <ClCompile Include="..\..\Logic\Timer.cpp" />
     <ClCompile Include="..\..\UI\GUI\EventMenu.cpp" />
     <ClCompile Include="..\..\UI\UIElements\Button.cpp" />
@@ -109,11 +109,12 @@
     <ClInclude Include="..\..\Logic\Boat\Room.h" />
     <ClInclude Include="..\..\Logic\Boat\RoomLog.h" />
     <ClInclude Include="..\..\Logic\Boat\Sensor.h" />
+    <ClInclude Include="..\..\Logic\CorrectName.h" />
     <ClInclude Include="..\..\Logic\Eventlog\EventLog.h" />
     <ClInclude Include="..\..\Logic\Eventlog\LogAction.h" />
     <ClInclude Include="..\..\Logic\Eventlog\LogEvent.h" />
     <ClInclude Include="..\..\Logic\Event\Event.h" />
-    <ClInclude Include="..\..\Logic\Test_Log.h" />
+    <ClInclude Include="..\..\Logic\Test_Logic.h" />
     <ClInclude Include="..\..\Logic\Timer.h" />
     <ClInclude Include="..\..\Test\Testing.h" />
     <ClInclude Include="..\..\UI\GUI\EventMenu.h" />

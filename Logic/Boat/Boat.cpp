@@ -106,7 +106,7 @@ Room* Boat::GetRoomPointerAt(int index_Boat)
 		return nullptr;
 	
 	// Find deck
-	for (int i = (int)this->mpDecks.size(); i > 0; i--)
+	for (int i = (int)this->mpDecks.size()-1; i >= 0; i--)
 	{
 		if (index_Boat >= this->mpDecks[i]->GetRoomOffset())
 		{
@@ -289,7 +289,7 @@ bool Boat::LoadFromFile_Boat(std::string filePath)
 						name += word;
 					}
 
-					this->mModelName = Room::CorrectName(name);
+					this->mModelName = Name::CorrectName(name);
 
 					break; // End case 'b'
 				}
@@ -305,7 +305,7 @@ bool Boat::LoadFromFile_Boat(std::string filePath)
 					int roomOffset = 0;
 					
 					for (int i = 0; i < (int)this->mpDecks.size(); i++)
-						roomOffset += this->mpDecks[i]->GetRoomOffset();
+						roomOffset += this->mpDecks[i]->GetRoomCount();
 
 
 					desc.index = (int)this->mpDecks.size();
@@ -333,7 +333,7 @@ bool Boat::LoadFromFile_Boat(std::string filePath)
 			}
 		}
 
-		// When.back() of file appears, close file and return from function
+		// When .back() of file appears, close file and return from function
 		file.close();
 	}
 	else
@@ -345,14 +345,27 @@ bool Boat::LoadFromFile_Boat(std::string filePath)
 	return true;
 }
 
-void Boat::SaveToFile_Log(std::string filePath) const
+void Boat::SaveToFile_Log(std::string filePath, std::string metaFile, std::string roomLogsFolderPath) const
 {
-	this->mEventLog.SaveToFile(filePath);
+	this->mEventLog.SaveToFile(filePath, metaFile);
+
+	// Save all active info in the roomlogs
+	for (int i = 0; i < (int)this->mpDecks.size(); i++)
+		this->mpDecks[i]->SaveRoomLogs(roomLogsFolderPath);
 }
 
-bool Boat::LoadFromFile_Log(std::string filePath)
+bool Boat::LoadFromFile_Log(std::string filePath, std::string metaFile, std::string roomLogsFolderPath)
 {
-	return this->mEventLog.LoadFromFile(filePath);
+	if (!this->mEventLog.LoadFromFile(filePath, metaFile))
+		return false;
+
+	// Update RoomLogs from active events and actions
+	for (int i = 0; i < (int)this->mpDecks.size(); i++)
+	{
+		if (!this->mpDecks[i]->LoadRoomLogs(roomLogsFolderPath))
+			return false;
+	}
+	return true;
 }
 
 

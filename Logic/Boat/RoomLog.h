@@ -20,15 +20,15 @@ public:
 	bool ClearEvent(Event::Type type);
 
 	int GetEventCount() const;
-	std::vector<LogEvent*> GetActiveEvents();
+	void GetActiveEvents(std::vector<LogEvent*> &output);
 
 	// Action specific
 	bool AddAction(LogAction::Desc desc);
 
-	bool ClearAction(int actionIndex);
+	bool ClearAction(int *actionIndex);
 
 	int GetActionCount() const;
-	std::vector<LogAction*> GetActiveActions();
+	void GetActiveActions(std::vector<LogAction*> &output);
 
 	// Room specific
 	void SetRoomName(std::string name);
@@ -36,7 +36,13 @@ public:
 	// Log specific
 	void SetEventLogPtr(EventLog *pEventLog);
 
+	// Disk specific
+	void SaveToFile(std::string folderPath) const;
+	bool LoadFromFile(std::string folderPath);
+
 private:
+
+	std::string RealPath(std::string folderPath) const;
 
 	std::vector<LogEvent*> mpEvents;
 	std::vector<LogAction*> mpActions;

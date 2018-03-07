@@ -10,6 +10,8 @@
 
 #include "../Eventlog/EventLog.h"
 
+#include "../CorrectName.h"
+
 using namespace DirectX;
 
 struct RoomData
@@ -71,19 +73,21 @@ public:
 											   sensor */
 	bool ClearEvent(Event::Type type);
 	void AddInputType(Event::Type type);
-	std::vector<LogEvent*> GetActiveEvents();
+	void GetActiveEvents(std::vector<LogEvent*> &output);
 	int GetEventCount() const;
 
 	// Action specific
 	bool AddAction(LogAction::Desc desc); /* No need to fill Desc.roomName
 											 (happens automatically) */
-	bool ClearAction(int actionIndex);
+	bool ClearAction(int *actionIndex);
+	void GetActiveActions(std::vector<LogAction*> &output);
 	int GetActionCount() const;
 
 	// Disk specific
 	std::string GetString() const;
 	static Room::Desc FillRoomDescFromLine(std::string line);
-	static std::string CorrectName(std::string name);
+	void SaveRoomLog(std::string folderPath) const;
+	bool LoadRoomLog(std::string folderPath);
 
 	void InitRoomData(XMMATRIX matrix);
 

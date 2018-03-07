@@ -246,14 +246,17 @@
     <ClInclude Include="..\..\UI\UIElements\InfoPanel.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Logic\Test_Log.h">
-      <Filter>Header Files\Logic\Test</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Logic\Boat\RoomLog.h">
       <Filter>Header Files\Logic</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Logic\Eventlog\LogAction.h">
       <Filter>Header Files\Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Logic\CorrectName.h">
+      <Filter>Header Files\Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Logic\Test_Logic.h">
+      <Filter>Header Files\Logic\Test</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -443,14 +446,14 @@
     <ClCompile Include="..\..\UI\UIElements\InfoPanel.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Logic\Test_Log.cpp">
-      <Filter>Source Files\Logic\Test</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Logic\Boat\RoomLog.cpp">
       <Filter>Source Files\Logic</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Logic\Eventlog\LogAction.cpp">
       <Filter>Source Files\Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Logic\Test_Logic.cpp">
+      <Filter>Source Files\Logic\Test</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

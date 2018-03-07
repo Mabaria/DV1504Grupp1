@@ -5,14 +5,17 @@ LogEvent::LogEvent()
 	this->mActive = true;
 }
 
-LogEvent::LogEvent(Event::Type type, std::string roomName)
+LogEvent::LogEvent(LogEvent::Desc desc)
 {
-	this->mActive = true;
-	this->mType = type;
-	this->mRoomName = roomName;
+
+	this->mType = desc.type;
+	this->mRoomName = desc.roomName;
+	this->mStartEvent = desc.start;
+	this->mActive = desc.active;
+	this->mID = desc.ID;
 }
 
-LogEvent::LogEvent(std::string lineFromLog)
+LogEvent::LogEvent(std::string lineFromLog, int ID)
 {
 	std::stringstream ss(lineFromLog);
 	std::string word;
@@ -44,9 +47,12 @@ LogEvent::LogEvent(std::string lineFromLog)
 
 	ss >> word; // '|'
 
-	// Get started/stopped
+	// Get active info
 	ss >> word;
-	// TODO: Make this useful
+	if (word ==	Name::CorrectName("Påbörjad"))
+		this->mStartEvent = true;
+	else // "Avslutad"
+		this->mStartEvent = false;
 
 	ss >> word; // '|'
 
@@ -59,11 +65,9 @@ LogEvent::LogEvent(std::string lineFromLog)
 			this->mRoomName += " ";
 		this->mRoomName += word;
 	}
-	
-
-	//ss >> this->mRoomName;
 
 	this->mActive = true;
+	this->mID = ID;
 }
 
 LogEvent::~LogEvent()
@@ -90,9 +94,19 @@ bool LogEvent::IsActive() const
 	return this->mActive;
 }
 
+bool LogEvent::IsStartEvent() const
+{
+	return this->mStartEvent;
+}
+
 void LogEvent::SetInactive()
 {
 	this->mActive = false;
+}
+
+int LogEvent::GetID() const
+{
+	return this->mID;
 }
 
 
@@ -105,7 +119,7 @@ std::string LogEvent::GetFileString()
 {
 	/**
 	*	Will return a one-line string to be printed to the .log file. Ex:
-	*	Jan 23 12:17:03 Eldsvåda startade i Maskinrum
+	*	Jan 23 12:17:03		Eldsvåda	|	startad		|	Maskinrum
 	*/
 
 	std::stringstream ss;
@@ -149,16 +163,20 @@ std::string LogEvent::GetFileString()
 	std::string type = Event::GetString(this->mType);
 	ss << "\t\t" << type;
 
-	if (type.size() < 4)
-		ss << "\t\t\t\t|\t";
-	else if (type.size() < 8)
-		ss << "\t\t\t|\t";
-	else if (type.size() < 12)
-		ss << "\t\t|\t";
-	else
-		ss << "\t|\t";
+	//if (type.size() < 4)
+	//	ss << "\t\t\t\t\t\t\t\t\t|\t";
+	//else if (type.size() < 8)
+	//	ss << "\t\t\t\t\t\t\t\t|\t";
+	//else if (type.size() < 12)
+	//	ss << "\t\t\t\t\t\t\t|\t";
+	//else
+	//	ss << "\t\t\t\t\t\t|\t";
+	ss << Name::GetTabs(type.size());
 
-	ss << "startad\t\t|\t" << this->mRoomName;
+	if (this->mStartEvent)
+		ss << "|\t" << Name::CorrectName("Påbörjad") << "\t|\t" << this->mRoomName;
+	else
+		ss << "|\tAvslutad\t|\t" << this->mRoomName;
 
 	return ss.str();
 }
@@ -201,6 +219,11 @@ const std::string LogEvent::GetStartTimeAsString()
 const std::string LogEvent::GetElapsedTimeAsString()
 {
 	return this->mTimer.GetTimeAsStr();
+}
+
+Timestamp LogEvent::GetTimestamp_Start() const
+{
+	return this->mTimer.GetTimestamp();
 }
 
 Timer * LogEvent::GetTimer()

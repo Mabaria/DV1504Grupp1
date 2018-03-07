@@ -178,6 +178,22 @@ Deck::Desc Deck::FillDeckDescFromLine(std::string line)
 			name += " ";
 		name += word;
 	}
-	desc.name = Room::CorrectName(name);
+	desc.name = Name::CorrectName(name);
 	return desc;
+}
+
+void Deck::SaveRoomLogs(std::string folderPath) const
+{
+	for (int i = 0; i < (int)this->mpRooms.size(); i++)
+		this->mpRooms[i]->SaveRoomLog(folderPath);
+}
+
+bool Deck::LoadRoomLogs(std::string folderPath)
+{
+	for (int i = 0; i < (int)this->mpRooms.size(); i++)
+	{
+		if (!this->mpRooms[i]->LoadRoomLog(folderPath))
+			return false;
+	}
+	return true;
 }

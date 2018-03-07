@@ -16,14 +16,6 @@
 *	
 */
 
-/**
-* BEFORE USING EVENTLOG:
-*
-*	EventLog need an ActiveLog to report active events to!
-*/
-
-// TODO: Read/Write events
-
 class EventLog
 {
 public:
@@ -41,23 +33,39 @@ public:
 	~EventLog();
 
 	// Event Specific
-	LogEvent* AddEvent(Event::Type type, std::string roomName);
+	LogEvent* AddEvent(LogEvent::Desc desc);
 															/* Pushing an event
 															at the end of the list,
 															returns index of event in
 															the active log */
+	bool ClearEvent(LogEvent* pEvent);
 	int GetEventCount() const;
-	LogEvent* GetEventPointer(int index);
+	LogEvent* GetEventPointerAt(int index);
 
 	// Action specific
 	LogAction* AddAction(LogAction::Desc desc);
 	int GetActionCount() const;
+	LogAction* GetActionPointerAt(int index);
+
+	// Log specific
+	std::vector<LogEvent*> GetActiveEvents() const;
+	std::vector<LogAction*> GetActiveActions() const;
 	
 	// Disk specific
-	void SaveToFile(std::string filePath) const;
-	bool LoadFromFile(std::string filePath);
+	void SaveToFile(std::string filePath, std::string metaFile) const;
+	bool LoadFromFile(std::string filePath, std::string metaFile);
 
 private:
 	std::vector<LogEvent*> mpLogEvents;	// Containing all events in the system
 	std::vector<LogAction*> mpActions;
+
+	//struct ActiveInfo
+	//{
+	//	int infoIndex;
+	//	bool isEvent;
+	//	int activeIndex;
+	//	int roomIndex;
+	//};
+
+	//std::vector<ActiveInfo*> mActiveEvents;
 };
