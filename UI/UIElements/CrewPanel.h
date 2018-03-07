@@ -29,6 +29,7 @@ private:
 	int mFontSize;
 
 	void mCreateTextBoxesAndButtons();
+	void mCloseWindow();
 	
 
 };
