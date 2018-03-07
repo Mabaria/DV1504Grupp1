@@ -1,4 +1,5 @@
 #include "CrewPanel.h"
+#include <fstream>
 
 CrewPanel::CrewPanel()
 {
@@ -37,6 +38,7 @@ CrewPanel::~CrewPanel()
 
 void CrewPanel::Init(int width, int height, int top, int left, HWND parent, LPCTSTR title)
 {
+	this->mInitTimers();
 	this->mpPanel = new Panel2D(
 		width,
 		height,
@@ -84,16 +86,21 @@ void CrewPanel::Update(Button * button)
 {
 	if (button->GetName() == "Crew" && this->mVisible == false)
 	{
+		this->mOpenWindow();
+		this->mSaveToDisk();
 		this->mVisible = true;
 		this->mpPanel->ShowOnTop();
 	}
 	else if (button->GetName() == "Crew" && this->mVisible == true)
 	{
-		this->mCloseWindow();
+		
+		this->mVisible = false;
+		this->mpPanel->Hide();
 	}
 	else if (button->GetName() == "Exit")
 	{
-		this->mCloseWindow();
+		this->mVisible = false;
+		this->mpPanel->Hide();
 	}
 	else if (button->getBitmapPointer() ==
 		this->mpPanel->GetBitmapByName("Off"))
@@ -109,11 +116,25 @@ void CrewPanel::Update(Button * button)
 		this->mpPanel->GetButtonByName(button->GetName() + "Text")->
 			SetBitmap(this->mpPanel->GetBitmapByName("Grid"));
 		
-		this->mtimer.StartTimer();
+		bool found = false;
+		int i = 0;
+		for (; i < 22; i++)
+		{
+			if (button->GetName() == this->mSeaMen[i])
+			{
+				found = true;
+				break;
+			}
+		}
+
+		this->mTimer.StartTimer();
+		this->mTimeData.startTime[i] = this->mTimer.GetTimeData();
+		this->mTimeData.textState[i] = 0;
+		this->mSaveToDisk();
 		// Set text with time
 		if (button->GetName().back() != '§')
 		{
-			std::string temp = this->mtimer.WhenTimerStarted();
+			std::string temp = this->mTimer.WhenTimerStarted();
 			temp.insert(10, "\n\t\t\t\t  ");
 			this->mpPanel->GetTextBoxByName(button->GetName())->SetText
 			(button->GetName() + "\t\t\t\t  " + temp);
@@ -124,7 +145,7 @@ void CrewPanel::Update(Button * button)
 		this->mpPanel->GetBitmapByName("On"))
 	{
 		button->SetBitmap(this->mpPanel->GetBitmapByName("Off"));
-		this->mtimer.StartTimer();
+		this->mTimer.StartTimer();
 		// Remove the time
 		if (button->GetName().back() != '§')
 		{
@@ -188,13 +209,43 @@ void CrewPanel::mCreateTextBoxesAndButtons()
 			this->mpPanel->GetBitmapByName("Off"),
 			this->mSeaMen[i]);
 
+		if (this->mTimeData.startTime[i] != 0)
+		{
+			this->mTimer = Timer(this->mTimeData.startTime[i]);
+			std::string temp = this->mTimer.WhenTimerStarted();
+			temp.insert(10, "\n\t\t\t\t  ");
+			this->mpPanel->GetTextBoxByName(this->mSeaMen[i])->SetText
+			(this->mSeaMen[i] + "\t\t\t\t  " + temp);
+		}
+
+		ID2D1Bitmap *tempBitmap;
+		if (this->mTimeData.textState[i] == 0)
+		{
+			tempBitmap = this->mpPanel->GetBitmapByName("Grid");
+		}
+		else
+		{
+			tempBitmap = this->mpPanel->GetBitmapByName("Red");
+		}
+
 		this->mpPanel->AddButton(
 			this->mpPanel->GetWidth() / 8,
 			this->mpPanel->GetHeight() / 13 + 1,
 			this->mpPanel->GetHeight() / 12 * (i + 1),
 			this->mpPanel->GetWidth() / 8 * 2,
-			this->mpPanel->GetBitmapByName("Grid"),
+			tempBitmap,
 			this->mSeaMen[i]+"Text");
+
+		if (this->mTimeData.textState[i] == 2)
+		{
+			this->mpPanel->GetButtonByName(this->mSeaMen[i] + "Text")->
+				SetOpacity(0.5f);
+		}
+		else
+		{
+			this->mpPanel->GetButtonByName(this->mSeaMen[i] + "Text")->
+				SetOpacity(0.0f);
+		}
 
 		this->mpPanel->AddButton(
 			this->mpPanel->GetWidth() / 8,
@@ -214,8 +265,8 @@ void CrewPanel::mCreateTextBoxesAndButtons()
 		this->mpPanel->GetButtonByName(this->mSeaMen[i] +
 			"§")->SetOpacity(0.0f);
 
-		this->mpPanel->GetButtonByName(this->mSeaMen[i] +
-			"Text")->SetOpacity(0.0f);
+		//this->mpPanel->GetButtonByName(this->mSeaMen[i] +
+		//	"Text")->SetOpacity(0.0f);
 
 		this->mpPanel->GetButtonByName(this->mSeaMen[i])->SetRenderWidth
 		(this->mpPanel->GetBitmapByName("Off")->GetSize().width);
@@ -243,13 +294,43 @@ void CrewPanel::mCreateTextBoxesAndButtons()
 			this->mpPanel->GetBitmapByName("Off"),
 			this->mSeaMen[i]);
 
+		if (this->mTimeData.startTime[i] != 0)
+		{
+			this->mTimer = Timer(this->mTimeData.startTime[i]);
+			std::string temp = this->mTimer.WhenTimerStarted();
+			temp.insert(10, "\n\t\t\t\t  ");
+			this->mpPanel->GetTextBoxByName(this->mSeaMen[i])->SetText
+			(this->mSeaMen[i] + "\t\t\t\t  " + temp);
+		}
+
+		ID2D1Bitmap *tempBitmap;
+		if (this->mTimeData.textState[i] == 0)
+		{
+			tempBitmap = this->mpPanel->GetBitmapByName("Grid");
+		}
+		else
+		{
+			tempBitmap = this->mpPanel->GetBitmapByName("Red");
+		}
+
 		this->mpPanel->AddButton(
 			this->mpPanel->GetWidth() / 8,
 			this->mpPanel->GetHeight() / 13 + 1,
 			this->mpPanel->GetHeight() / 12 * ((i % 11) + 1),
 			this->mpPanel->GetWidth() / 8 * 6,
-			this->mpPanel->GetBitmapByName("Grid"),
+			tempBitmap,
 			this->mSeaMen[i] + "Text");
+
+		if (this->mTimeData.textState[i] == 2)
+		{
+			this->mpPanel->GetButtonByName(this->mSeaMen[i] + "Text")->
+				SetOpacity(0.5f);
+		}
+		else 
+		{
+			this->mpPanel->GetButtonByName(this->mSeaMen[i] + "Text")->
+				SetOpacity(0.0f);
+		}
 
 		this->mpPanel->AddButton(
 			this->mpPanel->GetWidth() / 8,
@@ -267,8 +348,8 @@ void CrewPanel::mCreateTextBoxesAndButtons()
 		this->mpPanel->GetButtonByName(this->mSeaMen[i] +
 			"§")->SetOpacity(0.0f);
 
-		this->mpPanel->GetButtonByName(this->mSeaMen[i] +
-			"Text")->SetOpacity(0.0f);
+		//this->mpPanel->GetButtonByName(this->mSeaMen[i] +
+		//	"Text")->SetOpacity(0.0f);
 
 		this->mpPanel->GetButtonByName(this->mSeaMen[i])->SetRenderWidth
 		(this->mpPanel->GetBitmapByName("Off")->GetSize().width);
@@ -286,7 +367,27 @@ void CrewPanel::mCreateTextBoxesAndButtons()
 	(this->mpPanel->GetBitmapByName("Grid")->GetSize().width);
 }
 
-void CrewPanel::mCloseWindow()
+void CrewPanel::mInitTimers()
+{
+	ZeroMemory(&this->mTimeData, sizeof(TimeData));
+	std::fstream file("../../Savefiles/Metafiles/crew_log.meta", std::ios::in | std::ios::binary);
+	if (!file.is_open())
+		return;
+	file.read((char*)&this->mTimeData, sizeof(TimeData));
+	file.close();
+}
+
+void CrewPanel::mSaveToDisk()
+{
+
+	std::fstream file("../../Savefiles/Metafiles/crew_log.meta", std::ios::out | std::ios::binary);
+	if (!file.is_open())
+		return;
+	file.write((char*)&this->mTimeData, sizeof(TimeData));
+	file.close();
+}
+
+void CrewPanel::mOpenWindow()
 {
 	for (int i = 0; i < 22; i++)
 	{
@@ -306,6 +407,7 @@ void CrewPanel::mCloseWindow()
 		{
 			this->mpPanel->GetButtonByName(this->mSeaMen[i] + "Text")
 				->SetBitmap(this->mpPanel->GetBitmapByName("Red"));
+			this->mTimeData.textState[i] = 1;
 		}
 
 		// The second time you clost the window you change the opacity
@@ -317,9 +419,7 @@ void CrewPanel::mCloseWindow()
 		{
 			this->mpPanel->GetButtonByName(this->mSeaMen[i] + "Text")->
 				SetOpacity(0.5f);
+			this->mTimeData.textState[i] = 2;
 		}
 	}
-
-	this->mVisible = false;
-	this->mpPanel->Hide();
 }

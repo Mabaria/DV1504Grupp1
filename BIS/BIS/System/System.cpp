@@ -620,6 +620,8 @@ void System::mSetupPanels()
 
 	this->mActionHandler.Init(this->mpTopViewPanel->pGetActions());
 	this->mpMenuPanel->AddObserver(&this->mActionHandler);
+
+	this->mActionHandler.AddObserver(this->mpMenuPanel);
 }
 
 void System::mSetupModels()

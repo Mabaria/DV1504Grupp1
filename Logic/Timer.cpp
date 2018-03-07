@@ -7,6 +7,12 @@ Timer::Timer()
 	
 }
 
+Timer::Timer(time_t startTime)
+{
+	this->mStartTime = startTime;
+	this->pStartTimeStruct = localtime(&this->mStartTime);
+}
+
 Timer::~Timer()
 {
 }
@@ -139,6 +145,11 @@ const std::string Timer::GetHoursAsStr()
 	char buffer[30];
 	strftime(buffer, 30, "%H", pdiff_struct);
 	return std::string(buffer);
+}
+
+const time_t Timer::GetTimeData()
+{
+	return this->mStartTime;
 }
 
 void Timer::UpdateTime()

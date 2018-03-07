@@ -6,6 +6,7 @@ class Timer
 {
 public:
 	Timer();
+	Timer(time_t startTime);
 	~Timer();
 	const std::string WhenTimerStarted() const;
 	const std::string WhenTimerStoped();
@@ -19,6 +20,7 @@ public:
 	const std::string GetSecondsAsStr();
 	const std::string GetMinutesAsStr();
 	const std::string GetHoursAsStr();
+	const time_t GetTimeData();
 private:
 	time_t mStartTime;
 	tm *pStartTimeStruct;
