@@ -28,7 +28,7 @@ private:
 	//Timer *mTimers[22];
 	TimeData mTimeData;
 	Panel2D * mpPanel;
-	Timer mtimer;
+	Timer mTimer;
 	bool mVisible, mButtonFocus, mDraggingWindow;
 	int mDragX, mDragY;
 	std::string *mSeaMen;

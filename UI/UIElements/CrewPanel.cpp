@@ -127,14 +127,14 @@ void CrewPanel::Update(Button * button)
 			}
 		}
 
-		this->mtimer.StartTimer();
-		this->mTimeData.startTime[i] = this->mtimer.GetTimeData();
+		this->mTimer.StartTimer();
+		this->mTimeData.startTime[i] = this->mTimer.GetTimeData();
 		this->mTimeData.textState[i] = 0;
 		this->mSaveToDisk();
 		// Set text with time
 		if (button->GetName().back() != '§')
 		{
-			std::string temp = this->mtimer.WhenTimerStarted();
+			std::string temp = this->mTimer.WhenTimerStarted();
 			temp.insert(10, "\n\t\t\t\t  ");
 			this->mpPanel->GetTextBoxByName(button->GetName())->SetText
 			(button->GetName() + "\t\t\t\t  " + temp);
@@ -145,7 +145,7 @@ void CrewPanel::Update(Button * button)
 		this->mpPanel->GetBitmapByName("On"))
 	{
 		button->SetBitmap(this->mpPanel->GetBitmapByName("Off"));
-		this->mtimer.StartTimer();
+		this->mTimer.StartTimer();
 		// Remove the time
 		if (button->GetName().back() != '§')
 		{
@@ -211,8 +211,8 @@ void CrewPanel::mCreateTextBoxesAndButtons()
 
 		if (this->mTimeData.startTime[i] != 0)
 		{
-			this->mtimer = Timer(this->mTimeData.startTime[i]);
-			std::string temp = this->mtimer.WhenTimerStarted();
+			this->mTimer = Timer(this->mTimeData.startTime[i]);
+			std::string temp = this->mTimer.WhenTimerStarted();
 			temp.insert(10, "\n\t\t\t\t  ");
 			this->mpPanel->GetTextBoxByName(this->mSeaMen[i])->SetText
 			(this->mSeaMen[i] + "\t\t\t\t  " + temp);
@@ -296,8 +296,8 @@ void CrewPanel::mCreateTextBoxesAndButtons()
 
 		if (this->mTimeData.startTime[i] != 0)
 		{
-			this->mtimer = Timer(this->mTimeData.startTime[i]);
-			std::string temp = this->mtimer.WhenTimerStarted();
+			this->mTimer = Timer(this->mTimeData.startTime[i]);
+			std::string temp = this->mTimer.WhenTimerStarted();
 			temp.insert(10, "\n\t\t\t\t  ");
 			this->mpPanel->GetTextBoxByName(this->mSeaMen[i])->SetText
 			(this->mSeaMen[i] + "\t\t\t\t  " + temp);
