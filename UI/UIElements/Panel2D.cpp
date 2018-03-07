@@ -129,6 +129,11 @@ Button * Panel2D::GetButtonByIndex(unsigned int index)
 	return to_return;
 }
 
+int Panel2D::GetNrOfButtons() const
+{
+	return (int)this->mButtonVector.size();
+}
+
 
 TextBox * Panel2D::GetTextBoxByName(std::string name)
 {

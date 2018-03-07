@@ -64,6 +64,8 @@ bool EventMenu::Init(int parentWidth,
 	this->mpPanel->LoadImageToBitmap("../../Models/Action7.png", "Action7");
 	this->mpPanel->LoadImageToBitmap("../../Models/Action8.png", "Action8");
 	this->mpPanel->LoadImageToBitmap("../../Models/Action9.png", "Action9");
+	this->mpPanel->LoadImageToBitmap("../../Models/Action10.png", "Action10");
+	this->mpPanel->LoadImageToBitmap("../../Models/Action11.png", "Action11");
 
 	this->mpPanel->LoadImageToBitmap("../../Models/Number1.png", "Number1");
 	this->mpPanel->LoadImageToBitmap("../../Models/Number2.png", "Number2");
@@ -98,31 +100,7 @@ bool EventMenu::OpenAt(Room *pRoom)
 
 	this->mpActiveRoom = pRoom;
 
-	// TODO: Following functionallity does not work because GetActiveEvents
-	// does not work as intended. Not too important feature anyway
-	//std::vector<LogEvent*> test = pRoom->GetActiveEvents();
-	//for (int i = 0; i < pRoom->GetActiveEvents().size(); i++)
-	//{
-	//	switch (pRoom->GetActiveEvents()[i]->GetType())
-	//	{
-	//	case Event::Type::Fire:
-	//		this->mpPanel->GetButtonByName("Fire")->SetBitmap(
-	//			this->mpPanel->GetBitmapByName("FireOn"));
-	//		break;
-	//	case Event::Type::Water:
-	//		this->mpPanel->GetButtonByName("Water")->SetBitmap(
-	//			this->mpPanel->GetBitmapByName("WaterOn"));
-	//		break;
-	//	case Event::Type::Gas:
-	//		this->mpPanel->GetButtonByName("Gas")->SetBitmap(
-	//			this->mpPanel->GetBitmapByName("GasOn"));
-	//		break;
-	//	case Event::Type::Injury:
-	//		this->mpPanel->GetButtonByName("Injury")->SetBitmap(
-	//			this->mpPanel->GetBitmapByName("InjuryOn"));
-	//		break;
-	//	}
-	//}
+	this->UpdateEventButtonImages();
 
 	return true;
 }
@@ -171,6 +149,49 @@ bool EventMenu::IsMouseInsidePanel()
 bool EventMenu::IsVisible()
 {
 	return this->mpPanel->IsVisible();
+}
+
+void EventMenu::UpdateEventButtonImages()
+{
+
+	// Names of possible active events
+	std::string data_names[] = { "Fire", "Water", "Gas" };
+
+	// Deactivates all buttons (no event active)
+	int size = (int)floor(sizeof(data_names) / sizeof(std::string));
+	for (int i = 0; i < size; i++)
+	{
+		if (this->mpPanel->GetButtonByName(data_names[i]))
+		{
+			this->mpPanel->GetButtonByName(data_names[i])->SetBitmap(
+				this->mpPanel->GetBitmapByName(data_names[i] + "Off"));
+		}
+	}
+
+	// Activate corresponding buttons only if there are any active events 
+	// (activate necessary events)
+	if (this->mpActiveRoom->GetActiveEventIndex() != -1)
+	{
+		int size = (int)this->mpActiveRoom->GetActiveEvents().size();
+		for (int i = 0; i < size; i++)
+		{
+			switch (this->mpActiveRoom->GetActiveEvents()[i]->GetType())
+			{
+			case Event::Type::Fire:
+				this->mpPanel->GetButtonByName("Fire")->SetBitmap(
+					this->mpPanel->GetBitmapByName("FireOn"));
+				break;
+			case Event::Type::Water:
+				this->mpPanel->GetButtonByName("Water")->SetBitmap(
+					this->mpPanel->GetBitmapByName("WaterOn"));
+				break;
+			case Event::Type::Gas:
+				this->mpPanel->GetButtonByName("Gas")->SetBitmap(
+					this->mpPanel->GetBitmapByName("GasOn"));
+				break;
+			}
+		}
+	}
 }
 
 void EventMenu::SetActiveRoom(Room * room)
@@ -255,14 +276,14 @@ void EventMenu::Update(Button *attribute)
 					obs_inf.actionData = Icon_Cooling_Wall;
 					this->NotifyObservers(&obs_inf);
 				}
-				else if (button_name.compare("Supporting_Wall") == 0)
+				else if (button_name.compare("Icon_Draining") == 0)
 				{
-					obs_inf.actionData = Icon_Supporting_Wall;
+					obs_inf.actionData = Icon_Draining;
 					this->NotifyObservers(&obs_inf);
 				}
-				else if (button_name.compare("Damaged_Bulk") == 0)
+				else if (button_name.compare("Seal_Hole") == 0)
 				{
-					obs_inf.actionData = Icon_Damaged_Bulk;
+					obs_inf.actionData = Icon_Seal_Hole;
 					this->NotifyObservers(&obs_inf);
 				}
 			}
@@ -326,13 +347,13 @@ void EventMenu::Update(Button *attribute)
 					this->NotifyObservers(&obs_inf);
 					this->mSwapActionMode();
 				}
-				else if (button_name.compare("Supporting_Wall") == 0) //! 8
+				else if (button_name.compare("Icon_Draining") == 0) //! 8
 				{
 					obs_inf.actionData |= Number_8;
 					this->NotifyObservers(&obs_inf);
 					this->mSwapActionMode();
 				}
-				else if (button_name.compare("Damaged_Bulk") == 0) //! 9
+				else if (button_name.compare("Seal_Hole") == 0) //! 9
 				{
 					obs_inf.actionData |= Number_9;
 					this->NotifyObservers(&obs_inf);
@@ -374,10 +395,10 @@ void EventMenu::mSwapActionMode()
 		this->mpPanel->GetButtonByName("Cooling_Wall")->SetBitmap(
 			this->mpPanel->GetBitmapByName("Number7"));
 
-		this->mpPanel->GetButtonByName("Supporting_Wall")->SetBitmap(
+		this->mpPanel->GetButtonByName("Icon_Draining")->SetBitmap(
 			this->mpPanel->GetBitmapByName("Number8"));
 
-		this->mpPanel->GetButtonByName("Damaged_Bulk")->SetBitmap(
+		this->mpPanel->GetButtonByName("Seal_Hole")->SetBitmap(
 			this->mpPanel->GetBitmapByName("Number9"));
 	}
 	else {
@@ -405,11 +426,11 @@ void EventMenu::mSwapActionMode()
 		this->mpPanel->GetButtonByName("Cooling_Wall")->SetBitmap(
 			this->mpPanel->GetBitmapByName("Action7"));
 
-		this->mpPanel->GetButtonByName("Supporting_Wall")->SetBitmap(
-			this->mpPanel->GetBitmapByName("Action8"));
+		this->mpPanel->GetButtonByName("Icon_Draining")->SetBitmap(
+			this->mpPanel->GetBitmapByName("Action10"));
 
-		this->mpPanel->GetButtonByName("Damaged_Bulk")->SetBitmap(
-			this->mpPanel->GetBitmapByName("Action9"));
+		this->mpPanel->GetButtonByName("Seal_Hole")->SetBitmap(
+			this->mpPanel->GetBitmapByName("Action11"));
 	}
 }
 
@@ -513,16 +534,16 @@ void EventMenu::InitButtons()
 		buttonSize,
 		margin + (eventButtonSize + margin) * 2 + (actionMargin + buttonSize) * 2,
 		(this->mMenuWidth / 2) - (buttonSize / 2),
-		this->mpPanel->GetBitmapByName("Action8"),
-		"Supporting_Wall");
+		this->mpPanel->GetBitmapByName("Action10"),
+		"Icon_Draining");
 
 	this->mpPanel->AddButton(
 		buttonSize,
 		buttonSize,
 		margin + (eventButtonSize + margin) * 2 + (actionMargin + buttonSize) * 2,
 		this->mMenuWidth - buttonSize - actionMargin,
-		this->mpPanel->GetBitmapByName("Action9"),
-		"Damaged_Bulk");
+		this->mpPanel->GetBitmapByName("Action11"),
+		"Seal_Hole");
 
 	this->mpPanel->AddButton(
 		this->mMenuWidth / 9,
@@ -544,7 +565,7 @@ void EventMenu::InitButtons()
 	this->mpPanel->GetButtonByName("Ventilation_In")->AddObserver(this);
 	this->mpPanel->GetButtonByName("Ventilation_Out")->AddObserver(this);
 	this->mpPanel->GetButtonByName("Cooling_Wall")->AddObserver(this);
-	this->mpPanel->GetButtonByName("Supporting_Wall")->AddObserver(this);
-	this->mpPanel->GetButtonByName("Damaged_Bulk")->AddObserver(this);
+	this->mpPanel->GetButtonByName("Icon_Draining")->AddObserver(this);
+	this->mpPanel->GetButtonByName("Seal_Hole")->AddObserver(this);
 
 }

@@ -39,6 +39,7 @@ public:
 
 	Button* GetButtonByName(std::string name);
 	Button* GetButtonByIndex(unsigned int index);
+	int GetNrOfButtons() const;
 
 
 
