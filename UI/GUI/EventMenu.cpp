@@ -341,6 +341,16 @@ void EventMenu::Update(Button *attribute)
 					obs_inf.actionData = Icon_Seal_Hole;
 					this->NotifyObservers(&obs_inf);
 				}
+				else if (button_name.compare("Damaged_Bulk") == 0)
+				{
+					obs_inf.actionData = Icon_Damaged_Bulk;
+					this->NotifyObservers(&obs_inf);
+				}
+				else if (button_name.compare("Supporting_Wall") == 0)
+				{
+					obs_inf.actionData = Icon_Supporting_Wall;
+					this->NotifyObservers(&obs_inf);
+				}
 			}
 			else { //! ActionMode == NUMBERS
 				// Injury action has been selected, and these buttons now
@@ -360,60 +370,83 @@ void EventMenu::Update(Button *attribute)
 					obs_inf.actionData = Icon_Injured_Treated | Rotation_Stationary;
 					break;
 				}
-				if (button_name.compare("Injured_Moved") == 0) //! 1
+
+				static uint32_t numbers[] = {
+					Number_1,
+					Number_2,
+					Number_3,
+					Number_4,
+					Number_5,
+					Number_6,
+					Number_7,
+					Number_8,
+					Number_9,
+				};
+
+				for (int i = 0; i < 9; i++)
 				{
-					obs_inf.actionData |= Number_1;
-					this->NotifyObservers(&obs_inf);
-					this->mSwapActionMode();
+					if (button_name.compare("Number" + std::to_string(i + 1)) == 0)
+					{
+						obs_inf.actionData |= numbers[i];
+						this->NotifyObservers(&obs_inf);
+						this->mSwapActionMode();
+					}
 				}
-				else if (button_name.compare("Injured_Treated") == 0) //! 2
-				{
-					obs_inf.actionData |= Number_2;
-					this->NotifyObservers(&obs_inf);
-					this->mSwapActionMode();
-				}
-				else if (button_name.compare("Injured_Reported") == 0) //! 3
-				{
-					obs_inf.actionData |= Number_3;
-					this->NotifyObservers(&obs_inf);
-					this->mSwapActionMode();
-				}
-				else if (button_name.compare("Hole_In_Bulk") == 0) //! 4
-				{
-					obs_inf.actionData |= Number_4;
-					this->NotifyObservers(&obs_inf);
-					this->mSwapActionMode();
-				}
-				else if (button_name.compare("Ventilation_In") == 0) //! 5
-				{
-					obs_inf.actionData |= Number_8;
-					this->NotifyObservers(&obs_inf);
-					this->mSwapActionMode();
-				}
-				else if (button_name.compare("Ventilation_Out") == 0) //! 6
-				{
-					obs_inf.actionData |= Number_9;
-					this->NotifyObservers(&obs_inf);
-					this->mSwapActionMode();
-				}
-				else if (button_name.compare("Cooling_Wall") == 0) //! 7
-				{
-					obs_inf.actionData |= Number_7;
-					this->NotifyObservers(&obs_inf);
-					this->mSwapActionMode();
-				}
-				else if (button_name.compare("Icon_Draining") == 0) //! 8
-				{
-					obs_inf.actionData |= Number_6;
-					this->NotifyObservers(&obs_inf);
-					this->mSwapActionMode();
-				}
-				else if (button_name.compare("Seal_Hole") == 0) //! 9
-				{
-					obs_inf.actionData |= Number_5;
-					this->NotifyObservers(&obs_inf);
-					this->mSwapActionMode();
-				}
+
+				//if (button_name.compare("Injured_Moved") == 0) //! 1
+				//{
+				//	obs_inf.actionData |= Number_1;
+				//	this->NotifyObservers(&obs_inf);
+				//	this->mSwapActionMode();
+				//}
+				//else if (button_name.compare("Injured_Treated") == 0) //! 2
+				//{
+				//	obs_inf.actionData |= Number_2;
+				//	this->NotifyObservers(&obs_inf);
+				//	this->mSwapActionMode();
+				//}
+				//else if (button_name.compare("Injured_Reported") == 0) //! 3
+				//{
+				//	obs_inf.actionData |= Number_3;
+				//	this->NotifyObservers(&obs_inf);
+				//	this->mSwapActionMode();
+				//}
+				//else if (button_name.compare("Hole_In_Bulk") == 0) //! 4
+				//{
+				//	obs_inf.actionData |= Number_4;
+				//	this->NotifyObservers(&obs_inf);
+				//	this->mSwapActionMode();
+				//}
+				//else if (button_name.compare("Ventilation_In") == 0) //! 5
+				//{
+				//	obs_inf.actionData |= Number_8;
+				//	this->NotifyObservers(&obs_inf);
+				//	this->mSwapActionMode();
+				//}
+				//else if (button_name.compare("Ventilation_Out") == 0) //! 6
+				//{
+				//	obs_inf.actionData |= Number_9;
+				//	this->NotifyObservers(&obs_inf);
+				//	this->mSwapActionMode();
+				//}
+				//else if (button_name.compare("Cooling_Wall") == 0) //! 7
+				//{
+				//	obs_inf.actionData |= Number_7;
+				//	this->NotifyObservers(&obs_inf);
+				//	this->mSwapActionMode();
+				//}
+				//else if (button_name.compare("Icon_Draining") == 0) //! 8
+				//{
+				//	obs_inf.actionData |= Number_6;
+				//	this->NotifyObservers(&obs_inf);
+				//	this->mSwapActionMode();
+				//}
+				//else if (button_name.compare("Seal_Hole") == 0) //! 9
+				//{
+				//	obs_inf.actionData |= Number_5;
+				//	this->NotifyObservers(&obs_inf);
+				//	this->mSwapActionMode();
+				//}
 			}
 		}
 	}
@@ -426,66 +459,35 @@ Event::Type EventMenu::GetLastClicked()
 
 void EventMenu::mSwapActionMode()
 {
-	if (this->mActionMode == STANDARD)
+	/* 
+		-- Action Mode --
+	
+		0 = Standard
+		1 =	Numbers
+
+		The value can be either 0 or 1.
+		This makes it possible to handle it as a bool.
+	*/
+
+	this->mActionMode =
+		this->mActionMode != STANDARD ? STANDARD : NUMBERS;
+
+	// Based on action mode, show or hide number buttons
+	for (int i = 0; i < 9; i++)
 	{
-		this->mActionMode = NUMBERS;
-		this->mpPanel->GetButtonByName("Injured_Moved")->SetBitmap(
-			this->mpPanel->GetBitmapByName("Number1"));
-
-		this->mpPanel->GetButtonByName("Injured_Treated")->SetBitmap(
-			this->mpPanel->GetBitmapByName("Number2"));
-
-		this->mpPanel->GetButtonByName("Injured_Reported")->SetBitmap(
-			this->mpPanel->GetBitmapByName("Number3"));
-
-		this->mpPanel->GetButtonByName("Hole_In_Bulk")->SetBitmap(
-			this->mpPanel->GetBitmapByName("Number4"));
-
-		this->mpPanel->GetButtonByName("Ventilation_In")->SetBitmap(
-			this->mpPanel->GetBitmapByName("Number8"));
-
-		this->mpPanel->GetButtonByName("Ventilation_Out")->SetBitmap(
-			this->mpPanel->GetBitmapByName("Number9"));
-
-		this->mpPanel->GetButtonByName("Cooling_Wall")->SetBitmap(
-			this->mpPanel->GetBitmapByName("Number7"));
-
-		this->mpPanel->GetButtonByName("Supporting_Wall")->SetBitmap(
-			this->mpPanel->GetBitmapByName("Number6"));
-
-		this->mpPanel->GetButtonByName("Damaged_Bulk")->SetBitmap(
-			this->mpPanel->GetBitmapByName("Number5"));
+		this->mpPanel->GetButtonByName("Number" +
+			std::to_string(i + 1))->SetAlive((int)this->mActionMode);
 	}
-	else {
-		this->mActionMode = STANDARD;
 
-		// Reset all button bitmaps
-		this->mpPanel->GetButtonByName("Injured_Moved")->SetBitmap(
-			this->mpPanel->GetBitmapByName("Action1"));
-
-		this->mpPanel->GetButtonByName("Injured_Treated")->SetBitmap(
-			this->mpPanel->GetBitmapByName("Action2"));
-
-		this->mpPanel->GetButtonByName("Injured_Reported")->SetBitmap(
-			this->mpPanel->GetBitmapByName("Action3"));
-
-		this->mpPanel->GetButtonByName("Hole_In_Bulk")->SetBitmap(
-			this->mpPanel->GetBitmapByName("Action4"));
-
-		this->mpPanel->GetButtonByName("Ventilation_In")->SetBitmap(
-			this->mpPanel->GetBitmapByName("Action5"));
-
-		this->mpPanel->GetButtonByName("Ventilation_Out")->SetBitmap(
-			this->mpPanel->GetBitmapByName("Action6"));
-
-		this->mpPanel->GetButtonByName("Cooling_Wall")->SetBitmap(
-			this->mpPanel->GetBitmapByName("Action7"));
-
-		this->mpPanel->GetButtonByName("Icon_Draining")->SetBitmap(
-			this->mpPanel->GetBitmapByName("Action10"));
-
-		this->mpPanel->GetButtonByName("Seal_Hole")->SetBitmap(
-			this->mpPanel->GetBitmapByName("Action11"));
+	// Based on action mode, show or hide buttons other than number buttons
+	int size = (int)this->mpPanel->GetNrOfButtons();
+	for (int i = 0; i < size; i++)
+	{
+		Button* btn = this->mpPanel->GetButtonByIndex(i);
+		if (btn->GetName().find("Number") == std::string::npos)
+		{
+			btn->SetAlive(!this->mActionMode);
+		}
 	}
 }
 
@@ -686,6 +688,49 @@ void EventMenu::InitButtons()
 		this->mpPanel->GetBitmapByName("Exit"),
 		"Exit");
 
+	// DUMMY BUTTONS
+	for (int i = 0; i < 3; i++)
+	{
+		this->mpPanel->AddButton(
+			buttonSize,
+			buttonSize,
+			topStartPos + step * (i + 3),
+			left,
+			this->mpPanel->GetBitmapByName("Number" + std::to_string((i * 3) + 1)),
+			"Number" + std::to_string((i * 3) + 1));
+
+		this->mpPanel->AddButton(
+			buttonSize,
+			buttonSize,
+			topStartPos + step * (i + 3),
+			middle,
+			this->mpPanel->GetBitmapByName("Number" + std::to_string((i * 3) + 2)),
+			"Number" + std::to_string((i * 3) + 2));
+
+		this->mpPanel->AddButton(
+			buttonSize,
+			buttonSize,
+			topStartPos + step * (i + 3),
+			right,
+			this->mpPanel->GetBitmapByName("Number" + std::to_string((i * 3) + 3)),
+			"Number" + std::to_string((i * 3) + 3));
+
+		this->mpPanel->GetButtonByName("Number" +
+			std::to_string((i * 3) + 1))->SetAlive(false);
+		this->mpPanel->GetButtonByName("Number" +
+			std::to_string((i * 3) + 2))->SetAlive(false);
+		this->mpPanel->GetButtonByName("Number" +
+			std::to_string((i * 3) + 3))->SetAlive(false);
+
+		this->mpPanel->GetButtonByName("Number" +
+			std::to_string((i * 3) + 1))->AddObserver(this);
+		this->mpPanel->GetButtonByName("Number" +
+			std::to_string((i * 3) + 2))->AddObserver(this);
+		this->mpPanel->GetButtonByName("Number" +
+			std::to_string((i * 3) + 3))->AddObserver(this);
+	}
+
+
 	this->mpPanel->GetButtonByName("Fire")->AddObserver(this);
 	this->mpPanel->GetButtonByName("Gas")->AddObserver(this);
 	this->mpPanel->GetButtonByName("Water")->AddObserver(this);
@@ -701,5 +746,6 @@ void EventMenu::InitButtons()
 	this->mpPanel->GetButtonByName("Cooling_Wall")->AddObserver(this);
 	this->mpPanel->GetButtonByName("Icon_Draining")->AddObserver(this);
 	this->mpPanel->GetButtonByName("Seal_Hole")->AddObserver(this);
-
+	this->mpPanel->GetButtonByName("Damaged_Bulk")->AddObserver(this);
+	this->mpPanel->GetButtonByName("Supporting_Wall")->AddObserver(this);
 }

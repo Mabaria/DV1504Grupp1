@@ -357,6 +357,10 @@ void Panel2D::mUpdateButtons()
 				{
 					(*it)->SetButtonStatus(BUTTON_STATE::CLICKED);
 				}
+				else if (Mouse::IsButtonReleased(Buttons::Left))
+				{
+					(*it)->SetButtonStatus(BUTTON_STATE::RELEASED);
+				}
 				else if (!Mouse::IsButtonDown(Buttons::Left) ||
 					(*it)->GetButtState() != BUTTON_STATE::CLICKED)
 					(*it)->SetButtonStatus(BUTTON_STATE::HOVER);

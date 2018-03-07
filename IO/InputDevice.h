@@ -60,8 +60,10 @@ public:
 	static float scrollDirection;
 
 	static void SetMouseButton(const Buttons button, const bool is_pressed);
+
 	static void SetMousePositionPercentage(const float x, const float y);
 	static void SetMousePosition(const int x, const int y);
+
 	static void SetExactMousePosition(const int x, const int y);
 	static void SetExactMousePositionPercentage(const float x, const float y);
 

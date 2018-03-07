@@ -25,6 +25,7 @@ Button::Button(
 	this->D2D1Panel = D2D1Panel;
 	this->mCurrState = BUTTON_STATE::RESET;
 	this->mBitmapLoadedByFilePath = true;
+	this->mAlive = true;
 	/*this->D2D1Panel->GetpRenderTarget()->CreateSolidColorBrush(
 		D2D1::ColorF(D2D1::ColorF(1.f, 0.f, 0.f, 1.0f)),
 		&this->mpFillBrush);*/
@@ -63,6 +64,7 @@ Button::Button(
 	this->D2D1Panel = D2D1Panel;
 	this->mCurrState = BUTTON_STATE::RESET;
 	this->mBitmapLoadedByFilePath = false;
+	this->mAlive = true;
 
 	
 	this->D2D1Panel->GetpRenderTarget()->CreateSolidColorBrush(
@@ -271,7 +273,8 @@ void Button::MoveIcon(int x, int y)
 
 bool Button::SetButtonStatus(BUTTON_STATE buttState)
 {
-	if (!this->mForcedButtState)
+
+	if (!this->mForcedButtState && this->mAlive)
 	{
 		if (!(this->mCurrState == buttState))
 		{
@@ -286,7 +289,7 @@ bool Button::SetButtonStatus(BUTTON_STATE buttState)
 						this->mWidth* (buttState + 1),
 						this->mpBitMap->GetSize().height);
 				}
-				if (buttState == 2)
+				if (buttState == 4)
 				{
 					this->NotifyObservers(this);
 				}
@@ -468,6 +471,12 @@ void Button::SetForcedButtState(bool newForcedState)
 const float Button::GetOpacity()
 {
 	return this->mOpacity;
+}
+
+void Button::SetAlive(bool alive)
+{
+	this->mAlive = alive;
+	this->SetOpacity((float)alive);
 }
 
 void Button::ReleaseCOM(IUnknown *object)
