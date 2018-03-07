@@ -23,8 +23,10 @@ public:
 private:
 	struct TimeData {
 		time_t startTime[22];
+		char textState[22];
 	};
-	Timer *mTimers[22];
+	//Timer *mTimers[22];
+	TimeData mTimeData;
 	Panel2D * mpPanel;
 	Timer mtimer;
 	bool mVisible, mButtonFocus, mDraggingWindow;
