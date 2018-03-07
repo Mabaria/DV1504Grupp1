@@ -53,7 +53,7 @@ public:
 	void SetIconSize(int left, int top, int right, int bottom);
 	void MoveButton(int x, int y);
 	void MoveIcon(int x, int y);
-	void SetButtonStatus(BUTTON_STATE buttState);
+	bool SetButtonStatus(BUTTON_STATE buttState);
 	void SetRectStatus(BUTTON_STATE rectState);
 	void SetBitmap(ID2D1Bitmap* bitmapPointer);
 	void LoadImageToBitmap(std::string imageFilePath);
@@ -66,6 +66,16 @@ public:
 	void SetButtonColor(float r, float g, float b, float a = 1.f);
 	const D2D1_COLOR_F GetButtonColor() const;
 	const float GetOpacity();
+
+	void ForceButtState(BUTTON_STATE newState); /* Forces the button to stay in the
+												selected state until ForcedButtState
+												is set to false or ToggleForcedButtState
+												is called */
+	bool ToggleForcedButtState();
+	void SetForcedButtState(bool newForcedState);/*Set this to false if you want to
+												 unlock a currently forced button.
+												 Set to true if you wish to lock the
+												 button in it's current state */
 
 private:
 	
@@ -92,4 +102,6 @@ private:
 
 	bool mBitmapLoadedByFilePath;
 	std::string mName;
+
+	bool mForcedButtState = false;
 };
