@@ -170,7 +170,7 @@ void System::Update(ObserverInfo * obsInf)
 		// If a room is clicked in top view panel.
 		if (this->mpTopViewPanel->IsMouseInsidePanel())
 		{
-			this->mUpdateEvents(obsInf->pRoom, true);
+			this->mUpdateEvents(obsInf->pRoom, false);
 		}
 		// If a notification object is clicked in the active log panel.
 		else if (this->mpActiveLogPanel->IsMouseInsidePanel())
@@ -213,7 +213,7 @@ Room * System::GetRoomByIndex(int index)
 
 bool System::UpdateRoom(Room * room)
 {
-	this->mUpdateEvents(room, false);
+	this->mUpdateEvents(room, true);
 
 	return true;
 }
@@ -423,15 +423,15 @@ void System::mUpdateRoomInfo()
 		new_info_text);
 }
 
-void System::mUpdateEvents(Room * room, bool manual_input)
+void System::mUpdateEvents(Room * room, bool automatic_input)
 {
 	std::vector<LogEvent*> events_in_room = room->GetActiveEvents();
 	// If there already is an active event of that type in that room
 	// the event is removed.
-	if (!this->mpActiveLogPanel->AddNotification(room, events_in_room.back()))
+	if (!this->mpActiveLogPanel->AddNotification(room, events_in_room.back(), automatic_input))
 	{
 		// If event added through manual input (not through a sensor)
-		if (manual_input)
+		if (!automatic_input)
 		{
 			Event::Type to_remove = this->mpMenuPanel->GetLastClicked();
 			this->mpActiveLogPanel->RemoveNotification(room, to_remove);

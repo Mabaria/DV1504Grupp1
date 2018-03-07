@@ -37,7 +37,7 @@ private:
 	void mUpdateHover(std::string name, int index, bool activate);
 	void mUpdateRoomInfo();
 
-	void mUpdateEvents(Room *room, bool manual_input);
+	void mUpdateEvents(Room *room, bool automatic_input);
 
 	void mSetupPanels();
 	void mSetupModels();
