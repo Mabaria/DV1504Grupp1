@@ -131,41 +131,7 @@ void CrewPanel::Update(Button * button)
 	}
 	else if (button->GetName() == "Exit")
 	{
-		for (int i = 0; i < 22; i++)
-		{
-			// Change the bitmap from on to off
-			this->mpPanel->GetButtonByName(this->mSeaMen[i])->SetBitmap
-			(this->mpPanel->GetBitmapByName("Off"));
-
-			// Sets the opacity of the "skadad" button to 0
-			this->mpPanel->GetButtonByName(this->mSeaMen[i] + "§")->
-				SetOpacity(0.0f);
-
-			/*First time you clost the window the bitmap for the button behind
-			the time stamp is changed*/			
-			if (this->mpPanel->GetButtonByName(this->mSeaMen[i] + "Text")
-				->getBitmapPointer() == this->mpPanel->GetBitmapByName("Grid"))
-			{
-				this->mpPanel->GetButtonByName(this->mSeaMen[i] + "Text")
-					->SetBitmap(this->mpPanel->GetBitmapByName("Red"));
-				this->mTimeData.textState[i] = 1;
-			}
-
-			// The second time you clost the window you change the opacity
-			// of the button
-			else if (this->mpPanel->GetTextBoxByName
-			(this->mSeaMen[i])->GetText().size() > 5 &&
-				this->mpPanel->GetButtonByName(this->mSeaMen[i] + "Text")
-				->getBitmapPointer() == this->mpPanel->GetBitmapByName("Red"))
-			{
-				this->mpPanel->GetButtonByName(this->mSeaMen[i] + "Text")->
-					SetOpacity(0.5f);
-				this->mTimeData.textState[i] = 2;
-			}
-		}
-		this->mSaveToDisk();
-		this->mVisible = false;
-		this->mpPanel->Hide();
+		this->mCloseWindow();
 	}
 	else if (button->getBitmapPointer() ==
 		this->mpPanel->GetBitmapByName("Off"))
@@ -450,4 +416,42 @@ void CrewPanel::mSaveToDisk()
 		return;
 	file.write((char*)&this->mTimeData, sizeof(TimeData));
 	file.close();
+}
+
+void CrewPanel::mCloseWindow()
+{
+	for (int i = 0; i < 22; i++)
+	{
+		// Change the bitmap from on to off
+		this->mpPanel->GetButtonByName(this->mSeaMen[i])->SetBitmap
+		(this->mpPanel->GetBitmapByName("Off"));
+
+		// Sets the opacity of the "skadad" button to 0
+		this->mpPanel->GetButtonByName(this->mSeaMen[i] + "§")->
+			SetOpacity(0.0f);
+
+
+		/*First time you clost the window the bitmap for the button behind
+		the time stamp is changed*/
+		if (this->mpPanel->GetButtonByName(this->mSeaMen[i] + "Text")
+			->getBitmapPointer() == this->mpPanel->GetBitmapByName("Grid"))
+		{
+			this->mpPanel->GetButtonByName(this->mSeaMen[i] + "Text")
+				->SetBitmap(this->mpPanel->GetBitmapByName("Red"));
+		}
+
+		// The second time you clost the window you change the opacity
+		// of the button
+		else if (this->mpPanel->GetTextBoxByName
+		(this->mSeaMen[i])->GetText().size() > 5 &&
+			this->mpPanel->GetButtonByName(this->mSeaMen[i] + "Text")
+			->getBitmapPointer() == this->mpPanel->GetBitmapByName("Red"))
+		{
+			this->mpPanel->GetButtonByName(this->mSeaMen[i] + "Text")->
+				SetOpacity(0.5f);
+		}
+	}
+
+	this->mVisible = false;
+	this->mpPanel->Hide();
 }

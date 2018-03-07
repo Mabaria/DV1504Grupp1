@@ -35,6 +35,7 @@ private:
 	int mFontSize;
 
 	void mCreateTextBoxesAndButtons();
+	void mCloseWindow();
 	
 	void mInitTimers();
 	void mSaveToDisk();
