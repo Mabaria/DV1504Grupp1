@@ -64,6 +64,8 @@ bool EventMenu::Init(int parentWidth,
 	this->mpPanel->LoadImageToBitmap("../../Models/Action7.png", "Action7");
 	this->mpPanel->LoadImageToBitmap("../../Models/Action8.png", "Action8");
 	this->mpPanel->LoadImageToBitmap("../../Models/Action9.png", "Action9");
+	this->mpPanel->LoadImageToBitmap("../../Models/Action10.png", "Action10");
+	this->mpPanel->LoadImageToBitmap("../../Models/Action11.png", "Action11");
 
 	this->mpPanel->LoadImageToBitmap("../../Models/Number1.png", "Number1");
 	this->mpPanel->LoadImageToBitmap("../../Models/Number2.png", "Number2");
@@ -274,14 +276,14 @@ void EventMenu::Update(Button *attribute)
 					obs_inf.actionData = Icon_Cooling_Wall;
 					this->NotifyObservers(&obs_inf);
 				}
-				else if (button_name.compare("Supporting_Wall") == 0)
+				else if (button_name.compare("Icon_Draining") == 0)
 				{
-					obs_inf.actionData = Icon_Supporting_Wall;
+					obs_inf.actionData = Icon_Draining;
 					this->NotifyObservers(&obs_inf);
 				}
-				else if (button_name.compare("Damaged_Bulk") == 0)
+				else if (button_name.compare("Seal_Hole") == 0)
 				{
-					obs_inf.actionData = Icon_Damaged_Bulk;
+					obs_inf.actionData = Icon_Seal_Hole;
 					this->NotifyObservers(&obs_inf);
 				}
 			}
@@ -345,13 +347,13 @@ void EventMenu::Update(Button *attribute)
 					this->NotifyObservers(&obs_inf);
 					this->mSwapActionMode();
 				}
-				else if (button_name.compare("Supporting_Wall") == 0) //! 8
+				else if (button_name.compare("Icon_Draining") == 0) //! 8
 				{
 					obs_inf.actionData |= Number_6;
 					this->NotifyObservers(&obs_inf);
 					this->mSwapActionMode();
 				}
-				else if (button_name.compare("Damaged_Bulk") == 0) //! 9
+				else if (button_name.compare("Seal_Hole") == 0) //! 9
 				{
 					obs_inf.actionData |= Number_5;
 					this->NotifyObservers(&obs_inf);
@@ -424,11 +426,11 @@ void EventMenu::mSwapActionMode()
 		this->mpPanel->GetButtonByName("Cooling_Wall")->SetBitmap(
 			this->mpPanel->GetBitmapByName("Action7"));
 
-		this->mpPanel->GetButtonByName("Supporting_Wall")->SetBitmap(
-			this->mpPanel->GetBitmapByName("Action8"));
+		this->mpPanel->GetButtonByName("Icon_Draining")->SetBitmap(
+			this->mpPanel->GetBitmapByName("Action10"));
 
-		this->mpPanel->GetButtonByName("Damaged_Bulk")->SetBitmap(
-			this->mpPanel->GetBitmapByName("Action9"));
+		this->mpPanel->GetButtonByName("Seal_Hole")->SetBitmap(
+			this->mpPanel->GetBitmapByName("Action11"));
 	}
 }
 
@@ -544,6 +546,8 @@ void EventMenu::InitButtons()
 		(this->mMenuWidth / 2) - (buttonSize / 2),
 		this->mpPanel->GetBitmapByName("Action2"),
 		"Injured_Treated");
+		this->mpPanel->GetBitmapByName("Action10"),
+		"Icon_Draining");
 
 	this->mpPanel->AddButton(
 		buttonSize,
@@ -552,6 +556,8 @@ void EventMenu::InitButtons()
 		this->mMenuWidth - buttonSize - actionMargin,
 		this->mpPanel->GetBitmapByName("Action3"),
 		"Injured_Reported");
+		this->mpPanel->GetBitmapByName("Action11"),
+		"Seal_Hole");
 
 	this->mpPanel->AddButton(
 		this->mMenuWidth / 9,
@@ -574,7 +580,7 @@ void EventMenu::InitButtons()
 	this->mpPanel->GetButtonByName("Ventilation_In")->AddObserver(this);
 	this->mpPanel->GetButtonByName("Ventilation_Out")->AddObserver(this);
 	this->mpPanel->GetButtonByName("Cooling_Wall")->AddObserver(this);
-	this->mpPanel->GetButtonByName("Supporting_Wall")->AddObserver(this);
-	this->mpPanel->GetButtonByName("Damaged_Bulk")->AddObserver(this);
+	this->mpPanel->GetButtonByName("Icon_Draining")->AddObserver(this);
+	this->mpPanel->GetButtonByName("Seal_Hole")->AddObserver(this);
 
 }

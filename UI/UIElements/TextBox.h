@@ -23,6 +23,7 @@ public:
 	void SetFontWeight(DWRITE_FONT_WEIGHT fontWeight);
 	void SetFontName(std::wstring fontName);
 	void SetTextAlignment(DWRITE_TEXT_ALIGNMENT textAlignment);
+	const std::string GetText();
 
 	void DrawToBitmap(); /* This functions draws to the bitmap ONLY, and does
 						 NOT output anything to the render target in the Direct2D*/
