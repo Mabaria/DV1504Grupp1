@@ -64,7 +64,10 @@ public:
 	// system observe the notification objects.
 	NotificationList *GetNotificationList();
 
-	bool AddNotification(Room *room, LogEvent *event);
+	bool AddNotification(
+		Room *room,
+		LogEvent *event,
+		bool addedBySensor = false);
 	bool RemoveNotification(Room *room, Event::Type type);
 
 	bool GetButtonOcclude();

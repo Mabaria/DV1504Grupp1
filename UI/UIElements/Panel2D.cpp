@@ -184,7 +184,7 @@ NotificationList * Panel2D::GetNotificationList()
 	return this->mNotificationList;
 }
 
-bool Panel2D::AddNotification(Room * room, LogEvent * event)
+bool Panel2D::AddNotification(Room * room, LogEvent * event, bool addedBySensor)
 {
 	ID2D1Bitmap *bitmap = nullptr;
 	switch (event->GetType())
@@ -209,7 +209,8 @@ bool Panel2D::AddNotification(Room * room, LogEvent * event)
 		this->mDirect2D,
 		room,
 		event,
-		bitmap);
+		bitmap,
+		addedBySensor);
 	return result;
 }
 
@@ -392,12 +393,12 @@ void Panel2D::mUpdateButtons()
 						obs_inf.pRoom = notification_object->GetRoom();
 						obs_inf.actionData = No_Action;
 						notification_object->NotifyObservers(&obs_inf);
+						notification_object->SetIfNewStatus(false);
 					}
 					else if (!Mouse::IsButtonDown(Buttons::Left) ||
 						button->GetButtState() != BUTTON_STATE::CLICKED)
 					{
 						button->SetRectStatus(BUTTON_STATE::HOVER);
-						notification_object->SetIfNewStatus(false);
 					}
 				}
 				else
