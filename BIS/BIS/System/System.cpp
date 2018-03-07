@@ -255,6 +255,12 @@ void System::mHandleInput()
 			Actions::ActionPtr *act_ptr = actions->PickAction();
 			actions->RemoveAction(&act_ptr);
 		}
+		// If actionHandler is ready to place an action, right click rotates the pending
+		// action to be placed
+		if (Mouse::IsButtonPressed(Buttons::Right) && this->mActionHandler.IsWaiting())
+		{
+			this->mActionHandler.RotatePendingAction();
+		}
 
 		if (picked_room)
 		{
@@ -443,6 +449,8 @@ void System::mUpdateEvents(Room * room)
 		event_data,
 		this->mpSideViewPanel->rGetDirect3D().GetContext(),
 		index_in_deck);
+
+	this->mpMenuPanel->UpdateEventButtonImages();
 }
 
 void System::mSetupPanels()
