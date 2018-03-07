@@ -456,23 +456,15 @@ void System::mUpdateEvents(Room * room)
 
 void System::mUpdateGhostIcons()
 {
-	static bool is_updated = false;
 	if (this->mActionHandler.IsWaiting() && !this->mpMenuPanel->IsMouseInsidePanel())
 	{
-		if (is_updated)
-		{
-			this->mpTopViewPanel->SetIcon(*this->mActionHandler.GetLastAction());
-			this->mpTopViewPanel->SetActionHover(true);
-			is_updated = true;
-		}
+		this->mpTopViewPanel->SetActionHover(true);
+		this->mpTopViewPanel->SetIcon(*this->mActionHandler.GetLastAction());
 	}
 	else
 	{
-		if (!is_updated)
-		{
-			this->mpTopViewPanel->SetActionHover(false);
-			is_updated = true;
-		}
+		this->mpTopViewPanel->SetActionHover(false);
+		this->mpTopViewPanel->SetIcon(No_Action);
 	}
 }
 
