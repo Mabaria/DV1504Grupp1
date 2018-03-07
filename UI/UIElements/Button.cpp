@@ -327,14 +327,25 @@ void Button::SetRectStatus(BUTTON_STATE rectState)
 
 void Button::SetBitmap(ID2D1Bitmap * bitmapPointer)
 {
-
-	if (this->mBitmapLoadedByFilePath)
+	if (bitmapPointer)
 	{
-		this->ReleaseCOM(this->mpBitMap);
 
+		if (this->mBitmapLoadedByFilePath)
+		{
+			this->ReleaseCOM(this->mpBitMap);
+
+		}
+		this->mpBitMap = bitmapPointer;
+		this->mBitmapLoadedByFilePath = false;
 	}
-	this->mpBitMap = bitmapPointer;
-	this->mBitmapLoadedByFilePath = false;
+	else
+	{
+		MessageBoxA(
+			NULL, 
+			"Class Error: #BUTTON : Bitmap was nullptr", 
+			NULL, NULL
+		);
+	}
 }
 
 void Button::LoadImageToBitmap(
