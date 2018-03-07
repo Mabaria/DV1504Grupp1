@@ -449,7 +449,7 @@ void System::mUpdateEvents(Room * room)
 void System::mUpdateGhostIcons()
 {
 	static bool is_updated = false;
-	if (this->mActionHandler.IsWaiting())
+	if (this->mActionHandler.IsWaiting() && !this->mpMenuPanel->IsMouseInsidePanel())
 	{
 		if (is_updated)
 		{

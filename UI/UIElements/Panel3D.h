@@ -101,8 +101,9 @@ public:
 	void DrawBitmapToTexture(
 		ID2D1Bitmap *bitmap,
 		D2D1_RECT_F destRect,
-		D2D1_RECT_F sourceRect,
-		float opacity = 1.0f);
+		const D2D1_RECT_F sourceRect,
+		float opacity = 1.0f,
+		const D2D1_MATRIX_4X4_F *transform = nullptr);
 	//void SetCameraPosition()
 
 
@@ -156,9 +157,10 @@ private:
 	Actions *mpActions;
 
 	ID3D11Texture2D *mpBackBuffer;
-	ID2D1Bitmap *mpIconBitmap;
-	ID2D1Bitmap *mpNumberBitmap;
+	ID2D1Bitmap	*mpIconBitmap;
+	ID2D1Bitmap	*mpNumberBitmap;
 	D2D1_RECT_F mCurrentIconRect;
 	D2D1_RECT_F mCurrentNumberRect;
+	D2D1_MATRIX_4X4_F mCurrentTransform;
 	bool mActionHover;
 };
