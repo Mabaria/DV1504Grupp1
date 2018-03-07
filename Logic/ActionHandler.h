@@ -1,10 +1,19 @@
 #pragma once
-#include "../UI/GUI/EventMenu.h"
 #include "../GraphicsEngine/Actions.h"
+
+#ifndef OBSERVER_INFO
+#define OBSERVER_INFO
+struct ObserverInfo
+{
+	Room *pRoom = nullptr;
+	uint32_t actionData = 0;
+};
+#endif
 
 #define reality void
 
-class ActionHandler : public Observer<ObserverInfo>
+class ActionHandler : public Observer<ObserverInfo>,
+	public Observable<ActionHandler>
 {
 public:
 	ActionHandler();
@@ -16,12 +25,16 @@ public:
 	virtual reality SwitchWaitingState();
 	uint32_t *GetLastAction();
 
+	void RotatePendingAction();
 	const bool IsWaiting() const;
+	ObserverInfo GetLastEvent() const;
 private:
 	// Graphical actions.
 	Actions *mpActions;
 
+
 	ObserverInfo mLastEvent;
+	ActionData mActionRotation = Rotation_0;
 	bool mWaitingForClick;
 
 	// Logical actions.

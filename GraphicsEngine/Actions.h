@@ -15,6 +15,8 @@ enum ActionData : uint32_t
 	Icon_Cooling_Wall = 6,
 	Icon_Supporting_Wall = 7,
 	Icon_Damaged_Bulk = 8,
+	Icon_Draining = 9,
+	Icon_Seal_Hole = 10,
 	Rotation_0 = 0,
 	Rotation_90 = 16,
 	Rotation_180 = 32,
