@@ -31,14 +31,18 @@ void ActionHandler::AddAction(float x, float z)
 			transformed_action_data = (ActionData)(this->mLastEvent.actionData + this->mActionRotation);
 		}
 		this->mpActions->AddAction(x, z, transformed_action_data);
+		this->NotifyObservers(this);
 	}
 }
 
 void ActionHandler::SwitchWaitingState()
 {
 	this->mWaitingForClick = !this->mWaitingForClick;
+
 	if (!this->mWaitingForClick) // Reset rotation between events
 		this->mActionRotation = Rotation_0;
+
+	this->NotifyObservers(this);
 }
 
 void ActionHandler::RotatePendingAction()

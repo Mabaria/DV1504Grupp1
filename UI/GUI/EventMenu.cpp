@@ -237,6 +237,12 @@ void EventMenu::Update(ActionHandler * attribute)
 			case 8:
 				this->mpPanel->GetButtonByName("Damaged_Bulk")->ForceButtState(BUTTON_STATE::CLICKED);
 				break;
+			case 9:
+				this->mpPanel->GetButtonByName("Icon_Draining")->ForceButtState(BUTTON_STATE::CLICKED);
+				break;
+			case 10:
+				this->mpPanel->GetButtonByName("Seal_Hole")->ForceButtState(BUTTON_STATE::CLICKED);
+				break;
 			}
 		}
 	}
@@ -479,21 +485,51 @@ void EventMenu::mSwapActionMode()
 
 void EventMenu::mClearActionButtStates()
 {
-	this->mpPanel->GetButtonByName("Injured_Moved")->SetForcedButtState(false);
-	this->mpPanel->GetButtonByName("Injured_Treated")->SetForcedButtState(false);
-	this->mpPanel->GetButtonByName("Injured_Reported")->SetForcedButtState(false);
+	Button * temp;
 
-	this->mpPanel->GetButtonByName("Hole_In_Bulk")->SetForcedButtState(false);
+	temp = this->mpPanel->GetButtonByName("Injured_Moved");
+	if (temp)
+		temp->SetForcedButtState(false);
 
-	this->mpPanel->GetButtonByName("Ventilation_In")->SetForcedButtState(false);
+	temp = this->mpPanel->GetButtonByName("Injured_Treated");
+	if (temp)
+		temp->SetForcedButtState(false);
 
-	this->mpPanel->GetButtonByName("Ventilation_Out")->SetForcedButtState(false);
+	temp = this->mpPanel->GetButtonByName("Injured_Reported");
+	if (temp)
+		temp->SetForcedButtState(false);
 
-	this->mpPanel->GetButtonByName("Cooling_Wall")->SetForcedButtState(false);
+	temp = this->mpPanel->GetButtonByName("Hole_In_Bulk");
+	if (temp)
+		temp->SetForcedButtState(false);
 
-	this->mpPanel->GetButtonByName("Supporting_Wall")->SetForcedButtState(false);
+	temp = this->mpPanel->GetButtonByName("Ventilation_In");
+	if (temp)
+		temp->SetForcedButtState(false);
 
-	this->mpPanel->GetButtonByName("Damaged_Bulk")->SetForcedButtState(false);
+	temp = this->mpPanel->GetButtonByName("Ventilation_Out");
+	if (temp)
+		temp->SetForcedButtState(false);
+
+	temp = this->mpPanel->GetButtonByName("Cooling_Wall");
+	if (temp)
+		temp->SetForcedButtState(false);
+
+	temp = this->mpPanel->GetButtonByName("Supporting_Wall");
+	if (temp)
+		temp->SetForcedButtState(false);
+
+	temp = this->mpPanel->GetButtonByName("Damaged_Bulk");
+	if (temp)
+		temp->SetForcedButtState(false);
+
+	temp = this->mpPanel->GetButtonByName("Icon_Draining");
+	if (temp)
+		temp->SetForcedButtState(false);
+
+	temp = this->mpPanel->GetButtonByName("Seal_Hole");
+	if (temp)
+		temp->SetForcedButtState(false);
 }
 
 void EventMenu::InitButtons()
