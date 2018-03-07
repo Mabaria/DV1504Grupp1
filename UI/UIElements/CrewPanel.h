@@ -21,15 +21,22 @@ public:
 	bool IsMouseInsidePanel();
 
 private:
+	struct TimeData {
+		time_t startTime[22];
+		char textState[22];
+	};
+	//Timer *mTimers[22];
+	TimeData mTimeData;
 	Panel2D * mpPanel;
-	Timer mtimer;
+	Timer mTimer;
 	bool mVisible, mButtonFocus, mDraggingWindow;
 	int mDragX, mDragY;
 	std::string *mSeaMen;
 	int mFontSize;
 
 	void mCreateTextBoxesAndButtons();
-	void mCloseWindow();
+	void mOpenWindow();
 	
-
+	void mInitTimers();
+	void mSaveToDisk();
 };
