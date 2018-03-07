@@ -329,13 +329,13 @@ void EventMenu::Update(Button *attribute)
 				}
 				else if (button_name.compare("Ventilation_In") == 0) //! 5
 				{
-					obs_inf.actionData |= Number_5;
+					obs_inf.actionData |= Number_8;
 					this->NotifyObservers(&obs_inf);
 					this->mSwapActionMode();
 				}
 				else if (button_name.compare("Ventilation_Out") == 0) //! 6
 				{
-					obs_inf.actionData |= Number_6;
+					obs_inf.actionData |= Number_9;
 					this->NotifyObservers(&obs_inf);
 					this->mSwapActionMode();
 				}
@@ -347,13 +347,13 @@ void EventMenu::Update(Button *attribute)
 				}
 				else if (button_name.compare("Supporting_Wall") == 0) //! 8
 				{
-					obs_inf.actionData |= Number_8;
+					obs_inf.actionData |= Number_6;
 					this->NotifyObservers(&obs_inf);
 					this->mSwapActionMode();
 				}
 				else if (button_name.compare("Damaged_Bulk") == 0) //! 9
 				{
-					obs_inf.actionData |= Number_9;
+					obs_inf.actionData |= Number_5;
 					this->NotifyObservers(&obs_inf);
 					this->mSwapActionMode();
 				}
@@ -385,19 +385,19 @@ void EventMenu::mSwapActionMode()
 			this->mpPanel->GetBitmapByName("Number4"));
 
 		this->mpPanel->GetButtonByName("Ventilation_In")->SetBitmap(
-			this->mpPanel->GetBitmapByName("Number5"));
+			this->mpPanel->GetBitmapByName("Number8"));
 
 		this->mpPanel->GetButtonByName("Ventilation_Out")->SetBitmap(
-			this->mpPanel->GetBitmapByName("Number6"));
+			this->mpPanel->GetBitmapByName("Number9"));
 
 		this->mpPanel->GetButtonByName("Cooling_Wall")->SetBitmap(
 			this->mpPanel->GetBitmapByName("Number7"));
 
 		this->mpPanel->GetButtonByName("Supporting_Wall")->SetBitmap(
-			this->mpPanel->GetBitmapByName("Number8"));
+			this->mpPanel->GetBitmapByName("Number6"));
 
 		this->mpPanel->GetButtonByName("Damaged_Bulk")->SetBitmap(
-			this->mpPanel->GetBitmapByName("Number9"));
+			this->mpPanel->GetBitmapByName("Number5"));
 	}
 	else {
 		this->mActionMode = STANDARD;
@@ -493,38 +493,13 @@ void EventMenu::InitButtons()
 		buttonSize,
 		topStartPos + (buttonSize + actionMargin) * 1,
 		(this->mMenuWidth / 2) - (buttonSize / 2),
-		this->mpPanel->GetBitmapByName("Action8"),
-		"Supporting_Wall");
-
-	this->mpPanel->AddButton(
-		buttonSize,
-		buttonSize,
-		topStartPos + (buttonSize + actionMargin) * 1,
-		this->mMenuWidth - buttonSize - actionMargin,
-		this->mpPanel->GetBitmapByName("Action9"),
-		"Damaged_Bulk");
-
-	this->mpPanel->AddButton(
-		buttonSize,
-		buttonSize,
-		topStartPos + (buttonSize + actionMargin) * 2 + actionMargin + buttonSize,
-		actionMargin,
-		this->mpPanel->GetBitmapByName("Action4"),
-		"Hole_In_Bulk");
-
-
-	this->mpPanel->AddButton(
-		buttonSize,
-		buttonSize,
-		topStartPos + (buttonSize + actionMargin) * 2 + actionMargin + buttonSize,
-		(this->mMenuWidth / 2) - (buttonSize / 2),
 		this->mpPanel->GetBitmapByName("Action5"),
 		"Ventilation_In");
 
 	this->mpPanel->AddButton(
 		buttonSize,
 		buttonSize,
-		topStartPos + (buttonSize + actionMargin) * 2 + actionMargin + buttonSize,
+		topStartPos + (buttonSize + actionMargin) * 1,
 		this->mMenuWidth - buttonSize - actionMargin,
 		this->mpPanel->GetBitmapByName("Action6"),
 		"Ventilation_Out");
@@ -532,7 +507,32 @@ void EventMenu::InitButtons()
 	this->mpPanel->AddButton(
 		buttonSize,
 		buttonSize,
-		topStartPos + (buttonSize + actionMargin) * 2 + (actionMargin + buttonSize) * 2,
+		topStartPos + (buttonSize + actionMargin) * 2,
+		this->mMenuWidth - buttonSize - actionMargin,
+		this->mpPanel->GetBitmapByName("Action8"),
+		"Supporting_Wall");
+	
+
+	this->mpPanel->AddButton(
+		buttonSize,
+		buttonSize,
+		topStartPos + (buttonSize + actionMargin) * 2,
+		(this->mMenuWidth / 2) - (buttonSize / 2),
+		this->mpPanel->GetBitmapByName("Action9"),
+		"Damaged_Bulk");
+
+	this->mpPanel->AddButton(
+		buttonSize,
+		buttonSize,
+		topStartPos + (buttonSize + actionMargin) * 2,
+		actionMargin,
+		this->mpPanel->GetBitmapByName("Action4"),
+		"Hole_In_Bulk");	
+
+	this->mpPanel->AddButton(
+		buttonSize,
+		buttonSize,
+		topStartPos + (buttonSize + actionMargin) * 3,
 		actionMargin,
 		this->mpPanel->GetBitmapByName("Action1"),
 		"Injured_Moved");
@@ -540,7 +540,7 @@ void EventMenu::InitButtons()
 	this->mpPanel->AddButton(
 		buttonSize,
 		buttonSize,
-		topStartPos + (buttonSize + actionMargin) * 2 + (actionMargin + buttonSize) * 2,
+		topStartPos + (buttonSize + actionMargin) * 3,
 		(this->mMenuWidth / 2) - (buttonSize / 2),
 		this->mpPanel->GetBitmapByName("Action2"),
 		"Injured_Treated");
@@ -548,7 +548,7 @@ void EventMenu::InitButtons()
 	this->mpPanel->AddButton(
 		buttonSize,
 		buttonSize,
-		topStartPos + (buttonSize + actionMargin) * 2 + (actionMargin + buttonSize) * 2,
+		topStartPos + (buttonSize + actionMargin) * 3,
 		this->mMenuWidth - buttonSize - actionMargin,
 		this->mpPanel->GetBitmapByName("Action3"),
 		"Injured_Reported");
