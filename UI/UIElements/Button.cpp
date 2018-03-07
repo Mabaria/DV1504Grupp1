@@ -465,6 +465,11 @@ void Button::SetForcedButtState(bool newForcedState)
 	this->mForcedButtState = newForcedState;
 }
 
+const float Button::GetOpacity()
+{
+	return this->mOpacity;
+}
+
 void Button::ReleaseCOM(IUnknown *object)
 {
 	if (object)

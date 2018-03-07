@@ -65,6 +65,7 @@ public:
 	void SetRectColor(float r, float g, float b, float a = 1.f);
 	void SetButtonColor(float r, float g, float b, float a = 1.f);
 	const D2D1_COLOR_F GetButtonColor() const;
+	const float GetOpacity();
 
 	void ForceButtState(BUTTON_STATE newState); /* Forces the button to stay in the
 												selected state until ForcedButtState
