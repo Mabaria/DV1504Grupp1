@@ -255,6 +255,9 @@
     <ClInclude Include="..\..\UI\UIElements\CrewPanel.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Simulation\Simulator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BIS.cpp">
@@ -451,6 +454,9 @@
     </ClCompile>
     <ClCompile Include="..\..\UI\UIElements\CrewPanel.cpp">
       <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Simulation\Simulator.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

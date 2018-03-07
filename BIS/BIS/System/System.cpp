@@ -145,17 +145,22 @@ void System::BuildGraphicalUserInterface(
 	this->mSetupPanels();
 	this->mSetupModels();
 	this->mSetupBoat();
+
+	this->mpWindow->Open();
 }
 
-void System::Run()
+bool System::Run()
 {
-	this->mpWindow->Open();
-	while (this->mpWindow->IsOpen())
+	bool running = false;
+	if (this->mpWindow->IsOpen())
 	{
 		this->mHandleInput();
 		this->mUpdate();
 		this->mDraw();
+		running = true;
 	}
+
+	return running;
 }
 
 void System::Update(ObserverInfo * obsInf)
@@ -165,7 +170,7 @@ void System::Update(ObserverInfo * obsInf)
 		// If a room is clicked in top view panel.
 		if (this->mpTopViewPanel->IsMouseInsidePanel())
 		{
-			this->mUpdateEvents(obsInf->pRoom);
+			this->mUpdateEvents(obsInf->pRoom, true);
 		}
 		// If a notification object is clicked in the active log panel.
 		else if (this->mpActiveLogPanel->IsMouseInsidePanel())
@@ -194,6 +199,23 @@ void System::Update(ObserverInfo * obsInf)
 			);
 		}
 	}
+}
+
+int System::GetNrOfRooms() const
+{
+	return this->mBoat.GetNrOfRooms();
+}
+
+Room * System::GetRoomByIndex(int index)
+{
+	return this->mBoat.GetRoomPointerAt(index);
+}
+
+bool System::UpdateRoom(Room * room)
+{
+	this->mUpdateEvents(room, false);
+
+	return true;
 }
 
 void System::mUpdate()
@@ -267,7 +289,7 @@ void System::mHandleInput()
 			if (Mouse::IsButtonPressed(Buttons::Left))
 			{
 				this->mpMenuPanel->OpenAt(picked_room);
-			
+
 				this->mpTopViewPanel->GetMovableComponent()->FocusCameraOnRoom(picked_room, true);
 			
 				// Turn on selected effect if clicked room was actually a room
@@ -401,17 +423,21 @@ void System::mUpdateRoomInfo()
 		new_info_text);
 }
 
-void System::mUpdateEvents(Room * room)
+void System::mUpdateEvents(Room * room, bool manual_input)
 {
 	std::vector<LogEvent*> events_in_room = room->GetActiveEvents();
 	// If there already is an active event of that type in that room
 	// the event is removed.
 	if (!this->mpActiveLogPanel->AddNotification(room, events_in_room.back()))
 	{
-		Event::Type to_remove = this->mpMenuPanel->GetLastClicked();
-		this->mpActiveLogPanel->RemoveNotification(room, to_remove);
-		room->ClearEvent(to_remove);
-		events_in_room = room->GetActiveEvents();
+		// If event added through manual input (not through a sensor)
+		if (manual_input)
+		{
+			Event::Type to_remove = this->mpMenuPanel->GetLastClicked();
+			this->mpActiveLogPanel->RemoveNotification(room, to_remove);
+			room->ClearEvent(to_remove);
+			events_in_room = room->GetActiveEvents();
+		}
 	}
 	// Adding the system as an observer to the newly added notification object.
 	else
