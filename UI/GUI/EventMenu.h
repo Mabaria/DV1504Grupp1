@@ -60,7 +60,7 @@ private:
 	void mSwapActionMode();
 	INJURY_TYPE mInjuryType;
 
-	void mClearActionButtStates();
+	void mClearActionButtStates(); // Clears all buttons of forced button states
 
 
 	void InitButtons();

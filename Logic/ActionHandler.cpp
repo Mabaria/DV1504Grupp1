@@ -18,6 +18,7 @@ void ActionHandler::Update(ObserverInfo * pObsInf)
 {
 	this->mLastEvent = *pObsInf;
 	this->mWaitingForClick = true;
+	// Notify the event menu to lock its button while ready to place
 	this->NotifyObservers(this);
 }
 
@@ -31,6 +32,7 @@ void ActionHandler::AddAction(float x, float z)
 			transformed_action_data = (ActionData)(this->mLastEvent.actionData + this->mActionRotation);
 		}
 		this->mpActions->AddAction(x, z, transformed_action_data);
+		// Notify the event menu that an action has been placed so it can unlock the button
 		this->NotifyObservers(this);
 	}
 }
@@ -41,7 +43,7 @@ void ActionHandler::SwitchWaitingState()
 
 	if (!this->mWaitingForClick) // Reset rotation between events
 		this->mActionRotation = Rotation_0;
-
+	// Notify the event menu that the waiting state switched
 	this->NotifyObservers(this);
 }
 

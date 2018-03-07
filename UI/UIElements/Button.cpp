@@ -436,6 +436,9 @@ const D2D1_COLOR_F Button::GetButtonColor() const
 void Button::ForceButtState(BUTTON_STATE newState)
 {
 	//! POSSIBLE SOLUTION, this might also be shit idk
+	// Does everything that SetButtonStatus does, except the part where
+	// a clicked button notifies its observers, which makes the rest of the system
+	// think that the button was clicked when in fact we are just locking it
 	this->mCurrState = newState;
 	if (this->mBmpLoaded)
 	{

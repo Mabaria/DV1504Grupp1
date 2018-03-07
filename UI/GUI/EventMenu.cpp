@@ -204,7 +204,10 @@ void EventMenu::SetActiveRoom(Room * room)
 void EventMenu::Update(ActionHandler * attribute)
 {
 	ObserverInfo temp = attribute->GetLastEvent();
+	// First clear all previously locked states
 	this->mClearActionButtStates();
+	// If the actionhandler is ready to place an event, find out which one and lock
+	// that button in "clicked" state
 	if (attribute->IsWaiting())
 	{
 		if (temp.actionData % 512 == 64) {
@@ -486,7 +489,9 @@ void EventMenu::mSwapActionMode()
 void EventMenu::mClearActionButtStates()
 {
 	Button * temp;
-
+	// Nullptr checks before clearing, in case a named button doesnt exist
+	// This should probably exist in more places in this class, because
+	// debugging nullptr function calls from GetButtonByName is gay af
 	temp = this->mpPanel->GetButtonByName("Injured_Moved");
 	if (temp)
 		temp->SetForcedButtState(false);
