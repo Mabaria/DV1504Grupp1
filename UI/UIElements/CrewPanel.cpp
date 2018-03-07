@@ -86,39 +86,7 @@ void CrewPanel::Update(Button * button)
 {
 	if (button->GetName() == "Crew" && this->mVisible == false)
 	{
-		for (int i = 0; i < 22; i++)
-		{
-			// Change the bitmap from on to off
-			this->mpPanel->GetButtonByName(this->mSeaMen[i])->SetBitmap
-			(this->mpPanel->GetBitmapByName("Off"));
-
-			// Sets the opacity of the "skadad" button to 0
-			this->mpPanel->GetButtonByName(this->mSeaMen[i] + "§")->
-				SetOpacity(0.0f);
-
-
-			/*First time you clost the window the bitmap for the button behind
-			the time stamp is changed*/
-			if (this->mpPanel->GetButtonByName(this->mSeaMen[i] + "Text")
-				->getBitmapPointer() == this->mpPanel->GetBitmapByName("Grid"))
-			{
-				this->mpPanel->GetButtonByName(this->mSeaMen[i] + "Text")
-					->SetBitmap(this->mpPanel->GetBitmapByName("Red"));
-				this->mTimeData.textState[i] = 1;
-			}
-
-			// The second time you clost the window you change the opacity
-			// of the button
-			else if (this->mpPanel->GetTextBoxByName
-			(this->mSeaMen[i])->GetText().size() > 5 &&
-				this->mpPanel->GetButtonByName(this->mSeaMen[i] + "Text")
-				->getBitmapPointer() == this->mpPanel->GetBitmapByName("Red"))
-			{
-				this->mpPanel->GetButtonByName(this->mSeaMen[i] + "Text")->
-					SetOpacity(0.5f);
-				this->mTimeData.textState[i] = 2;
-			}
-		}
+		this->mOpenWindow();
 		this->mSaveToDisk();
 		this->mVisible = true;
 		this->mpPanel->ShowOnTop();
@@ -131,7 +99,8 @@ void CrewPanel::Update(Button * button)
 	}
 	else if (button->GetName() == "Exit")
 	{
-		this->mCloseWindow();
+		this->mVisible = false;
+		this->mpPanel->Hide();
 	}
 	else if (button->getBitmapPointer() ==
 		this->mpPanel->GetBitmapByName("Off"))
@@ -401,7 +370,7 @@ void CrewPanel::mCreateTextBoxesAndButtons()
 void CrewPanel::mInitTimers()
 {
 	ZeroMemory(&this->mTimeData, sizeof(TimeData));
-	std::fstream file("test.dat", std::ios::in | std::ios::binary);
+	std::fstream file("../../Savefiles/Metafiles/crew_log.meta", std::ios::in | std::ios::binary);
 	if (!file.is_open())
 		return;
 	file.read((char*)&this->mTimeData, sizeof(TimeData));
@@ -411,14 +380,14 @@ void CrewPanel::mInitTimers()
 void CrewPanel::mSaveToDisk()
 {
 
-	std::fstream file("test.dat", std::ios::out | std::ios::binary);
+	std::fstream file("../../Savefiles/Metafiles/crew_log.meta", std::ios::out | std::ios::binary);
 	if (!file.is_open())
 		return;
 	file.write((char*)&this->mTimeData, sizeof(TimeData));
 	file.close();
 }
 
-void CrewPanel::mCloseWindow()
+void CrewPanel::mOpenWindow()
 {
 	for (int i = 0; i < 22; i++)
 	{
@@ -438,6 +407,7 @@ void CrewPanel::mCloseWindow()
 		{
 			this->mpPanel->GetButtonByName(this->mSeaMen[i] + "Text")
 				->SetBitmap(this->mpPanel->GetBitmapByName("Red"));
+			this->mTimeData.textState[i] = 1;
 		}
 
 		// The second time you clost the window you change the opacity
@@ -449,9 +419,7 @@ void CrewPanel::mCloseWindow()
 		{
 			this->mpPanel->GetButtonByName(this->mSeaMen[i] + "Text")->
 				SetOpacity(0.5f);
+			this->mTimeData.textState[i] = 2;
 		}
 	}
-
-	this->mVisible = false;
-	this->mpPanel->Hide();
 }
