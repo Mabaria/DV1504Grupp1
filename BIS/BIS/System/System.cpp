@@ -438,7 +438,7 @@ void System::mUpdateEvents(Room * room)
 	EventData event_data = { 0 };
 	for (int i = 0; (i < (int)events_in_room.size()) && (i < 4); i++)
 	{
-		event_data.slots[i] = (float)events_in_room[i]->GetType() + 1;
+		event_data.slots[i] = (float)Event::GetID(events_in_room[i]->GetType()) + 1;
 	}
 
 	top_picked_deck->SetEvent(

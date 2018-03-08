@@ -464,6 +464,8 @@ bool Boat::LoadBoundingBoxes(
 //				Picking::FromVerticesToAABB(submeshList[j]));			
 			this->mpDecks[i]->GetRoomPointerAt(j)->SetAABB(
 				Picking::FromVerticesToAABB(submeshList[j]));
+			this->mpDecks[i]->GetRoomPointerAt(j)->InitRoomData(
+				*matrixList[i]);
 		}
 	}
 	return true;

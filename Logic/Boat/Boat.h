@@ -157,6 +157,10 @@ public:
 	int GetActiveActionCount() const;
 
 	// Disk specific
+	//void SetLogDir(std::string folderPath);
+	//void SetLogMetaDir(std::string folderPath);
+	//void SetRoomMetaDir(std::string folderPath);
+
 	void SaveToFile_Boat(std::string filePath) const;
 	bool LoadFromFile_Boat(std::string filePath);
 
