@@ -28,7 +28,8 @@ public:
 		Direct2D *direct2d, 
 		int index,
 		int fontSize,
-		ID2D1Bitmap *bitmap = nullptr);
+		ID2D1Bitmap *bitmap = nullptr,
+		ID2D1Bitmap *actionSymbolsBitmap = nullptr);
 	~NotificationObject();
 	
 	const Event::Type GetEventType() const;
@@ -72,6 +73,8 @@ private:
 
 	std::string mStartTime;
 	std::string mElapsedTime;
+
+	ID2D1Bitmap *mpActionSymbolsBitmap;
 
 	int mIndex;
 

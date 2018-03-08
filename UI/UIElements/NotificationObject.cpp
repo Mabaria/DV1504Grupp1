@@ -6,7 +6,8 @@ NotificationObject::NotificationObject(
 	Direct2D *direct2d,
 	int index,
 	int fontSize,
-	ID2D1Bitmap *bitmap) 
+	ID2D1Bitmap *bitmap,
+	ID2D1Bitmap *actionSymbolsBitmap) 
 	: mButton(direct2d, bitmap, 0, 0, 0, 0)
 	, mTextBox(direct2d, 0, 0, 0, 0)
 {
@@ -20,6 +21,7 @@ NotificationObject::NotificationObject(
 	this->mIndex = index;
 	this->mIsNew = true;
 	this->mNewColorCounter = 0.0f;
+	this->mpActionSymbolsBitmap = actionSymbolsBitmap;
 	
 	this->mTextBox.SetFontSize(fontSize);
 	this->mTextBox.SetFontWeight(DWRITE_FONT_WEIGHT_BOLD);

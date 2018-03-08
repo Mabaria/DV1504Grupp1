@@ -16,7 +16,8 @@ public:
 		int posX, 
 		int posY,
 		int titleFontSize,
-		int objectFontSize);
+		int objectFontSize,
+		ID2D1Bitmap* actionSymbolsBitmap);
 	~NotificationList();
 
 	bool AddNotification(
@@ -40,6 +41,7 @@ public:
 private:
 	int mPosX;
 	int mPosY;
+	ID2D1Bitmap* mpActionSymbolsBitmap;
 
 	int mListTop;
 	int mListBottom;
