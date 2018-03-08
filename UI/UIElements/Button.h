@@ -68,6 +68,7 @@ public:
 	const D2D1_COLOR_F GetButtonColor() const;
 	const float GetOpacity();
 	void SetAlive(bool alive);
+	const bool GetAlive();
 
 	void ForceButtState(BUTTON_STATE newState); /* Forces the button to stay in the
 												selected state until ForcedButtState

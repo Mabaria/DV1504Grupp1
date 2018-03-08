@@ -479,6 +479,11 @@ void Button::SetAlive(bool alive)
 	this->SetOpacity((float)alive);
 }
 
+const bool Button::GetAlive()
+{
+	return this->mAlive;
+}
+
 void Button::ReleaseCOM(IUnknown *object)
 {
 	if (object)

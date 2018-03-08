@@ -240,10 +240,10 @@ void EventMenu::Update(ActionHandler * attribute)
 			case 8:
 				this->mpPanel->GetButtonByName("Damaged_Bulk")->ForceButtState(BUTTON_STATE::CLICKED);
 				break;
-			case 9:
+			case 73:
 				this->mpPanel->GetButtonByName("Icon_Draining")->ForceButtState(BUTTON_STATE::CLICKED);
 				break;
-			case 10:
+			case 74:
 				this->mpPanel->GetButtonByName("Seal_Hole")->ForceButtState(BUTTON_STATE::CLICKED);
 				break;
 			}
@@ -333,12 +333,12 @@ void EventMenu::Update(Button *attribute)
 				}
 				else if (button_name.compare("Icon_Draining") == 0)
 				{
-					obs_inf.actionData = Icon_Draining;
+					obs_inf.actionData = Icon_Draining | Rotation_Stationary;
 					this->NotifyObservers(&obs_inf);
 				}
 				else if (button_name.compare("Seal_Hole") == 0)
 				{
-					obs_inf.actionData = Icon_Seal_Hole;
+					obs_inf.actionData = Icon_Seal_Hole | Rotation_Stationary;
 					this->NotifyObservers(&obs_inf);
 				}
 				else if (button_name.compare("Damaged_Bulk") == 0)
@@ -547,7 +547,7 @@ void EventMenu::InitButtons()
 	int padding = this->mMenuWidth / 9;
 	int actionMargin = this->mMenuWidth / 14;
 	int buttonSize = this->mMenuWidth / 4 + 5;
-	int topStartPos = this->mMenuHeight / 12 - 10;
+	int topStartPos = this->mMenuHeight / 12 - 25;
 	
 	int left = actionMargin;
 	int middle = (this->mMenuWidth / 2) - (buttonSize / 2);
@@ -619,7 +619,7 @@ void EventMenu::InitButtons()
 	this->mpPanel->AddButton(
 		buttonSize,
 		buttonSize,
-		topStartPos + step * 3,
+		topStartPos + step * 4,
 		left,
 		this->mpPanel->GetBitmapByName("Action9"),
 		"Damaged_Bulk");
@@ -627,7 +627,7 @@ void EventMenu::InitButtons()
 	this->mpPanel->AddButton(
 		buttonSize,
 		buttonSize,
-		topStartPos + step * 3,
+		topStartPos + step * 4,
 		middle,
 		this->mpPanel->GetBitmapByName("Action8"),
 		"Supporting_Wall");
@@ -636,7 +636,7 @@ void EventMenu::InitButtons()
 	this->mpPanel->AddButton(
 		buttonSize,
 		buttonSize,
-		topStartPos + step * 4,
+		topStartPos + step * 5,
 		left,
 		this->mpPanel->GetBitmapByName("Action4"),
 		"Hole_In_Bulk");
@@ -644,7 +644,7 @@ void EventMenu::InitButtons()
 	this->mpPanel->AddButton(
 		buttonSize,
 		buttonSize,
-		topStartPos + step * 4,
+		topStartPos + step * 5,
 		middle,
 		this->mpPanel->GetBitmapByName("Action11"),
 		"Seal_Hole");
@@ -658,7 +658,7 @@ void EventMenu::InitButtons()
 	this->mpPanel->AddButton(
 		buttonSize,
 		buttonSize,
-		topStartPos + step * 5,
+		topStartPos + step * 3,
 		right,
 		this->mpPanel->GetBitmapByName("Action1"),
 		"Injured_Moved");
@@ -666,7 +666,7 @@ void EventMenu::InitButtons()
 	this->mpPanel->AddButton(
 		buttonSize,
 		buttonSize,
-		topStartPos + step * 5,
+		topStartPos + step * 3,
 		middle,
 		this->mpPanel->GetBitmapByName("Action2"),
 		"Injured_Treated");
@@ -675,7 +675,7 @@ void EventMenu::InitButtons()
 	this->mpPanel->AddButton(
 		buttonSize,
 		buttonSize,
-		topStartPos + step * 5,
+		topStartPos + step * 3,
 		left,
 		this->mpPanel->GetBitmapByName("Action3"),
 		"Injured_Reported");		
@@ -688,7 +688,7 @@ void EventMenu::InitButtons()
 		this->mpPanel->GetBitmapByName("Exit"),
 		"Exit");
 
-	// DUMMY BUTTONS
+	// NUMBER BUTTONS
 	for (int i = 0; i < 3; i++)
 	{
 		this->mpPanel->AddButton(
