@@ -586,7 +586,7 @@ void System::mSetupPanels()
 		this->mpControlPanel->GetBitmapByName("Crew"), "Crew");
 	this->mpControlPanel->AddButton(70, 70, 10, 90,
 		this->mpControlPanel->GetBitmapByName("ChangeCamera"), "ChangeCamera");
-	this->mpControlPanel->AddButton(70, 70, 10, 260,
+	this->mpControlPanel->AddButton(70, 70, 10, this->mpControlPanel->GetWidth() - 80,
 		this->mpControlPanel->GetBitmapByName("Exit"), "Exit");
 
 	this->mpControlPanel->GetButtonByName("Reset")->
