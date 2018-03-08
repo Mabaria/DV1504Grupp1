@@ -63,6 +63,7 @@ public:
 
 	// Action specific
 	void SetInactive();
+	void SetActive();
 	void SetType(LogAction::Type type);
 	bool IsActive() const;
 	LogAction::Type GetType() const;

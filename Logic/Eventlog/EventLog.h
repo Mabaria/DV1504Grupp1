@@ -38,13 +38,15 @@ public:
 															at the end of the list,
 															returns index of event in
 															the active log */
-	bool ClearEvent(LogEvent* pEvent);
-	int GetEventCount() const;
+	//bool ClearEvent(LogEvent* pEvent);
+	int GetTotalEventCount() const;
+	int GetActiveEventCount() const;
 	LogEvent* GetEventPointerAt(int index);
 
 	// Action specific
 	LogAction* AddAction(LogAction::Desc desc);
-	int GetActionCount() const;
+	int GetTotalActionCount() const;
+	int GetActiveActionCount() const;
 	LogAction* GetActionPointerAt(int index);
 
 	// Log specific

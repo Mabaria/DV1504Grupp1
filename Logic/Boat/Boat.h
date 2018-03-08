@@ -150,8 +150,11 @@ public:
 	XMFLOAT3 GetPickedPosition(Ray ray);
 
 	// Log specific
-	int GetEventCount() const;
-	int GetActionCount() const;
+	int GetTotalEventCount() const;
+	int GetTotalActionCount() const;
+
+	int GetActiveEventCount() const;
+	int GetActiveActionCount() const;
 
 	// Disk specific
 	void SaveToFile_Boat(std::string filePath) const;

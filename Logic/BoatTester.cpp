@@ -207,7 +207,7 @@ void BoatTester::TestBoat()
 	*	Check eventlog
 	*/
 
-	if (pBoat->GetEventCount() != 2) // Should be 2 (4 events - 2 that wasn't detected by sensor)
+	if (pBoat->GetTotalEventCount() != 2) // Should be 2 (4 events - 2 that wasn't detected by sensor)
 		throw ("Error unexpected amount of events in total");
 
 

@@ -9,13 +9,20 @@ bool Test_Logic::MainTest()
 		<< "Steps in this test:"
 		<< "\n\t1. Create a Boat from a .boat file (which is holding a log)."
 		<< "\n\t2. Fill boat with events and actions."
-		<< "\n\t3. Clear some of the events and actions."
-		<< "\n\t4. Save all stored information to files."
-		<< "\n\t5. Delete the Boat and create a new one from the same .boat file."
-		<< "\n\t6. Load the old log to recreate the scenario."
-		<< "\n\t7. Save all stored information again, to new files."
-		<< "\n\t8. Compare all the old files with the new files.";
-	std::cout << "\nPress enter to continue..." << std::endl << std::endl << std::endl;
+		<< "\n\t3. Check log and rooms for correct amount of events and "
+		<< "actions."
+		<< "\n\t4. Clear some of the events and actions."
+		<< "\n\t5. Check log and rooms for correct amount of events and "
+		<< "actions."
+		<< "\n\t6. Save all stored information to files."
+		<< "\n\t7. Delete the Boat and create a new one from the same .boat file."
+		<< "\n\t8. Load the old log to recreate the scenario."
+		<< "\n\t9. Check log and rooms for correct amount of events and "
+		<< "actions."
+		<< "\n\t10. Save all stored information again, to new files."
+		<< "\n\t11. Compare all the old files with the new files.";
+	std::cout << "\nPress enter to continue..." << std::endl << std::endl
+		<< std::endl;
 	getchar();
 
 
@@ -24,7 +31,15 @@ bool Test_Logic::MainTest()
 	Boat *myBoat = nullptr;
 	Room *myRoom = nullptr;
 	std::vector<int*> myActiveIndices;
-	
+
+	int totEventCount = 0;
+	int totActionCount = 0;
+	int activeEventCount = 0;
+	int activeActionCount = 0;
+
+	std::vector<int> roomEventCount;
+	std::vector<int> roomActionCount;
+
 
 
 	/**
@@ -39,15 +54,47 @@ bool Test_Logic::MainTest()
 	std::cout << "Press enter to continue..." << std::endl << std::endl << std::endl;
 	getchar();
 
-
+	for (int i = 0; i < myBoat->GetRoomCount(); i++)
+	{
+		roomEventCount.push_back(0);
+		roomActionCount.push_back(0);
+	}
 
 	/**
 	*	Fill boat with event and actions
 	*/
 
-	Test_Logic::FillLog(myBoat, myActiveIndices);
+	Test_Logic::FillLog(
+		myBoat,
+		myActiveIndices,
+		totEventCount,
+		totActionCount,
+		activeEventCount,
+		activeActionCount,
+		roomEventCount,
+		roomActionCount);
 
 	std::cout << "Press enter to continue..." << std::endl << std::endl;
+	getchar();
+
+
+
+	/**
+	*	Check log and rooms for correct amount of events and actions.
+	*/
+
+	if (!Test_Logic::CheckAmount(
+		myBoat,
+		totEventCount,
+		totActionCount,
+		activeEventCount,
+		activeActionCount,
+		roomEventCount,
+		roomActionCount))
+		return false;
+
+	std::cout << "\nPress enter to continue..." << std::endl << std::endl
+		<< std::endl;
 	getchar();
 
 
@@ -56,9 +103,38 @@ bool Test_Logic::MainTest()
 	*	Clear some events and actions
 	*/
 
-	Test_Logic::ClearSome(myBoat, myActiveIndices);
+	Test_Logic::ClearSome(
+		myBoat,
+		myActiveIndices,
+		totEventCount,
+		totActionCount,
+		activeEventCount,
+		activeActionCount,
+		roomEventCount,
+		roomActionCount);
 
-	std::cout << "\nPress enter to continue..." << std::endl << std::endl << std::endl;
+	std::cout << "\nPress enter to continue..." << std::endl << std::endl
+		<< std::endl;
+	getchar();
+
+
+
+	/**
+	*	Check log and rooms for correct amount of events and actions.
+	*/
+
+	if (!Test_Logic::CheckAmount(
+		myBoat,
+		totEventCount,
+		totActionCount,
+		activeEventCount,
+		activeActionCount,
+		roomEventCount,
+		roomActionCount))
+		return false;
+
+	std::cout << "\nPress enter to continue..." << std::endl << std::endl
+		<< std::endl;
 	getchar();
 
 
@@ -101,6 +177,26 @@ bool Test_Logic::MainTest()
 		"../../Savefiles/Testing/Metafiles/Roomlog_metas_first/"))
 		return false;
 	std::cout << "\nPress enter to continue..." << std::endl << std::endl << std::endl;
+	getchar();
+
+
+
+	/**
+	*	Check log and rooms for correct amount of events and actions.
+	*/
+
+	if (!Test_Logic::CheckAmount(
+		myBoat,
+		totEventCount,
+		totActionCount,
+		activeEventCount,
+		activeActionCount,
+		roomEventCount,
+		roomActionCount))
+		return false;
+
+	std::cout << "\nPress enter to continue..." << std::endl << std::endl
+		<< std::endl;
 	getchar();
 
 
@@ -150,9 +246,7 @@ bool Test_Logic::MainTest()
 	if (!Test_Logic::CompareFiles(
 		"../../Savefiles/Testing/Metafiles/Log_metas/Log_first.meta",
 		"../../Savefiles/Testing/Metafiles/Log_metas/Log_second.meta"))
-	{
 		return false;
-	}
 	std::cout << "ok!";
 
 
@@ -185,7 +279,7 @@ bool Test_Logic::MainTest()
 	std::cout << "\n\nTest finished." << std::endl;
 	std::cout << "--------------------------------------------------------------";
 	std::cout << std::endl;
-		
+
 	getchar();
 
 
@@ -193,7 +287,7 @@ bool Test_Logic::MainTest()
 	/**
 	*	Free memory
 	*/
-	
+
 	for (int i = 0; i < (int)myActiveIndices.size(); i++)
 		delete myActiveIndices[i];
 	delete myBoat;
@@ -201,9 +295,19 @@ bool Test_Logic::MainTest()
 	return true;
 }
 
-void Test_Logic::FillLog(Boat *pBoat, std::vector<int*> &indices)
+void Test_Logic::FillLog(
+	Boat *pBoat,
+	std::vector<int*> &indexOutput,
+	int &totEventOutput,
+	int &totActionOutput,
+	int &activeEventOutput,
+	int &activeActionOutput,
+	std::vector<int> &roomEventCountOutput,
+	std::vector<int> &roomActionCountOutput)
 {
-	indices.clear();
+	for (int i = 0; i < (int)indexOutput.size(); i++)
+		delete indexOutput[i];		
+	indexOutput.clear();
 
 	Room* myRoom;
 	Event::Type type_event;
@@ -230,6 +334,10 @@ void Test_Logic::FillLog(Boat *pBoat, std::vector<int*> &indices)
 			<< Event::GetString(type_event)
 			<< "' to " << myRoom->GetName()
 			<< " " << i+1 << "/19" << std::endl;
+
+		totEventOutput++;
+		activeEventOutput++;
+		roomEventCountOutput[i]++;
 		
 		// Waste some time to get some time differences between the events
 		//for (int j = 0; j < 150000000; j++);
@@ -251,12 +359,12 @@ void Test_Logic::FillLog(Boat *pBoat, std::vector<int*> &indices)
 		myRoom = pBoat->GetRoomPointerAt(i);
 
 		// Simulate new graphical actions
-		indices.push_back(new int(i));
+		indexOutput.push_back(new int(i));
 
 		// Create and fill a description for the new action
 		LogAction::Desc desc;
 		desc.active = true;
-		desc.pActionIndex;
+		desc.pActionIndex = indexOutput[i];
 		desc.pos_x = (float)i + 0.5f;
 		desc.pos_z = (float)-i + 0.5f;
 		desc.rotation = (i % 5) * 16;
@@ -266,6 +374,10 @@ void Test_Logic::FillLog(Boat *pBoat, std::vector<int*> &indices)
 
 		// Add action to room
 		myRoom->AddAction(desc);
+
+		totActionOutput++;
+		activeActionOutput++;
+		roomActionCountOutput[i]++;
 
 		std::cout
 			<< "  * Added '"
@@ -278,7 +390,15 @@ void Test_Logic::FillLog(Boat *pBoat, std::vector<int*> &indices)
 	}
 }
 
-void Test_Logic::ClearSome(Boat * pBoat, std::vector<int*>& indices)
+void Test_Logic::ClearSome(
+	Boat *pBoat,
+	std::vector<int*> &indexOutput,
+	int &totEventOutput,
+	int &totActionOutput,
+	int &activeEventOutput,
+	int &activeActionOutput,
+	std::vector<int> &roomEventCountOutput,
+	std::vector<int> &roomActionCountOutput)
 {
 	std::cout << "\nClearing events";
 	Room *pRoom = nullptr;
@@ -295,11 +415,16 @@ void Test_Logic::ClearSome(Boat * pBoat, std::vector<int*>& indices)
 			<< pRoom->GetName()
 			<< " - "
 			<< Event::GetString(type_event)
-			<< " (" << i << "/"
+			<< " (" << i + 1 << "/"
 			<< std::floor(pBoat->GetRoomCount() / 2.f)
 			<< ")";
 
 		pRoom->ClearEvent(type_event);
+
+		// The log creates a new (inactive) event when clearing
+		totEventOutput++;
+		activeEventOutput--;
+		roomEventCountOutput[i * 2]--;
 	}
 
 
@@ -316,14 +441,54 @@ void Test_Logic::ClearSome(Boat * pBoat, std::vector<int*>& indices)
 			<< pRoom->GetName()
 			<< " - "
 			<< LogAction::GetStringFromType(type_action)
-			<< " (" << i << "/"
+			<< " (" << i + 1  << "/"
 			<< std::floor(pBoat->GetRoomCount() / 2.f)
 			<< ")";
 
 		// Use vector filled with simulated graphical actions
 		// by the function 'FillLog'
-		pRoom->ClearAction(indices[i]);
+		pRoom->ClearAction(indexOutput[i * 2]);
+
+		// The log creates a new (inactive) action when clearing
+		totActionOutput++;
+		activeActionOutput--;
+		roomActionCountOutput[i * 2]--;
 	}
+}
+
+bool Test_Logic::CheckAmount(
+	Boat * pBoat,
+	int & totEventOutput,
+	int & totActionOutput,
+	int & activeEventOutput,
+	int & activeActionOutput,
+	std::vector<int>& roomEventCountOutput,
+	std::vector<int>& roomActionCountOutput)
+{
+	Room *pRoom = nullptr;
+
+	std::cout << "Check amount of events and actions:";
+	std::cout << "\n  * Log...";
+	if (totEventOutput != pBoat->GetTotalEventCount() ||
+		totActionOutput != pBoat->GetTotalActionCount())
+		return false;
+	if (activeEventOutput != pBoat->GetActiveEventCount() ||
+		activeActionOutput != pBoat->GetActiveActionCount())
+		return false;
+	std::cout << "ok!";
+
+	std::cout << "\n  * Rooms...";
+	for (int i = 0; i < (int)pBoat->GetRoomCount(); i++)
+	{
+		pRoom = pBoat->GetRoomPointerAt(i);
+
+		if (pRoom->GetEventCount() != roomEventCountOutput[i] ||
+			pRoom->GetActionCount() != roomActionCountOutput[i])
+			return false;
+	}
+	std::cout << "ok!";
+
+	return true;
 }
 
 bool Test_Logic::CompareFiles(std::string filePath1, std::string filePath2)

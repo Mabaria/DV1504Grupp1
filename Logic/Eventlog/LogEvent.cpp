@@ -17,6 +17,8 @@ LogEvent::LogEvent(LogEvent::Desc desc)
 
 LogEvent::LogEvent(std::string lineFromLog, int ID)
 {
+	this->mActive = false; // Room log will set this active if it is
+
 	std::stringstream ss(lineFromLog);
 	std::string word;
 	std::string number;
@@ -66,7 +68,6 @@ LogEvent::LogEvent(std::string lineFromLog, int ID)
 		this->mRoomName += word;
 	}
 
-	this->mActive = true;
 	this->mID = ID;
 }
 
@@ -102,6 +103,11 @@ bool LogEvent::IsStartEvent() const
 void LogEvent::SetInactive()
 {
 	this->mActive = false;
+}
+
+void LogEvent::SetActive()
+{
+	this->mActive = true;
 }
 
 int LogEvent::GetID() const

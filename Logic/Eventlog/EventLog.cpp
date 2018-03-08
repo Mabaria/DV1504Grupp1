@@ -30,9 +30,21 @@ LogEvent* EventLog::AddEvent(LogEvent::Desc desc)
 	return this->mpLogEvents.back();
 }
 
-int EventLog::GetEventCount() const
+int EventLog::GetTotalEventCount() const
 {
-	return this->mpLogEvents.size();
+	return (int)this->mpLogEvents.size();
+}
+
+int EventLog::GetActiveEventCount() const
+{
+	int count = 0;
+
+	for (int i = 0; i < (int)this->mpLogEvents.size(); i++)
+	{
+		if (this->mpLogEvents[i]->IsActive())
+			count++;
+	}
+	return count;
 }
 
 LogEvent* EventLog::GetEventPointerAt(int index)
@@ -54,9 +66,21 @@ LogAction* EventLog::AddAction(LogAction::Desc desc)
 	return this->mpActions.back();
 }
 
-int EventLog::GetActionCount() const
+int EventLog::GetTotalActionCount() const
 {
 	return (int)this->mpActions.size();
+}
+
+int EventLog::GetActiveActionCount() const
+{
+	int count = 0;
+
+	for (int i = 0; i < (int)this->mpActions.size(); i++)
+	{
+		if (this->mpActions[i]->IsActive())
+			count++;
+	}
+	return count;
 }
 
 LogAction* EventLog::GetActionPointerAt(int index)
@@ -208,11 +232,11 @@ bool EventLog::LoadFromFile(std::string filePath, std::string metaFile)
 			switch (line_log[0])
 			{
 				case 'e':	// Event
-					ID = this->GetEventCount();
+					ID = this->GetTotalEventCount();
 					this->mpLogEvents.push_back(new LogEvent(line_log, ID));
 					break;
 				case 'a':	// Action
-					ID = this->GetActionCount();
+					ID = this->GetTotalActionCount();
 					getline(file_meta, line_meta);
 					this->mpActions.push_back(new LogAction(line_log, line_meta));
 					break;

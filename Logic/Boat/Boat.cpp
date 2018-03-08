@@ -213,14 +213,24 @@ int Boat::GetRoomCount() const
 
 
 
-int Boat::GetEventCount() const
+int Boat::GetTotalEventCount() const
 {
-	return this->mEventLog.GetEventCount();
+	return this->mEventLog.GetTotalEventCount();
 }
 
-int Boat::GetActionCount() const
+int Boat::GetTotalActionCount() const
 {
-	return this->mEventLog.GetActionCount();
+	return this->mEventLog.GetTotalActionCount();
+}
+
+int Boat::GetActiveEventCount() const
+{
+	return this->mEventLog.GetActiveEventCount();
+}
+
+int Boat::GetActiveActionCount() const
+{
+	return this->mEventLog.GetActiveActionCount();
 }
 
 

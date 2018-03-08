@@ -101,6 +101,8 @@ LogAction::LogAction(LogAction::Desc desc)
 
 LogAction::LogAction(std::string lineFromLog, std::string metaLine)
 {
+	this->mActive = false; // Room log will set this active if it is
+
 	std::stringstream ss(lineFromLog);
 	std::string word;
 	int number;
@@ -143,9 +145,9 @@ LogAction::LogAction(std::string lineFromLog, std::string metaLine)
 	// Get active info
 	ss >> word;
 	if (word ==	Name::CorrectName("Påbörjad"))
-		this->mActive = true;
+		this->mStart = true;
 	else // "Avslutad"
-		this->mActive = false;
+		this->mStart = false;
 
 	ss >> word; // Get '|'
 
@@ -189,6 +191,11 @@ LogAction::~LogAction()
 void LogAction::SetInactive()
 {
 	this->mActive = false;
+}
+
+void LogAction::SetActive()
+{
+	this->mActive = true;
 }
 
 void LogAction::SetType(LogAction::Type type)
@@ -298,7 +305,7 @@ std::string LogAction::GetLogString() const
 	ss << Name::GetTabs(typeString.size());
 
 	// Pass active information to string
-	if (this->mActive)
+	if (this->mStart)
 		ss << "|\t" << Name::CorrectName("Påbörjad") << "\t|\t";
 	else
 		ss << "|\tAvslutad\t|\t";

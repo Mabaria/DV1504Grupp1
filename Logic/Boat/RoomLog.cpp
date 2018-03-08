@@ -95,7 +95,22 @@ bool RoomLog::ClearAction(int *actionIndex)
 	{
 		if (this->mpActions[i]->GetActionIndex() == actionIndex)
 		{
-			this->mpActions[i]->SetInactive();
+			LogAction *pAction = this->mpActions[i];
+
+			pAction->SetInactive();
+
+			LogAction::Desc desc;
+			desc.type = pAction->GetType();
+			desc.roomName = pAction->GetRoomName();
+			desc.pActionIndex = pAction->GetActionIndex();
+			desc.pos_x = pAction->GetPos_X();
+			desc.pos_z = pAction->GetPos_Z();
+			desc.rotation = pAction->GetRotation();
+			desc.start = false;
+			desc.active = false;
+
+			this->mpEventLog->AddAction(desc);
+
 			this->mpActions.erase(this->mpActions.begin() + i);
 			return true;
 		}
@@ -184,8 +199,10 @@ bool RoomLog::LoadFromFile(std::string folderPath)
 			switch (line[0])
 			{
 				case 'e':	// Event
-					ss >> scrap >> number;
+					ss >> scrap;
+					ss >> number;
 					this->mpEvents.push_back(this->mpEventLog->GetEventPointerAt(number));
+					this->mpEvents.back()->SetActive();
 					break;
 
 				case 'a':	// Action
@@ -193,6 +210,7 @@ bool RoomLog::LoadFromFile(std::string folderPath)
 					ss >> scrap;
 					ss >> number;
 					this->mpActions.push_back(this->mpEventLog->GetActionPointerAt(number));
+					this->mpActions.back()->SetActive();
 					break;
 
 				default:	// Comments

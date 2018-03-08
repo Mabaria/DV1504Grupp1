@@ -36,6 +36,7 @@ public:
 	bool IsActive() const;
 	bool IsStartEvent() const;
 	void SetInactive();
+	void SetActive();
 	int GetID() const;
 
 	// Log specific
