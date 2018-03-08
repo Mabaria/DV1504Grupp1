@@ -84,10 +84,16 @@ public:
 	int GetActionCount() const;
 
 	// Disk specific
+	void SetMetaPath(std::string path);
 	std::string GetString() const;
 	static Room::Desc FillRoomDescFromLine(std::string line);
 	void SaveRoomLog(std::string folderPath) const;
 	bool LoadRoomLog(std::string folderPath);
+
+	void SaveRoomLog() const;
+	bool LoadRoomLog();
+
+	void ClearMeta() const;
 
 	void InitRoomData(XMMATRIX matrix);
 

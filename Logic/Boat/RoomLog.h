@@ -37,15 +37,24 @@ public:
 	void SetEventLogPtr(EventLog *pEventLog);
 
 	// Disk specific
+	void SetMetaPath(std::string path);
+	void ClearMeta() const;
+
 	void SaveToFile(std::string folderPath) const;
 	bool LoadFromFile(std::string folderPath);
+
+	void SaveToFile() const;
+	bool LoadFromFile();
 
 private:
 
 	std::string RealPath(std::string folderPath) const;
+	void UpdateMeta() const;
 
 	std::vector<LogEvent*> mpEvents;
 	std::vector<LogAction*> mpActions;
 	EventLog *mpEventLog;
 	std::string mRoomName;
+
+	std::string mMetaPath;
 };

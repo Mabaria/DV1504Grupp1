@@ -21,6 +21,18 @@
 *		Simply call the LoadFromFile_Boat() with a filepath to the .boat file
 *		you want to use. The log will be created automatically.
 *
+*		The log need to know what file to append all it's information to. For
+*		this, you need to specify the paths to
+*			* the .log that will be filled with events and actions,
+*			* the log .meta that stores additional information about actions, and
+*			* the room logs meta folder destination where all the room logs will
+*			  store their own meta files.
+*		It is important to know that the first two paths is specifying a file,
+*		while the last one only specifies a path to a directory. The function you
+*		have to call for this is (with example paths):
+*			* Boat::SetLogPath("../../Savefiles/Logs/Log.log");
+*			* Boat::SetLogMetaPath("../../Savefiles/Metafiles/Log.meta");
+*			* Boat::SetRoomMetaDir("../../Savefiles/Metafiles/RoomLogMetas/");
 *
 *
 *	Recover from an older session:
@@ -157,15 +169,20 @@ public:
 	int GetActiveActionCount() const;
 
 	// Disk specific
-	//void SetLogDir(std::string folderPath);
-	//void SetLogMetaDir(std::string folderPath);
-	//void SetRoomMetaDir(std::string folderPath);
+	void SetLogPath(std::string folderPath);
+	void SetLogMetaPath(std::string folderPath);
+	void SetRoomMetaDir(std::string folderPath);
+
+	void ClearFiles() const;
 
 	void SaveToFile_Boat(std::string filePath) const;
 	bool LoadFromFile_Boat(std::string filePath);
 
 	void SaveToFile_Log(std::string filePath, std::string metaFile, std::string roomLogsFolderPath) const;
 	bool LoadFromFile_Log(std::string filePath, std::string metaFile, std::string roomLogsFolderPath);
+
+	void SaveToFile_Log() const;
+	bool LoadFromFile_Log();
 
 	// Room data specific
 	bool LoadBoundingBoxes(

@@ -46,11 +46,17 @@ public:
 	Room* GetRoomPointerAt(int index) const;
 
 	// Disk specific
+	void SetMetaPath(std::string path);
 	std::string GetString() const;
 	std::string GetRoomStringAt(int index) const;
 	static Deck::Desc FillDeckDescFromLine(std::string line);
 	void SaveRoomLogs(std::string folderPath) const;
 	bool LoadRoomLogs(std::string folderPath);
+
+	void SaveRoomLogs() const;
+	bool LoadRoomLogs();
+
+	void ClearMetas() const;
 
 private:
 

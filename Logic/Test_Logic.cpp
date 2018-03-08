@@ -14,18 +14,15 @@ bool Test_Logic::MainTest()
 		<< "\n\t4. Clear some of the events and actions."
 		<< "\n\t5. Check log and rooms for correct amount of events and "
 		<< "actions."
-		<< "\n\t6. Save all stored information to files."
-		<< "\n\t7. Delete the Boat and create a new one from the same .boat file."
-		<< "\n\t8. Load the old log to recreate the scenario."
-		<< "\n\t9. Check log and rooms for correct amount of events and "
+		<< "\n\t6. Delete the Boat and create a new one from the same .boat file."
+		<< "\n\t7. Load the old log to recreate the scenario."
+		<< "\n\t8. Check log and rooms for correct amount of events and "
 		<< "actions."
-		<< "\n\t10. Save all stored information again, to new files."
-		<< "\n\t11. Compare all the old files with the new files.";
+		<< "\n\t9. Save all stored information again, to new files."
+		<< "\n\t10. Compare all the old files with the new files.";
 	std::cout << "\nPress enter to continue..." << std::endl << std::endl
 		<< std::endl;
-	getchar();
-
-
+	getchar();	
 
 	// Necessary variables
 	Boat *myBoat = nullptr;
@@ -49,7 +46,13 @@ bool Test_Logic::MainTest()
 	std::cout << "Loading boat from file...";
 	myBoat = new Boat;
 	myBoat->LoadFromFile_Boat("../../Savefiles/Boats/Vulcanus.boat");
+	myBoat->SetLogPath("../../Savefiles/Testing/Logs/Log_first.log");
+	myBoat->SetLogMetaPath("../../Savefiles/Testing/Metafiles/Log_metas/Log_first.meta");
+	myBoat->SetRoomMetaDir("../../Savefiles/Testing/Metafiles/Roomlog_metas_first/");
 	std::cout << "done!" << std::endl;
+
+	// Clear old files
+	myBoat->ClearFiles();
 
 	std::cout << "Press enter to continue..." << std::endl << std::endl << std::endl;
 	getchar();
@@ -140,30 +143,20 @@ bool Test_Logic::MainTest()
 
 
 	/**
-	*	Save the log to a file
-	*/
-
-	std::cout
-		<< "\nSaving log to files:"
-		<< "\n  * Log: Savefiles/Testing/Logs/Log_first.log"
-		<< "\n  * Meta: Savefiles/Testing/Metafiles/Log_metas/Log_first.meta"
-		<< "\n  * Roomlog: Savefiles/Testring/Metafiles/Roomlog_metas_first/*";
-	myBoat->SaveToFile_Log(
-		"../../Savefiles/Testing/Logs/Log_first.log",
-		"../../Savefiles/Testing/Metafiles/Log_metas/Log_first.meta",
-		"../../Savefiles/Testing/Metafiles/Roomlog_metas_first/");
-	std::cout << "\nPress enter to continue..." << std::endl << std::endl << std::endl;
-	getchar();
-
-
-
-	/**
 	*	Scrap current log and load old log from file
 	*/
-
+	
+	std::cout << "Deleting old boat and create a new one..";
 	delete myBoat;
 	myBoat = new Boat;
 	myBoat->LoadFromFile_Boat("../../Savefiles/Boats/Vulcanus.boat");
+	myBoat->SetLogPath("../../Savefiles/Testing/Logs/Log_second.log");
+	myBoat->SetLogMetaPath("../../Savefiles/Testing/Metafiles/Log_metas/Log_second.meta");
+	myBoat->SetRoomMetaDir("../../Savefiles/Testing/Metafiles/Roomlog_metas_second/");
+	std::cout << "done!" << std::endl;
+
+	// Clear old files
+	myBoat->ClearFiles();
 
 	// Read log from file
 	std::cout
@@ -339,8 +332,11 @@ void Test_Logic::FillLog(
 		roomEventCountOutput[i]++;
 		
 		// Waste some time to get some time differences between the events
-		//for (int j = 0; j < 150000000; j++);
+		for (int j = 0; j < 150000000; j++);
 	}
+
+
+	for (int j = 0; j < 150000000; j++);
 
 	std::cout << std::endl;
 
@@ -385,7 +381,7 @@ void Test_Logic::FillLog(
 			<< " " << i + 1 << "/19" << std::endl;
 
 		// Waste some time to get some time differences between the actions
-		//for (int j = 0; j < 150000000; j++);
+		for (int j = 0; j < 150000000; j++);
 	}
 }
 
@@ -424,9 +420,11 @@ void Test_Logic::ClearSome(
 		totEventOutput++;
 		activeEventOutput--;
 		roomEventCountOutput[i * 2]--;
+
+		for (int j = 0; j < 150000000; j++);
 	}
 
-
+	for (int j = 0; j < 150000000; j++);
 
 	std::cout << "\n\nClearing actions";
 
@@ -452,6 +450,8 @@ void Test_Logic::ClearSome(
 		totActionOutput++;
 		activeActionOutput--;
 		roomActionCountOutput[i * 2]--;
+
+		for (int j = 0; j < 150000000; j++);
 	}
 }
 

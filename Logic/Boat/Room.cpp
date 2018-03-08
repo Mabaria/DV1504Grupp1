@@ -195,6 +195,11 @@ int Room::GetActionCount() const
 *	Disk specific
 */
 
+void Room::SetMetaPath(std::string path)
+{
+	this->mRoomLog.SetMetaPath(path);
+}
+
 std::string Room::GetString() const
 {
 	std::stringstream ss;
@@ -250,6 +255,21 @@ void Room::SaveRoomLog(std::string folderPath) const
 bool Room::LoadRoomLog(std::string folderPath)
 {
 	return this->mRoomLog.LoadFromFile(folderPath);
+}
+
+void Room::SaveRoomLog() const
+{
+	this->mRoomLog.SaveToFile();
+}
+
+bool Room::LoadRoomLog()
+{
+	return this->mRoomLog.LoadFromFile();
+}
+
+void Room::ClearMeta() const
+{
+	this->mRoomLog.ClearMeta();
 }
 
 void Room::InitRoomData(XMMATRIX matrix)

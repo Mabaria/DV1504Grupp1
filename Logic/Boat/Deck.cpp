@@ -144,6 +144,12 @@ int Deck::GetRoomOffset() const
 *	Disk specific
 */
 
+void Deck::SetMetaPath(std::string path)
+{
+	for (int i = 0; i < (int)this->mpRooms.size(); i++)
+		this->mpRooms[i]->SetMetaPath(path);
+}
+
 std::string Deck::GetString() const
 {
 	std::string print = "";
@@ -196,4 +202,26 @@ bool Deck::LoadRoomLogs(std::string folderPath)
 			return false;
 	}
 	return true;
+}
+
+void Deck::SaveRoomLogs() const
+{
+	for (int i = 0; i < (int)this->mpRooms.size(); i++)
+		this->mpRooms[i]->SaveRoomLog();
+}
+
+bool Deck::LoadRoomLogs()
+{
+	for (int i = 0; i < (int)this->mpRooms.size(); i++)
+	{
+		if (!this->mpRooms[i]->LoadRoomLog())
+			return false;
+	}
+	return true;
+}
+
+void Deck::ClearMetas() const
+{
+	for (int i = 0; i < (int)this->mpRooms.size(); i++)
+		this->mpRooms[i]->ClearMeta();
 }

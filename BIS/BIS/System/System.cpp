@@ -750,7 +750,11 @@ void System::mSetupModels()
 
 void System::mSetupBoat()
 {
-	this->mBoat.LoadFromFile_Boat("../../SaveFiles/Boats/Vulcanus.boat");
+	this->mBoat.LoadFromFile_Boat("../../Savefiles/Boats/Vulcanus.boat");
+
+	this->mBoat.SetLogPath("../../Savefiles/Logs/Log.log");
+	this->mBoat.SetLogMetaPath("../../Savefiles/Metafiles/Log.meta");
+	this->mBoat.SetRoomMetaDir("../../Savefiles/Metafiles/RoomLogMetas/");
 
 	// Creating the mesh and matrix list that boat 
 	// needs to load bounding boxes to the rooms.

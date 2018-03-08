@@ -54,20 +54,22 @@ public:
 	std::vector<LogAction*> GetActiveActions() const;
 	
 	// Disk specific
+	void SetLogDir(std::string folderPath);
+	void SetMetaDir(std::string folderPath);
+
+	void ClearFiles() const;
+
 	void SaveToFile(std::string filePath, std::string metaFile) const;
 	bool LoadFromFile(std::string filePath, std::string metaFile);
 
 private:
-	std::vector<LogEvent*> mpLogEvents;	// Containing all events in the system
+
+	void AppendFiles_Event() const;
+	void AppendFiles_Action() const;
+
+	std::vector<LogEvent*> mpLogEvents;
 	std::vector<LogAction*> mpActions;
 
-	//struct ActiveInfo
-	//{
-	//	int infoIndex;
-	//	bool isEvent;
-	//	int activeIndex;
-	//	int roomIndex;
-	//};
-
-	//std::vector<ActiveInfo*> mActiveEvents;
+	std::string mLogPath;
+	std::string mMetaPath;
 };

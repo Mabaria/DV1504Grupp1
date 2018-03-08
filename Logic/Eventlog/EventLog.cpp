@@ -27,6 +27,9 @@ LogEvent* EventLog::AddEvent(LogEvent::Desc desc)
 {
 	desc.ID = (int)this->mpLogEvents.size();
 	this->mpLogEvents.push_back(new LogEvent(desc));
+
+	this->AppendFiles_Event();
+
 	return this->mpLogEvents.back();
 }
 
@@ -63,6 +66,9 @@ LogAction* EventLog::AddAction(LogAction::Desc desc)
 {
 	desc.ID = (int)this->mpActions.size();
 	this->mpActions.push_back(new LogAction(desc));
+
+	this->AppendFiles_Action();
+
 	return this->mpActions.back();
 }
 
@@ -123,11 +129,37 @@ std::vector<LogAction*> EventLog::GetActiveActions() const
 	return list;
 }
 
+void EventLog::SetLogDir(std::string folderPath)
+{
+	this->mLogPath = folderPath;
+}
+
+void EventLog::SetMetaDir(std::string folderPath)
+{
+	this->mMetaPath = folderPath;
+}
+
 
 
 /**
 *	Disk specific
 */
+
+void EventLog::ClearFiles() const
+{
+	std::ofstream file_log;
+	std::ofstream file_meta;
+
+	// Open files in append mode
+	file_log.open(this->mLogPath);
+	file_meta.open(this->mMetaPath);
+
+	file_log << "";
+	file_meta << "";
+
+	file_log.close();
+	file_meta.close();
+}
 
 void EventLog::SaveToFile(std::string filePath, std::string metaFile) const
 {
@@ -162,7 +194,6 @@ void EventLog::SaveToFile(std::string filePath, std::string metaFile) const
 			{
 				file_log
 					<< "a"
-					<< nextAction
 					<< " "
 					<< pAction->GetLogString()
 					<< std::endl;
@@ -198,7 +229,6 @@ void EventLog::SaveToFile(std::string filePath, std::string metaFile) const
 			pAction = this->mpActions[nextAction];
 			file_log
 				<< "a"
-				<< nextAction
 				<< " "
 				<< pAction->GetLogString()
 				<< std::endl;
@@ -247,4 +277,38 @@ bool EventLog::LoadFromFile(std::string filePath, std::string metaFile)
 		return false;
 	
 	return true;
+}
+
+void EventLog::AppendFiles_Event() const
+{
+	std::ofstream file;
+
+	// Open file in append mode
+	file.open(this->mLogPath, std::ios_base::app);
+
+	LogEvent *pEvent = this->mpLogEvents.back();
+	file
+		<< "e "
+		<< pEvent->GetFileString()
+		<< std::endl;
+}
+
+void EventLog::AppendFiles_Action() const
+{
+	std::ofstream file_log;
+	std::ofstream file_meta;
+
+	// Open files in append mode
+	file_log.open(this->mLogPath, std::ios_base::app);
+	file_meta.open(this->mMetaPath, std::ios_base::app);
+
+	LogAction *pAction = this->mpActions.back();
+	file_log
+		<< "a"
+		<< " "
+		<< pAction->GetLogString()
+		<< std::endl;
+	file_meta
+		<< pAction->GetMetaString()
+		<< std::endl;
 }

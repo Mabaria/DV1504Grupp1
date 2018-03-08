@@ -233,6 +233,30 @@ int Boat::GetActiveActionCount() const
 	return this->mEventLog.GetActiveActionCount();
 }
 
+void Boat::SetLogPath(std::string folderPath)
+{
+	this->mEventLog.SetLogDir(folderPath);
+}
+
+void Boat::SetLogMetaPath(std::string folderPath)
+{
+	this->mEventLog.SetMetaDir(folderPath);
+}
+
+void Boat::SetRoomMetaDir(std::string folderPath)
+{
+	for (int i = 0; i < (int)this->mpDecks.size(); i++)
+		this->mpDecks[i]->SetMetaPath(folderPath);
+}
+
+void Boat::ClearFiles() const
+{
+	this->mEventLog.ClearFiles();
+	
+	for (int i = 0; i < (int)this->mpDecks.size(); i++)
+		this->mpDecks[i]->ClearMetas();
+}
+
 
 
 /**
@@ -373,6 +397,22 @@ bool Boat::LoadFromFile_Log(std::string filePath, std::string metaFile, std::str
 	for (int i = 0; i < (int)this->mpDecks.size(); i++)
 	{
 		if (!this->mpDecks[i]->LoadRoomLogs(roomLogsFolderPath))
+			return false;
+	}
+	return true;
+}
+
+void Boat::SaveToFile_Log() const
+{
+	for (int i = 0; i < (int)this->mpDecks.size(); i++)
+		this->mpDecks[i]->SaveRoomLogs();
+}
+
+bool Boat::LoadFromFile_Log()
+{
+	for (int i = 0; i < (int)this->mpDecks.size(); i++)
+	{
+		if (!this->mpDecks[i]->LoadRoomLogs())
 			return false;
 	}
 	return true;

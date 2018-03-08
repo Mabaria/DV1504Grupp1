@@ -32,6 +32,10 @@ bool RoomLog::AddEvent(Event::Type type)
 
 	LogEvent *pNewEvent = this->mpEventLog->AddEvent(desc);
 	this->mpEvents.push_back(pNewEvent);
+
+	// Update meta file
+	this->UpdateMeta();
+
 	return true;
 }
 
@@ -57,6 +61,9 @@ bool RoomLog::ClearEvent(Event::Type type)
 			return true;
 		}
 	}
+
+	// Update meta file
+	this->UpdateMeta();
 
 	return false;
 }
@@ -86,6 +93,10 @@ bool RoomLog::AddAction(LogAction::Desc desc)
 	LogAction *pNewAction = this->mpEventLog->AddAction(desc);
 
 	this->mpActions.push_back(pNewAction);
+
+	// Update meta file
+	this->UpdateMeta();
+
 	return true;
 }
 
@@ -112,6 +123,10 @@ bool RoomLog::ClearAction(int *actionIndex)
 			this->mpEventLog->AddAction(desc);
 
 			this->mpActions.erase(this->mpActions.begin() + i);
+
+			// Update meta file
+			this->UpdateMeta();
+
 			return true;
 		}
 	}
@@ -159,6 +174,21 @@ void RoomLog::SetEventLogPtr(EventLog *pEventLog)
 *	Disk specific
 */
 
+
+void RoomLog::SetMetaPath(std::string path)
+{
+	this->mMetaPath = path;
+}
+
+void RoomLog::ClearMeta() const
+{
+	std::ofstream file;
+	file.open(this->mMetaPath + this->mRoomName + ".meta");
+
+	file << "";
+
+	file.close();
+}
 
 void RoomLog::SaveToFile(std::string folderPath) const
 {
@@ -227,10 +257,45 @@ bool RoomLog::LoadFromFile(std::string folderPath)
 	return true;
 }
 
+void RoomLog::SaveToFile() const
+{
+	this->SaveToFile(this->mMetaPath);
+}
+
+bool RoomLog::LoadFromFile()
+{
+	return this->LoadFromFile(this->mMetaPath);
+}
+
 std::string RoomLog::RealPath(std::string folderPath) const
 {
 	if (folderPath[folderPath.size()-1] == '/')
 		return folderPath + this->mRoomName + ".meta";
 	else
 		return folderPath + "/" + this->mRoomName + ".meta";
+}
+
+void RoomLog::UpdateMeta() const
+{
+	std::ofstream file;
+	file.open(this->mMetaPath + this->mRoomName + ".meta");
+
+	int eventSize = (int)this->mpEvents.size();
+	int actionSize = (int)this->mpActions.size();
+
+	if (eventSize == 0 && actionSize == 0)
+	{
+		file << "";
+	}
+	else
+	{
+		for (int i = 0; i < eventSize; i++)
+			file << "e " << this->mpEvents[i]->GetID() << std::endl;
+
+		for (int i = 0; i < actionSize; i++)
+			file << "a " << this->mpActions[i]->GetID() << std::endl;
+	}
+
+
+	file.close();
 }

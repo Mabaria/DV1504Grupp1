@@ -111,7 +111,6 @@ LogAction::LogAction(std::string lineFromLog, std::string metaLine)
 	Timestamp ts;
 
 	ss.get(scrap); // Get rid of 'a'
-	ss >> number; // Get index to read coord from
 
 	// Fill the start time to timestamp
 	ss >> ts.date.year;
