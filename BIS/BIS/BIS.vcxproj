@@ -45,7 +45,6 @@
     <ClCompile Include="..\..\IO\ObserverPattern\Test_Obs.cpp" />
     <ClCompile Include="..\..\IO\Picking.cpp" />
     <ClCompile Include="..\..\IO\Test_Input.cpp" />
-    <ClCompile Include="..\..\Logic\BoatTester.cpp" />
     <ClCompile Include="..\..\Logic\Boat\Boat.cpp" />
     <ClCompile Include="..\..\Logic\Boat\Deck.cpp" />
     <ClCompile Include="..\..\Logic\Boat\Room.cpp" />
@@ -103,7 +102,6 @@
     <ClInclude Include="..\..\IO\Picking.h" />
     <ClInclude Include="..\..\IO\Test_Input.h" />
     <ClInclude Include="..\..\IO\Test_Picking.h" />
-    <ClInclude Include="..\..\Logic\BoatTester.h" />
     <ClInclude Include="..\..\Logic\Boat\Boat.h" />
     <ClInclude Include="..\..\Logic\Boat\Deck.h" />
     <ClInclude Include="..\..\Logic\Boat\Room.h" />

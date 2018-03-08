@@ -192,9 +192,6 @@
     <ClInclude Include="..\..\Logic\Boat\Boat.h">
       <Filter>Header Files\Logic</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Logic\BoatTester.h">
-      <Filter>Header Files\Logic\Test</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\UI\UIElements\Test_TextBox.h">
       <Filter>Header Files\UI\Test</Filter>
     </ClInclude>
@@ -385,9 +382,6 @@
     </ClCompile>
     <ClCompile Include="..\..\Logic\Boat\Boat.cpp">
       <Filter>Source Files\Logic</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Logic\BoatTester.cpp">
-      <Filter>Source Files\Logic\Test</Filter>
     </ClCompile>
     <ClCompile Include="..\..\UI\UIElements\Test_TextBox.cpp">
       <Filter>Source Files\UI\Test</Filter>
