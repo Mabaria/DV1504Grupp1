@@ -743,10 +743,12 @@ const void Panel3D::SetActionHover(bool state)
 
 const void Panel3D::SetIcon(uint32_t data)
 {
+	// Early exit if there was no action in data.
 	if (data == No_Action)
 	{
 		return;
 	}
+
 	// Using magic to extract data from the uint32_t.
 	int rotation_index	= (data >> 4) & 7;
 	int icon_index		= data & 15;
@@ -872,6 +874,26 @@ const void Panel3D::Update()
 		this->mGhostPosition.top = mouse_pos.y - icon_height / 2.0f;
 		this->mGhostPosition.right = this->mGhostPosition.left + icon_width;
 		this->mGhostPosition.bottom = this->mGhostPosition.top + icon_height;
+
+		static float max_zoom_in = 0.5f;
+		static float max_zoom_out = 0.15f;
+
+		static float zoom_increment = (max_zoom_in - max_zoom_out) / 10.0f;
+
+		float scroll = Mouse::GetScroll();
+		if (scroll != 0.0f)
+		{
+			this->mGhostScale += scroll * zoom_increment;
+
+			if (this->mGhostScale > max_zoom_in)
+			{
+				this->mGhostScale = max_zoom_in;
+			}
+			else if (this->mGhostScale < max_zoom_out)
+			{
+				this->mGhostScale = max_zoom_out;
+			}
+		}
 
 		this->mUpdateGhostTransform();
 	}
