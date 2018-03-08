@@ -945,10 +945,10 @@ const void Panel3D::Draw()
 
 	// For readability.
 	ID3D11PixelShader *pixel_shader = nullptr;
-	ID3D11Buffer* vertex_buffer		= nullptr;
-	ID3D11Buffer* index_buffer		= nullptr;
-	ID3D11Buffer* matrix_buffer		= nullptr;
-	ID3D11Buffer* material_buffer	= nullptr;
+	ID3D11Buffer *vertex_buffer		= nullptr;
+	ID3D11Buffer *index_buffer		= nullptr;
+	ID3D11Buffer *matrix_buffer		= nullptr;
+	ID3D11Buffer *material_buffer	= nullptr;
 	UINT numIndices = 0;
 
 	this->mDirect3D.GetContext()->VSSetConstantBuffers(
