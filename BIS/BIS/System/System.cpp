@@ -456,15 +456,37 @@ void System::mUpdateEvents(Room * room)
 
 void System::mUpdateGhostIcons()
 {
+	static bool is_reset = false;
+	static bool is_set = false;
+
 	if (this->mActionHandler.IsWaiting() && !this->mpMenuPanel->IsMouseInsidePanel())
 	{
-		this->mpTopViewPanel->SetActionHover(true);
-		this->mpTopViewPanel->SetIcon(*this->mActionHandler.GetLastAction());
+		if (!is_set)
+		{
+			this->mpTopViewPanel->SetActionHover(true);
+			this->mpTopViewPanel->SetIcon(*this->mActionHandler.GetLastAction());
+			is_set = true;
+			is_reset = false;
+		}
+		if (Mouse::IsButtonPressed(Buttons::Right))
+		{
+			this->mpTopViewPanel->RotateIcon();
+		}
+	}
+	else if (!this->mActionHandler.IsWaiting())
+	{
+		if (!is_reset)
+		{
+			this->mpTopViewPanel->SetActionHover(false);
+			this->mpTopViewPanel->ResetIcon();
+			is_reset = true;
+			is_set = false;
+		}
 	}
 	else
 	{
 		this->mpTopViewPanel->SetActionHover(false);
-		this->mpTopViewPanel->SetIcon(No_Action);
+		is_set = false;
 	}
 }
 

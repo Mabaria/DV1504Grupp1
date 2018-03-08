@@ -238,7 +238,7 @@ Actions::ActionPtr *Actions::PickAction()
 
 		if (fabs(x) < size && fabs(z) < size && actionDistance < distance)
 		{
-			std::cout << "Action Picking hit nr: " << i << std::endl;
+			//std::cout << "Action Picking hit nr: " << i << std::endl;
 			result = this->mpVertexPtrArray[i];
 			distance = actionDistance;
 		}

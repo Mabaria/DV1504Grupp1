@@ -115,6 +115,11 @@ public:
 	const void SetActionHover(bool state);
 	const void SetIcon(uint32_t data);
 
+	// Rotates the ghost icon 90 degrees clockwise.
+	const void RotateIcon();
+
+	const void ResetIcon();
+
 private:
 	D3D11 mDirect3D;
 	std::vector<MeshObject*> mpMeshObjects;
@@ -156,11 +161,32 @@ private:
 
 	Actions *mpActions;
 
+	//! GHOST ACTION STUFF
+
+	// Back buffer texture for hijacking purposes.
 	ID3D11Texture2D *mpBackBuffer;
+
+	// Bitmaps containing the icons and numbers.
 	ID2D1Bitmap	*mpIconBitmap;
 	ID2D1Bitmap	*mpNumberBitmap;
-	D2D1_RECT_F mCurrentIconRect;
-	D2D1_RECT_F mCurrentNumberRect;
-	D2D1_MATRIX_4X4_F mCurrentTransform;
-	bool mActionHover;
+
+	// Rectangle to draw from.
+	D2D1_RECT_F mGhostIconRect;
+	D2D1_RECT_F mGhostNumberRect;
+
+	// Center position of the ghost.
+	D2D1_RECT_F mGhostPosition;
+
+	// Rotation/scale for the ghost.
+	D2D1_MATRIX_4X4_F mGhostTransform;
+	int mGhostRotation;
+	float mGhostScale;
+
+	// Whether or not the ghost should be shown.
+	bool mGhostActive;
+
+	// Whether or not the ghost should rotate.
+	bool mGhostStationary;
+
+	const void mUpdateGhostTransform();
 };

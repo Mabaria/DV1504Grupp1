@@ -76,9 +76,11 @@ Panel3D::Panel3D(int width, int height, int top, int left,
 
 	this->mpActions = nullptr;
 
-	this->mActionHover = false;
 	this->mpIconBitmap = nullptr;
 	this->mpNumberBitmap = nullptr;
+
+	// Puts the ghost action feature in a zero state.
+	this->ResetIcon();
 
 }
 
@@ -509,6 +511,35 @@ const void Panel3D::CreateTexture(std::wstring texturePath)
 	}
 }
 
+const void Panel3D::mUpdateGhostTransform()
+{
+	float icon_width = this->mGhostIconRect.right - this->mGhostIconRect.left;
+	float icon_height = this->mGhostIconRect.bottom - this->mGhostIconRect.top;
+
+	XMVECTOR ghost_center = {
+		this->mGhostPosition.left + icon_width / 2.0f,
+		this->mGhostPosition.top + icon_height / 2.0f,
+		0.0f,
+		0.0f };
+
+	XMFLOAT4X4 transform;
+	XMStoreFloat4x4(&transform, XMMatrixTransformation2D(
+		ghost_center,
+		0.0f,
+		{ this->mGhostScale, this->mGhostScale, 0.0f, 0.0f },
+		ghost_center,
+		this->mGhostRotation * XM_PI / 2.0f,
+		{ 0.0f, 0.0f, 0.0f, 0.0f }));
+
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			this->mGhostTransform.m[i][j] = transform.m[i][j];
+		}
+	}
+}
+
 const void Panel3D::UpdateMatrixBuffer(std::string name)
 {
 	// Getting the mesh object of the given name.
@@ -665,7 +696,11 @@ void Panel3D::DrawBitmapToTexture(
 
 }
 
-void Panel3D::DrawBitmapToTexture(ID2D1Bitmap * bitmap, D2D1_RECT_F destRect, const D2D1_RECT_F sourceRect, FLOAT opacity, const D2D1_MATRIX_4X4_F *transform)
+void Panel3D::DrawBitmapToTexture(ID2D1Bitmap * bitmap, 
+	D2D1_RECT_F destRect, 
+	const D2D1_RECT_F sourceRect, 
+	FLOAT opacity, 
+	const D2D1_MATRIX_4X4_F *transform)
 {
 	this->mDirect2D->GetpContext()->BeginDraw();
 	this->mDirect2D->GetpContext()->DrawBitmap(
@@ -703,16 +738,22 @@ Actions * Panel3D::pGetActions()
 
 const void Panel3D::SetActionHover(bool state)
 {
-	this->mActionHover = state;
+	this->mGhostActive = state;
 }
 
 const void Panel3D::SetIcon(uint32_t data)
 {
+	if (data == No_Action)
+	{
+		return;
+	}
 	// Using magic to extract data from the uint32_t.
 	int rotation_index	= (data >> 4) & 7;
 	int icon_index		= data & 15;
 	int number_index	= (data >> 9) & 15;
 	bool has_number		= number_index == 0 ? false : true;
+
+	this->mGhostStationary = rotation_index == 4 ? true : false;
 
 	// Sizes of the entire bitmap.
 	static D2D1_SIZE_F icon_bitmap_size	= 
@@ -722,20 +763,16 @@ const void Panel3D::SetIcon(uint32_t data)
 
 	// Sizes of individual icons/numbers.
 	static D2D1_SIZE_F icon_size = { 
-		icon_bitmap_size.width  / 4, 
+		icon_bitmap_size.width / 4, 
 		icon_bitmap_size.height / 4 };
 	static D2D1_SIZE_F number_size = { 
 		number_bitmap_size.width / 3, 
 		number_bitmap_size.height / 3 };
 	
-
-	D2D1_RECT_F icon;
-	icon.top	= (icon_index / 4) * icon_size.height;
-	icon.left	= (icon_index % 4) * icon_size.width;
-	icon.bottom = icon.top	+ icon_size.height;
-	icon.right	= icon.left + icon_size.width;
-
-	this->mCurrentIconRect = icon;
+	this->mGhostIconRect.top	= (icon_index / 4) * icon_size.height;
+	this->mGhostIconRect.left	= (icon_index % 4) * icon_size.width;
+	this->mGhostIconRect.bottom = this->mGhostIconRect.top	+ icon_size.height;
+	this->mGhostIconRect.right	= this->mGhostIconRect.left + icon_size.width;
 
 	D2D1_RECT_F number = { 0.0f, 0.0f, 0.0f, 0.0f };
 	
@@ -747,8 +784,29 @@ const void Panel3D::SetIcon(uint32_t data)
 		number.bottom	= number.top + number_size.height;
 		number.right	= number.left + number_size.width;
 	}
+	this->mGhostNumberRect = number;	
 
-	this->mCurrentNumberRect = number;
+	this->mGhostScale = 0.5f;
+}
+
+const void Panel3D::RotateIcon()
+{
+	// Increments current rotation and takes it modulo 4
+	// for the 4 possible stages of rotation.
+	if (!this->mGhostStationary)
+	{
+		this->mGhostRotation++;
+		this->mGhostRotation %= 4;
+	}
+}
+
+const void Panel3D::ResetIcon()
+{
+	this->mGhostActive			= false;
+	this->mGhostRotation		= 0;
+	this->mGhostNumberRect		= { 0 };
+	this->mGhostIconRect		= { 0 };
+	this->mGhostTransform		= { 0 };
 }
 
 MovableCameraComponent * Panel3D::GetMovableComponent()
@@ -803,27 +861,20 @@ const void Panel3D::Update()
 	//		this->mpActions->RemoveAction(&target);
 
 	//}
+	if (this->mGhostActive && this->IsMouseInsidePanel())
+	{
+		Position mouse_pos = Mouse::GetPosition();
 
+		float icon_width = this->mGhostIconRect.right - this->mGhostIconRect.left;
+		float icon_height = this->mGhostIconRect.bottom - this->mGhostIconRect.top;
 
+		this->mGhostPosition.left = mouse_pos.x - icon_width / 2.0f;
+		this->mGhostPosition.top = mouse_pos.y - icon_height / 2.0f;
+		this->mGhostPosition.right = this->mGhostPosition.left + icon_width;
+		this->mGhostPosition.bottom = this->mGhostPosition.top + icon_height;
 
-	// Updating the transform for the ghost action.	
-	//XMFLOAT4X4 view_proj;
-
-	///*XMStoreFloat4x4(
-	//	&view_proj,
-	//	XMMatrixMultiply(
-	//		this->mpCamera->GetProjectionMatrix(),
-	//		this->mpCamera->GetViewMatrix()));*/
-	//XMStoreFloat4x4(&view_proj, XMMatrixScaling(1, 1, 1));
-	//D2D1_MATRIX_4X4_F ghost_transform;
-	//for (int i = 0; i < 4; i++)
-	//{
-	//	for (int j = 0; j < 4; j++)
-	//	{
-	//		ghost_transform.m[i][j] = view_proj.m[i][j];
-	//	}
-	//}
-	//this->mCurrentTransform = ghost_transform;
+		this->mUpdateGhostTransform();
+	}
 }
 
 const void Panel3D::Draw()
@@ -955,33 +1006,21 @@ const void Panel3D::Draw()
 	}
 
 	static float ghost_opacity = 0.4f;
-	if (this->mActionHover && this->IsMouseInsidePanel())
-	{
-		//TODO Draw chosen icon on mouse position.
-		D2D1_RECT_F ghost_position;
-		Position mouse_pos = Mouse::GetPosition();
-
-		float icon_width = this->mCurrentIconRect.right - this->mCurrentIconRect.left;
-		float icon_height = this->mCurrentIconRect.bottom - this->mCurrentIconRect.top;
-		icon_width	*= 0.5f;
-		icon_height *= 0.5f;
-
-		ghost_position.left		= mouse_pos.x - icon_width / 2.0f;
-		ghost_position.top		= mouse_pos.y - icon_height / 2.0f;
-		ghost_position.right	= ghost_position.left + icon_width;
-		ghost_position.bottom	= ghost_position.top + icon_height;
-
+	if (this->mGhostActive && this->IsMouseInsidePanel())
+	{	
 		this->DrawBitmapToTexture(
-			this->GetBitmapByName("iconBitmap"), 
-			ghost_position,
-			this->mCurrentIconRect, 
-			ghost_opacity);		
+			this->GetBitmapByName("iconBitmap"),
+			this->mGhostPosition,
+			this->mGhostIconRect,
+			ghost_opacity,
+			&this->mGhostTransform); 	
 
 		this->DrawBitmapToTexture(
 			this->GetBitmapByName("numberBitmap"),
-			ghost_position,
-			this->mCurrentNumberRect,
-			ghost_opacity);
+			this->mGhostPosition,
+			this->mGhostNumberRect,
+			ghost_opacity,
+			&this->mGhostTransform);
 	}
 
 	this->mDirect3D.GetSwapChain()->Present(1, 0);
