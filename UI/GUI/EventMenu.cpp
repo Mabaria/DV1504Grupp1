@@ -284,164 +284,111 @@ void EventMenu::Update(Button *attribute)
 		else if (this->mActionMode == STANDARD)
 		{
 
-				if (button_name.compare("Injured_Moved") == 0)
+			if (button_name.compare("Injured_Moved") == 0)
+			{
+				this->mInjuryType = MOVED;
+				this->mClearActionButtStates();
+				this->mSwapActionMode();
+			}
+			else if (button_name.compare("Injured_Treated") == 0)
+			{					
+				this->mInjuryType = TREATED;
+				this->mClearActionButtStates();
+				this->mSwapActionMode();
+			}
+			else if (button_name.compare("Injured_Reported") == 0)
+			{
+				this->mInjuryType = REPORTED;
+				this->mClearActionButtStates();
+				this->mSwapActionMode();
+			}
+			else if (button_name.compare("Hole_In_Bulk") == 0)
+			{
+				obs_inf.actionData = Icon_Hole_In_Bulk;
+				this->NotifyObservers(&obs_inf);
+			}
+			else if (button_name.compare("Ventilation_In") == 0)
+			{
+				obs_inf.actionData = Icon_Ventilation_In;
+				this->NotifyObservers(&obs_inf);
+			}
+			else if (button_name.compare("Ventilation_Out") == 0)
+			{
+				obs_inf.actionData = Icon_Ventilation_Out;
+				this->NotifyObservers(&obs_inf);
+			}
+			else if (button_name.compare("Cooling_Wall") == 0)
+			{
+				obs_inf.actionData = Icon_Cooling_Wall;
+				this->NotifyObservers(&obs_inf);
+			}
+			else if (button_name.compare("Icon_Draining") == 0)
+			{
+				obs_inf.actionData = Icon_Draining | Rotation_Stationary;
+				this->NotifyObservers(&obs_inf);
+			}
+			else if (button_name.compare("Seal_Hole") == 0)
+			{
+				obs_inf.actionData = Icon_Seal_Hole | Rotation_Stationary;
+				this->NotifyObservers(&obs_inf);
+			}
+			else if (button_name.compare("Damaged_Bulk") == 0)
+			{
+				obs_inf.actionData = Icon_Damaged_Bulk;
+				this->NotifyObservers(&obs_inf);
+			}
+			else if (button_name.compare("Supporting_Wall") == 0)
+			{
+				obs_inf.actionData = Icon_Supporting_Wall;
+				this->NotifyObservers(&obs_inf);
+			}
+		}
+		else 
+		{	//! ActionMode == NUMBERS
+			// Injury action has been selected, and these buttons now
+			// correspond to the amount of injured people to draw the symbol
+			// with, from 1-9
+			//! this->mInjuryType contains which kind of triangle to use
+			//! MOVED, TREATED or REPORTED
+			switch (this->mInjuryType)
+			{
+			case MOVED:
+				obs_inf.actionData = Icon_Injured_Moved | Rotation_Stationary;
+				break;
+			case REPORTED:
+				obs_inf.actionData = Icon_Injured_Reported | Rotation_Stationary;
+				break;
+			case TREATED:
+				obs_inf.actionData = Icon_Injured_Treated | Rotation_Stationary;
+				break;
+			}
+
+			static uint32_t numbers[] = {
+				Number_1,
+				Number_2,
+				Number_3,
+				Number_4,
+				Number_5,
+				Number_6,
+				Number_7,
+				Number_8,
+				Number_9,
+			};
+
+			for (int i = 0; i < 9; i++)
+			{
+				if (button_name.compare("Number" + std::to_string(i + 1)) == 0)
 				{
-					this->mInjuryType = MOVED;
-					this->mClearActionButtStates();
+					obs_inf.actionData |= numbers[i];
+					this->NotifyObservers(&obs_inf);
 					this->mSwapActionMode();
-				}
-				else if (button_name.compare("Injured_Treated") == 0)
-				{					
-					this->mInjuryType = TREATED;
-					this->mClearActionButtStates();
-					this->mSwapActionMode();
-				}
-				else if (button_name.compare("Injured_Reported") == 0)
-				{
-					this->mInjuryType = REPORTED;
-					this->mClearActionButtStates();
-					this->mSwapActionMode();
-				}
-				else if (button_name.compare("Hole_In_Bulk") == 0)
-				{
-					obs_inf.actionData = Icon_Hole_In_Bulk;
-					this->NotifyObservers(&obs_inf);
-				}
-				else if (button_name.compare("Ventilation_In") == 0)
-				{
-					obs_inf.actionData = Icon_Ventilation_In;
-					this->NotifyObservers(&obs_inf);
-				}
-				else if (button_name.compare("Ventilation_Out") == 0)
-				{
-					obs_inf.actionData = Icon_Ventilation_Out;
-					this->NotifyObservers(&obs_inf);
-				}
-				else if (button_name.compare("Cooling_Wall") == 0)
-				{
-					obs_inf.actionData = Icon_Cooling_Wall;
-					this->NotifyObservers(&obs_inf);
-				}
-				else if (button_name.compare("Icon_Draining") == 0)
-				{
-					obs_inf.actionData = Icon_Draining | Rotation_Stationary;
-					this->NotifyObservers(&obs_inf);
-				}
-				else if (button_name.compare("Seal_Hole") == 0)
-				{
-					obs_inf.actionData = Icon_Seal_Hole | Rotation_Stationary;
-					this->NotifyObservers(&obs_inf);
-				}
-				else if (button_name.compare("Damaged_Bulk") == 0)
-				{
-					obs_inf.actionData = Icon_Damaged_Bulk;
-					this->NotifyObservers(&obs_inf);
-				}
-				else if (button_name.compare("Supporting_Wall") == 0)
-				{
-					obs_inf.actionData = Icon_Supporting_Wall;
-					this->NotifyObservers(&obs_inf);
 				}
 			}
-			else { //! ActionMode == NUMBERS
-				// Injury action has been selected, and these buttons now
-				// correspond to the amount of injured people to draw the symbol
-				// with, from 1-9
-				//! this->mInjuryType contains which kind of triangle to use
-				//! MOVED, TREATED or REPORTED
-				switch (this->mInjuryType)
-				{
-				case MOVED:
-					obs_inf.actionData = Icon_Injured_Moved | Rotation_Stationary;
-					break;
-				case REPORTED:
-					obs_inf.actionData = Icon_Injured_Reported | Rotation_Stationary;
-					break;
-				case TREATED:
-					obs_inf.actionData = Icon_Injured_Treated | Rotation_Stationary;
-					break;
-				}
 
-				static uint32_t numbers[] = {
-					Number_1,
-					Number_2,
-					Number_3,
-					Number_4,
-					Number_5,
-					Number_6,
-					Number_7,
-					Number_8,
-					Number_9,
-				};
-
-				for (int i = 0; i < 9; i++)
-				{
-					if (button_name.compare("Number" + std::to_string(i + 1)) == 0)
-					{
-						obs_inf.actionData |= numbers[i];
-						this->NotifyObservers(&obs_inf);
-						this->mSwapActionMode();
-					}
-				}
-
-				//if (button_name.compare("Injured_Moved") == 0) //! 1
-				//{
-				//	obs_inf.actionData |= Number_1;
-				//	this->NotifyObservers(&obs_inf);
-				//	this->mSwapActionMode();
-				//}
-				//else if (button_name.compare("Injured_Treated") == 0) //! 2
-				//{
-				//	obs_inf.actionData |= Number_2;
-				//	this->NotifyObservers(&obs_inf);
-				//	this->mSwapActionMode();
-				//}
-				//else if (button_name.compare("Injured_Reported") == 0) //! 3
-				//{
-				//	obs_inf.actionData |= Number_3;
-				//	this->NotifyObservers(&obs_inf);
-				//	this->mSwapActionMode();
-				//}
-				//else if (button_name.compare("Hole_In_Bulk") == 0) //! 4
-				//{
-				//	obs_inf.actionData |= Number_4;
-				//	this->NotifyObservers(&obs_inf);
-				//	this->mSwapActionMode();
-				//}
-				//else if (button_name.compare("Ventilation_In") == 0) //! 5
-				//{
-				//	obs_inf.actionData |= Number_8;
-				//	this->NotifyObservers(&obs_inf);
-				//	this->mSwapActionMode();
-				//}
-				//else if (button_name.compare("Ventilation_Out") == 0) //! 6
-				//{
-				//	obs_inf.actionData |= Number_9;
-				//	this->NotifyObservers(&obs_inf);
-				//	this->mSwapActionMode();
-				//}
-				//else if (button_name.compare("Cooling_Wall") == 0) //! 7
-				//{
-				//	obs_inf.actionData |= Number_7;
-				//	this->NotifyObservers(&obs_inf);
-				//	this->mSwapActionMode();
-				//}
-				//else if (button_name.compare("Icon_Draining") == 0) //! 8
-				//{
-				//	obs_inf.actionData |= Number_6;
-				//	this->NotifyObservers(&obs_inf);
-				//	this->mSwapActionMode();
-				//}
-				//else if (button_name.compare("Seal_Hole") == 0) //! 9
-				//{
-				//	obs_inf.actionData |= Number_5;
-				//	this->NotifyObservers(&obs_inf);
-				//	this->mSwapActionMode();
-				//}
-			}
 		}
 	}
 }
+
 
 
 Event::Type EventMenu::GetLastClicked()
