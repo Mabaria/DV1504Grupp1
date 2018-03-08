@@ -1,10 +1,19 @@
 #pragma once
-#include "../UI/GUI/EventMenu.h"
 #include "../GraphicsEngine/Actions.h"
+
+#ifndef OBSERVER_INFO
+#define OBSERVER_INFO
+struct ObserverInfo
+{
+	Room *pRoom = nullptr;
+	uint32_t actionData = 0;
+};
+#endif
 
 #define reality void
 
-class ActionHandler : public Observer<ObserverInfo>
+class ActionHandler : public Observer<ObserverInfo>,
+	public Observable<ActionHandler>
 {
 public:
 	ActionHandler();
@@ -17,6 +26,7 @@ public:
 
 	void RotatePendingAction();
 	const bool IsWaiting() const;
+	ObserverInfo GetLastEvent() const;
 private:
 	// Graphical actions.
 	Actions *mpActions;

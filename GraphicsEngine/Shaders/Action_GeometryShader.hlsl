@@ -1,8 +1,13 @@
-#define ICON_WIDTH 3
-#define ICON_HEIGHT 3
+#define ICON_WIDTH 4
+#define ICON_HEIGHT 4
+#define NUMBER_WIDTH 3
+#define NUMBER_HEIGHT 3
 
-#define TEX_WIDTH 1.0f / (float)ICON_WIDTH
-#define TEX_HEIGHT 1.0f / (float)ICON_HEIGHT
+#define ICON_TEX_WIDTH 1.0f / (float)ICON_WIDTH
+#define ICON_TEX_HEIGHT 1.0f / (float)ICON_HEIGHT
+
+#define NUMBER_TEX_WIDTH 1.0f / (float)NUMBER_WIDTH
+#define NUMBER_TEX_HEIGHT 1.0f / (float)NUMBER_HEIGHT
 
 #define ICON_SIZE 0.15f
 
@@ -99,11 +104,11 @@ void main(
 	// coordinates for the pixel shader stage.
 	uint iconData = input[0].data & 15;
 	float2 iconTexRectLow = float2(
-		(float)(iconData % ICON_WIDTH) * TEX_WIDTH,
-		(float)(iconData / ICON_HEIGHT) * TEX_HEIGHT);
+		(float)(iconData % ICON_WIDTH) * ICON_TEX_WIDTH,
+		(float)(iconData / ICON_HEIGHT) * ICON_TEX_HEIGHT);
 	float2 iconTexRectHigh = float2(
-		iconTexRectLow.x + TEX_WIDTH,
-		iconTexRectLow.y + TEX_HEIGHT);
+		iconTexRectLow.x + ICON_TEX_WIDTH,
+		iconTexRectLow.y + ICON_TEX_HEIGHT);
 
 	float4 iconUV = float4(iconTexRectLow.xy, iconTexRectHigh.xy);
 
@@ -117,11 +122,11 @@ void main(
 	{
 		iconData--;
 		iconTexRectLow = float2(
-			(float)(iconData % ICON_WIDTH) * TEX_WIDTH,
-			(float)(iconData / ICON_HEIGHT) * TEX_HEIGHT);
+			(float)(iconData % NUMBER_WIDTH) * NUMBER_TEX_WIDTH,
+			(float)(iconData / NUMBER_HEIGHT) * NUMBER_TEX_HEIGHT);
 		iconTexRectHigh = float2(
-			iconTexRectLow.x + TEX_WIDTH,
-			iconTexRectLow.y + TEX_HEIGHT);
+			iconTexRectLow.x + NUMBER_TEX_WIDTH,
+			iconTexRectLow.y + NUMBER_TEX_HEIGHT);
 
 		numberUV = float4(iconTexRectLow.xy, iconTexRectHigh.xy);
 	}

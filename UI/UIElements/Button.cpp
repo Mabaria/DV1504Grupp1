@@ -269,72 +269,90 @@ void Button::MoveIcon(int x, int y)
 		this->mIconSize.bottom + y);
 }
 
-void Button::SetButtonStatus(BUTTON_STATE buttState)
+bool Button::SetButtonStatus(BUTTON_STATE buttState)
 {
-	if (!(this->mCurrState == buttState))
+	if (!this->mForcedButtState)
 	{
-		this->mCurrState = buttState;
-		if (this->mBmpLoaded)
+		if (!(this->mCurrState == buttState))
 		{
-			if (this->mpBitMap->GetSize().width != this->mWidth)
+			this->mCurrState = buttState;
+			if (this->mBmpLoaded)
 			{
-				this->mBitmapRenderSize = D2D1::RectF(
-					this->mWidth * buttState,
-					0,
-					this->mWidth* (buttState + 1),
-					this->mpBitMap->GetSize().height);
-			}
-			if (buttState == 2)
-			{
-				this->NotifyObservers(this);
+				if (this->mpBitMap->GetSize().width != this->mWidth)
+				{
+					this->mBitmapRenderSize = D2D1::RectF(
+						this->mWidth * buttState,
+						0,
+						this->mWidth* (buttState + 1),
+						this->mpBitMap->GetSize().height);
+				}
+				if (buttState == 2)
+				{
+					this->NotifyObservers(this);
+				}
 			}
 		}
 	}
+	return !this->mForcedButtState; // Returns false if the state cannot be changed
 }
 
 void Button::SetRectStatus(BUTTON_STATE rectState)
 {
-	if (!(this->mCurrState == rectState))
+	if (!this->mForcedButtState)
 	{
-		this->mCurrState = rectState;
-		switch (rectState)
+		if (!(this->mCurrState == rectState))
 		{
-		case BUTTON_STATE::HOVER:
-			this->mpRectBrush->SetColor(D2D1::ColorF(D2D1::ColorF(
-				0.50f, 
-				0.50f, 
-				0.50f, 
-				1.0f)));
-			break;
-		case BUTTON_STATE::CLICKED:
-			this->mpRectBrush->SetColor(D2D1::ColorF(D2D1::ColorF(
-				0.00f,
-				0.00f,
-				0.00f,
-				1.0f)));
-			this->NotifyObservers(this);
-			break;
-		default:
-			this->mpRectBrush->SetColor(D2D1::ColorF(D2D1::ColorF(
-				0.75f, 
-				0.75f, 
-				0.75f, 
-				1.0f)));
-			break;
+			this->mCurrState = rectState;
+			switch (rectState)
+			{
+			case BUTTON_STATE::HOVER:
+				this->mpRectBrush->SetColor(D2D1::ColorF(D2D1::ColorF(
+					0.50f,
+					0.50f,
+					0.50f,
+					1.0f)));
+				break;
+			case BUTTON_STATE::CLICKED:
+				this->mpRectBrush->SetColor(D2D1::ColorF(D2D1::ColorF(
+					0.00f,
+					0.00f,
+					0.00f,
+					1.0f)));
+				 this->NotifyObservers(this);
+				break;
+			default:
+				this->mpRectBrush->SetColor(D2D1::ColorF(D2D1::ColorF(
+					0.75f,
+					0.75f,
+					0.75f,
+					1.0f)));
+				break;
+			}
 		}
 	}
 }
 
 void Button::SetBitmap(ID2D1Bitmap * bitmapPointer)
 {
-
-	if (this->mBitmapLoadedByFilePath)
+	if (bitmapPointer)
 	{
-		this->ReleaseCOM(this->mpBitMap);
 
+		if (this->mBitmapLoadedByFilePath)
+		{
+			this->ReleaseCOM(this->mpBitMap);
+
+		}
+		this->mpBitMap = bitmapPointer;
+		this->mBitmapLoadedByFilePath = false;
 	}
-	this->mpBitMap = bitmapPointer;
-	this->mBitmapLoadedByFilePath = false;
+	else
+	{
+		MessageBoxA(
+			NULL, 
+			"Class Error: #BUTTON : Bitmap was nullptr", 
+			NULL, NULL
+		);
+	}
 }
 
 void Button::LoadImageToBitmap(
@@ -413,6 +431,43 @@ void Button::SetButtonColor(float r, float g, float b, float a)
 const D2D1_COLOR_F Button::GetButtonColor() const
 {
 	return this->mpFillBrush->GetColor();
+}
+
+void Button::ForceButtState(BUTTON_STATE newState)
+{
+	//! POSSIBLE SOLUTION, this might also be shit idk
+	// Does everything that SetButtonStatus does, except the part where
+	// a clicked button notifies its observers, which makes the rest of the system
+	// think that the button was clicked when in fact we are just locking it
+	this->mCurrState = newState;
+	if (this->mBmpLoaded)
+	{
+		if (this->mpBitMap->GetSize().width != this->mWidth)
+		{
+			this->mBitmapRenderSize = D2D1::RectF(
+				this->mWidth * newState,
+				0,
+				this->mWidth* (newState + 1),
+				this->mpBitMap->GetSize().height);
+		}
+	}
+	this->mForcedButtState = true;
+}
+
+bool Button::ToggleForcedButtState()
+{
+	this->mForcedButtState = !this->mForcedButtState;
+	return this->mForcedButtState;
+}
+
+void Button::SetForcedButtState(bool newForcedState)
+{
+	this->mForcedButtState = newForcedState;
+}
+
+const float Button::GetOpacity()
+{
+	return this->mOpacity;
 }
 
 void Button::ReleaseCOM(IUnknown *object)
