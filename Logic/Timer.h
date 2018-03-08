@@ -21,6 +21,8 @@ public:
 	const std::string GetMinutesAsStr();
 	const std::string GetHoursAsStr();
 	const time_t GetTimeData();
+	const std::string GetFileFriendlyString() const;
+	void UpdateTimeStruct();
 private:
 	time_t mStartTime;
 	tm *pStartTimeStruct;
