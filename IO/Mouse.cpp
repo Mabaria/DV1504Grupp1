@@ -2,31 +2,25 @@
 
 const bool Mouse::IsButtonPressed(const Buttons button)
 {
-	//bool flag = false;
-
-	//if (InputDevice::buttonsPressed[button]
-	//	&& !InputDevice::buttonsActive[button])
-	//{
-	//	flag 
-	//		= InputDevice::buttonsActive[button] 
-	//		= InputDevice::buttonsPressed[button];
-	//}
-
-	//return flag;
-
 	// If active and previous does NOT match with button
-	char step2 = 0;
-	char step1 = (InputDevice::buttonsActive & ~InputDevice::buttonsPrevious);
-	if ((1 << button) & step1)
-		step2 = (1 << button) & step1;
+	//char step2 = 0;
+	//char step1 = (InputDevice::buttonsActive & ~InputDevice::buttonsPrevious);
+	//if ((1 << button) & step1)
+	//	step2 = (1 << button) & step1;
 	return (1 << button) & 
 		(InputDevice::buttonsActive & ~InputDevice::buttonsPrevious);
 }
 
 const bool Mouse::IsButtonDown(const Buttons button)
 {
-	//return InputDevice::buttonsPressed[button];
 	return (1 << button) & InputDevice::buttonsActive;
+}
+
+const bool Mouse::IsButtonReleased(const Buttons button)
+{
+	//return false;
+	return (1 << button) &
+		(InputDevice::buttonsPrevious & ~InputDevice::buttonsActive);
 }
 
 const int Mouse::GetX()
