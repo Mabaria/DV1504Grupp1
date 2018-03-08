@@ -15,7 +15,7 @@
 struct ObserverInfo
 {
 	Room *pRoom = nullptr;
-	uint32_t actionData = 0;
+	uint32_t actionData;
 };
 #endif
 

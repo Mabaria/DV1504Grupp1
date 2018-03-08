@@ -55,6 +55,11 @@ void ActionHandler::RotatePendingAction()
 	this->mActionRotation = (ActionData)temp;
 }
 
+uint32_t * ActionHandler::GetLastAction()
+{
+	return &this->mLastEvent.actionData;
+}
+
 const bool ActionHandler::IsWaiting() const
 {
 	return this->mWaitingForClick;
