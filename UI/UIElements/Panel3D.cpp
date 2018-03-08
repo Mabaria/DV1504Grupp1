@@ -513,15 +513,19 @@ const void Panel3D::CreateTexture(std::wstring texturePath)
 
 const void Panel3D::mUpdateGhostTransform()
 {
-	float icon_width = this->mGhostIconRect.right - this->mGhostIconRect.left;
+	// Calculating the center of the ghost for scaling and rotation.
+	float icon_width  = this->mGhostIconRect.right - this->mGhostIconRect.left;
 	float icon_height = this->mGhostIconRect.bottom - this->mGhostIconRect.top;
 
-	XMVECTOR ghost_center = {
+	XMVECTOR ghost_center = 
+	{
 		this->mGhostPosition.left + icon_width / 2.0f,
 		this->mGhostPosition.top + icon_height / 2.0f,
 		0.0f,
-		0.0f };
+		0.0f 
+	};
 
+	// Creating a 2D transform XMMATRIX, storing that in an XMFLOAT4X4.
 	XMFLOAT4X4 transform;
 	XMStoreFloat4x4(&transform, XMMatrixTransformation2D(
 		ghost_center,
@@ -531,6 +535,8 @@ const void Panel3D::mUpdateGhostTransform()
 		this->mGhostRotation * XM_PI / 2.0f,
 		{ 0.0f, 0.0f, 0.0f, 0.0f }));
 
+	// Element-wise copying every slot in the FLOAT4X4
+	// to the D2D1_MATRIX_4X4_F that the draw call requires.
 	for (int i = 0; i < 4; i++)
 	{
 		for (int j = 0; j < 4; j++)
@@ -771,11 +777,14 @@ const void Panel3D::SetIcon(uint32_t data)
 		number_bitmap_size.width / 3, 
 		number_bitmap_size.height / 3 };
 	
+	// Calculating the rectangle in the bitmap which holds the icon.
 	this->mGhostIconRect.top	= (icon_index / 4) * icon_size.height;
 	this->mGhostIconRect.left	= (icon_index % 4) * icon_size.width;
 	this->mGhostIconRect.bottom = this->mGhostIconRect.top	+ icon_size.height;
 	this->mGhostIconRect.right	= this->mGhostIconRect.left + icon_size.width;
 
+	// Initializing a number rect to not draw anything from the 
+	// number bitmap if there is no number.
 	D2D1_RECT_F number = { 0.0f, 0.0f, 0.0f, 0.0f };
 	
 	if (has_number)
@@ -804,11 +813,14 @@ const void Panel3D::RotateIcon()
 
 const void Panel3D::ResetIcon()
 {
-	this->mGhostActive			= false;
-	this->mGhostRotation		= 0;
-	this->mGhostNumberRect		= { 0 };
-	this->mGhostIconRect		= { 0 };
-	this->mGhostTransform		= { 0 };
+	this->mGhostActive		= false;
+	this->mGhostStationary	= false;
+	this->mGhostRotation	= 0;
+	this->mGhostScale		= 0.0f;
+	this->mGhostNumberRect	= { 0 };
+	this->mGhostIconRect	= { 0 };
+	this->mGhostTransform	= { 0 };
+	this->mGhostPosition	= { 0 };
 }
 
 MovableCameraComponent * Panel3D::GetMovableComponent()
@@ -865,16 +877,19 @@ const void Panel3D::Update()
 	//}
 	if (this->mGhostActive && this->IsMouseInsidePanel())
 	{
+		// Calculating the position of the ghost
+		// with the cursor position as the center.
 		Position mouse_pos = Mouse::GetPosition();
 
 		float icon_width = this->mGhostIconRect.right - this->mGhostIconRect.left;
 		float icon_height = this->mGhostIconRect.bottom - this->mGhostIconRect.top;
 
-		this->mGhostPosition.left = mouse_pos.x - icon_width / 2.0f;
-		this->mGhostPosition.top = mouse_pos.y - icon_height / 2.0f;
-		this->mGhostPosition.right = this->mGhostPosition.left + icon_width;
+		this->mGhostPosition.left	= mouse_pos.x - icon_width / 2.0f;
+		this->mGhostPosition.top	= mouse_pos.y - icon_height / 2.0f;
+		this->mGhostPosition.right	= this->mGhostPosition.left + icon_width;
 		this->mGhostPosition.bottom = this->mGhostPosition.top + icon_height;
 
+		// ----Super cool scaling----
 		static float max_zoom_in = 0.5f;
 		static float max_zoom_out = 0.15f;
 
@@ -894,6 +909,7 @@ const void Panel3D::Update()
 				this->mGhostScale = max_zoom_out;
 			}
 		}
+		// --------------------------
 
 		this->mUpdateGhostTransform();
 	}
@@ -928,10 +944,10 @@ const void Panel3D::Draw()
 
 	// For readability.
 	ID3D11PixelShader *pixel_shader = nullptr;
-	ID3D11Buffer* vertex_buffer = nullptr;
-	ID3D11Buffer* index_buffer = nullptr;
-	ID3D11Buffer* matrix_buffer = nullptr;
-	ID3D11Buffer* material_buffer = nullptr;
+	ID3D11Buffer* vertex_buffer		= nullptr;
+	ID3D11Buffer* index_buffer		= nullptr;
+	ID3D11Buffer* matrix_buffer		= nullptr;
+	ID3D11Buffer* material_buffer	= nullptr;
 	UINT numIndices = 0;
 
 	this->mDirect3D.GetContext()->VSSetConstantBuffers(
