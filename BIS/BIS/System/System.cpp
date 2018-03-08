@@ -344,18 +344,25 @@ void System::mHandleInput()
 
 void System::Update(Button * attribute)
 {
-	if (attribute->GetName().compare("ChangeCamera") == 0)
+	if (attribute)
 	{
-		if (this->mpTopViewPanel->GetActiveCamera() != this->mpTopViewCameraRotate)
+		if (attribute->GetName().compare("ChangeCamera") == 0)
 		{
-			this->mpTopViewPanel->SetCamera(this->mpTopViewCameraRotate);
-		}
-		else if (this->mpTopViewPanel->GetActiveCamera() != this->mpTopViewCameraPan)
-		{
-			this->mpTopViewPanel->SetCamera(this->mpTopViewCameraPan);
-		}
+			if (this->mpTopViewPanel->GetActiveCamera() != this->mpTopViewCameraRotate)
+			{
+				this->mpTopViewPanel->SetCamera(this->mpTopViewCameraRotate);
+			}
+			else if (this->mpTopViewPanel->GetActiveCamera() != this->mpTopViewCameraPan)
+			{
+				this->mpTopViewPanel->SetCamera(this->mpTopViewCameraPan);
+			}
 
-		this->mpTopViewPanel->GetActiveCamera()->Reset();
+			this->mpTopViewPanel->GetActiveCamera()->Reset();
+		}
+		else if (attribute->GetName().compare("Exit") == 0)
+		{
+			this->mpWindow->Close();
+		}
 	}
 }
 
@@ -588,6 +595,10 @@ void System::mSetupPanels()
 		"../../Models/ChangeCamera.png",
 		"ChangeCamera"
 	);
+	this->mpControlPanel->LoadImageToBitmap(
+		"../../Models/Exit.png",
+		"Exit"
+	);
 
 	this->mpControlPanel->AddButton(30, 30,
 		this->mpControlPanel->GetHeight() / 2 + 50,
@@ -618,6 +629,8 @@ void System::mSetupPanels()
 		this->mpControlPanel->GetBitmapByName("Crew"), "Crew");
 	this->mpControlPanel->AddButton(70, 70, 10, 90,
 		this->mpControlPanel->GetBitmapByName("ChangeCamera"), "ChangeCamera");
+	this->mpControlPanel->AddButton(70, 70, 10, this->mpControlPanel->GetWidth() - 80,
+		this->mpControlPanel->GetBitmapByName("Exit"), "Exit");
 
 	this->mpControlPanel->GetButtonByName("Reset")->
 		AddObserver(this->mpSideViewPanel);
@@ -630,6 +643,8 @@ void System::mSetupPanels()
 		AddObserver(&this->mpCrewPanel);
 
 	this->mpControlPanel->GetButtonByName("ChangeCamera")
+		->AddObserver(this);
+	this->mpControlPanel->GetButtonByName("Exit")
 		->AddObserver(this);
 
 	// Setting up the active log panel. (top, left, titleFontSize, objectFontSize)

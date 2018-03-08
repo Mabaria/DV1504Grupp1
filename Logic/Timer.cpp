@@ -152,6 +152,18 @@ const time_t Timer::GetTimeData()
 	return this->mStartTime;
 }
 
+const std::string Timer::GetFileFriendlyString() const
+{
+	char buffer[30];
+	strftime(buffer, 30, "%F~%H_%M_%S", this->pStartTimeStruct);
+	return std::string(buffer);
+}
+
+void Timer::UpdateTimeStruct() 
+{
+	this->pStartTimeStruct = localtime(&this->mStartTime);
+}
+
 void Timer::UpdateTime()
 {
 	this->mTimeNow = time(0);

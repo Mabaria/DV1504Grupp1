@@ -38,6 +38,7 @@ CrewPanel::~CrewPanel()
 
 void CrewPanel::Init(int width, int height, int top, int left, HWND parent, LPCTSTR title)
 {
+	//this->mSaveTextToDisk();
 	this->mInitTimers();
 	this->mpPanel = new Panel2D(
 		width,
@@ -87,18 +88,21 @@ void CrewPanel::Update(Button * button)
 	if (button->GetName() == "Crew" && this->mVisible == false)
 	{
 		this->mOpenWindow();
-		this->mSaveToDisk();
+		this->mSaveMetaToDisk();
 		this->mVisible = true;
 		this->mpPanel->ShowOnTop();
 	}
 	else if (button->GetName() == "Crew" && this->mVisible == true)
 	{
-		
+		this->mTimeData.sessionStart = 0;
+		this->mSaveMetaToDisk();
 		this->mVisible = false;
 		this->mpPanel->Hide();
 	}
 	else if (button->GetName() == "Exit")
 	{
+		this->mTimeData.sessionStart = 0;
+		this->mSaveMetaToDisk();
 		this->mVisible = false;
 		this->mpPanel->Hide();
 	}
@@ -126,15 +130,18 @@ void CrewPanel::Update(Button * button)
 				break;
 			}
 		}
-
-		this->mTimer.StartTimer();
-		this->mTimeData.startTime[i] = this->mTimer.GetTimeData();
+		Timer tempTimer;
+		tempTimer.StartTimer();
+		this->mTimeData.startTime[i] = tempTimer.GetTimeData();
 		this->mTimeData.textState[i] = 0;
-		this->mSaveToDisk();
+		this->mTimeData.pressed[i] = 1;
+		this->mSaveMetaToDisk();
+		this->mSaveTextToDisk();
+		tempTimer.UpdateTimeStruct();
 		// Set text with time
 		if (button->GetName().back() != '§')
 		{
-			std::string temp = this->mTimer.WhenTimerStarted();
+			std::string temp = tempTimer.WhenTimerStarted();
 			temp.insert(10, "\n\t\t\t\t  ");
 			this->mpPanel->GetTextBoxByName(button->GetName())->SetText
 			(button->GetName() + "\t\t\t\t  " + temp);
@@ -144,8 +151,21 @@ void CrewPanel::Update(Button * button)
 	else if (button->getBitmapPointer() ==
 		this->mpPanel->GetBitmapByName("On"))
 	{
+		bool found = false;
+		int i = 0;
+		for (; i < 22; i++)
+		{
+			if (button->GetName() == this->mSeaMen[i])
+			{
+				found = true;
+				break;
+			}
+		}
+		this->mTimeData.pressed[i] = 0;
+		this->mSaveMetaToDisk();
+		this->mSaveTextToDisk();
 		button->SetBitmap(this->mpPanel->GetBitmapByName("Off"));
-		this->mTimer.StartTimer();
+		//this->mTimer.StartTimer();
 		// Remove the time
 		if (button->GetName().back() != '§')
 		{
@@ -157,14 +177,28 @@ void CrewPanel::Update(Button * button)
 	else if (button->getBitmapPointer() ==
 		this->mpPanel->GetBitmapByName("Red"))
 	{
+		bool found = false;
+		int i = 0;
+		for (; i < 22; i++)
+		{
+			if (button->GetName() == this->mSeaMen[i] + "§")
+			{
+				found = true;
+				break;
+			}
+		}
 		if (button->GetOpacity() == 0.0f)
 		{
 			button->SetOpacity(1.0f);
+			this->mTimeData.hurt[i] = 1;
 		}
 		else
 		{
 			button->SetOpacity(0.0f);
+			this->mTimeData.hurt[i] = 0;
 		}
+		this->mSaveMetaToDisk();
+		this->mSaveTextToDisk();
 	}
 
 
@@ -189,6 +223,8 @@ bool CrewPanel::IsMouseInsidePanel()
 
 void CrewPanel::mCreateTextBoxesAndButtons()
 {
+	ID2D1Bitmap *tempBitmap;
+	Timer tempTimer;
 	for (int i = 0; i < 11; i++)
 	{
 		this->mpPanel->AddTextbox(
@@ -211,14 +247,13 @@ void CrewPanel::mCreateTextBoxesAndButtons()
 
 		if (this->mTimeData.startTime[i] != 0)
 		{
-			this->mTimer = Timer(this->mTimeData.startTime[i]);
-			std::string temp = this->mTimer.WhenTimerStarted();
+			tempTimer = Timer(this->mTimeData.startTime[i]);
+			std::string temp = tempTimer.WhenTimerStarted();
 			temp.insert(10, "\n\t\t\t\t  ");
 			this->mpPanel->GetTextBoxByName(this->mSeaMen[i])->SetText
 			(this->mSeaMen[i] + "\t\t\t\t  " + temp);
 		}
 
-		ID2D1Bitmap *tempBitmap;
 		if (this->mTimeData.textState[i] == 0)
 		{
 			tempBitmap = this->mpPanel->GetBitmapByName("Grid");
@@ -296,8 +331,8 @@ void CrewPanel::mCreateTextBoxesAndButtons()
 
 		if (this->mTimeData.startTime[i] != 0)
 		{
-			this->mTimer = Timer(this->mTimeData.startTime[i]);
-			std::string temp = this->mTimer.WhenTimerStarted();
+			tempTimer = Timer(this->mTimeData.startTime[i]);
+			std::string temp = tempTimer.WhenTimerStarted();
 			temp.insert(10, "\n\t\t\t\t  ");
 			this->mpPanel->GetTextBoxByName(this->mSeaMen[i])->SetText
 			(this->mSeaMen[i] + "\t\t\t\t  " + temp);
@@ -377,49 +412,101 @@ void CrewPanel::mInitTimers()
 	file.close();
 }
 
-void CrewPanel::mSaveToDisk()
+void CrewPanel::mSaveMetaToDisk()
 {
 
-	std::fstream file("../../Savefiles/Metafiles/crew_log.meta", std::ios::out | std::ios::binary);
+	std::fstream file("../../Savefiles/Metafiles/crew_log.meta",
+		std::ios::out | std::ios::binary);
 	if (!file.is_open())
 		return;
 	file.write((char*)&this->mTimeData, sizeof(TimeData));
 	file.close();
 }
 
+void CrewPanel::mSaveTextToDisk()
+{
+	//this->mTimer = Timer();
+	//std::string hello = this->mTimer.WhenTimerStarted();
+	this->mSessionTimer.UpdateTimeStruct();
+	std::fstream file(
+		"../../Savefiles/Crewlog/crew_" + this->mSessionTimer.GetFileFriendlyString()
+		+ ".txt",
+		std::ios::out);
+	if (!file.is_open())
+		return;
+	file << "Skeppsnummer\tNärvarande\t\tTid/Senast sedd\t\tSkadad" << std::endl
+		<< "----------------------------------------------------------------"
+		"-----------" << std::endl;
+	for (int i = 0; i < 22; i++)
+	{
+		Timer tempTimer = Timer(this->mTimeData.startTime[i]);
+		file << this->mSeaMen[i] << "\t\t"
+			<< (this->mTimeData.pressed[i] ? "Ja" : "Nej") << "\t\t\t"
+			<< (tempTimer.GetTimeData() != 0 ?
+				tempTimer.WhenTimerStarted() : "\t\t") << "\t"
+			<< (this->mTimeData.hurt[i] ? "Ja" : "Nej") << std::endl;
+	}
+		//<< "Mano\t\tNej\t\t\t" << this->mTimer.WhenTimerStarted()
+		//<< "\tNej";
+	file.close();
+}
+
 void CrewPanel::mOpenWindow()
 {
+	bool newSession = false;
+	if (this->mTimeData.sessionStart == 0)
+	{
+		ZeroMemory(&this->mTimeData.pressed, sizeof(char) * 22);
+		ZeroMemory(&this->mTimeData.hurt, sizeof(char) * 22);
+		this->mSessionTimer = Timer();
+		this->mTimeData.sessionStart = this->mSessionTimer.GetTimeData();
+		newSession = true;
+	}
+	else 
+	{
+		this->mSessionTimer = Timer(this->mTimeData.sessionStart);
+	}
 	for (int i = 0; i < 22; i++)
 	{
 		// Change the bitmap from on to off
-		this->mpPanel->GetButtonByName(this->mSeaMen[i])->SetBitmap
-		(this->mpPanel->GetBitmapByName("Off"));
+		if (this->mTimeData.pressed[i] == 0)
+			this->mpPanel->GetButtonByName(this->mSeaMen[i])->SetBitmap
+			(this->mpPanel->GetBitmapByName("Off"));
+		else 
+			this->mpPanel->GetButtonByName(this->mSeaMen[i])->SetBitmap
+			(this->mpPanel->GetBitmapByName("On"));
 
 		// Sets the opacity of the "skadad" button to 0
-		this->mpPanel->GetButtonByName(this->mSeaMen[i] + "§")->
-			SetOpacity(0.0f);
+		if (this->mTimeData.hurt[i] == 0)
+			this->mpPanel->GetButtonByName(this->mSeaMen[i] + "§")->
+				SetOpacity(0.0f);
+		else
+			this->mpPanel->GetButtonByName(this->mSeaMen[i] + "§")->
+			SetOpacity(1.0f);
 
+		if (newSession)
+		{ 
+			/*First time you clost the window the bitmap for the button behind
+			the time stamp is changed*/
+			if (this->mpPanel->GetButtonByName(this->mSeaMen[i] + "Text")
+				->getBitmapPointer() == this->mpPanel->GetBitmapByName("Grid"))
+			{
+				this->mpPanel->GetButtonByName(this->mSeaMen[i] + "Text")
+					->SetBitmap(this->mpPanel->GetBitmapByName("Red"));
+				this->mTimeData.textState[i] = 1;
+			}
 
-		/*First time you clost the window the bitmap for the button behind
-		the time stamp is changed*/
-		if (this->mpPanel->GetButtonByName(this->mSeaMen[i] + "Text")
-			->getBitmapPointer() == this->mpPanel->GetBitmapByName("Grid"))
-		{
-			this->mpPanel->GetButtonByName(this->mSeaMen[i] + "Text")
-				->SetBitmap(this->mpPanel->GetBitmapByName("Red"));
-			this->mTimeData.textState[i] = 1;
-		}
-
-		// The second time you clost the window you change the opacity
-		// of the button
-		else if (this->mpPanel->GetTextBoxByName
-		(this->mSeaMen[i])->GetText().size() > 5 &&
-			this->mpPanel->GetButtonByName(this->mSeaMen[i] + "Text")
-			->getBitmapPointer() == this->mpPanel->GetBitmapByName("Red"))
-		{
-			this->mpPanel->GetButtonByName(this->mSeaMen[i] + "Text")->
-				SetOpacity(0.5f);
-			this->mTimeData.textState[i] = 2;
+			// The second time you clost the window you change the opacity
+			// of the button
+			else if (this->mpPanel->GetTextBoxByName
+			(this->mSeaMen[i])->GetText().size() > 5 &&
+				this->mpPanel->GetButtonByName(this->mSeaMen[i] + "Text")
+				->getBitmapPointer() == this->mpPanel->GetBitmapByName("Red"))
+			{
+				this->mpPanel->GetButtonByName(this->mSeaMen[i] + "Text")->
+					SetOpacity(0.5f);
+				this->mTimeData.textState[i] = 2;
+			}
 		}
 	}
 }
