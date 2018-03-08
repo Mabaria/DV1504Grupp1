@@ -11,7 +11,7 @@
 #include "../../../Logic/ActionHandler.h"
 #include "../../../UI/UIElements/CrewPanel.h"
 
-class System : public Observer<ObserverInfo>, public Observer<Button>
+class System : public Observer<ObserverInfo>, public Observer<Button>, public Observable<std::string>
 {
 public:
 	System();

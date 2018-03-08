@@ -373,6 +373,11 @@ void System::Update(Button * attribute)
 
 		this->mpTopViewPanel->GetActiveCamera()->Reset();
 	}
+
+	else if (attribute->GetName().compare("Simulator") == 0)
+	{
+		this->NotifyObservers(&std::string("simulator_(de)activate"));
+	}
 }
 
 void System::mUpdateHover(std::string name, int index, bool activate)
@@ -599,6 +604,8 @@ void System::mSetupPanels()
 		this->mpControlPanel->GetBitmapByName("Crew"), "Crew");
 	this->mpControlPanel->AddButton(70, 70, 10, 90,
 		this->mpControlPanel->GetBitmapByName("ChangeCamera"), "ChangeCamera");
+	this->mpControlPanel->AddButton(70, 70, 10, 170,
+		this->mpControlPanel->GetBitmapByName("Crew"), "Simulator");
 
 	this->mpControlPanel->GetButtonByName("Reset")->
 		AddObserver(this->mpSideViewPanel);
@@ -611,6 +618,8 @@ void System::mSetupPanels()
 		AddObserver(&this->mpCrewPanel);
 
 	this->mpControlPanel->GetButtonByName("ChangeCamera")
+		->AddObserver(this);
+	this->mpControlPanel->GetButtonByName("Simulator")
 		->AddObserver(this);
 
 	// Setting up the active log panel. (top, left, titleFontSize, objectFontSize)

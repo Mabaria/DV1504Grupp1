@@ -16,19 +16,23 @@ Simulator::Simulator(System& sys, float chance, int seconds_between_a_new_chance
 	// Max limit for number to random to activate an event
 	this->mMaxLimit		= this->mMaxNumber * chance;	
 
+	// --- To add more events change these variables
 	this->mNrOfEvents = 3;
 	this->mEvents 
 		= new Event::Type[this->mNrOfEvents]
 	{ 
 		Event::Water, 
-		Event::Fire, 
-		Event::Gas, 
+		Event::Fire,
+		Event::Gas,
 	};
-
+	// ---
 
 	this->pSys = &sys;
-	this->timer.StartTimer();
+	this->mTimer.StartTimer();
 	srand((unsigned int)time(NULL));
+
+	this->mRunSimulator = false;
+	this->pSys->AddObserver(this);
 }
 
 Simulator::~Simulator()
@@ -38,20 +42,37 @@ Simulator::~Simulator()
 
 void Simulator::Update()
 {
-	Room *pSelected = this->pGetRandomRoom();
-	if (pSelected)
+	if (this->mRunSimulator)
 	{
-		this->pSys->UpdateRoom(pSelected);
+		Room *pSelected = this->pGetRandomRoom();
+		if (pSelected)
+		{
+			this->pSys->UpdateRoom(pSelected);
+		}
+	}
+}
+
+void Simulator::Update(std::string * attribute)
+{
+	if (attribute->compare("simulator_(de)activate") == 0)
+	{
+		this->mRunSimulator = !this->mRunSimulator;
+		this->mTimer.StartTimer();
 	}
 }
 
 Room * Simulator::pGetRandomRoom()
 {
+	// Make sure an event is added
+	bool event_added = false;
+
 	Room * pSelected = nullptr; // Selected Room
 
-	if (mSecondsBetweenUpdates <= this->timer.GetSeconds())
+	int fail_safe_count = 0; // if infinite loop was discovered
+
+	if (mSecondsBetweenUpdates <= this->mTimer.GetSeconds())
 	{
-		this->timer.StartTimer();
+		this->mTimer.StartTimer();
 
 		float number = (float)(rand() % this->mMaxNumber); // Do a roll
 
@@ -61,20 +82,26 @@ Room * Simulator::pGetRandomRoom()
 			int rEvent	= 0;		// Random Event
 			int rRoom	= 0;		// Random Room
 
-			// Make sure an event is added
-			bool event_added = false;
+			// Infinite loop when all rooms has events added
 			do {
 				if(!event_added)
 					rEvent = rand() % this->mNrOfEvents;
 
-				if(!pSelected)
-					rRoom = rand() % this->pSys->GetNrOfRooms();
+				do {
+					if (!pSelected || !event_added)
+						rRoom = rand() % this->pSys->GetNrOfRooms();
 
-				pSelected = this->pSys->GetRoomByIndex(rRoom);
+					pSelected = this->pSys->GetRoomByIndex(rRoom);
+				} while (!pSelected);
+
 				event_added = pSelected->AddSensorEvent(this->mEvents[rEvent]);
 
-			} while (pSelected->GetActiveEventIndex() == -1 || event_added);
+				fail_safe_count++;
+			} while (!event_added && fail_safe_count <= 50);
 		}
+
+		if (!event_added)
+			std::cout << "Failed to place event!" << std::endl;
 	}
 
 	return pSelected;
