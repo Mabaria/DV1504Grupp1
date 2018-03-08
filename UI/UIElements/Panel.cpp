@@ -200,6 +200,7 @@ bool Panel::IsMouseInsidePanel()
 	{
 		RECT window_rect;
 		GetWindowRect(this->mPanelWindow, &window_rect);
+
 		POINT mouse_pos;
 		GetCursorPos(&mouse_pos);
 		result = PtInRect(&window_rect, mouse_pos); // if mouse is inside panel

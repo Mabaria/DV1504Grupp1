@@ -874,7 +874,7 @@ const void Panel3D::Update()
 	//	if (target != nullptr)
 	//		this->mpActions->RemoveAction(&target);
 
-	//}
+	//}	
 	if (this->mGhostActive && this->IsMouseInsidePanel())
 	{
 
@@ -914,7 +914,6 @@ const void Panel3D::Update()
 
 		this->mUpdateGhostTransform();
 	}
-
 }
 
 const void Panel3D::Draw()

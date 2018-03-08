@@ -225,10 +225,15 @@ void System::mHandleInput()
 	static Room* last_picked_room = nullptr; 
 	Room *picked_room = nullptr;
 
+	// Only allows input if the cursor is within the top view panel,
+	// but not within any other panel that overlaps the top view panel.
+	// Also requires the look mode to be LOOK_TO because plotting should
+	// not be done in LOOK_AT mode.
 	if (this->mpTopViewPanel->IsMouseInsidePanel() &&
 		!this->mpMenuPanel->IsMouseInsidePanel() &&
 		!this->mpInfoPanel.IsMouseInsidePanel() &&
-		!this->mpCrewPanel.IsMouseInsidePanel())
+		!this->mpCrewPanel.IsMouseInsidePanel() &&
+		this->mpTopViewPanel->GetActiveCamera()->GetLookMode() == LOOK_TO)
 	{
 
 		Picking::GetWorldRay(
@@ -459,11 +464,13 @@ void System::mUpdateGhostIcons()
 	static bool is_reset = false;
 	static bool is_set = false;
 
-	if (this->mActionHandler.IsWaiting() && !this->mpMenuPanel->IsMouseInsidePanel())
+	if (this->mActionHandler.IsWaiting() && 
+		!this->mpMenuPanel->IsMouseInsidePanel() &&
+		this->mpTopViewPanel->IsMouseInsidePanel())
 	{
+		this->mpTopViewPanel->SetActionHover(true);
 		if (!is_set)
 		{
-			this->mpTopViewPanel->SetActionHover(true);
 			this->mpTopViewPanel->SetIcon(*this->mActionHandler.GetLastAction());
 			is_set = true;
 			is_reset = false;
@@ -486,7 +493,6 @@ void System::mUpdateGhostIcons()
 	else
 	{
 		this->mpTopViewPanel->SetActionHover(false);
-		is_set = false;
 	}
 }
 
