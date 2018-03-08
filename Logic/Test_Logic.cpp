@@ -209,13 +209,12 @@ bool Test_Logic::MainTest()
 		<< "\nSaving log to files:"
 		<< "\n  * Log: Savefiles/Testing/Logs/Log_second.log"
 		<< "\n  * Meta: Savefiles/Testing/Metafiles/Log_metas/Log_second.meta"
-		<< "\n  * Roomlog: Savefiles/Testring/Metafiles/Roomlog_metas_second/*"
-		<< "\n...";
+		<< "\n  * Roomlog: Savefiles/Testring/Metafiles/Roomlog_metas_second/*";
 	myBoat->SaveToFile_Log(
 		"../../Savefiles/Testing/Logs/Log_second.log",
 		"../../Savefiles/Testing/Metafiles/Log_metas/Log_second.meta",
 		"../../Savefiles/Testing/Metafiles/Roomlog_metas_second/");
-	std::cout << "Press enter to continue..." << std::endl << std::endl << std::endl;
+	std::cout << "\nPress enter to continue..." << std::endl << std::endl << std::endl;
 	getchar();
 
 
@@ -482,7 +481,7 @@ bool Test_Logic::CheckAmount(
 	{
 		pRoom = pBoat->GetRoomPointerAt(i);
 
-		if (pRoom->GetEventCount() != roomEventCountOutput[i] ||
+		if (pRoom->GetActiveEventCount() != roomEventCountOutput[i] ||
 			pRoom->GetActionCount() != roomActionCountOutput[i])
 			return false;
 	}

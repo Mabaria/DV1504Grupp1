@@ -158,7 +158,7 @@ void Room::GetActiveEvents(std::vector<LogEvent*> &output)
 	this->mRoomLog.GetActiveEvents(output);
 }
 
-int Room::GetEventCount() const
+int Room::GetActiveEventCount() const
 {
 	return this->mRoomLog.GetEventCount();
 }

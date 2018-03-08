@@ -750,7 +750,7 @@ void System::mSetupModels()
 
 void System::mSetupBoat()
 {
-	this->mBoat.LoadFromFile_Boat("../../SaveFiles/data.boat");
+	this->mBoat.LoadFromFile_Boat("../../SaveFiles/Boats/Vulcanus.boat");
 
 	// Creating the mesh and matrix list that boat 
 	// needs to load bounding boxes to the rooms.

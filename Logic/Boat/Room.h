@@ -74,7 +74,7 @@ public:
 	bool ClearEvent(Event::Type type);
 	void AddInputType(Event::Type type);
 	void GetActiveEvents(std::vector<LogEvent*> &output);
-	int GetEventCount() const;
+	int GetActiveEventCount() const;
 
 	// Action specific
 	bool AddAction(LogAction::Desc desc); /* No need to fill Desc.roomName

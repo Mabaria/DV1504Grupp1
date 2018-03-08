@@ -172,26 +172,28 @@ void EventMenu::UpdateEventButtonImages()
 
 	// Activate corresponding buttons only if there are any active events 
 	// (activate necessary events)
-	if (this->mpActiveRoom->GetActiveEventIndex() != -1)
+
+	size = this->mpActiveRoom->GetActiveEventCount();
+
+	std::vector<LogEvent*> active_events;
+	this->mpActiveRoom->GetActiveEvents(active_events);
+
+	for (int i = 0; i < size; i++)
 	{
-		int size = (int)this->mpActiveRoom->GetActiveEvents().size();
-		for (int i = 0; i < size; i++)
+		switch (active_events[i]->GetType())
 		{
-			switch (this->mpActiveRoom->GetActiveEvents()[i]->GetType())
-			{
-			case Event::Type::Fire:
-				this->mpPanel->GetButtonByName("Fire")->SetBitmap(
-					this->mpPanel->GetBitmapByName("FireOn"));
-				break;
-			case Event::Type::Water:
-				this->mpPanel->GetButtonByName("Water")->SetBitmap(
-					this->mpPanel->GetBitmapByName("WaterOn"));
-				break;
-			case Event::Type::Gas:
-				this->mpPanel->GetButtonByName("Gas")->SetBitmap(
-					this->mpPanel->GetBitmapByName("GasOn"));
-				break;
-			}
+		case Event::Type::Fire:
+			this->mpPanel->GetButtonByName("Fire")->SetBitmap(
+				this->mpPanel->GetBitmapByName("FireOn"));
+			break;
+		case Event::Type::Water:
+			this->mpPanel->GetButtonByName("Water")->SetBitmap(
+				this->mpPanel->GetBitmapByName("WaterOn"));
+			break;
+		case Event::Type::Gas:
+			this->mpPanel->GetButtonByName("Gas")->SetBitmap(
+				this->mpPanel->GetBitmapByName("GasOn"));
+			break;
 		}
 	}
 }
