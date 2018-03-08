@@ -22,13 +22,16 @@ public:
 
 private:
 	struct TimeData {
+		time_t sessionStart;
 		time_t startTime[22];
 		char textState[22];
+		char pressed[22];
+		char hurt[22];
 	};
-	//Timer *mTimers[22];
+	//Timer mTimers[22];
 	TimeData mTimeData;
 	Panel2D * mpPanel;
-	Timer mTimer;
+	Timer mSessionTimer;
 	bool mVisible, mButtonFocus, mDraggingWindow;
 	int mDragX, mDragY;
 	std::string *mSeaMen;
@@ -38,5 +41,6 @@ private:
 	void mOpenWindow();
 	
 	void mInitTimers();
-	void mSaveToDisk();
+	void mSaveMetaToDisk();
+	void mSaveTextToDisk();
 };
