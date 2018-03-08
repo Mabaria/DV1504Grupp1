@@ -51,6 +51,7 @@ class Timer
 {
 public:
 	Timer();
+	Timer(time_t startTime);
 	~Timer();
 	const std::string WhenTimerStarted() const;
 	const std::string WhenTimerStoped();
@@ -67,6 +68,7 @@ public:
 
 	void SetTimestamp(Timestamp ts);
 	Timestamp GetTimestamp() const;
+	const time_t GetTimeData();
 private:
 	time_t mStartTime;
 	tm *pStartTimeStruct;

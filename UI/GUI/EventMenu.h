@@ -4,7 +4,12 @@
 #include "../../Logic/Boat/Room.h"
 #include "../../UI/UIElements/Panel2D.h"
 #include "../../IO/ObserverPattern/Observer.h"
-class EventMenu : public Observer<Button>, public Observable<Room>
+#include "../../Logic/ActionHandler.h"
+
+class EventMenu : 
+	public Observer<Button>,
+	public Observer<ActionHandler>,
+	public Observable<ObserverInfo> 
 {
 	enum ACTION_MODE {
 		STANDARD, NUMBERS
@@ -30,6 +35,11 @@ public:
 	bool IsMouseInsidePanel();
 	bool IsVisible();
 
+	void UpdateEventButtonImages();
+
+	void SetActiveRoom(Room *room);
+
+	virtual void Update(ActionHandler* attribute);
 	virtual void Update(Button* attribute);
 	Event::Type GetLastClicked();
 
@@ -49,6 +59,8 @@ private:
 	ACTION_MODE mActionMode;
 	void mSwapActionMode();
 	INJURY_TYPE mInjuryType;
+
+	void mClearActionButtStates(); // Clears all buttons of forced button states
 
 
 	void InitButtons();

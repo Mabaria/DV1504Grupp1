@@ -65,6 +65,8 @@ public:
 	void LoadImageToBitmap(std::string imageFilePath, std::string bitmapName);
 	ID2D1Bitmap* GetBitmapByName(std::string bitmapName);
 
+	Direct2D* GetDirect2D();
+
 protected:
 	Direct2D * mDirect2D;
 	int mWidth;

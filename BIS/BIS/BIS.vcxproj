@@ -45,6 +45,8 @@
     <ClCompile Include="..\..\IO\ObserverPattern\Test_Obs.cpp" />
     <ClCompile Include="..\..\IO\Picking.cpp" />
     <ClCompile Include="..\..\IO\Test_Input.cpp" />
+    <ClCompile Include="..\..\Logic\ActionHandler.cpp" />
+
     <ClCompile Include="..\..\Logic\Boat\Boat.cpp" />
     <ClCompile Include="..\..\Logic\Boat\Deck.cpp" />
     <ClCompile Include="..\..\Logic\Boat\Room.cpp" />
@@ -59,6 +61,7 @@
     <ClCompile Include="..\..\Logic\Timer.cpp" />
     <ClCompile Include="..\..\UI\GUI\EventMenu.cpp" />
     <ClCompile Include="..\..\UI\UIElements\Button.cpp" />
+    <ClCompile Include="..\..\UI\UIElements\CrewPanel.cpp" />
     <ClCompile Include="..\..\UI\UIElements\InfoPanel.cpp" />
     <ClCompile Include="..\..\UI\UIElements\MeshObject.cpp" />
     <ClCompile Include="..\..\UI\UIElements\NotificationList.cpp" />
@@ -102,6 +105,8 @@
     <ClInclude Include="..\..\IO\Picking.h" />
     <ClInclude Include="..\..\IO\Test_Input.h" />
     <ClInclude Include="..\..\IO\Test_Picking.h" />
+    <ClInclude Include="..\..\Logic\ActionHandler.h" />
+
     <ClInclude Include="..\..\Logic\Boat\Boat.h" />
     <ClInclude Include="..\..\Logic\Boat\Deck.h" />
     <ClInclude Include="..\..\Logic\Boat\Room.h" />
@@ -117,6 +122,7 @@
     <ClInclude Include="..\..\Test\Testing.h" />
     <ClInclude Include="..\..\UI\GUI\EventMenu.h" />
     <ClInclude Include="..\..\UI\UIElements\Button.h" />
+    <ClInclude Include="..\..\UI\UIElements\CrewPanel.h" />
     <ClInclude Include="..\..\UI\UIElements\InfoPanel.h" />
     <ClInclude Include="..\..\UI\UIElements\MeshObject.h" />
     <ClInclude Include="..\..\UI\UIElements\NotificationList.h" />

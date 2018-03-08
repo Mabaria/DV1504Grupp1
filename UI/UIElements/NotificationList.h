@@ -8,7 +8,6 @@
 * Handles adding and removing without leaving "gaps".
 */
 
-
 class NotificationList
 {
 public:

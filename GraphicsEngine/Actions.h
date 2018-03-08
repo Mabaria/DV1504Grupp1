@@ -15,6 +15,8 @@ enum ActionData : uint32_t
 	Icon_Cooling_Wall = 6,
 	Icon_Supporting_Wall = 7,
 	Icon_Damaged_Bulk = 8,
+	Icon_Draining = 9,
+	Icon_Seal_Hole = 10,
 	Rotation_0 = 0,
 	Rotation_90 = 16,
 	Rotation_180 = 32,
@@ -29,11 +31,14 @@ enum ActionData : uint32_t
 	Number_6 = 3072,
 	Number_7 = 3584,
 	Number_8 = 4096,
-	Number_9 = 4608
+	Number_9 = 4608,
+	No_Action = 9001
 };
+
 
 class Actions {
 public:
+
 	struct ActionPtr
 	{
 		int index;

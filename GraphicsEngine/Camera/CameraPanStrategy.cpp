@@ -106,6 +106,7 @@ void CameraPanStrategy::FocusRoom(Room *pRoom, bool animate)
 	XMVECTOR new_pos = XMLoadFloat3(&pRoom->GetRoomCenter());
 	this->mDistance = this->mMinDistance;
 	new_pos = XMVectorSetY(new_pos, this->mDistance);
+	new_pos = XMVectorSetX(new_pos, XMVectorGetX(new_pos) - (pRoom->GetRoomSize().x / 4.0f));
 
 	if (this->mAnimate)
 	{
@@ -117,11 +118,21 @@ void CameraPanStrategy::FocusRoom(Room *pRoom, bool animate)
 	}
 }
 
-void CameraPanStrategy::Reset()
+void CameraPanStrategy::Reset(bool animate)
 {
-	// Get position for the reseted camera position
-	this->HandleChangeInCamera();
-	this->mAnimate = false;
+	// Get default values and animate to it
+	if (animate)
+	{
+		this->mAnimate = true;
+		XMVECTOR new_pos = this->pCamera->GetDefaultValues().pos;
+		XMStoreFloat3(&this->mNewPosition, new_pos);
+	}
+	else
+	{
+		this->mAnimate = false;
+		this->pCamera->Reset();
+		this->HandleChangeInCamera();
+	}
 }
 
 void CameraPanStrategy::HandleChangeInCamera()

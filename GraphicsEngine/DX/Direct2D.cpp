@@ -153,6 +153,49 @@ void Direct2D::InitDeviceAndContext(IDXGIDevice * dxgiDevice)
 		&this->mpContext);
 }
 
+void Direct2D::DrawLine(float startX, float startY, float endX, float endY, float lineThickness, float r, float g, float b, float a)
+{
+	ID2D1SolidColorBrush* line_brush;
+	this->mpRenderTarget->CreateSolidColorBrush(
+		D2D1::ColorF(D2D1::ColorF::Black),
+		&line_brush);
+	line_brush->SetColor(D2D1::ColorF(r, g, b, a));
+	this->mpRenderTarget->BeginDraw();
+	this->mpRenderTarget->DrawLine(
+		D2D1::Point2F(startX, startY),
+		D2D1::Point2F(endX, endY),
+		line_brush,
+		lineThickness);
+	this->mpRenderTarget->EndDraw();
+	line_brush->Release();
+	
+}
+
+void Direct2D::DrawRect(
+	float left,
+	float top,
+	float right,
+	float bottom,
+	float lineThickness,
+	float r,
+	float g,
+	float b,
+	float a)
+{
+	ID2D1SolidColorBrush* rect_brush;
+	this->mpRenderTarget->CreateSolidColorBrush(
+		D2D1::ColorF(D2D1::ColorF::Black),
+		&rect_brush);
+	rect_brush->SetColor(D2D1::ColorF(r, g, b, a));
+	this->mpRenderTarget->BeginDraw();
+	this->mpRenderTarget->DrawRectangle(
+		D2D1::RectF(left,top,right,bottom),
+		rect_brush,
+		lineThickness);
+	this->mpRenderTarget->EndDraw();
+	rect_brush->Release();
+}
+
 void Direct2D::mCreateWicFactory()
 {
 	CoInitialize(nullptr);

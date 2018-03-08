@@ -7,6 +7,12 @@ Timer::Timer()
 	
 }
 
+Timer::Timer(time_t startTime)
+{
+	this->mStartTime = startTime;
+	this->pStartTimeStruct = localtime(&this->mStartTime);
+}
+
 Timer::~Timer()
 {
 }
@@ -172,6 +178,11 @@ Timestamp Timer::GetTimestamp() const
 	ts.clock.second = tmp->tm_sec;
 
 	return ts;
+}
+
+const time_t Timer::GetTimeData()
+{
+	return this->mStartTime;
 }
 
 void Timer::UpdateTime()

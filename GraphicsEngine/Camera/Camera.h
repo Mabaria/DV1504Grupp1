@@ -147,6 +147,8 @@ public:
 	void SetProjectionMode(const PROJECTION_MODE new_projection_mode);
 
 	void Update(Button* attribute);
+	void Reset();
+	CAMERA_DEFAULT_VALUES GetDefaultValues();
 
 private:
 	DirectX::XMVECTOR mCameraPosition;

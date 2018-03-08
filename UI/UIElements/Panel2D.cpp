@@ -129,6 +129,11 @@ Button * Panel2D::GetButtonByIndex(unsigned int index)
 	return to_return;
 }
 
+int Panel2D::GetNrOfButtons() const
+{
+	return (int)this->mButtonVector.size();
+}
+
 
 TextBox * Panel2D::GetTextBoxByName(std::string name)
 {
@@ -388,8 +393,10 @@ void Panel2D::mUpdateButtons()
 					if (Mouse::IsButtonPressed(Buttons::Left))
 					{
 						button->SetRectStatus(BUTTON_STATE::CLICKED);
-						notification_object->NotifyObservers
-						(notification_object->GetRoom());
+						ObserverInfo obs_inf;
+						obs_inf.pRoom = notification_object->GetRoom();
+						obs_inf.actionData = No_Action;
+						notification_object->NotifyObservers(&obs_inf);
 					}
 					else if (!Mouse::IsButtonDown(Buttons::Left) ||
 						button->GetButtState() != BUTTON_STATE::CLICKED)
