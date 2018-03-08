@@ -14,7 +14,7 @@ namespace Test_Logic
 	*/
 
 	// Log
-	bool MainTest(); // To test all, call this function
+	bool MainTest(bool waitForInput = true); // To test all, call this function
 
 	void FillLog(
 		Boat *pBoat,

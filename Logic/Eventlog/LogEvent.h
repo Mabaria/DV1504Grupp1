@@ -55,7 +55,7 @@ public:
 	
 	Timer *GetTimer();
 
-
+	int GetSecondsSinceStart() const;
 private:
 
 	Timer mTimer;

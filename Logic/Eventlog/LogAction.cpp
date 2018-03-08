@@ -373,3 +373,8 @@ Timestamp LogAction::GetTimestamp_Start() const
 {
 	return this->mTimer.GetTimestamp();
 }
+
+int LogAction::GetSecondsSinceStart() const
+{
+	return this->mTimer.GetSecondsSinceStart();
+}

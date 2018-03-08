@@ -1,6 +1,6 @@
 #include "Test_Logic.h"
 
-bool Test_Logic::MainTest()
+bool Test_Logic::MainTest(bool waitForInput)
 {
 	std::cout << "-------------------- Testing Boat and Log --------------------";
 	std::cout << std::endl << std::endl;
@@ -20,9 +20,13 @@ bool Test_Logic::MainTest()
 		<< "actions."
 		<< "\n\t9. Save all stored information again, to new files."
 		<< "\n\t10. Compare all the old files with the new files.";
-	std::cout << "\nPress enter to continue..." << std::endl << std::endl
-		<< std::endl;
-	getchar();	
+
+	if (waitForInput)
+	{
+		std::cout << "\nPress enter to continue..." << std::endl << std::endl
+			<< std::endl;
+		getchar();
+	}
 
 	// Necessary variables
 	Boat *myBoat = nullptr;
@@ -54,8 +58,12 @@ bool Test_Logic::MainTest()
 	// Clear old files
 	myBoat->ClearFiles();
 
-	std::cout << "Press enter to continue..." << std::endl << std::endl << std::endl;
-	getchar();
+	if (waitForInput)
+	{
+		std::cout << "\nPress enter to continue..." << std::endl << std::endl
+			<< std::endl;
+		getchar();
+	}
 
 	for (int i = 0; i < myBoat->GetRoomCount(); i++)
 	{
@@ -77,8 +85,12 @@ bool Test_Logic::MainTest()
 		roomEventCount,
 		roomActionCount);
 
-	std::cout << "Press enter to continue..." << std::endl << std::endl;
-	getchar();
+	if (waitForInput)
+	{
+		std::cout << "\nPress enter to continue..." << std::endl << std::endl
+			<< std::endl;
+		getchar();
+	}
 
 
 
@@ -96,9 +108,12 @@ bool Test_Logic::MainTest()
 		roomActionCount))
 		return false;
 
-	std::cout << "\nPress enter to continue..." << std::endl << std::endl
-		<< std::endl;
-	getchar();
+	if (waitForInput)
+	{
+		std::cout << "\nPress enter to continue..." << std::endl << std::endl
+			<< std::endl;
+		getchar();
+	}
 
 
 
@@ -116,9 +131,12 @@ bool Test_Logic::MainTest()
 		roomEventCount,
 		roomActionCount);
 
-	std::cout << "\nPress enter to continue..." << std::endl << std::endl
-		<< std::endl;
-	getchar();
+	if (waitForInput)
+	{
+		std::cout << "\nPress enter to continue..." << std::endl << std::endl
+			<< std::endl;
+		getchar();
+	}
 
 
 
@@ -136,9 +154,12 @@ bool Test_Logic::MainTest()
 		roomActionCount))
 		return false;
 
-	std::cout << "\nPress enter to continue..." << std::endl << std::endl
-		<< std::endl;
-	getchar();
+	if (waitForInput)
+	{
+		std::cout << "\nPress enter to continue..." << std::endl << std::endl
+			<< std::endl;
+		getchar();
+	}
 
 
 
@@ -169,8 +190,12 @@ bool Test_Logic::MainTest()
 		"../../Savefiles/Testing/Metafiles/Log_metas/Log_first.meta",
 		"../../Savefiles/Testing/Metafiles/Roomlog_metas_first/"))
 		return false;
-	std::cout << "\nPress enter to continue..." << std::endl << std::endl << std::endl;
-	getchar();
+	if (waitForInput)
+	{
+		std::cout << "\nPress enter to continue..." << std::endl << std::endl
+			<< std::endl;
+		getchar();
+	}
 
 
 
@@ -188,9 +213,12 @@ bool Test_Logic::MainTest()
 		roomActionCount))
 		return false;
 
-	std::cout << "\nPress enter to continue..." << std::endl << std::endl
-		<< std::endl;
-	getchar();
+	if (waitForInput)
+	{
+		std::cout << "\nPress enter to continue..." << std::endl << std::endl
+			<< std::endl;
+		getchar();
+	}
 
 
 
@@ -207,8 +235,12 @@ bool Test_Logic::MainTest()
 		"../../Savefiles/Testing/Logs/Log_second.log",
 		"../../Savefiles/Testing/Metafiles/Log_metas/Log_second.meta",
 		"../../Savefiles/Testing/Metafiles/Roomlog_metas_second/");
-	std::cout << "\nPress enter to continue..." << std::endl << std::endl << std::endl;
-	getchar();
+	if (waitForInput)
+	{
+		std::cout << "\nPress enter to continue..." << std::endl << std::endl
+			<< std::endl;
+		getchar();
+	}
 
 
 
@@ -265,14 +297,16 @@ bool Test_Logic::MainTest()
 	}
 	std::cout << "ok!";
 
-	std::cout << "\nPress enter to continue..." << std::endl << std::endl << std::endl;
-	getchar();
+	if (waitForInput)
+	{
+		std::cout << "\nPress enter to continue..." << std::endl << std::endl
+			<< std::endl;
+		getchar();
+	}
 
 	std::cout << "\n\nTest finished." << std::endl;
 	std::cout << "--------------------------------------------------------------";
 	std::cout << std::endl;
-
-	getchar();
 
 
 
@@ -336,7 +370,7 @@ void Test_Logic::FillLog(
 	}
 
 
-	for (int j = 0; j < 150000000; j++);
+	for (int j = 0; j < 500000000; j++);
 
 	std::cout << std::endl;
 
@@ -383,6 +417,8 @@ void Test_Logic::FillLog(
 		// Waste some time to get some time differences between the actions
 		for (int j = 0; j < 150000000; j++);
 	}
+
+	for (int j = 0; j < 500000000; j++);
 }
 
 void Test_Logic::ClearSome(
@@ -424,7 +460,7 @@ void Test_Logic::ClearSome(
 		for (int j = 0; j < 150000000; j++);
 	}
 
-	for (int j = 0; j < 150000000; j++);
+	for (int j = 0; j < 500000000; j++);
 
 	std::cout << "\n\nClearing actions";
 
@@ -453,6 +489,8 @@ void Test_Logic::ClearSome(
 
 		for (int j = 0; j < 150000000; j++);
 	}
+
+	for (int j = 0; j < 500000000; j++);
 }
 
 bool Test_Logic::CheckAmount(

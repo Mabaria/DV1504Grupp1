@@ -89,6 +89,8 @@ public:
 	Timestamp GetTimestamp_Start() const;
 
 
+	int GetSecondsSinceStart() const;
+
 private:
 
 	Timer mTimer;

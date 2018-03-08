@@ -69,6 +69,8 @@ public:
 	void SetTimestamp(Timestamp ts);
 	Timestamp GetTimestamp() const;
 	const time_t GetTimeData();
+
+	int GetSecondsSinceStart() const;
 private:
 	time_t mStartTime;
 	tm *pStartTimeStruct;

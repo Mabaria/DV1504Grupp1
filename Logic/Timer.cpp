@@ -185,6 +185,11 @@ const time_t Timer::GetTimeData()
 	return this->mStartTime;
 }
 
+int Timer::GetSecondsSinceStart() const
+{
+	return (int)this->mStartTime;
+}
+
 void Timer::UpdateTime()
 {
 	this->mTimeNow = time(0);

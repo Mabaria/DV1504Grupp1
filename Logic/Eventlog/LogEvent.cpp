@@ -237,6 +237,11 @@ Timer * LogEvent::GetTimer()
 	return &this->mTimer;
 }
 
+int LogEvent::GetSecondsSinceStart() const
+{
+	return this->mTimer.GetSecondsSinceStart();
+}
+
 
 
 

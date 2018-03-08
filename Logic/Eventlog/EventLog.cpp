@@ -190,7 +190,7 @@ void EventLog::SaveToFile(std::string filePath, std::string metaFile) const
 			pEvent = this->mpLogEvents[nextEvent];
 			pAction = this->mpActions[nextAction];
 
-			if (pAction->GetTimestamp_Start() < pEvent->GetTimestamp_Start())
+			if (pAction->GetSecondsSinceStart() < pEvent->GetSecondsSinceStart())
 			{
 				file_log
 					<< "a"
