@@ -877,6 +877,7 @@ const void Panel3D::Update()
 	//}
 	if (this->mGhostActive && this->IsMouseInsidePanel())
 	{
+
 		// Calculating the position of the ghost
 		// with the cursor position as the center.
 		Position mouse_pos = Mouse::GetPosition();
@@ -913,6 +914,7 @@ const void Panel3D::Update()
 
 		this->mUpdateGhostTransform();
 	}
+
 }
 
 const void Panel3D::Draw()
