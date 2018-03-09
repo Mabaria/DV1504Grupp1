@@ -82,6 +82,7 @@ Panel3D::Panel3D(int width, int height, int top, int left,
 	// Puts the ghost action feature in a zero state.
 	this->ResetIcon();
 
+	this->mUsingGhosts = false;
 }
 
 Panel3D::~Panel3D()
@@ -798,6 +799,7 @@ void Panel3D::InitActions()
 		
 		this->LoadImageToBitmap("../../Models/Symbols.dds", "iconBitmap");
 		this->LoadImageToBitmap("../../Models/Numbers.dds", "numberBitmap");
+		this->mUsingGhosts = true;
 	}
 }
 
@@ -930,7 +932,10 @@ const void Panel3D::Update()
 		this->mShowCursor = show_cursor;
 		ShowCursor(this->mShowCursor);
 	}
-	this->mUpdateGhosts();
+	if (this->mUsingGhosts)
+	{
+		this->mUpdateGhosts();
+	}
 }
 
 const void Panel3D::Draw()
@@ -1061,7 +1066,10 @@ const void Panel3D::Draw()
 		this->mpActions->Draw();
 	}
 
-	this->mDrawGhosts();
+	if (this->mUsingGhosts)
+	{
+		this->mDrawGhosts();
+	}
 
 	this->mDirect3D.GetSwapChain()->Present(1, 0);
 }
