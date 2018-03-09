@@ -57,9 +57,10 @@ void InfoPanel::Init(int width, int height, int top, int left, HWND parent, LPCT
 	body_strings.push_back("Vänster musknapp: Välja rum eller händelser "
 		"samt lägga till och ta bort händelser.\n"
 		"Höger musknapp: Håll in och dra för att flytta kameran.\n\n"
-		"När du klickar på ett rum så kommer vyn att fokuseras på det rummet "
+		"När du klickar på ett rum så fokuseras vyn på det rummet "
 		"och en ny meny öppnas. I denna finns knappar för att lägga "
-		"till händelser och åtgärder.\n\nKlicka på en helfärgad knapp för att "
+		"till händelser och åtgärder. Klicka någonstans utanför modellen för "
+		"att återvända till vanlig vy.\n\nKlicka på en helfärgad knapp för att "
 		"lägga till den händelsen i hela rummet.\n\nKlicka på en symbolknapp "
 		"för att välja den symbolen. Vänsterklicka sedan någonstans i rummet "
 		"för att placera den. Du kan även högerklicka för att rotera symbolen.\n\n"
@@ -161,8 +162,8 @@ void InfoPanel::Update(Button *button)
 {
 	if (button->GetName() == "Info")
 	{
-		this->mVisible = true;
-		this->mpPanel->ShowOnTop();
+		this->mVisible = !this->mVisible;
+		(mVisible) ? this->mpPanel->ShowOnTop() : this->mpPanel->Hide();
 	}
 	else if (button->GetName() == "Exit")
 	{
