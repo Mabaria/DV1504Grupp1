@@ -60,5 +60,7 @@ Event::Type Event::GetType(int id)
 			return Event::Type::Water;
 		case 3:
 			return Event::Type::Gas;
+		default:
+			return Event::Type::Injury; // No default-type exists
 	}
 }
