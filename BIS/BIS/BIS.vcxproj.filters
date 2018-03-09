@@ -261,6 +261,9 @@
     <ClInclude Include="..\..\Logic\Test_Logic.h">
       <Filter>Header Files\Logic\Test</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Logic\Eventlog\LogElement.h">
+      <Filter>Header Files\Logic</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BIS.cpp">
@@ -460,6 +463,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Logic\Test_Logic.cpp">
       <Filter>Source Files\Logic\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Logic\Eventlog\LogElement.cpp">
+      <Filter>Source Files\Logic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

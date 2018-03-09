@@ -3,6 +3,7 @@
 #include <vector>
 #include <fstream>
 
+#include "LogElement.h"
 #include "LogEvent.h"
 #include "LogAction.h"
 
@@ -69,6 +70,7 @@ private:
 
 	std::vector<LogEvent*> mpLogEvents;
 	std::vector<LogAction*> mpActions;
+	std::vector<LogElement*> mpElements;
 
 	std::string mLogPath;
 	std::string mMetaPath;

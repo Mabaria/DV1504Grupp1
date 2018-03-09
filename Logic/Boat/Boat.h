@@ -51,17 +51,17 @@
 *			1. LoadFromFile_Boat( .boat )
 *			2. LoadFromFile_Log( .log , .meta , metafolder/ )
 *
-
-
+*
+*
 *	-- Room
-	
-	Get the room's index:
-		The room stores three different indices.
-			* Index_Boat		- The room's index in the boat.
-			* Index_Deck		- The room's index in the deck.
-			* Index_DeckInBoat	- The room's deck index in the boat.
-		You can get these indices by first obtaining the rooms pointer, then
-		call the corresponding GetIndex_[...]() function.
+*	
+*	Get the room's index:
+*		The room stores three different indices.
+*			* Index_Boat		- The room's index in the boat.
+*			* Index_Deck		- The room's index in the deck.
+*			* Index_DeckInBoat	- The room's deck index in the boat.
+*		You can get these indices by first obtaining the rooms pointer, then
+*		call the corresponding GetIndex_[...]() function.
 *
 *
 *
@@ -124,12 +124,14 @@
 *		active Actions in that room.
 *		If you only wan't to know how many Actions that are active in the room,
 *		call the room's GetActionCount() function instead.
-
-
+*
+*
 *	-- Notations
-	
-	When clearing an Event/Action, the Log will automatically create a new Event/
-	Action set as inactive. This is just to log the clearing.
+*	
+*	When clearing an Event/Action, the Log will automatically create a new Event/
+*	Action set as inactive. This is just to log the clearing.
+*
+*	LogElement is only used to find the right order of added events and actions.
 */
 
 class Boat

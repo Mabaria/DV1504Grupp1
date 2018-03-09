@@ -1,6 +1,6 @@
 #include "Test_Logic.h"
 
-bool Test_Logic::MainTest(bool waitForInput)
+bool Test_Logic::MainTest(bool waitForInput, bool timeDelay)
 {
 	std::cout << "-------------------- Testing Boat and Log --------------------";
 	std::cout << std::endl << std::endl;
@@ -19,12 +19,12 @@ bool Test_Logic::MainTest(bool waitForInput)
 		<< "\n\t8. Check log and rooms for correct amount of events and "
 		<< "actions."
 		<< "\n\t9. Save all stored information again, to new files."
-		<< "\n\t10. Compare all the old files with the new files.";
+		<< "\n\t10. Compare all the old files with the new files."
+		<< std::endl;
 
 	if (waitForInput)
 	{
-		std::cout << "\nPress enter to continue..." << std::endl << std::endl
-			<< std::endl;
+		std::cout << "Press enter to continue...";
 		getchar();
 	}
 
@@ -47,23 +47,24 @@ bool Test_Logic::MainTest(bool waitForInput)
 	*	Create boat and load from file
 	*/
 
-	std::cout << "Loading boat from file...";
+	std::cout << "\nLoading boat from file...";
 	myBoat = new Boat;
 	myBoat->LoadFromFile_Boat("../../Savefiles/Boats/Vulcanus.boat");
 	myBoat->SetLogPath("../../Savefiles/Testing/Logs/Log_first.log");
 	myBoat->SetLogMetaPath("../../Savefiles/Testing/Metafiles/Log_metas/Log_first.meta");
 	myBoat->SetRoomMetaDir("../../Savefiles/Testing/Metafiles/Roomlog_metas_first/");
-	std::cout << "done!" << std::endl;
+	std::cout << "done!";
 
 	// Clear old files
 	myBoat->ClearFiles();
 
 	if (waitForInput)
 	{
-		std::cout << "\nPress enter to continue..." << std::endl << std::endl
-			<< std::endl;
+		std::cout << "\nPress enter to continue...";
 		getchar();
 	}
+
+	std::cout << std::endl << std::endl;
 
 	for (int i = 0; i < myBoat->GetRoomCount(); i++)
 	{
@@ -76,6 +77,7 @@ bool Test_Logic::MainTest(bool waitForInput)
 	*/
 
 	Test_Logic::FillLog(
+		timeDelay,
 		myBoat,
 		myActiveIndices,
 		totEventCount,
@@ -87,12 +89,11 @@ bool Test_Logic::MainTest(bool waitForInput)
 
 	if (waitForInput)
 	{
-		std::cout << "\nPress enter to continue..." << std::endl << std::endl
-			<< std::endl;
+		std::cout << "\nPress enter to continue...";
 		getchar();
 	}
 
-
+	std::cout << std::endl;
 
 	/**
 	*	Check log and rooms for correct amount of events and actions.
@@ -110,18 +111,18 @@ bool Test_Logic::MainTest(bool waitForInput)
 
 	if (waitForInput)
 	{
-		std::cout << "\nPress enter to continue..." << std::endl << std::endl
-			<< std::endl;
+		std::cout << "\nPress enter to continue...";
 		getchar();
 	}
 
-
+	std::cout << std::endl;
 
 	/**
 	*	Clear some events and actions
 	*/
 
 	Test_Logic::ClearSome(
+		timeDelay,
 		myBoat,
 		myActiveIndices,
 		totEventCount,
@@ -133,12 +134,11 @@ bool Test_Logic::MainTest(bool waitForInput)
 
 	if (waitForInput)
 	{
-		std::cout << "\nPress enter to continue..." << std::endl << std::endl
-			<< std::endl;
+		std::cout << "\nPress enter to continue...";
 		getchar();
 	}
 
-
+	std::cout << std::endl << std::endl;
 
 	/**
 	*	Check log and rooms for correct amount of events and actions.
@@ -156,12 +156,11 @@ bool Test_Logic::MainTest(bool waitForInput)
 
 	if (waitForInput)
 	{
-		std::cout << "\nPress enter to continue..." << std::endl << std::endl
-			<< std::endl;
+		std::cout << "\nPress enter to continue...";
 		getchar();
 	}
 
-
+	std::cout << std::endl << std::endl;
 
 	/**
 	*	Scrap current log and load old log from file
@@ -174,7 +173,15 @@ bool Test_Logic::MainTest(bool waitForInput)
 	myBoat->SetLogPath("../../Savefiles/Testing/Logs/Log_second.log");
 	myBoat->SetLogMetaPath("../../Savefiles/Testing/Metafiles/Log_metas/Log_second.meta");
 	myBoat->SetRoomMetaDir("../../Savefiles/Testing/Metafiles/Roomlog_metas_second/");
-	std::cout << "done!" << std::endl;
+	std::cout << "done!";
+
+	if (waitForInput)
+	{
+		std::cout << "\nPress enter to continue...";
+		getchar();
+	}
+
+	std::cout << std::endl;
 
 	// Clear old files
 	myBoat->ClearFiles();
@@ -192,12 +199,11 @@ bool Test_Logic::MainTest(bool waitForInput)
 		return false;
 	if (waitForInput)
 	{
-		std::cout << "\nPress enter to continue..." << std::endl << std::endl
-			<< std::endl;
+		std::cout << "\nPress enter to continue...";
 		getchar();
 	}
 
-
+	std::cout << std::endl << std::endl;
 
 	/**
 	*	Check log and rooms for correct amount of events and actions.
@@ -215,12 +221,11 @@ bool Test_Logic::MainTest(bool waitForInput)
 
 	if (waitForInput)
 	{
-		std::cout << "\nPress enter to continue..." << std::endl << std::endl
-			<< std::endl;
+		std::cout << "\nPress enter to continue...";
 		getchar();
 	}
 
-
+	std::cout << std::endl;
 
 	/**
 	*	Save log to new file
@@ -237,12 +242,11 @@ bool Test_Logic::MainTest(bool waitForInput)
 		"../../Savefiles/Testing/Metafiles/Roomlog_metas_second/");
 	if (waitForInput)
 	{
-		std::cout << "\nPress enter to continue..." << std::endl << std::endl
-			<< std::endl;
+		std::cout << "\nPress enter to continue...";
 		getchar();
 	}
 
-
+	std::cout << std::endl;
 
 	/**
 	*	Compare old and new saved files
@@ -299,12 +303,18 @@ bool Test_Logic::MainTest(bool waitForInput)
 
 	if (waitForInput)
 	{
-		std::cout << "\nPress enter to continue..." << std::endl << std::endl
-			<< std::endl;
+		std::cout << "\nPress enter to continue...";
 		getchar();
 	}
 
 	std::cout << "\n\nTest finished." << std::endl;
+
+	if (waitForInput)
+	{
+		std::cout << "\nPress enter to continue...";
+		getchar();
+	}
+
 	std::cout << "--------------------------------------------------------------";
 	std::cout << std::endl;
 
@@ -322,6 +332,7 @@ bool Test_Logic::MainTest(bool waitForInput)
 }
 
 void Test_Logic::FillLog(
+	bool timeDelay,
 	Boat *pBoat,
 	std::vector<int*> &indexOutput,
 	int &totEventOutput,
@@ -366,11 +377,12 @@ void Test_Logic::FillLog(
 		roomEventCountOutput[i]++;
 		
 		// Waste some time to get some time differences between the events
-		for (int j = 0; j < 150000000; j++);
+		if (timeDelay)
+			for (int j = 0; j < 100000000; j++);
 	}
 
-
-	for (int j = 0; j < 500000000; j++);
+	if (timeDelay)
+		for (int j = 0; j < 100000000; j++);
 
 	std::cout << std::endl;
 
@@ -414,14 +426,16 @@ void Test_Logic::FillLog(
 			<< "' to " << myRoom->GetName()
 			<< " " << i + 1 << "/19" << std::endl;
 
-		// Waste some time to get some time differences between the actions
-		for (int j = 0; j < 150000000; j++);
+		if (timeDelay)
+			for (int j = 0; j < 100000000; j++);
 	}
 
-	for (int j = 0; j < 500000000; j++);
+	if (timeDelay)
+		for (int j = 0; j < 100000000; j++);
 }
 
 void Test_Logic::ClearSome(
+	bool timeDelay,
 	Boat *pBoat,
 	std::vector<int*> &indexOutput,
 	int &totEventOutput,
@@ -457,10 +471,12 @@ void Test_Logic::ClearSome(
 		activeEventOutput--;
 		roomEventCountOutput[i * 2]--;
 
-		for (int j = 0; j < 150000000; j++);
+		if (timeDelay)
+			for (int j = 0; j < 100000000; j++);
 	}
 
-	for (int j = 0; j < 500000000; j++);
+	if (timeDelay)
+		for (int j = 0; j < 100000000; j++);
 
 	std::cout << "\n\nClearing actions";
 
@@ -487,10 +503,12 @@ void Test_Logic::ClearSome(
 		activeActionOutput--;
 		roomActionCountOutput[i * 2]--;
 
-		for (int j = 0; j < 150000000; j++);
+		if (timeDelay)
+			for (int j = 0; j < 100000000; j++);
 	}
 
-	for (int j = 0; j < 500000000; j++);
+	if (timeDelay)
+		for (int j = 0; j < 100000000; j++);
 }
 
 bool Test_Logic::CheckAmount(

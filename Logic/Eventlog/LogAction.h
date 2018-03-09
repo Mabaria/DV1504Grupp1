@@ -4,7 +4,9 @@
 #include "../Timer.h"
 #include "../CorrectName.h"
 
-class LogAction
+#include "LogElement.h"
+
+class LogAction : public LogElement
 {
 public:
 

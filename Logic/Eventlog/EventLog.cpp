@@ -30,6 +30,8 @@ LogEvent* EventLog::AddEvent(LogEvent::Desc desc)
 
 	this->AppendFiles_Event();
 
+	this->mpElements.push_back(this->mpLogEvents.back());
+
 	return this->mpLogEvents.back();
 }
 
@@ -68,6 +70,8 @@ LogAction* EventLog::AddAction(LogAction::Desc desc)
 	this->mpActions.push_back(new LogAction(desc));
 
 	this->AppendFiles_Action();
+
+	this->mpElements.push_back(this->mpActions.back());
 
 	return this->mpActions.back();
 }
@@ -171,62 +175,26 @@ void EventLog::SaveToFile(std::string filePath, std::string metaFile) const
 	LogEvent *pEvent;
 	LogAction *pAction;
 
-	int nextEvent = 0;
-	int nextAction = 0;
+	int size = this->mpElements.size();
 
-	while (
-		nextEvent < (int)this->mpLogEvents.size() ||
-		nextAction < (int)this->mpActions.size())
+	for (int i = 0; i < size; i++)
 	{
-		/**
-		*	Find next line sorted by time
-		*/
+		pEvent = nullptr;
+		pAction = nullptr;
 
-		// Both events and actions left to write
-		if (
-			nextEvent < (int)this->mpLogEvents.size() &&
-			nextAction < (int)this->mpActions.size())
+		pEvent = dynamic_cast<LogEvent*>(this->mpElements[i]);
+
+		if (pEvent != nullptr)
 		{
-			pEvent = this->mpLogEvents[nextEvent];
-			pAction = this->mpActions[nextAction];
-
-			if (pAction->GetSecondsSinceStart() < pEvent->GetSecondsSinceStart())
-			{
-				file_log
-					<< "a"
-					<< " "
-					<< pAction->GetLogString()
-					<< std::endl;
-				file_meta
-					<< pAction->GetMetaString()
-					<< std::endl;
-				nextAction++;
-			}
-			else
-			{
-				file_log
-					<< "e "
-					<< pEvent->GetFileString()
-					<< std::endl;
-				nextEvent++;
-			}
-		}
-
-		// Only events left to write
-		else if (nextEvent < (int)this->mpLogEvents.size())
-		{
-			pEvent = this->mpLogEvents[nextEvent];
 			file_log
 				<< "e "
 				<< pEvent->GetFileString()
 				<< std::endl;
-			nextEvent++;
 		}
-		
-		// Only actions left to write
 		else
 		{
-			pAction = this->mpActions[nextAction];
+			pAction = dynamic_cast<LogAction*>(this->mpElements[i]);
+
 			file_log
 				<< "a"
 				<< " "
@@ -235,7 +203,6 @@ void EventLog::SaveToFile(std::string filePath, std::string metaFile) const
 			file_meta
 				<< pAction->GetMetaString()
 				<< std::endl;
-			nextAction++;
 		}
 	}
 
@@ -264,11 +231,15 @@ bool EventLog::LoadFromFile(std::string filePath, std::string metaFile)
 				case 'e':	// Event
 					ID = this->GetTotalEventCount();
 					this->mpLogEvents.push_back(new LogEvent(line_log, ID));
+
+					this->mpElements.push_back(this->mpLogEvents.back());
 					break;
 				case 'a':	// Action
 					ID = this->GetTotalActionCount();
 					getline(file_meta, line_meta);
 					this->mpActions.push_back(new LogAction(line_log, line_meta));
+
+					this->mpElements.push_back(this->mpActions.back());
 					break;
 			}
 		}

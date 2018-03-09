@@ -46,7 +46,6 @@
     <ClCompile Include="..\..\IO\Picking.cpp" />
     <ClCompile Include="..\..\IO\Test_Input.cpp" />
     <ClCompile Include="..\..\Logic\ActionHandler.cpp" />
-
     <ClCompile Include="..\..\Logic\Boat\Boat.cpp" />
     <ClCompile Include="..\..\Logic\Boat\Deck.cpp" />
     <ClCompile Include="..\..\Logic\Boat\Room.cpp" />
@@ -54,6 +53,7 @@
     <ClCompile Include="..\..\Logic\Boat\Sensor.cpp" />
     <ClCompile Include="..\..\Logic\Eventlog\EventLog.cpp" />
     <ClCompile Include="..\..\Logic\Eventlog\LogAction.cpp" />
+    <ClCompile Include="..\..\Logic\Eventlog\LogElement.cpp" />
     <ClCompile Include="..\..\Logic\Eventlog\LogEvent.cpp" />
     <ClCompile Include="..\..\Logic\Event\Event.cpp" />
     <ClCompile Include="..\..\IO\Test_Picking.cpp" />
@@ -106,7 +106,6 @@
     <ClInclude Include="..\..\IO\Test_Input.h" />
     <ClInclude Include="..\..\IO\Test_Picking.h" />
     <ClInclude Include="..\..\Logic\ActionHandler.h" />
-
     <ClInclude Include="..\..\Logic\Boat\Boat.h" />
     <ClInclude Include="..\..\Logic\Boat\Deck.h" />
     <ClInclude Include="..\..\Logic\Boat\Room.h" />
@@ -115,6 +114,7 @@
     <ClInclude Include="..\..\Logic\CorrectName.h" />
     <ClInclude Include="..\..\Logic\Eventlog\EventLog.h" />
     <ClInclude Include="..\..\Logic\Eventlog\LogAction.h" />
+    <ClInclude Include="..\..\Logic\Eventlog\LogElement.h" />
     <ClInclude Include="..\..\Logic\Eventlog\LogEvent.h" />
     <ClInclude Include="..\..\Logic\Event\Event.h" />
     <ClInclude Include="..\..\Logic\Test_Logic.h" />

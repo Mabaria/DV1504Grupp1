@@ -14,9 +14,10 @@ namespace Test_Logic
 	*/
 
 	// Log
-	bool MainTest(bool waitForInput = true); // To test all, call this function
+	bool MainTest(bool waitForInput = true, bool timeDelay = true); // To test all, call this function
 
 	void FillLog(
+		bool timeDelay,
 		Boat *pBoat,
 		std::vector<int*> &indexOutput,
 		int &totEventOutput,
@@ -27,6 +28,7 @@ namespace Test_Logic
 		std::vector<int> &roomActionCountOutput);
 
 	void ClearSome(
+		bool timeDelay,
 		Boat *pBoat,
 		std::vector<int*> &indexOutput,
 		int &totEventOutput,

@@ -5,13 +5,15 @@
 #include "../Timer.h"
 #include "../CorrectName.h"
 
+#include "LogElement.h"
+
 /* An event in the log will be able to describe:
 	*	Type (Fire, Water, Gas)
 	*	Timestamp when created, and elapsed time
 	*	Which room the event is occuring in
 */
 
-class LogEvent
+class LogEvent : public LogElement
 {
 public:
 
