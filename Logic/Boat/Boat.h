@@ -8,7 +8,7 @@
 #include "Deck.h"
 #include "Room.h"
 
-#include "../Eventlog/EventLog.h"
+#include "../Log/Log.h"
 #include "../Event/Event.h"
 
 #include "../../IO/Picking.h"
@@ -212,5 +212,5 @@ private:
 	std::vector<DirectX::XMMATRIX> mFloorMatrix;
 	std::vector<DirectX::XMMATRIX> mInverseFloorMatrix;
 
-	EventLog mEventLog;
+	Log mEventLog;
 };

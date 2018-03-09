@@ -163,7 +163,7 @@ void RoomLog::SetRoomName(std::string name)
 *	Log specific
 */
 
-void RoomLog::SetEventLogPtr(EventLog *pEventLog)
+void RoomLog::SetEventLogPtr(Log *pEventLog)
 {
 	this->mpEventLog = pEventLog;
 }

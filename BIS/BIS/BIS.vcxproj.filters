@@ -171,10 +171,7 @@
     <ClInclude Include="..\..\GraphicsEngine\Quad.h">
       <Filter>Header Files\GraphicsEngine</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Logic\Eventlog\LogEvent.h">
-      <Filter>Header Files\Logic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Logic\Eventlog\EventLog.h">
+    <ClInclude Include="..\..\Logic\Log\LogEvent.h">
       <Filter>Header Files\Logic</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Logic\Event\Event.h">
@@ -252,7 +249,7 @@
     <ClInclude Include="..\..\Logic\Boat\RoomLog.h">
       <Filter>Header Files\Logic</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Logic\Eventlog\LogAction.h">
+    <ClInclude Include="..\..\Logic\Log\LogAction.h">
       <Filter>Header Files\Logic</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Logic\CorrectName.h">
@@ -261,7 +258,10 @@
     <ClInclude Include="..\..\Logic\Test_Logic.h">
       <Filter>Header Files\Logic\Test</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Logic\Eventlog\LogElement.h">
+    <ClInclude Include="..\..\Logic\Log\LogElement.h">
+      <Filter>Header Files\Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Logic\Log\Log.h">
       <Filter>Header Files\Logic</Filter>
     </ClInclude>
   </ItemGroup>
@@ -371,10 +371,7 @@
     <ClCompile Include="..\..\GraphicsEngine\DX\Direct3D.cpp">
       <Filter>Source Files\GraphicsEngine</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Logic\Eventlog\LogEvent.cpp">
-      <Filter>Source Files\Logic</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Logic\Eventlog\EventLog.cpp">
+    <ClCompile Include="..\..\Logic\Log\LogEvent.cpp">
       <Filter>Source Files\Logic</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Logic\Event\Event.cpp">
@@ -458,13 +455,16 @@
     <ClCompile Include="..\..\Logic\Boat\RoomLog.cpp">
       <Filter>Source Files\Logic</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Logic\Eventlog\LogAction.cpp">
+    <ClCompile Include="..\..\Logic\Log\LogAction.cpp">
       <Filter>Source Files\Logic</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Logic\Test_Logic.cpp">
       <Filter>Source Files\Logic\Test</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Logic\Eventlog\LogElement.cpp">
+    <ClCompile Include="..\..\Logic\Log\LogElement.cpp">
+      <Filter>Source Files\Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Logic\Log\Log.cpp">
       <Filter>Source Files\Logic</Filter>
     </ClCompile>
   </ItemGroup>

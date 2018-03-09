@@ -8,7 +8,7 @@
 #include "RoomLog.h"
 #include "Sensor.h"
 
-#include "../Eventlog/EventLog.h"
+#include "../Log/Log.h"
 
 #include "../CorrectName.h"
 
@@ -33,7 +33,7 @@ public:
 		int index_DeckInBoat;
 		std::string name;
 		std::string deckName;
-		EventLog *pEventLog;
+		Log *pEventLog;
 	};
 
 	Room();

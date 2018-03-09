@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Eventlog/EventLog.h"
+#include "../Log/Log.h"
 
 /**
 *	The room log contains pointers to all events and actions that are
@@ -34,7 +34,7 @@ public:
 	void SetRoomName(std::string name);
 
 	// Log specific
-	void SetEventLogPtr(EventLog *pEventLog);
+	void SetEventLogPtr(Log *pEventLog);
 
 	// Disk specific
 	void SetMetaPath(std::string path);
@@ -53,7 +53,7 @@ private:
 
 	std::vector<LogEvent*> mpEvents;
 	std::vector<LogAction*> mpActions;
-	EventLog *mpEventLog;
+	Log *mpEventLog;
 	std::string mRoomName;
 
 	std::string mMetaPath;

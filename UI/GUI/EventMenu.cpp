@@ -27,7 +27,7 @@ EventMenu::~EventMenu()
 
 bool EventMenu::Init(int parentWidth,
 	int parentHeight,
-	EventLog *pEventLog,
+	Log *pEventLog,
 	LPCTSTR windowName,
 	HWND *pWindow)
 {

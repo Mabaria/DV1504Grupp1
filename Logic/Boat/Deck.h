@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 #include "Room.h"
-#include "../Eventlog/EventLog.h"
+#include "../Log/Log.h"
 
 /**
 *	Deck is a simple structure that holds offset and length of its own rooms in
@@ -19,7 +19,7 @@ public:
 		int index;
 		int roomOffset;
 		std::string name;
-		EventLog *pEventLog;
+		Log *pEventLog;
 	};
 
 
@@ -69,6 +69,6 @@ private:
 	std::vector<Room*> mpRooms;
 	
 	// Log specific
-	EventLog *mpEventLog;
+	Log *mpEventLog;
 };
 

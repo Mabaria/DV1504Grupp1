@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iostream>
-#include "Eventlog/EventLog.h"
+#include "Log/Log.h"
 #include "Boat/Boat.h"
 
 namespace Test_Logic

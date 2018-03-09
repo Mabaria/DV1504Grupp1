@@ -2,7 +2,7 @@
 #include "Button.h"
 #include "TextBox.h"
 #include "../../Logic/Timer.h"
-#include "../../Logic/Eventlog/LogEvent.h"
+#include "../../Logic/Log/LogEvent.h"
 #include "../../Logic/Boat/Room.h"
 #include "../../UI/UIElements/Button.h"
 #include "../../UI/UIElements/TextBox.h"
