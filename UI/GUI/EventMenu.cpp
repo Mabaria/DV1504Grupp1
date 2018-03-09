@@ -384,7 +384,6 @@ void EventMenu::Update(Button *attribute)
 					this->mSwapActionMode();
 				}
 			}
-
 		}
 	}
 }
@@ -432,66 +431,32 @@ void EventMenu::mSwapActionMode()
 
 void EventMenu::mClearActionButtStates()
 {
-	Button * temp;
-	// Nullptr checks before clearing, in case a named button doesnt exist
-	// This should probably exist in more places in this class, because
-	// debugging nullptr function calls from GetButtonByName is gay af
-	temp = this->mpPanel->GetButtonByName("Injured_Moved");
-	if (temp)
-		temp->SetForcedButtState(false);
+	//// Nullptr checks before clearing, in case a named button doesnt exist
+	//// This should probably exist in more places in this class, because
+	//// debugging nullptr function calls from GetButtonByName is gay af
 
-	temp = this->mpPanel->GetButtonByName("Injured_Treated");
-	if (temp)
-		temp->SetForcedButtState(false);
-
-	temp = this->mpPanel->GetButtonByName("Injured_Reported");
-	if (temp)
-		temp->SetForcedButtState(false);
-
-	temp = this->mpPanel->GetButtonByName("Hole_In_Bulk");
-	if (temp)
-		temp->SetForcedButtState(false);
-
-	temp = this->mpPanel->GetButtonByName("Ventilation_In");
-	if (temp)
-		temp->SetForcedButtState(false);
-
-	temp = this->mpPanel->GetButtonByName("Ventilation_Out");
-	if (temp)
-		temp->SetForcedButtState(false);
-
-	temp = this->mpPanel->GetButtonByName("Cooling_Wall");
-	if (temp)
-		temp->SetForcedButtState(false);
-
-	temp = this->mpPanel->GetButtonByName("Supporting_Wall");
-	if (temp)
-		temp->SetForcedButtState(false);
-
-	temp = this->mpPanel->GetButtonByName("Damaged_Bulk");
-	if (temp)
-		temp->SetForcedButtState(false);
-
-	temp = this->mpPanel->GetButtonByName("Icon_Draining");
-	if (temp)
-		temp->SetForcedButtState(false);
-
-	temp = this->mpPanel->GetButtonByName("Seal_Hole");
-	if (temp)
-		temp->SetForcedButtState(false);
+	int size = this->mpPanel->GetNrOfButtons();
+	for (int i = 0; i < size; i++)
+	{
+		Button *pTemp = this->mpPanel->GetButtonByIndex(i);
+		if (pTemp)
+		{
+			pTemp->SetForcedButtState(false);
+		}
+	}
 }
 
 void EventMenu::InitButtons()
 {
-	int padding = this->mMenuWidth / 9;
-	int actionMargin = this->mMenuWidth / 14;
-	int buttonSize = this->mMenuWidth / 4 + 5;
-	int topStartPos = this->mMenuHeight / 12 - 25;
+	int padding			= this->mMenuWidth / 9;
+	int actionMargin	= this->mMenuWidth / 14;
+	int buttonSize		= this->mMenuWidth / 4 + 5;
+	int topStartPos		= this->mMenuHeight / 12 - 25;
 	
-	int left = actionMargin;
-	int middle = (this->mMenuWidth / 2) - (buttonSize / 2);
-	int right = this->mMenuWidth - buttonSize - actionMargin;
-	int step = (buttonSize + actionMargin);
+	int left	= actionMargin;
+	int middle	= (this->mMenuWidth / 2) - (buttonSize / 2);
+	int right	= this->mMenuWidth - buttonSize - actionMargin;
+	int step	= (buttonSize + actionMargin);
 	// Event buttons
 
 	this->mpPanel->AddButton(
@@ -621,62 +586,66 @@ void EventMenu::InitButtons()
 
 	
 
+	std::string name = "";
 	// NUMBER BUTTONS
 	for (int i = 0; i < 3; i++)
 	{
+		name = "Number" + std::to_string((i * 3) + 1);
+
 		this->mpPanel->AddButton(
 			buttonSize,
 			buttonSize,
 			topStartPos + step * (i + 3),
 			left,
-			this->mpPanel->GetBitmapByName("Number" + std::to_string((i * 3) + 1)),
-			"Number" + std::to_string((i * 3) + 1));
+			this->mpPanel->GetBitmapByName(name),
+			name);
+
+		this->mpPanel->GetButtonByName(name)->SetAlive(false);
+		this->mpPanel->GetButtonByName(name)->AddObserver(this);
+
+
+		name = "Number" + std::to_string((i * 3) + 2);
 
 		this->mpPanel->AddButton(
 			buttonSize,
 			buttonSize,
 			topStartPos + step * (i + 3),
 			middle,
-			this->mpPanel->GetBitmapByName("Number" + std::to_string((i * 3) + 2)),
-			"Number" + std::to_string((i * 3) + 2));
+			this->mpPanel->GetBitmapByName(name),
+			name);
+
+		this->mpPanel->GetButtonByName(name)->SetAlive(false);
+		this->mpPanel->GetButtonByName(name)->AddObserver(this);
+
+
+		name = "Number" + std::to_string((i * 3) + 3);
 
 		this->mpPanel->AddButton(
 			buttonSize,
 			buttonSize,
 			topStartPos + step * (i + 3),
 			right,
-			this->mpPanel->GetBitmapByName("Number" + std::to_string((i * 3) + 3)),
-			"Number" + std::to_string((i * 3) + 3));
+			this->mpPanel->GetBitmapByName(name),
+			name);
 
-		this->mpPanel->GetButtonByName("Number" +
-			std::to_string((i * 3) + 1))->SetAlive(false);
-		this->mpPanel->GetButtonByName("Number" +
-			std::to_string((i * 3) + 2))->SetAlive(false);
-		this->mpPanel->GetButtonByName("Number" +
-			std::to_string((i * 3) + 3))->SetAlive(false);
-
-		this->mpPanel->GetButtonByName("Number" +
-			std::to_string((i * 3) + 1))->AddObserver(this);
-		this->mpPanel->GetButtonByName("Number" +
-			std::to_string((i * 3) + 2))->AddObserver(this);
-		this->mpPanel->GetButtonByName("Number" +
-			std::to_string((i * 3) + 3))->AddObserver(this);
+		this->mpPanel->GetButtonByName(name)->SetAlive(false);
+		this->mpPanel->GetButtonByName(name)->AddObserver(this);
 	}
 
 
-	this->mpPanel->GetButtonByName("Fire")->AddObserver(this);
-	this->mpPanel->GetButtonByName("Gas")->AddObserver(this);
-	this->mpPanel->GetButtonByName("Water")->AddObserver(this);
+	this->mpPanel->GetButtonByName("Fire")	->AddObserver(this);
+	this->mpPanel->GetButtonByName("Gas")	->AddObserver(this);
+	this->mpPanel->GetButtonByName("Water")	->AddObserver(this);
 	
-	this->mpPanel->GetButtonByName("Injured_Moved")->AddObserver(this);
-	this->mpPanel->GetButtonByName("Injured_Treated")->AddObserver(this);
-	this->mpPanel->GetButtonByName("Injured_Reported")->AddObserver(this);
-	this->mpPanel->GetButtonByName("Hole_In_Bulk")->AddObserver(this);
-	this->mpPanel->GetButtonByName("Ventilation_In")->AddObserver(this);
-	this->mpPanel->GetButtonByName("Ventilation_Out")->AddObserver(this);
-	this->mpPanel->GetButtonByName("Cooling_Wall")->AddObserver(this);
-	this->mpPanel->GetButtonByName("Icon_Draining")->AddObserver(this);
-	this->mpPanel->GetButtonByName("Seal_Hole")->AddObserver(this);
-	this->mpPanel->GetButtonByName("Damaged_Bulk")->AddObserver(this);
-	this->mpPanel->GetButtonByName("Supporting_Wall")->AddObserver(this);
+	this->mpPanel->GetButtonByName("Injured_Moved")		->AddObserver(this);
+	this->mpPanel->GetButtonByName("Injured_Treated")	->AddObserver(this);
+	this->mpPanel->GetButtonByName("Injured_Reported")	->AddObserver(this);
+	this->mpPanel->GetButtonByName("Hole_In_Bulk")		->AddObserver(this);
+	this->mpPanel->GetButtonByName("Ventilation_In")	->AddObserver(this);
+	this->mpPanel->GetButtonByName("Ventilation_Out")	->AddObserver(this);
+	this->mpPanel->GetButtonByName("Cooling_Wall")		->AddObserver(this);
+	this->mpPanel->GetButtonByName("Icon_Draining")		->AddObserver(this);
+	this->mpPanel->GetButtonByName("Seal_Hole")			->AddObserver(this);
+	this->mpPanel->GetButtonByName("Damaged_Bulk")		->AddObserver(this);
+	this->mpPanel->GetButtonByName("Supporting_Wall")	->AddObserver(this);
 }
