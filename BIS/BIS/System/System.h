@@ -36,6 +36,8 @@ private:
 
 	void mUpdateEvents(Room *room);
 
+	void mUpdateGhostIcons();
+
 	void mSetupPanels();
 	void mSetupModels();
 	void mSetupBoat();

@@ -206,6 +206,7 @@ void System::mUpdate()
 	this->mpMenuPanel->Update();
 	this->mpInfoPanel.Update();
 	this->mpCrewPanel.Update();
+	this->mUpdateGhostIcons();
 }
 
 void System::mDraw()
@@ -224,10 +225,15 @@ void System::mHandleInput()
 	static Room* last_picked_room = nullptr; 
 	Room *picked_room = nullptr;
 
+	// Only allows input if the cursor is within the top view panel,
+	// but not within any other panel that overlaps the top view panel.
+	// Also requires the look mode to be LOOK_TO because plotting should
+	// not be done in LOOK_AT mode.
 	if (this->mpTopViewPanel->IsMouseInsidePanel() &&
 		!this->mpMenuPanel->IsMouseInsidePanel() &&
 		!this->mpInfoPanel.IsMouseInsidePanel() &&
-		!this->mpCrewPanel.IsMouseInsidePanel())
+		!this->mpCrewPanel.IsMouseInsidePanel() &&
+		this->mpTopViewPanel->GetActiveCamera()->GetLookMode() == LOOK_TO)
 	{
 
 		Picking::GetWorldRay(
@@ -338,18 +344,25 @@ void System::mHandleInput()
 
 void System::Update(Button * attribute)
 {
-	if (attribute->GetName().compare("ChangeCamera") == 0)
+	if (attribute)
 	{
-		if (this->mpTopViewPanel->GetActiveCamera() != this->mpTopViewCameraRotate)
+		if (attribute->GetName().compare("ChangeCamera") == 0)
 		{
-			this->mpTopViewPanel->SetCamera(this->mpTopViewCameraRotate);
-		}
-		else if (this->mpTopViewPanel->GetActiveCamera() != this->mpTopViewCameraPan)
-		{
-			this->mpTopViewPanel->SetCamera(this->mpTopViewCameraPan);
-		}
+			if (this->mpTopViewPanel->GetActiveCamera() != this->mpTopViewCameraRotate)
+			{
+				this->mpTopViewPanel->SetCamera(this->mpTopViewCameraRotate);
+			}
+			else if (this->mpTopViewPanel->GetActiveCamera() != this->mpTopViewCameraPan)
+			{
+				this->mpTopViewPanel->SetCamera(this->mpTopViewCameraPan);
+			}
 
-		this->mpTopViewPanel->GetActiveCamera()->Reset();
+			this->mpTopViewPanel->GetActiveCamera()->Reset();
+		}
+		else if (attribute->GetName().compare("Exit") == 0)
+		{
+			this->mpWindow->Close();
+		}
 	}
 }
 
@@ -454,6 +467,43 @@ void System::mUpdateEvents(Room * room)
 	this->mpMenuPanel->UpdateEventButtonImages();
 }
 
+void System::mUpdateGhostIcons()
+{
+	static bool is_reset = false;
+	static bool is_set = false;
+
+	if (this->mActionHandler.IsWaiting() && 
+		!this->mpMenuPanel->IsMouseInsidePanel() &&
+		this->mpTopViewPanel->IsMouseInsidePanel())
+	{
+		this->mpTopViewPanel->SetActionHover(true);
+		if (!is_set)
+		{
+			this->mpTopViewPanel->SetIcon(*this->mActionHandler.GetLastAction());
+			is_set = true;
+			is_reset = false;
+		}
+		if (Mouse::IsButtonPressed(Buttons::Right))
+		{
+			this->mpTopViewPanel->RotateIcon();
+		}
+	}
+	else if (!this->mActionHandler.IsWaiting())
+	{
+		if (!is_reset)
+		{
+			this->mpTopViewPanel->SetActionHover(false);
+			this->mpTopViewPanel->ResetIcon();
+			is_reset = true;
+			is_set = false;
+		}
+	}
+	else
+	{
+		this->mpTopViewPanel->SetActionHover(false);
+	}
+}
+
 void System::mSetupPanels()
 {
 	// Adding action support for topView
@@ -546,6 +596,10 @@ void System::mSetupPanels()
 		"../../Models/ChangeCamera.png",
 		"ChangeCamera"
 	);
+	this->mpControlPanel->LoadImageToBitmap(
+		"../../Models/Exit.png",
+		"Exit"
+	);
 
 	this->mpControlPanel->AddButton(30, 30,
 		this->mpControlPanel->GetHeight() / 2 + 50,
@@ -576,6 +630,8 @@ void System::mSetupPanels()
 		this->mpControlPanel->GetBitmapByName("Crew"), "Crew");
 	this->mpControlPanel->AddButton(70, 70, 10, 90,
 		this->mpControlPanel->GetBitmapByName("ChangeCamera"), "ChangeCamera");
+	this->mpControlPanel->AddButton(70, 70, 10, this->mpControlPanel->GetWidth() - 80,
+		this->mpControlPanel->GetBitmapByName("Exit"), "Exit");
 
 	this->mpControlPanel->GetButtonByName("Reset")->
 		AddObserver(this->mpSideViewPanel);
@@ -588,6 +644,8 @@ void System::mSetupPanels()
 		AddObserver(&this->mpCrewPanel);
 
 	this->mpControlPanel->GetButtonByName("ChangeCamera")
+		->AddObserver(this);
+	this->mpControlPanel->GetButtonByName("Exit")
 		->AddObserver(this);
 
 	// Setting up the active log panel. (top, left, titleFontSize, objectFontSize)

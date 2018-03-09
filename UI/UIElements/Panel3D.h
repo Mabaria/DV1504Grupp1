@@ -20,6 +20,7 @@ enum PANEL3D_SHADER_TYPE
 };
 
 class Panel3D : public Panel, public Observer<Button>
+	
 {
 public:
 	Panel3D(
@@ -97,6 +98,12 @@ public:
 		float startY,
 		float widthOfTex,
 		float heightOfTex);
+	void DrawBitmapToTexture(
+		ID2D1Bitmap *bitmap,
+		D2D1_RECT_F destRect,
+		const D2D1_RECT_F sourceRect,
+		float opacity = 1.0f,
+		const D2D1_MATRIX_4X4_F *transform = nullptr);
 	//void SetCameraPosition()
 
 
@@ -104,6 +111,15 @@ public:
 
 	void InitActions();
 	Actions *pGetActions();
+
+	const void SetActionHover(bool state);
+	const void SetIcon(uint32_t data);
+
+	// Rotates the ghost icon 90 degrees clockwise.
+	const void RotateIcon();
+
+	const void ResetIcon();
+
 private:
 	D3D11 mDirect3D;
 	std::vector<MeshObject*> mpMeshObjects;
@@ -144,4 +160,33 @@ private:
 	bool mMovableCamera;
 
 	Actions *mpActions;
+
+	//! GHOST ACTION STUFF
+
+	// Back buffer texture for hijacking purposes.
+	ID3D11Texture2D *mpBackBuffer;
+
+	// Bitmaps containing the icons and numbers.
+	ID2D1Bitmap	*mpIconBitmap;
+	ID2D1Bitmap	*mpNumberBitmap;
+
+	// Rectangle to draw from.
+	D2D1_RECT_F mGhostIconRect;
+	D2D1_RECT_F mGhostNumberRect;
+
+	// Center position of the ghost.
+	D2D1_RECT_F mGhostPosition;
+
+	// Rotation/scale for the ghost.
+	D2D1_MATRIX_4X4_F mGhostTransform;
+	int mGhostRotation;
+	float mGhostScale;
+
+	// Whether or not the ghost should be shown.
+	bool mGhostActive;
+
+	// Whether or not the ghost should rotate.
+	bool mGhostStationary;
+
+	const void mUpdateGhostTransform();
 };

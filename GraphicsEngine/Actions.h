@@ -57,6 +57,10 @@ public:
 	void RemoveAction(ActionPtr **pActionPtr);
 	ActionPtr *PickAction();
 	void Draw();
+
+	ID3D11ShaderResourceView *GetIconResource();
+	ID3D11ShaderResourceView *GetNumberResource();
+
 private:
 	struct ActionVertex
 	{

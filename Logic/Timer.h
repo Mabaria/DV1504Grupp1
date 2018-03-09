@@ -69,6 +69,8 @@ public:
 	void SetTimestamp(Timestamp ts);
 	Timestamp GetTimestamp() const;
 	const time_t GetTimeData();
+	const std::string GetFileFriendlyString() const;
+	void UpdateTimeStruct();
 
 	int GetSecondsSinceStart() const;
 private:
