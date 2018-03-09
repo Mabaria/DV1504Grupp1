@@ -189,4 +189,6 @@ private:
 	bool mGhostStationary;
 
 	const void mUpdateGhostTransform();
+	const void mUpdateGhosts();
+	const void mDrawGhosts();
 };

@@ -470,7 +470,7 @@ void System::mUpdateGhostIcons()
 {
 	static bool is_reset = false;
 	static bool is_set = false;
-
+	uint32_t action = 9001;
 	if (this->mActionHandler.IsWaiting() && 
 		!this->mpMenuPanel->IsMouseInsidePanel() &&
 		this->mpTopViewPanel->IsMouseInsidePanel())
@@ -478,7 +478,8 @@ void System::mUpdateGhostIcons()
 		this->mpTopViewPanel->SetActionHover(true);
 		if (!is_set)
 		{
-			this->mpTopViewPanel->SetIcon(*this->mActionHandler.GetLastAction());
+			action = *this->mActionHandler.GetLastAction();
+			this->mpTopViewPanel->SetIcon(action);
 			is_set = true;
 			is_reset = false;
 		}
@@ -499,6 +500,10 @@ void System::mUpdateGhostIcons()
 	}
 	else
 	{
+		if (action != *this->mActionHandler.GetLastAction())
+		{
+			is_set = false;
+		}
 		this->mpTopViewPanel->SetActionHover(false);
 	}
 }
@@ -556,8 +561,6 @@ void System::mSetupPanels()
 	this->mpControlPanel->GetTextBoxByName("title")->SetFontSize(35);
 	this->mpControlPanel->GetTextBoxByName("title")->SetFontWeight
 	(DWRITE_FONT_WEIGHT_NORMAL);
-	/*this->mpControlPanel->GetTextBoxByName("title")->SetTextAlignment
-	(DWRITE_TEXT_ALIGNMENT_CENTER);*/
 
 	this->mpControlPanel->AddTextbox(
 		this->mpControlPanel->GetWidth() / 2,
