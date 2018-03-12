@@ -198,15 +198,17 @@ void System::Update(ObserverInfo * obsInf)
 
 void System::mUpdate()
 {
-	this->mpWindow->Update();
-	this->mpActiveLogPanel->Update();
-	this->mpControlPanel->Update();
-	this->mpTopViewPanel->Update();
-	this->mpSideViewPanel->Update();
-	this->mpMenuPanel->Update();
+	if (!this->mpInfoPanel.IsMouseInsidePanel())
+	{
+		this->mpActiveLogPanel->Update();
+		this->mpControlPanel->Update();
+		this->mpTopViewPanel->Update();
+		this->mpSideViewPanel->Update();
+		this->mpCrewPanel.Update();
+		this->mUpdateGhostIcons();
+	}
 	this->mpInfoPanel.Update();
-	this->mpCrewPanel.Update();
-	this->mUpdateGhostIcons();
+	this->mpWindow->Update();
 }
 
 void System::mDraw()
