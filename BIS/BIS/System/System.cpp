@@ -351,6 +351,15 @@ void System::Update(Button * attribute)
 			if (this->mpTopViewPanel->GetActiveCamera() != this->mpTopViewCameraRotate)
 			{
 				this->mpTopViewPanel->SetCamera(this->mpTopViewCameraRotate);
+				if (this->mpMenuPanel->IsVisible())
+				{
+					this->mpMenuPanel->Close();
+				}
+				this->mpTopViewPanel->rGetMeshObject(
+					this->mpLastClickedRoom->GetDeckName() + "bounds")->SetSelected(
+					false,
+					this->mpTopViewPanel->rGetDirect3D().GetContext(),
+					this->mpLastClickedRoom->GetIndexInDeck());
 			}
 			else if (this->mpTopViewPanel->GetActiveCamera() != this->mpTopViewCameraPan)
 			{
