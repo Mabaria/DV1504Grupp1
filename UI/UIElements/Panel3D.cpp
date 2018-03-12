@@ -528,7 +528,7 @@ const void Panel3D::mUpdateGhostTransform()
 
 	// Creating a 2D transform XMMATRIX, storing that in an XMFLOAT4X4.
 	XMFLOAT4X4 transform;
-	XMStoreFloat4x4(&transform, XMMatrixTransformation2D(
+	DirectX::XMStoreFloat4x4(&transform, XMMatrixTransformation2D(
 		ghost_center,
 		0.0f,
 		{ this->mGhostScale, this->mGhostScale, 0.0f, 0.0f },
