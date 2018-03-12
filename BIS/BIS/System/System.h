@@ -36,6 +36,8 @@ private:
 
 	void mUpdateEvents(Room *room);
 
+	void mUpdateGhostIcons();
+
 	void mSetupPanels();
 	void mSetupModels();
 	void mSetupBoat();
@@ -61,7 +63,7 @@ private:
 	// Personnel Log
 	CrewPanel mpCrewPanel;
 
-	EventLog mEventLog;
+	Log mEventLog;
 	Boat mBoat;
 	Ray mRay;
 

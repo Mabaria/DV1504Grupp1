@@ -7,6 +7,7 @@ class Mouse
 public:
 	static const bool IsButtonPressed(const Buttons button);
 	static const bool IsButtonDown(const Buttons button);
+	static const bool IsButtonReleased(const Buttons button);
 	
 	static const int GetX();
 	static const int GetY();

@@ -7,7 +7,8 @@ enum BUTTON_STATE
 	IDLE,
 	HOVER,
 	CLICKED,
-	RESET
+	RESET,
+	RELEASED
 };
 
 class Button : public Observable<Button>
@@ -66,6 +67,8 @@ public:
 	void SetButtonColor(float r, float g, float b, float a = 1.f);
 	const D2D1_COLOR_F GetButtonColor() const;
 	const float GetOpacity();
+	void SetAlive(bool alive);
+	const bool GetAlive();
 
 	void ForceButtState(BUTTON_STATE newState); /* Forces the button to stay in the
 												selected state until ForcedButtState
@@ -103,5 +106,6 @@ private:
 	bool mBitmapLoadedByFilePath;
 	std::string mName;
 
-	bool mForcedButtState = false;
+	bool mAlive;
+	bool mForcedButtState = false;	
 };
