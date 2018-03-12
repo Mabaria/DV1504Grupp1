@@ -17,14 +17,13 @@ class ActionHandler : public Observer<ObserverInfo>,
 {
 public:
 
-	struct ActionInfo
+	struct Info
 	{
-		int *ActionPtr;
+		int type;
 		float pos_x;
 		float pos_z;
-		int type;
-		uint32_t number;
-		uint32_t rotation;
+		int *ActionPtr;
+		uint32_t data;
 	};
 
 	ActionHandler();
@@ -32,13 +31,16 @@ public:
 
 	virtual reality Init(Actions *pActions);
 	virtual reality Update(ObserverInfo *pObsInf) override;
-	virtual ActionInfo AddAction(float x, float z);
+	virtual Info AddAction(float x, float z);
 	virtual reality SwitchWaitingState();
 	uint32_t *GetLastAction();
 
 	void RotatePendingAction();
 	const bool IsWaiting() const;
 	ObserverInfo GetLastEvent() const;
+
+	void InitFromFile(std::vector<Actions::Info> input, std::vector<int*> &output);
+
 private:
 	// Graphical actions.
 	Actions *mpActions;

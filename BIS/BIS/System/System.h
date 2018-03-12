@@ -11,6 +11,8 @@
 #include "../../../Logic/ActionHandler.h"
 #include "../../../UI/UIElements/CrewPanel.h"
 
+#include <list>
+
 class System : public Observer<ObserverInfo>, public Observer<Button>
 {
 public:
@@ -25,6 +27,20 @@ public:
 
 
 private:
+
+	struct EventInfo
+	{
+		Room *pRoom;
+		LogEvent *pEvent;
+
+		bool operator < (const EventInfo &other)
+		{
+			if (*pEvent < *other.pEvent)
+				return true;
+			return false;
+		}
+	};
+
 	void mUpdate();
 	void mDraw();
 	void mHandleInput();

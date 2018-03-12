@@ -58,6 +58,9 @@ public:
 	Timer *GetTimer();
 
 	int GetSecondsSinceStart() const;
+
+	bool operator < (const LogEvent &other);
+
 private:
 
 	Timer mTimer;

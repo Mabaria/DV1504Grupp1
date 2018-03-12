@@ -242,6 +242,13 @@ int LogEvent::GetSecondsSinceStart() const
 	return this->mTimer.GetSecondsSinceStart();
 }
 
+bool LogEvent::operator < (const LogEvent &other)
+{
+	if (this->mTimer.GetSecondsSinceStart() < other.GetSecondsSinceStart())
+		return true;
+	return false;
+}
+
 
 
 

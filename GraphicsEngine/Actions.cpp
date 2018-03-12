@@ -301,6 +301,14 @@ void Actions::Draw()
 	this->pDirect3D->GetContext()->Draw(this->mVertexSize, 0);
 }
 
+void Actions::InitFromFile(std::vector<Info> input, std::vector<int*>& output)
+{
+	output.clear();
+
+	for (int i = 0; i < (int)input.size(); i++)
+		output.push_back(this->AddAction(input[i].x, input[i].z, input[i].data));
+}
+
 ID3D11ShaderResourceView * Actions::GetIconResource()
 {
 	return this->mpIconResource;

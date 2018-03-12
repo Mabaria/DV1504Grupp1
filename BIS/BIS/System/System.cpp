@@ -249,7 +249,7 @@ void System::mHandleInput()
 			if (picked_room)
 			{
 				XMFLOAT3 picked_position = this->mBoat.GetPickedPosition(this->mRay);
-				ActionHandler::ActionInfo result = this->mActionHandler.AddAction(
+				ActionHandler::Info result = this->mActionHandler.AddAction(
 					picked_position.x,
 					picked_position.z);
 
@@ -260,12 +260,11 @@ void System::mHandleInput()
 
 					desc.active = true;
 					desc.start = true;
-					desc.pActionIndex = result.ActionPtr;
+					desc.type = (LogAction::Type)result.type;
 					desc.pos_x = result.pos_x;
 					desc.pos_z = result.pos_z;
-					desc.rotation = result.rotation;
-					desc.type = (LogAction::Type)result.type;
-					desc.numberOnIcon = result.number;
+					desc.pActionIndex = result.ActionPtr;
+					desc.data = result.data;
 
 					picked_room->AddAction(desc);
 				}
@@ -854,4 +853,71 @@ void System::mSetupBoat()
 	};
 
 	this->mBoat.LoadBoundingBoxes(mesh_list, floor_matrix_list, 3);
+
+	std::vector<Log::ActionInfo> activeActions;
+	std::vector<Actions::Info> actionInfos;
+	std::vector<int*> actionPointers;
+
+	this->mBoat.LoadFromFile_Log();
+	this->mBoat.GetAllActiveActions(activeActions);
+
+	for (int i = 0; i < (int)activeActions.size(); i++)
+	{
+		Actions::Info info;
+		info.x = activeActions[i].pAction->GetPos_X();
+		info.z = activeActions[i].pAction->GetPos_Z();
+		info.data = activeActions[i].pAction->GetData();
+
+		actionInfos.push_back(info);
+	}
+
+	this->mActionHandler.InitFromFile(actionInfos, actionPointers);
+
+	for (int i = 0; i < (int)activeActions.size(); i++)
+		activeActions[i].pIndexPtr = actionPointers[i];
+
+	this->mBoat.UpdateActionPointers(activeActions);
+
+
+	std::list<EventInfo> infolist;
+
+	Room *pRoom;
+	int size = this->mBoat.GetRoomCount();
+	for (int i = 0; i < size; i++)
+	{
+		pRoom = this->mBoat.GetRoomPointerAt(i);
+
+		if (pRoom->GetActiveEventCount() > 0)
+		{
+			this->mpMenuPanel->SetActiveRoom(pRoom);
+			this->mUpdateEvents(pRoom);
+
+			std::vector<LogEvent*> events;
+			pRoom->GetActiveEvents(events);		
+
+			EventInfo eventinfo;
+			eventinfo.pRoom = pRoom;
+
+			for (int j = 0; j < (int)events.size(); j++)
+			{
+				eventinfo.pEvent = events[j];
+
+				infolist.push_back(eventinfo);
+			}
+		}
+	}
+
+	infolist.sort();
+
+	EventInfo eventinfo;
+	do
+	{
+		eventinfo = infolist.back();
+
+		this->mpMenuPanel->SetActiveRoom(eventinfo.pRoom);
+		this->mUpdateEvents(eventinfo.pRoom); // TODO: Skapa funktion som ej går igenom ALLA events i rummet, utan bara givet event.
+		//this->mpActiveLogPanel->AddNotification(eventinfo.pRoom, eventinfo.pEvent);
+
+		infolist.pop_back();
+	} while ((int)infolist.size() > 0);
 }

@@ -210,6 +210,11 @@ void Log::SaveToFile(std::string filePath, std::string metaFile) const
 	file_meta.close();
 }
 
+bool Log::LoadFromFile()
+{
+	return this->LoadFromFile(this->mLogPath, this->mMetaPath);
+}
+
 bool Log::LoadFromFile(std::string filePath, std::string metaFile)
 {
 	std::ifstream file_log(filePath);
@@ -250,14 +255,26 @@ bool Log::LoadFromFile(std::string filePath, std::string metaFile)
 	return true;
 }
 
-void Log::GetAllActiveActions(std::vector<LogAction*> &output)
+void Log::GetAllActiveActions(std::vector<Log::ActionInfo> &output)
 {
 	output.clear();
 	for (int i = 0; i < (int)this->mpActions.size(); i++)
 	{
 		if (this->mpActions[i]->IsActive())
-			output.push_back(this->mpActions[i]);
+		{
+			Log::ActionInfo info;
+			info.index = i;
+			info.pIndexPtr = nullptr;
+			info.pAction = this->mpActions[i];
+			output.push_back(info);
+		}
 	}
+}
+
+void Log::UpdateActionPointers(std::vector<Log::ActionInfo> &pointers)
+{
+	for (int i = 0; i < (int)pointers.size(); i++)
+		this->mpActions[pointers[i].index]->SetActionIndex(pointers[i].pIndexPtr);
 }
 
 void Log::AppendFiles_Event() const
