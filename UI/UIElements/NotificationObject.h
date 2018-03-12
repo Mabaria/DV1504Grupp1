@@ -61,6 +61,7 @@ public:
 
 private:
 	Button mButton;
+	Button mActionButton;
 	TextBox mTextBox;
 	Timer *mpTimer;
 	Room *mpRoom;
@@ -75,6 +76,9 @@ private:
 	std::string mElapsedTime;
 
 	ID2D1Bitmap *mpActionSymbolsBitmap;
+
+	void mUpdateActionButton();
+	bool mFindActionType(std::vector<LogAction*> &actionVector, LogAction::Type typeToFind);
 
 	int mIndex;
 

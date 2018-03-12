@@ -1,14 +1,15 @@
 #include "NotificationObject.h"
 
 NotificationObject::NotificationObject(
-	Room *room, 
-	LogEvent *event, 
+	Room *room,
+	LogEvent *event,
 	Direct2D *direct2d,
 	int index,
 	int fontSize,
 	ID2D1Bitmap *bitmap,
-	ID2D1Bitmap *actionSymbolsBitmap) 
+	ID2D1Bitmap *actionSymbolsBitmap)
 	: mButton(direct2d, bitmap, 0, 0, 0, 0)
+	, mActionButton(direct2d, actionSymbolsBitmap, 230, 7, 290, 67, "ActionButton")
 	, mTextBox(direct2d, 0, 0, 0, 0)
 {
 	this->mpRoom = room;
@@ -95,6 +96,16 @@ NotificationObject::NotificationObject(
 
 	this->mTextBox.SetText(this->GetNotificationString());
 	this->mButton.SetButtonStatus(BUTTON_STATE::IDLE);
+	this->mActionButton.SetButtonStatus(BUTTON_STATE::IDLE);
+	// this->mActionButton.SetOpacity(0.0f);
+	D2D1_SIZE_F action_button_size = actionSymbolsBitmap->GetSize();
+	int step = action_button_size.width / 4;
+	this->mActionButton.SetBitmapRenderSize(
+		step * 2,
+		step,
+		step * 3,
+		step * 2
+	);
 }
 
 NotificationObject::~NotificationObject()
@@ -178,6 +189,7 @@ const void NotificationObject::SetIndex(int index)
 const void NotificationObject::Move(int x, int y)
 {
 	this->mButton.MoveButton(x, y);
+	this->mActionButton.MoveButton(x, y);
 	this->mTextBox.MoveTextBox(x, y);
 }
 
@@ -210,7 +222,70 @@ void NotificationObject::Draw()
 			sin(this->mNewColorCounter += 0.2f),
 			0, 0);
 	}
+	this->mUpdateActionButton();
 	this->mButton.DrawRect();
 	this->mTextBox.DrawTextBox();
 	this->mButton.DrawButton();
+	if (this->mActionButton.GetOpacity() > 0.0f)
+		this->mActionButton.DrawRect();
+	this->mActionButton.DrawButton();
+}
+
+void NotificationObject::mUpdateActionButton()
+{
+	static int stride = this->mpActionSymbolsBitmap->GetSize().width / 4;
+	std::vector<LogAction*> active_actions;
+	this->mpRoom->GetActiveActions(active_actions);
+	if (active_actions.size() > 0) // If there are actions in the room
+	{
+		bool action_found = false;
+		// Actions found in room, determine if we should place the action icon on the object
+		switch (mEventType) {
+		case Event::Type::Fire: {
+			action_found = this->mFindActionType(active_actions, LogAction::Type::Cooling_Wall);
+			if (action_found) {
+				this->mActionButton.SetBitmapRenderSize(2 * stride, stride, 3 * stride, 2 * stride);
+				this->mActionButton.SetOpacity(1.0f);
+			}
+			break;
+		}
+		case Event::Type::Gas: {
+			action_found = this->mFindActionType(active_actions, LogAction::Type::Ventilation_Out);
+			if (!action_found) // No vent out, check vent in
+				action_found = this->mFindActionType(active_actions, LogAction::Type::Ventilation_In);
+
+			if (action_found) {
+				this->mActionButton.SetBitmapRenderSize(stride, stride, 2 * stride, 2 * stride);
+				this->mActionButton.SetOpacity(1.0f);
+			}
+			break;
+		}
+		case Event::Type::Water: {
+			// Todo ADD LÄNSNING
+			// action_found = this->mFindActionType(active_actions, LogAction::Type::)
+			if (action_found) {
+				this->mActionButton.SetBitmapRenderSize(stride, 2 * stride, 2 * stride, 3 * stride);
+				this->mActionButton.SetOpacity(1.0f);
+			}
+			break;
+		}
+		}
+	}
+	else
+	{
+		this->mActionButton.SetOpacity(0.0f);
+	}
+}
+
+bool NotificationObject::mFindActionType(std::vector<LogAction*>& actionVector, LogAction::Type typeToFind)
+{
+	bool to_return = false; // Assume failed find
+	
+	for (int i = 0; i < actionVector.size() && to_return == false; i++)
+	{
+		if (actionVector[i]->GetType() == typeToFind)
+			to_return = true;
+	}
+
+	return to_return;
 }
