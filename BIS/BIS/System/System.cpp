@@ -174,6 +174,8 @@ void System::Update(ObserverInfo * obsInf)
 				GetMovableComponent()->
 				FocusCameraOnRoom(obsInf->pRoom, true);
 
+			this->mpMenuPanel->UpdateEventButtonImages();
+
 			if (this->mpLastClickedRoom != nullptr)
 			{
 				std::string picked_name = this->mpLastClickedRoom->GetDeckName() + "bounds";
