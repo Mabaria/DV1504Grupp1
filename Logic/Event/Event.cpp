@@ -33,3 +33,34 @@ int Event::GetID(Event::Type type)
 			return (-1);
 	}
 }
+
+Event::Type Event::GetType(std::string type)
+{
+	if (type == "Eldsvåda")
+		return Event::Type::Fire;
+	else if (type == "Personskada")
+		return Event::Type::Injury;
+	else if (type == "Vattenläcka")
+		return Event::Type::Water;
+	else if (type == "Kontaminering")
+		return Event::Type::Gas;
+	else
+		throw ("Invalid type");
+}
+
+Event::Type Event::GetType(int id)
+{
+	switch (id)
+	{
+		case 0:
+			return Event::Type::Fire;
+		case 1:
+			return Event::Type::Injury;
+		case 2:
+			return Event::Type::Water;
+		case 3:
+			return Event::Type::Gas;
+		default:
+			return Event::Type::Injury; // No default-type exists
+	}
+}
