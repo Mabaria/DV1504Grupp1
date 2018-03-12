@@ -97,9 +97,9 @@ NotificationObject::NotificationObject(
 	this->mTextBox.SetText(this->GetNotificationString());
 	this->mButton.SetButtonStatus(BUTTON_STATE::IDLE);
 	this->mActionButton.SetButtonStatus(BUTTON_STATE::IDLE);
-	// this->mActionButton.SetOpacity(0.0f);
+	this->mActionButton.SetOpacity(0.0f);
 	D2D1_SIZE_F action_button_size = actionSymbolsBitmap->GetSize();
-	int step = action_button_size.width / 4;
+	int step = (int)action_button_size.width / 4;
 	this->mActionButton.SetBitmapRenderSize(
 		step * 2,
 		step,
@@ -235,7 +235,7 @@ void NotificationObject::Draw()
 
 void NotificationObject::mUpdateActionButton()
 {
-	static int stride = this->mpActionSymbolsBitmap->GetSize().width / 4;
+	static int stride = (int)this->mpActionSymbolsBitmap->GetSize().width / 4;
 	std::vector<LogAction*> active_actions;
 	this->mpRoom->GetActiveActions(active_actions);
 	if (active_actions.size() > 0) // If there are actions in the room
@@ -283,7 +283,7 @@ bool NotificationObject::mFindActionType(std::vector<LogAction*>& actionVector, 
 {
 	bool to_return = false; // Assume failed find
 	
-	for (int i = 0; i < actionVector.size() && to_return == false; i++)
+	for (unsigned int i = 0; i < actionVector.size() && to_return == false; i++)
 	{
 		if (actionVector[i]->GetType() == typeToFind)
 			to_return = true;
