@@ -1,6 +1,6 @@
 #pragma once
 #include "../../GraphicsEngine/Window.h"
-#include "../../Logic/Eventlog/EventLog.h"
+#include "../../Logic/Log/Log.h"
 #include "../../Logic/Boat/Room.h"
 #include "../../UI/UIElements/Panel2D.h"
 #include "../../IO/ObserverPattern/Observer.h"
@@ -23,7 +23,7 @@ public:
 
 	bool Init(int parentWidth,
 		int parentHeight,
-		EventLog *pEventLog,
+		Log *pEventLog,
 		LPCTSTR windowName,
 		HWND *pWindow);
 	bool OpenAt(Room *pRoom);
@@ -48,7 +48,7 @@ private:
 	int mParentPanelWidth, mParentPanelHeight;
 	bool mVisible, mButtonFocus, mDraggingWindow;
 	int mDragX, mDragY;
-	EventLog *mpEventLog;
+	Log *mpEventLog;
 	Panel2D *mpPanel;
 
 	Room *mpActiveRoom;

@@ -27,7 +27,7 @@ EventMenu::~EventMenu()
 
 bool EventMenu::Init(int parentWidth,
 	int parentHeight,
-	EventLog *pEventLog,
+	Log *pEventLog,
 	LPCTSTR windowName,
 	HWND *pWindow)
 {
@@ -155,29 +155,33 @@ bool EventMenu::IsVisible()
 
 void EventMenu::UpdateEventButtonImages()
 {
-
-	// Names of possible active events
-	std::string data_names[] = { "Fire", "Water", "Gas" };
-
-	// Deactivates all buttons (no event active)
-	int size = (int)floor(sizeof(data_names) / sizeof(std::string));
-	for (int i = 0; i < size; i++)
+	if (this->mpActiveRoom)
 	{
-		if (this->mpPanel->GetButtonByName(data_names[i]))
-		{
-			this->mpPanel->GetButtonByName(data_names[i])->SetBitmap(
-				this->mpPanel->GetBitmapByName(data_names[i] + "Off"));
-		}
-	}
+		// Names of possible active events
+		std::string data_names[] = { "Fire", "Water", "Gas" };
 
-	// Activate corresponding buttons only if there are any active events 
-	// (activate necessary events)
-	if (this->mpActiveRoom->GetActiveEventIndex() != -1)
-	{
-		int size = (int)this->mpActiveRoom->GetActiveEvents().size();
+		// Deactivates all buttons (no event active)
+		int size = (int)floor(sizeof(data_names) / sizeof(std::string));
 		for (int i = 0; i < size; i++)
 		{
-			switch (this->mpActiveRoom->GetActiveEvents()[i]->GetType())
+			if (this->mpPanel->GetButtonByName(data_names[i]))
+			{
+				this->mpPanel->GetButtonByName(data_names[i])->SetBitmap(
+					this->mpPanel->GetBitmapByName(data_names[i] + "Off"));
+			}
+		}
+
+		// Activate corresponding buttons only if there are any active events 
+		// (activate necessary events)
+
+		size = this->mpActiveRoom->GetActiveEventCount();
+
+		std::vector<LogEvent*> active_events;
+		this->mpActiveRoom->GetActiveEvents(active_events);
+
+		for (int i = 0; i < size; i++)
+		{
+			switch (active_events[i]->GetType())
 			{
 			case Event::Type::Fire:
 				this->mpPanel->GetButtonByName("Fire")->SetBitmap(

@@ -145,17 +145,22 @@ void System::BuildGraphicalUserInterface(
 	this->mSetupPanels();
 	this->mSetupModels();
 	this->mSetupBoat();
+
+	this->mpWindow->Open();
 }
 
-void System::Run()
+bool System::Run()
 {
-	this->mpWindow->Open();
-	while (this->mpWindow->IsOpen())
+	bool running = false;
+	if (this->mpWindow->IsOpen())
 	{
 		this->mHandleInput();
 		this->mUpdate();
 		this->mDraw();
+		running = true;
 	}
+
+	return running;
 }
 
 void System::Update(ObserverInfo * obsInf)
@@ -165,7 +170,7 @@ void System::Update(ObserverInfo * obsInf)
 		// If a room is clicked in top view panel.
 		if (this->mpTopViewPanel->IsMouseInsidePanel())
 		{
-			this->mUpdateEvents(obsInf->pRoom);
+			this->mUpdateEvents(obsInf->pRoom, false);
 		}
 		// If a notification object is clicked in the active log panel.
 		else if (this->mpActiveLogPanel->IsMouseInsidePanel())
@@ -198,17 +203,37 @@ void System::Update(ObserverInfo * obsInf)
 	}
 }
 
+int System::GetNrOfRooms() const
+{
+	return this->mBoat.GetRoomCount();
+}
+
+Room * System::GetRoomByIndex(int index)
+{
+	return this->mBoat.GetRoomPointerAt(index);
+}
+
+bool System::UpdateRoom(Room * room)
+{
+	this->mUpdateEvents(room, true);
+
+	return true;
+}
+
 void System::mUpdate()
 {
-	this->mpWindow->Update();
-	this->mpActiveLogPanel->Update();
-	this->mpControlPanel->Update();
-	this->mpTopViewPanel->Update();
-	this->mpSideViewPanel->Update();
+	if (!this->mpInfoPanel.IsMouseInsidePanel())
+	{
+		this->mpActiveLogPanel->Update();
+		this->mpControlPanel->Update();
+		this->mpTopViewPanel->Update();
+		this->mpSideViewPanel->Update();
+		this->mpCrewPanel.Update();
+		this->mUpdateGhostIcons();
+	}
 	this->mpMenuPanel->Update();
 	this->mpInfoPanel.Update();
-	this->mpCrewPanel.Update();
-	this->mUpdateGhostIcons();
+	this->mpWindow->Update();
 }
 
 void System::mDraw()
@@ -275,7 +300,7 @@ void System::mHandleInput()
 			if (Mouse::IsButtonPressed(Buttons::Left))
 			{
 				this->mpMenuPanel->OpenAt(picked_room);
-			
+
 				this->mpTopViewPanel->GetMovableComponent()->FocusCameraOnRoom(picked_room, true);
 			
 				// Turn on selected effect if clicked room was actually a room
@@ -342,6 +367,14 @@ void System::mHandleInput()
 
 		//// ___ END ___ (HOVER EFFECT)
 	}
+
+	else if (last_picked_room != nullptr)
+	{
+		std::string last_picked_name = last_picked_room->GetDeckName() + "bounds";
+		this->mUpdateHover(last_picked_name, last_picked_room->GetIndexInDeck(), false);
+		last_picked_room = nullptr;
+	}
+
 }
 
 void System::Update(Button * attribute)
@@ -353,6 +386,18 @@ void System::Update(Button * attribute)
 			if (this->mpTopViewPanel->GetActiveCamera() != this->mpTopViewCameraRotate)
 			{
 				this->mpTopViewPanel->SetCamera(this->mpTopViewCameraRotate);
+				if (this->mpMenuPanel->IsVisible())
+				{
+					this->mpMenuPanel->Close();
+				}
+				if (this->mpLastClickedRoom)
+				{
+					this->mpTopViewPanel->rGetMeshObject(
+						this->mpLastClickedRoom->GetDeckName() + "bounds")->SetSelected(
+							false,
+							this->mpTopViewPanel->rGetDirect3D().GetContext(),
+							this->mpLastClickedRoom->GetIndexInDeck());
+				}
 			}
 			else if (this->mpTopViewPanel->GetActiveCamera() != this->mpTopViewCameraPan)
 			{
@@ -361,9 +406,22 @@ void System::Update(Button * attribute)
 
 			this->mpTopViewPanel->GetActiveCamera()->Reset();
 		}
+
 		else if (attribute->GetName().compare("Exit") == 0)
 		{
 			this->mpWindow->Close();
+		}
+		else if (attribute->GetName().compare("Simulator") == 0)
+		{
+			static bool active = false;
+
+			active = !active;
+			std::string extension = active ? "On" : "Off";
+
+			this->mpControlPanel->GetButtonByName("Simulator")->SetBitmap(
+				this->mpControlPanel->GetBitmapByName("Simulation" + extension)
+			);
+			this->NotifyObservers(&std::string("simulator_(de)activate"));
 		}
 	}
 }
@@ -397,7 +455,6 @@ void System::mUpdateRoomInfo()
 		if (*it == 0)
 		{
 			this->mpControlPanel->GetButtonByName("fireSensor")->SetOpacity(1.0f);
-
 		}
 		// Event 1 is currently injury
 		else if (*it == 2)
@@ -408,7 +465,6 @@ void System::mUpdateRoomInfo()
 		else if (*it == 3)
 		{
 			this->mpControlPanel->GetButtonByName("gasSensor")->SetOpacity(1.0f);
-
 		}
 
 	}
@@ -416,17 +472,22 @@ void System::mUpdateRoomInfo()
 		new_info_text);
 }
 
-void System::mUpdateEvents(Room * room)
+void System::mUpdateEvents(Room * room, bool automatic_input)
 {
-	std::vector<LogEvent*> events_in_room = room->GetActiveEvents();
+	std::vector<LogEvent*> events_in_room;
+	room->GetActiveEvents(events_in_room);
 	// If there already is an active event of that type in that room
 	// the event is removed.
-	if (!this->mpActiveLogPanel->AddNotification(room, events_in_room.back()))
+	if (!this->mpActiveLogPanel->AddNotification(room, events_in_room.back(), automatic_input))
 	{
-		Event::Type to_remove = this->mpMenuPanel->GetLastClicked();
-		this->mpActiveLogPanel->RemoveNotification(room, to_remove);
-		room->ClearEvent(to_remove);
-		events_in_room = room->GetActiveEvents();
+		// If event added through manual input (not through a sensor)
+		if (!automatic_input)
+		{
+			Event::Type to_remove = this->mpMenuPanel->GetLastClicked();
+			this->mpActiveLogPanel->RemoveNotification(room, to_remove);
+			room->ClearEvent(to_remove);
+			room->GetActiveEvents(events_in_room);
+		}
 	}
 	// Adding the system as an observer to the newly added notification object.
 	else
@@ -452,7 +513,7 @@ void System::mUpdateEvents(Room * room)
 	EventData event_data = { 0 };
 	for (int i = 0; (i < (int)events_in_room.size()) && (i < 4); i++)
 	{
-		event_data.slots[i] = (float)events_in_room[i]->GetType() + 1;
+		event_data.slots[i] = (float)Event::GetID(events_in_room[i]->GetType()) + 1;
 	}
 
 	top_picked_deck->SetEvent(
@@ -605,6 +666,16 @@ void System::mSetupPanels()
 		"Exit"
 	);
 
+	this->mpControlPanel->LoadImageToBitmap(
+		"../../Models/SimulationOff.png",
+		"SimulationOff"
+	);
+
+	this->mpControlPanel->LoadImageToBitmap(
+		"../../Models/SimulationOn.png",
+		"SimulationOn"
+	);
+
 	this->mpControlPanel->AddButton(30, 30,
 		this->mpControlPanel->GetHeight() / 2 + 50,
 		this->mpControlPanel->GetWidth() / 2 + 150,
@@ -623,18 +694,22 @@ void System::mSetupPanels()
 		this->mpControlPanel->GetBitmapByName("Gas"), "gasSensor");
 	this->mpControlPanel->GetButtonByName("gasSensor")->SetOpacity(0.0f);
 
+	int butt_size = 82;
+	int space = 5;
 
-	this->mpControlPanel->AddButton(70, 70, 10, 10,
+	this->mpControlPanel->AddButton(butt_size, butt_size, space, space,
 		this->mpControlPanel->GetBitmapByName("Reset"), "Reset");
-	this->mpControlPanel->AddButton(70, 70, 90, 10,
+	this->mpControlPanel->AddButton(butt_size, butt_size, butt_size + space * 2, space,
 		this->mpControlPanel->GetBitmapByName("Reset"), "Reset2");
-	this->mpControlPanel->AddButton(70, 70, 90, 90,
+	this->mpControlPanel->AddButton(butt_size, butt_size, butt_size + space * 2, butt_size + space * 2,
 		this->mpControlPanel->GetBitmapByName("Info"), "Info");
-	this->mpControlPanel->AddButton(70, 70, 90, 170,
+	this->mpControlPanel->AddButton(butt_size, butt_size, butt_size + space * 2, butt_size * 2 + space * 3,
 		this->mpControlPanel->GetBitmapByName("Crew"), "Crew");
-	this->mpControlPanel->AddButton(70, 70, 10, 90,
+	this->mpControlPanel->AddButton(butt_size, butt_size, space, butt_size + space * 2,
 		this->mpControlPanel->GetBitmapByName("ChangeCamera"), "ChangeCamera");
-	this->mpControlPanel->AddButton(70, 70, 10, this->mpControlPanel->GetWidth() - 80,
+	this->mpControlPanel->AddButton(butt_size, butt_size, space, butt_size * 2 + space * 3,
+		this->mpControlPanel->GetBitmapByName("SimulationOff"), "Simulator");
+	this->mpControlPanel->AddButton(butt_size, butt_size, space, this->mpControlPanel->GetWidth() - (butt_size + space),
 		this->mpControlPanel->GetBitmapByName("Exit"), "Exit");
 
 	this->mpControlPanel->GetButtonByName("Reset")->
@@ -648,6 +723,8 @@ void System::mSetupPanels()
 		AddObserver(&this->mpCrewPanel);
 
 	this->mpControlPanel->GetButtonByName("ChangeCamera")
+		->AddObserver(this);
+	this->mpControlPanel->GetButtonByName("Simulator")
 		->AddObserver(this);
 	this->mpControlPanel->GetButtonByName("Exit")
 		->AddObserver(this);
@@ -812,7 +889,11 @@ void System::mSetupModels()
 
 void System::mSetupBoat()
 {
-	this->mBoat.ReadFile("../../SaveFiles/data.boat");
+	this->mBoat.LoadFromFile_Boat("../../Savefiles/Boats/Vulcanus.boat");
+
+	this->mBoat.SetLogPath("../../Savefiles/Logs/Log.log");
+	this->mBoat.SetLogMetaPath("../../Savefiles/Metafiles/Log.meta");
+	this->mBoat.SetRoomMetaDir("../../Savefiles/Metafiles/RoomLogMetas/");
 
 	// Creating the mesh and matrix list that boat 
 	// needs to load bounding boxes to the rooms.
@@ -834,9 +915,4 @@ void System::mSetupBoat()
 	};
 
 	this->mBoat.LoadBoundingBoxes(mesh_list, floor_matrix_list, 3);
-
-	/**
-	*	Send corresponding pointers
-	*/
-	this->mBoat.SetEventLog(&this->mEventLog);
 }
