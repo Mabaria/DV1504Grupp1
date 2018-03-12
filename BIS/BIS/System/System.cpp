@@ -396,6 +396,14 @@ void System::Update(Button * attribute)
 		}
 		else if (attribute->GetName().compare("Simulator") == 0)
 		{
+			static bool active = false;
+
+			active = !active;
+			std::string extension = active ? "On" : "Off";
+
+			this->mpControlPanel->GetButtonByName("Simulator")->SetBitmap(
+				this->mpControlPanel->GetBitmapByName("Simulation" + extension)
+			);
 			this->NotifyObservers(&std::string("simulator_(de)activate"));
 		}
 	}
@@ -638,6 +646,16 @@ void System::mSetupPanels()
 		"Exit"
 	);
 
+	this->mpControlPanel->LoadImageToBitmap(
+		"../../Models/SimulationOff.png",
+		"SimulationOff"
+	);
+
+	this->mpControlPanel->LoadImageToBitmap(
+		"../../Models/SimulationOn.png",
+		"SimulationOn"
+	);
+
 	this->mpControlPanel->AddButton(30, 30,
 		this->mpControlPanel->GetHeight() / 2 + 50,
 		this->mpControlPanel->GetWidth() / 2 + 150,
@@ -668,7 +686,7 @@ void System::mSetupPanels()
 	this->mpControlPanel->AddButton(70, 70, 10, 90,
 		this->mpControlPanel->GetBitmapByName("ChangeCamera"), "ChangeCamera");
 	this->mpControlPanel->AddButton(70, 70, 10, 170,
-		this->mpControlPanel->GetBitmapByName("Crew"), "Simulator");
+		this->mpControlPanel->GetBitmapByName("SimulationOff"), "Simulator");
 	this->mpControlPanel->AddButton(70, 70, 10, this->mpControlPanel->GetWidth() - 80,
 		this->mpControlPanel->GetBitmapByName("Exit"), "Exit");
 
