@@ -19,12 +19,14 @@ bool CameraPanStrategy::Initialize(Camera & rCamera)
 {
 	CameraMovementStrategy::Initialize(rCamera);
 
-	// Keep start position to limit moves outside of desired area
-	this->mMinX = XMVectorGetX(this->pCamera->GetPosition()) - 2.0f;
-	this->mMinZ = XMVectorGetZ(this->pCamera->GetPosition()) - 2.0f;
+	float d = 0.7f;
 
-	this->mMaxX = XMVectorGetX(this->pCamera->GetPosition()) + 2.0f;
-	this->mMaxZ = XMVectorGetZ(this->pCamera->GetPosition()) + 2.0f;
+	// Keep start position to limit moves outside of desired area
+	this->mMinX = XMVectorGetX(this->pCamera->GetPosition()) - d;
+	this->mMinZ = XMVectorGetZ(this->pCamera->GetPosition()) - d;
+
+	this->mMaxX = XMVectorGetX(this->pCamera->GetPosition()) + d;
+	this->mMaxZ = XMVectorGetZ(this->pCamera->GetPosition()) + d;
 
 	this->mMoveSpeed = 0.0001f;
 
