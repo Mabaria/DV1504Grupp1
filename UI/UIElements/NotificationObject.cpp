@@ -238,6 +238,7 @@ void NotificationObject::mUpdateActionButton()
 	static int stride = (int)this->mpActionSymbolsBitmap->GetSize().width / 4;
 	std::vector<LogAction*> active_actions;
 	this->mpRoom->GetActiveActions(active_actions);
+	this->mActionButton.SetOpacity(0.0f);
 	if (active_actions.size() > 0) // If there are actions in the room
 	{
 		bool action_found = false;
@@ -264,7 +265,7 @@ void NotificationObject::mUpdateActionButton()
 		}
 		case Event::Type::Water: {
 			// Todo ADD LÄNSNING
-			// action_found = this->mFindActionType(active_actions, LogAction::Type::)
+			action_found = this->mFindActionType(active_actions, LogAction::Type::Draining);
 			if (action_found) {
 				this->mActionButton.SetBitmapRenderSize(stride, 2 * stride, 2 * stride, 3 * stride);
 				this->mActionButton.SetOpacity(1.0f);
@@ -272,10 +273,6 @@ void NotificationObject::mUpdateActionButton()
 			break;
 		}
 		}
-	}
-	else
-	{
-		this->mActionButton.SetOpacity(0.0f);
 	}
 }
 
