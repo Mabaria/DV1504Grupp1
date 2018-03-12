@@ -207,6 +207,7 @@ void System::mUpdate()
 		this->mpCrewPanel.Update();
 		this->mUpdateGhostIcons();
 	}
+	this->mpMenuPanel->Update();
 	this->mpInfoPanel.Update();
 	this->mpWindow->Update();
 }
