@@ -355,11 +355,14 @@ void System::Update(Button * attribute)
 				{
 					this->mpMenuPanel->Close();
 				}
-				this->mpTopViewPanel->rGetMeshObject(
-					this->mpLastClickedRoom->GetDeckName() + "bounds")->SetSelected(
-					false,
-					this->mpTopViewPanel->rGetDirect3D().GetContext(),
-					this->mpLastClickedRoom->GetIndexInDeck());
+				if (this->mpLastClickedRoom)
+				{
+					this->mpTopViewPanel->rGetMeshObject(
+						this->mpLastClickedRoom->GetDeckName() + "bounds")->SetSelected(
+							false,
+							this->mpTopViewPanel->rGetDirect3D().GetContext(),
+							this->mpLastClickedRoom->GetIndexInDeck());
+				}
 			}
 			else if (this->mpTopViewPanel->GetActiveCamera() != this->mpTopViewCameraPan)
 			{
@@ -630,18 +633,20 @@ void System::mSetupPanels()
 		this->mpControlPanel->GetBitmapByName("Gas"), "gasSensor");
 	this->mpControlPanel->GetButtonByName("gasSensor")->SetOpacity(0.0f);
 
+	int butt_size = 82;
+	int space = 5;
 
-	this->mpControlPanel->AddButton(70, 70, 10, 10,
+	this->mpControlPanel->AddButton(butt_size, butt_size, space, space,
 		this->mpControlPanel->GetBitmapByName("Reset"), "Reset");
-	this->mpControlPanel->AddButton(70, 70, 90, 10,
+	this->mpControlPanel->AddButton(butt_size, butt_size, butt_size + space * 2, space,
 		this->mpControlPanel->GetBitmapByName("Reset"), "Reset2");
-	this->mpControlPanel->AddButton(70, 70, 90, 90,
+	this->mpControlPanel->AddButton(butt_size, butt_size, butt_size + space * 2, butt_size + space * 2,
 		this->mpControlPanel->GetBitmapByName("Info"), "Info");
-	this->mpControlPanel->AddButton(70, 70, 90, 170,
+	this->mpControlPanel->AddButton(butt_size, butt_size, butt_size + space * 2, butt_size * 2 + space * 3,
 		this->mpControlPanel->GetBitmapByName("Crew"), "Crew");
-	this->mpControlPanel->AddButton(70, 70, 10, 90,
+	this->mpControlPanel->AddButton(butt_size, butt_size, space, butt_size + space * 2,
 		this->mpControlPanel->GetBitmapByName("ChangeCamera"), "ChangeCamera");
-	this->mpControlPanel->AddButton(70, 70, 10, this->mpControlPanel->GetWidth() - 80,
+	this->mpControlPanel->AddButton(butt_size, butt_size, space, this->mpControlPanel->GetWidth() - (butt_size + space),
 		this->mpControlPanel->GetBitmapByName("Exit"), "Exit");
 
 	this->mpControlPanel->GetButtonByName("Reset")->
