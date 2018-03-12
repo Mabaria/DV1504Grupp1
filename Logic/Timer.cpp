@@ -147,9 +147,59 @@ const std::string Timer::GetHoursAsStr()
 	return std::string(buffer);
 }
 
+void Timer::SetTimestamp(Timestamp ts)
+{
+	tm tmp;
+
+	tmp.tm_year = ts.date.year - 1900;
+	tmp.tm_mon = ts.date.month - 1;
+	tmp.tm_mday = ts.date.day;
+
+	tmp.tm_hour = ts.clock.hour;
+	tmp.tm_min = ts.clock.minute;
+	tmp.tm_sec = ts.clock.second;
+
+	this->mStartTime = mktime(&tmp);
+}
+
+Timestamp Timer::GetTimestamp() const
+{
+	Timestamp ts;
+
+	tm *tmp = gmtime(&this->mStartTime);
+
+	// Fill the timestamp
+	ts.date.year = tmp->tm_year + 1900;
+	ts.date.month = tmp->tm_mon + 1;
+	ts.date.day = tmp->tm_mday;
+
+	ts.clock.hour = tmp->tm_hour + 1;
+	ts.clock.minute = tmp->tm_min;
+	ts.clock.second = tmp->tm_sec;
+
+	return ts;
+}
+
 const time_t Timer::GetTimeData()
 {
 	return this->mStartTime;
+}
+
+const std::string Timer::GetFileFriendlyString() const
+{
+	char buffer[30];
+	strftime(buffer, 30, "%F~%H_%M_%S", this->pStartTimeStruct);
+	return std::string(buffer);
+}
+
+void Timer::UpdateTimeStruct() 
+{
+	this->pStartTimeStruct = localtime(&this->mStartTime);
+}
+
+int Timer::GetSecondsSinceStart() const
+{
+	return (int)this->mStartTime;
 }
 
 void Timer::UpdateTime()

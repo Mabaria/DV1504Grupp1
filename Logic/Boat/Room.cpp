@@ -2,12 +2,12 @@
 
 Room::Room()
 {
-	this->mIndexInBoat = -1;
-	this->mIndexInDeck = -1;
-	this->mDeckIndex = -1;
+	this->mIndex_Boat = -1;
+	this->mIndex_Deck = -1;
+	this->mIndex_DeckInBoat = -1;
 }
 
-Room::Room(RoomDesc desc)
+Room::Room(Room::Room::Desc desc)
 {
 	this->InitFromDesc(desc);
 }
@@ -23,10 +23,14 @@ Room::~Room()
 *	Room specific
 */
 
-void Room::SetIndex(int index)
+void Room::SetIndex_Boat(int index)
 {
-	this->mIndexInBoat = index;
-	this->mSensor.SetRoomIndex(this->mIndexInBoat);
+	this->mIndex_Boat = index;
+}
+
+void Room::SetIndex_Deck(int index)
+{
+	this->mIndex_Deck = index;
 }
 
 void Room::SetName(std::string name)
@@ -54,27 +58,26 @@ std::string Room::GetName() const
 	return this->mName;
 }
 
-void Room::InitFromDesc(RoomDesc desc)
+void Room::InitFromDesc(Room::Desc desc)
 {
+	this->mSensor.SetInputTypes(desc.inputs);
+	this->mIndex_Boat = desc.index_Boat;
+	this->mIndex_Deck = desc.index_Deck;
+	this->mIndex_DeckInBoat = desc.index_DeckInBoat;
 	this->mName = desc.name;
-	this->mIndexInBoat = desc.indexInBoat;
-	this->mIndexInDeck = desc.indexInDeck;
-	this->mDeckIndex = desc.deckIndex;
 	this->mDeckName = desc.deckName;
-	this->mSensor.SetRoomIndex(desc.indexInBoat);
-	this->mSensor.SetEventLog(desc.pEventLog);
-	this->mSensor.SetInputTypes(desc.inputTypes);
-	this->mSensor.SetActiveEvent(desc.activeIndex, desc.pActiveEvent);
+	this->mRoomLog.SetEventLogPtr(desc.pEventLog);
+	this->mRoomLog.SetRoomName(desc.name);
 }
 
 int Room::GetIndexInBoat() const
 {
-	return this->mIndexInBoat;
+	return this->mIndex_Boat;
 }
 
 int Room::GetIndexInDeck() const
 {
-	return this->mIndexInDeck;
+	return this->mIndex_Deck;
 }
 
 /**
@@ -103,25 +106,19 @@ std::string Room::GetDeckName() const
 	return this->mDeckName;
 }
 
-int Room::GetDeckIndex() const
+int Room::GetIndex_Boat() const
 {
-	return this->mDeckIndex;
+	return this->mIndex_Boat;
 }
 
-
-
-/**
-*	Log specific
-*/
-
-void Room::SetActiveEvent(int index, ActiveEvent *pActiveEvent)
+int Room::GetIndex_Deck() const
 {
-	this->mSensor.SetActiveEvent(index, pActiveEvent);
+	return this->mIndex_Deck;
 }
 
-void Room::SetEventLog(EventLog *pEventLog)
+int Room::GetIndex_DeckInBoat() const
 {
-	this->mSensor.SetEventLog(pEventLog);
+	return this->mIndex_DeckInBoat;
 }
 
 
@@ -132,17 +129,23 @@ void Room::SetEventLog(EventLog *pEventLog)
 
 bool Room::AddSensorEvent(Event::Type type)
 {
-	return this->mSensor.AutoTrigger(type);
+	if (this->mSensor.CanDetect(type))
+	{
+		return this->mRoomLog.AddEvent(type);
+	}
+
+	// If sensor can't detect given type
+	return false;
 }
 
 bool Room::AddPlotterEvent(Event::Type type)
 {
-	return this->mSensor.PlotTrigger(type);
+	return this->mRoomLog.AddEvent(type);
 }
 
 bool Room::ClearEvent(Event::Type type)
 {
-	return this->mSensor.ClearEvent(type);
+	return this->mRoomLog.ClearEvent(type);
 }
 
 void Room::AddInputType(Event::Type type)
@@ -150,14 +153,40 @@ void Room::AddInputType(Event::Type type)
 	this->mSensor.AddInputType(type);
 }
 
-int Room::GetActiveEventIndex() const
+void Room::GetActiveEvents(std::vector<LogEvent*> &output)
 {
-	return this->mSensor.GetActiveEventIndex();
+	this->mRoomLog.GetActiveEvents(output);
 }
 
-std::vector<LogEvent*> Room::GetActiveEvents() const
+int Room::GetActiveEventCount() const
 {
-	return this->mSensor.GetActiveEvents();
+	return this->mRoomLog.GetEventCount();
+}
+
+
+
+/**
+*	Action specific
+*/
+
+bool Room::AddAction(LogAction::Desc desc)
+{
+	return this->mRoomLog.AddAction(desc);
+}
+
+bool Room::ClearAction(int *actionIndex)
+{
+	return this->mRoomLog.ClearAction(actionIndex);
+}
+
+void Room::GetActiveActions(std::vector<LogAction*> &output)
+{
+	this->mRoomLog.GetActiveActions(output);
+}
+
+int Room::GetActionCount() const
+{
+	return this->mRoomLog.GetActionCount();
 }
 
 
@@ -166,16 +195,81 @@ std::vector<LogEvent*> Room::GetActiveEvents() const
 *	Disk specific
 */
 
-std::string Room::WriteString() const
+void Room::SetMetaPath(std::string path)
 {
-	std::string print = "";
+	this->mRoomLog.SetMetaPath(path);
+}
 
-	print += "r ";
-	print += this->mName;
-	print += " / ";
-	print += this->mSensor.WriteString();
+std::string Room::GetString() const
+{
+	std::stringstream ss;
 
-	return print;
+	ss << "r ";
+	ss << this->mName;
+	ss << " / ";
+	ss << this->mSensor.GetInputTypes_Int();
+
+	return ss.str();
+}
+
+Room::Desc Room::FillRoomDescFromLine(std::string line)
+{
+	Room::Desc desc;
+
+	std::stringstream buffer;
+	std::string roomName, word;
+
+	buffer.str(line);
+
+	/**
+	*	Get room name
+	*/
+	roomName = "";
+	buffer >> word; // Get 'r'
+	buffer >> word;
+
+	while (word != "/")
+	{
+		if (roomName != "")
+		roomName += " ";
+		roomName +=	word;
+
+		buffer >> word;
+	}
+	desc.name = Name::CorrectName(roomName);
+
+	/**
+	*	Get sensor data
+	*/
+	buffer >> desc.inputs;	// Input types (stored as int)
+	
+	return desc;
+}
+
+
+void Room::SaveRoomLog(std::string folderPath) const
+{
+	this->mRoomLog.SaveToFile(folderPath);
+}
+
+bool Room::LoadRoomLog(std::string folderPath)
+{
+	return this->mRoomLog.LoadFromFile(folderPath);
+}
+
+void Room::SaveRoomLog() const
+{
+	this->mRoomLog.SaveToFile();
+}
+
+bool Room::LoadRoomLog()
+{
+	return this->mRoomLog.LoadFromFile();
+}
+
+void Room::ClearMeta() const
+{
+	this->mRoomLog.ClearMeta();
 }
 
 void Room::InitRoomData(XMMATRIX matrix)

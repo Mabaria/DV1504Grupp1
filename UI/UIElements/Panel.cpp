@@ -26,7 +26,7 @@ Panel::Panel(int width, int height, int top, int left, HWND handle, LPCTSTR titl
 		GetModuleHandle(0),
 		0);
 	ShowWindow(this->mPanelWindow, SW_NORMAL);
-
+	
 	RECT parent_size;
 	GetClientRect(this->mParentWindow, &parent_size);
 
@@ -200,6 +200,7 @@ bool Panel::IsMouseInsidePanel()
 	{
 		RECT window_rect;
 		GetWindowRect(this->mPanelWindow, &window_rect);
+
 		POINT mouse_pos;
 		GetCursorPos(&mouse_pos);
 		result = PtInRect(&window_rect, mouse_pos); // if mouse is inside panel

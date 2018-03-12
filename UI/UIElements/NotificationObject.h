@@ -2,7 +2,7 @@
 #include "Button.h"
 #include "TextBox.h"
 #include "../../Logic/Timer.h"
-#include "../../Logic/Eventlog/LogEvent.h"
+#include "../../Logic/Log/LogEvent.h"
 #include "../../Logic/Boat/Room.h"
 #include "../../UI/UIElements/Button.h"
 #include "../../UI/UIElements/TextBox.h"
@@ -15,7 +15,7 @@
 struct ObserverInfo
 {
 	Room *pRoom = nullptr;
-	uint32_t actionData = 0;
+	uint32_t actionData;
 };
 #endif
 

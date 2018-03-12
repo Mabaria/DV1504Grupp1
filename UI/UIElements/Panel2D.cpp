@@ -12,6 +12,7 @@ Panel2D::Panel2D(
 	:Panel(width, height, top, left, handle, title)
 {
 	this->mDirect2D->CreateRenderTarget(this->mPanelWindow, width, height);
+
 	// Assumes the panel does not have a notification list.
 	this->mNotificationList = nullptr;
 	this->mNotificationListIsActive = false;
@@ -333,6 +334,7 @@ void Panel2D::mUpdateButtons()
 {
 	// For notification list.
 	Button *button = nullptr;
+	static Button *same_button_check = nullptr;
 	NotificationObject *notification_object = nullptr;
 	//----------------------
 	this->mButtonOccludes = false;
@@ -344,29 +346,55 @@ void Panel2D::mUpdateButtons()
 			it != this->mButtonVector.end();
 			it++)
 		{
-			if (Mouse::GetPositionPercentage().x <
-				(*it)->GetBoundingBoxPercentage().right &&
-				Mouse::GetPositionPercentage().x >
-				(*it)->GetBoundingBoxPercentage().left &&
-				Mouse::GetPositionPercentage().y <
-				(*it)->GetBoundingBoxPercentage().bottom &&
-				Mouse::GetPositionPercentage().y >
-				(*it)->GetBoundingBoxPercentage().top) /* Classic bounds check */
+			if ((*it)->GetAlive())
 			{
-				this->mButtonOccludes = true;
-				if (Mouse::IsButtonPressed(Buttons::Left))
+				if (Mouse::GetPositionPercentage().x <
+					(*it)->GetBoundingBoxPercentage().right &&
+					Mouse::GetPositionPercentage().x >
+					(*it)->GetBoundingBoxPercentage().left &&
+					Mouse::GetPositionPercentage().y <
+					(*it)->GetBoundingBoxPercentage().bottom &&
+					Mouse::GetPositionPercentage().y >
+					(*it)->GetBoundingBoxPercentage().top) /* Classic bounds check */
 				{
-					(*it)->SetButtonStatus(BUTTON_STATE::CLICKED);
-				}
-				else if (!Mouse::IsButtonDown(Buttons::Left) ||
-					(*it)->GetButtState() != BUTTON_STATE::CLICKED)
-					(*it)->SetButtonStatus(BUTTON_STATE::HOVER);
-			}
-			else
-			{
-				(*it)->SetButtonStatus(BUTTON_STATE::IDLE);
-			}
+					this->mButtonOccludes = true;
+					if (Mouse::IsButtonPressed(Buttons::Left))
+					{
+						(*it)->SetButtonStatus(BUTTON_STATE::CLICKED);
+						same_button_check = (*it);
+					}
+					else if (Mouse::IsButtonReleased(Buttons::Left))
+					{
+						if ((*it)->GetButtState() == BUTTON_STATE::CLICKED)
+						{
+							(*it)->SetButtonStatus(BUTTON_STATE::RELEASED);
+							same_button_check = nullptr;
+						}
+					}
+					else if (!Mouse::IsButtonDown(Buttons::Left) ||
+						(*it)->GetButtState() != BUTTON_STATE::CLICKED)
+					{
+						if (same_button_check != nullptr &&
+							same_button_check == (*it))
+						{
+							(*it)->SetButtonStatus(BUTTON_STATE::CLICKED);
+						}
+						else
+						{
+							(*it)->SetButtonStatus(BUTTON_STATE::HOVER);
+						}
 
+					}
+				}
+				else
+				{
+					(*it)->SetButtonStatus(BUTTON_STATE::IDLE);
+					if (Mouse::IsButtonReleased(Buttons::Left))
+					{
+						same_button_check = nullptr;
+					}
+				}
+			}
 		}
 		//! Notification list sets rect status instead of button status.
 		// Notifies system if a notification object is clicked.
@@ -394,11 +422,18 @@ void Panel2D::mUpdateButtons()
 					if (Mouse::IsButtonPressed(Buttons::Left))
 					{
 						button->SetRectStatus(BUTTON_STATE::CLICKED);
-						ObserverInfo obs_inf;
-						obs_inf.pRoom = notification_object->GetRoom();
-						obs_inf.actionData = No_Action;
-						notification_object->NotifyObservers(&obs_inf);
-						notification_object->SetIfNewStatus(false);
+					}
+					else if (Mouse::IsButtonReleased(Buttons::Left))
+					{
+						
+						if (button->GetButtState() == BUTTON_STATE::CLICKED)
+						{
+							ObserverInfo obs_inf;
+							obs_inf.pRoom = notification_object->GetRoom();
+							obs_inf.actionData = No_Action;
+							notification_object->NotifyObservers(&obs_inf);
+							notification_object->SetIfNewStatus(false);
+						}
 					}
 					else if (!Mouse::IsButtonDown(Buttons::Left) ||
 						button->GetButtState() != BUTTON_STATE::CLICKED)

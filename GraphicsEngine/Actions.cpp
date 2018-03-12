@@ -238,7 +238,7 @@ Actions::ActionPtr *Actions::PickAction()
 
 		if (fabs(x) < size && fabs(z) < size && actionDistance < distance)
 		{
-			std::cout << "Action Picking hit nr: " << i << std::endl;
+			//std::cout << "Action Picking hit nr: " << i << std::endl;
 			result = this->mpVertexPtrArray[i];
 			distance = actionDistance;
 		}
@@ -299,6 +299,16 @@ void Actions::Draw()
 
 	// Draw only the amount of vertecies that are active
 	this->pDirect3D->GetContext()->Draw(this->mVertexSize, 0);
+}
+
+ID3D11ShaderResourceView * Actions::GetIconResource()
+{
+	return this->mpIconResource;
+}
+
+ID3D11ShaderResourceView * Actions::GetNumberResource()
+{
+	return this->mpNumberResource;
 }
 
 bool Actions::CompileShadersAndLayout()

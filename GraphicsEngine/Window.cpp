@@ -274,13 +274,13 @@ Window::Window(
 	if (RegisterClassEx(&this->mWndClass))
 	{
 		RECT window_size = { 0, 0, this->mClientWidth, this->mClientHeight };
-		AdjustWindowRectEx(&window_size, WS_OVERLAPPEDWINDOW, false, 0);
+		AdjustWindowRectEx(&window_size, 0, false, 0);
 
 		this->mHwnd = CreateWindowEx(
 			0,
 			this->mTitle.c_str(),
 			this->mTitle.c_str(),
-			WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN,
+			WS_POPUP | WS_CLIPCHILDREN,
 			CW_USEDEFAULT,
 			CW_USEDEFAULT,
 			window_size.right - window_size.left,	// Width of window
