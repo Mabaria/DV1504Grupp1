@@ -203,7 +203,7 @@ void System::Update(ObserverInfo * obsInf)
 
 int System::GetNrOfRooms() const
 {
-	return this->mBoat.GetNrOfRooms();
+	return this->mBoat.GetRoomCount();
 }
 
 Room * System::GetRoomByIndex(int index)
@@ -362,6 +362,14 @@ void System::mHandleInput()
 
 		//// ___ END ___ (HOVER EFFECT)
 	}
+
+	else if (last_picked_room != nullptr)
+	{
+		std::string last_picked_name = last_picked_room->GetDeckName() + "bounds";
+		this->mUpdateHover(last_picked_name, last_picked_room->GetIndexInDeck(), false);
+		last_picked_room = nullptr;
+	}
+
 }
 
 void System::Update(Button * attribute)
@@ -422,7 +430,6 @@ void System::mUpdateRoomInfo()
 		if (*it == 0)
 		{
 			this->mpControlPanel->GetButtonByName("fireSensor")->SetOpacity(1.0f);
-
 		}
 		// Event 1 is currently injury
 		else if (*it == 2)
@@ -433,7 +440,6 @@ void System::mUpdateRoomInfo()
 		else if (*it == 3)
 		{
 			this->mpControlPanel->GetButtonByName("gasSensor")->SetOpacity(1.0f);
-
 		}
 
 	}

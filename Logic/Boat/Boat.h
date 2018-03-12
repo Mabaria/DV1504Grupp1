@@ -192,8 +192,6 @@ public:
 		DirectX::XMMATRIX **matrixList,
 		int amount);
 
-	int GetNrOfRooms() const;
-
 private:
 	
 	// Returns -1 if item is not found

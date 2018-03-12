@@ -68,12 +68,13 @@ Room * Simulator::pGetRandomRoom()
 
 	Room * pSelected = nullptr; // Selected Room
 
-	int fail_safe_count = 0; // if infinite loop was discovered
+	// if infinite loop was discovered and exit can be made
+	int fail_safe_count = 0;
 
+	// If its time to do a roll
 	if (mSecondsBetweenUpdates <= this->mTimer.GetSeconds())
 	{
 		this->mTimer.StartTimer();
-
 		float number = (float)(rand() % this->mMaxNumber); // Do a roll
 
 		if (number <= this->mMaxLimit) // Add event if roll succeeded
@@ -83,25 +84,34 @@ Room * Simulator::pGetRandomRoom()
 			int rRoom	= 0;		// Random Room
 
 			// Infinite loop when all rooms has events added
+			// Try to add event till it works (not optimised but works)
 			do {
-				if(!event_added)
+				if (!event_added)
+				{
 					rEvent = rand() % this->mNrOfEvents;
+				}
 
 				do {
-					if (!pSelected || !event_added)
-						rRoom = rand() % this->pSys->GetNrOfRooms();
 
+					if (!pSelected || !event_added)
+					{
+						rRoom = rand() % this->pSys->GetNrOfRooms();
+					}
 					pSelected = this->pSys->GetRoomByIndex(rRoom);
+
 				} while (!pSelected);
 
+
 				event_added = pSelected->AddSensorEvent(this->mEvents[rEvent]);
+
 
 				fail_safe_count++;
 			} while (!event_added && fail_safe_count <= 50);
 		}
 
+		/* -- For debugging --
 		if (!event_added)
-			std::cout << "Failed to place event!" << std::endl;
+			std::cout << "Failed to place event!" << std::endl;*/
 	}
 
 	return pSelected;
