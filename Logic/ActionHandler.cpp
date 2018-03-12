@@ -32,6 +32,8 @@ void ActionHandler::AddAction(float x, float z)
 			transformed_action_data = (ActionData)(this->mLastEvent.actionData + this->mActionRotation);
 		}
 		this->mpActions->AddAction(x, z, transformed_action_data);
+		// Send info to Logic
+
 		// Notify the event menu that an action has been placed so it can unlock the button
 		this->NotifyObservers(this);
 	}
