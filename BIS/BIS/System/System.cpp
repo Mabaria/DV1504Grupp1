@@ -276,11 +276,18 @@ void System::mHandleInput()
 		// Temp action removal.
 		else if (Mouse::IsButtonPressed(Buttons::Left))
 		{
-			Actions *actions = this->mpTopViewPanel->pGetActions();
-			int *act_ptr = actions->PickAction();
-			if (this->mpLastClickedRoom)
-				this->mpLastClickedRoom->ClearAction(act_ptr);
-			actions->RemoveAction(&act_ptr);
+			if (picked_room)
+			{
+				
+				Actions *actions = this->mpTopViewPanel->pGetActions();
+				int *act_ptr = actions->PickAction();
+
+				if (act_ptr)
+				{
+					picked_room->ClearAction(act_ptr);
+					actions->RemoveAction(&act_ptr);
+				}
+			}
 		}
 		// If actionHandler is ready to place an action, right click rotates the pending
 		// action to be placed
