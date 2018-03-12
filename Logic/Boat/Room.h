@@ -1,26 +1,18 @@
 #pragma once
 
 #include <string>
-#include "../../IO/Picking.h"
-#include "../Eventlog/EventLog.h"
-#include "../Event/Event.h"
-#include "Sensor.h"
 #include <DirectXMath.h>
 
-using namespace DirectX;
+#include "../../IO/Picking.h"
 
-struct RoomDesc
-{
-	int indexInBoat;
-	int indexInDeck;
-	int deckIndex;
-	int activeIndex;
-	ActiveEvent *pActiveEvent;
-	std::string name;
-	std::string deckName;
-	std::vector<Event::Type> inputTypes;
-	EventLog *pEventLog;
-};
+#include "RoomLog.h"
+#include "Sensor.h"
+
+#include "../Log/Log.h"
+
+#include "../CorrectName.h"
+
+using namespace DirectX;
 
 struct RoomData
 {
@@ -33,21 +25,32 @@ class Room
 {
 public:
 
+	struct Desc
+	{
+		int inputs;
+		int index_Boat;
+		int index_Deck;
+		int index_DeckInBoat;
+		std::string name;
+		std::string deckName;
+		Log *pEventLog;
+	};
+
 	Room();
-	Room(RoomDesc desc);
+	Room(Room::Desc desc);
 	~Room();
 
 	// Room specific
-	void SetIndex(int index);
+	void SetIndex_Boat(int index);
+	void SetIndex_Deck(int index);
 	void SetName(std::string name);
 	void SetAABB(const AABB &boundingBox);
 	std::string GetName() const;
-	void InitFromDesc(RoomDesc desc);
+	void InitFromDesc(Room::Desc desc);
 	int GetIndexInBoat() const;
 	int GetIndexInDeck() const;
 
 	float CheckRayCollision(const Ray &rRay);
-
 	float CheckWorldRayCollision(const Ray &rRay);
 
 	// Sensor specific
@@ -56,11 +59,9 @@ public:
 	// Deck specific
 	void SetDeckName(std::string name);
 	std::string GetDeckName() const;
-	int GetDeckIndex() const;
-
-	// Log specific
-	void SetActiveEvent(int index, ActiveEvent *pActiveEvent);
-	void SetEventLog(EventLog *pEventLog);
+	int GetIndex_Boat() const;
+	int GetIndex_Deck() const;
+	int GetIndex_DeckInBoat() const;
 
 	// Event specific
 	bool AddSensorEvent(Event::Type type);	/* This function will only add
@@ -71,13 +72,28 @@ public:
 											   event without checking the
 											   sensor */
 	bool ClearEvent(Event::Type type);
-
 	void AddInputType(Event::Type type);
-	int GetActiveEventIndex() const;
-	std::vector<LogEvent*> GetActiveEvents() const;
+	void GetActiveEvents(std::vector<LogEvent*> &output);
+	int GetActiveEventCount() const;
+
+	// Action specific
+	bool AddAction(LogAction::Desc desc); /* No need to fill Desc.roomName
+											 (happens automatically) */
+	bool ClearAction(int *actionIndex);
+	void GetActiveActions(std::vector<LogAction*> &output);
+	int GetActionCount() const;
 
 	// Disk specific
-	std::string WriteString() const;
+	void SetMetaPath(std::string path);
+	std::string GetString() const;
+	static Room::Desc FillRoomDescFromLine(std::string line);
+	void SaveRoomLog(std::string folderPath) const;
+	bool LoadRoomLog(std::string folderPath);
+
+	void SaveRoomLog() const;
+	bool LoadRoomLog();
+
+	void ClearMeta() const;
 
 	void InitRoomData(XMMATRIX matrix);
 
@@ -99,9 +115,9 @@ public:
 private:
 
 	// Room specific
-	int mIndexInBoat;
-	int mIndexInDeck;
-	int mDeckIndex;
+	int mIndex_Boat;
+	int mIndex_Deck;
+	int mIndex_DeckInBoat;
 	std::string mName;
 	AABB mBoundingBox;
 
@@ -115,4 +131,7 @@ private:
 
 	// Room info for camera purposes.
 	RoomData mRoomData;
+
+	// Log specific
+	RoomLog mRoomLog;
 };

@@ -3,44 +3,60 @@
 #include <string>
 #include <vector>
 #include "Room.h"
+#include "../Log/Log.h"
 
 /**
 *	Deck is a simple structure that holds offset and length of its own rooms in
 * the Boat room list.
 */
 
-struct DeckDesc
-{
-	int index;
-	int roomOffset;
-	std::string name;
-};
-
 class Deck
 {
 public:
 
+	struct Desc
+	{
+		int index;
+		int roomOffset;
+		std::string name;
+		Log *pEventLog;
+	};
+
+
+
 	Deck();
-	Deck(DeckDesc desc);
+	Deck(Deck::Desc desc);
 	~Deck();
 	
 	// Deck specific
 	void SetIndex(int index);
 	void SetName(std::string name);
-	void InitFromDesc(DeckDesc desc);
+	void InitFromDesc(Deck::Desc desc);
 	std::string GetName() const;
 
 	// Room specific
-	void AddRoom(Room *pRoom, int index = -1);
-	void SetRoomCount(int count);
+	bool AddRoom(std::string name, int inputs);
+	bool AddRoom(std::string line);
 	void SetRoomOffset(int index);
-	void PushRoomOffset(int value = 1);
 	int GetRoomCount() const;
 	int GetRoomOffset() const;
-	Room* GetRoomPointerAt(int index);
+	int GetRoomIndex_Boat(std::string name) const;
+	int GetRoomIndex_Deck(std::string name) const;
+	Room* GetRoomPointer(std::string name) const;
+	Room* GetRoomPointerAt(int index) const;
 
 	// Disk specific
+	void SetMetaPath(std::string path);
 	std::string GetString() const;
+	std::string GetRoomStringAt(int index) const;
+	static Deck::Desc FillDeckDescFromLine(std::string line);
+	void SaveRoomLogs(std::string folderPath) const;
+	bool LoadRoomLogs(std::string folderPath);
+
+	void SaveRoomLogs() const;
+	bool LoadRoomLogs();
+
+	void ClearMetas() const;
 
 private:
 
@@ -49,7 +65,10 @@ private:
 	std::string mName;
 
 	// Room specific
-	int mRoomCount;
 	int mRoomOffset;
 	std::vector<Room*> mpRooms;
+	
+	// Log specific
+	Log *mpEventLog;
 };
+

@@ -431,7 +431,8 @@ void System::mUpdateRoomInfo()
 
 void System::mUpdateEvents(Room * room)
 {
-	std::vector<LogEvent*> events_in_room = room->GetActiveEvents();
+	std::vector<LogEvent*> events_in_room;
+	room->GetActiveEvents(events_in_room);
 	// If there already is an active event of that type in that room
 	// the event is removed.
 	if (!this->mpActiveLogPanel->AddNotification(room, events_in_room.back()))
@@ -439,7 +440,7 @@ void System::mUpdateEvents(Room * room)
 		Event::Type to_remove = this->mpMenuPanel->GetLastClicked();
 		this->mpActiveLogPanel->RemoveNotification(room, to_remove);
 		room->ClearEvent(to_remove);
-		events_in_room = room->GetActiveEvents();
+		room->GetActiveEvents(events_in_room);
 	}
 	// Adding the system as an observer to the newly added notification object.
 	else
@@ -465,7 +466,7 @@ void System::mUpdateEvents(Room * room)
 	EventData event_data = { 0 };
 	for (int i = 0; (i < (int)events_in_room.size()) && (i < 4); i++)
 	{
-		event_data.slots[i] = (float)events_in_room[i]->GetType() + 1;
+		event_data.slots[i] = (float)Event::GetID(events_in_room[i]->GetType()) + 1;
 	}
 
 	top_picked_deck->SetEvent(
@@ -827,7 +828,11 @@ void System::mSetupModels()
 
 void System::mSetupBoat()
 {
-	this->mBoat.ReadFile("../../SaveFiles/data.boat");
+	this->mBoat.LoadFromFile_Boat("../../Savefiles/Boats/Vulcanus.boat");
+
+	this->mBoat.SetLogPath("../../Savefiles/Logs/Log.log");
+	this->mBoat.SetLogMetaPath("../../Savefiles/Metafiles/Log.meta");
+	this->mBoat.SetRoomMetaDir("../../Savefiles/Metafiles/RoomLogMetas/");
 
 	// Creating the mesh and matrix list that boat 
 	// needs to load bounding boxes to the rooms.
@@ -849,9 +854,4 @@ void System::mSetupBoat()
 	};
 
 	this->mBoat.LoadBoundingBoxes(mesh_list, floor_matrix_list, 3);
-
-	/**
-	*	Send corresponding pointers
-	*/
-	this->mBoat.SetEventLog(&this->mEventLog);
 }
