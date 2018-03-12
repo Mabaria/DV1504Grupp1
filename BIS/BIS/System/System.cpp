@@ -121,7 +121,6 @@ void System::BuildGraphicalUserInterface(
 	this->mpMenuPanel->Init(
 		this->mpTopViewPanel->GetWidth(), 
 		this->mpTopViewPanel->GetHeight(), 
-		&this->mEventLog, 
 		windowName.c_str(), 
 		this->mpTopViewPanel->GetPanelWindowHandle());
 	this->mpMenuPanel->AddObserver(this);

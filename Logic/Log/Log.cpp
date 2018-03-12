@@ -250,6 +250,16 @@ bool Log::LoadFromFile(std::string filePath, std::string metaFile)
 	return true;
 }
 
+void Log::GetAllActiveActions(std::vector<LogAction*> &output)
+{
+	output.clear();
+	for (int i = 0; i < (int)this->mpActions.size(); i++)
+	{
+		if (this->mpActions[i]->IsActive())
+			output.push_back(this->mpActions[i]);
+	}
+}
+
 void Log::AppendFiles_Event() const
 {
 	std::ofstream file;

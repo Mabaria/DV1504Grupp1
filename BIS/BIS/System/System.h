@@ -63,7 +63,7 @@ private:
 	// Personnel Log
 	CrewPanel mpCrewPanel;
 
-	Log mEventLog;
+	//Log mEventLog;
 	Boat mBoat;
 	Ray mRay;
 

@@ -418,6 +418,11 @@ bool Boat::LoadFromFile_Log()
 	return true;
 }
 
+void Boat::GetAllActiveActions(std::vector<LogAction*>& output)
+{
+	this->mEventLog.GetAllActiveActions(output);
+}
+
 
 
 /**

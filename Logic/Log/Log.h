@@ -63,6 +63,8 @@ public:
 	void SaveToFile(std::string filePath, std::string metaFile) const;
 	bool LoadFromFile(std::string filePath, std::string metaFile);
 
+	void GetAllActiveActions(std::vector<LogAction*> &output);
+
 private:
 
 	void AppendFiles_Event() const;
