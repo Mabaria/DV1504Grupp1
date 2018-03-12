@@ -278,8 +278,8 @@ void System::mHandleInput()
 		{
 			Actions *actions = this->mpTopViewPanel->pGetActions();
 			int *act_ptr = actions->PickAction();
-			actions->RemoveAction(&act_ptr);
 			picked_room->ClearAction(act_ptr);
+			actions->RemoveAction(&act_ptr);
 		}
 		// If actionHandler is ready to place an action, right click rotates the pending
 		// action to be placed
