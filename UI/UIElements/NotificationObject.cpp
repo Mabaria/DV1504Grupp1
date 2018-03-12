@@ -212,6 +212,7 @@ void NotificationObject::Update()
 {
 	this->mElapsedTime = this->mpTimer->GetTimeAsStr();
 	this->SetText(this->GetNotificationString());
+	this->mUpdateActionButton();
 }
 
 void NotificationObject::Draw()
@@ -222,10 +223,11 @@ void NotificationObject::Draw()
 			sin(this->mNewColorCounter += 0.2f),
 			0, 0);
 	}
-	this->mUpdateActionButton();
+
 	this->mButton.DrawRect();
 	this->mTextBox.DrawTextBox();
 	this->mButton.DrawButton();
+
 	if (this->mActionButton.GetOpacity() > 0.0f)
 		this->mActionButton.DrawRect();
 	this->mActionButton.DrawButton();
