@@ -175,11 +175,6 @@ void System::Update(ObserverInfo * obsInf)
 		// If a notification object is clicked in the active log panel.
 		else if (this->mpActiveLogPanel->IsMouseInsidePanel())
 		{
-			this->mpTopViewPanel->
-				GetMovableComponent()->
-				FocusCameraOnRoom(obsInf->pRoom, true);
-
-
 			if (this->mpLastClickedRoom != nullptr)
 			{
 				std::string picked_name = this->mpLastClickedRoom->GetDeckName() + "bounds";
@@ -192,15 +187,20 @@ void System::Update(ObserverInfo * obsInf)
 
 			this->mpLastClickedRoom = obsInf->pRoom;
 			this->mUpdateRoomInfo();
-			this->mpMenuPanel->SetActiveRoom(this->mpLastClickedRoom);
-			this->mpMenuPanel->UpdateEventButtonImages();
+
 			this->mpMenuPanel->OpenAt(this->mpLastClickedRoom);
+			this->mpMenuPanel->UpdateEventButtonImages();
+
 			std::string picked_name = this->mpLastClickedRoom->GetDeckName() + "bounds";
 			this->mpTopViewPanel->rGetMeshObject(picked_name)->SetSelected(
 				true,
 				this->mpTopViewPanel->rGetDirect3D().GetContext(),
 				this->mpLastClickedRoom->GetIndexInDeck()
 			);
+
+			this->mpTopViewPanel->
+				GetMovableComponent()->
+				FocusCameraOnRoom(this->mpLastClickedRoom, true);
 		}
 	}
 }
