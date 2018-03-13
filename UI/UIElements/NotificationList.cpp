@@ -52,7 +52,8 @@ bool NotificationList::AddNotification(
 	Direct2D * direct2d, 
 	Room * room, 
 	LogEvent * event,
-	ID2D1Bitmap * bitmap)
+	ID2D1Bitmap * bitmap,
+	bool addedBySensor)
 {
 	bool new_event = true;
 	for (int i = 0; i < (int)this->mObjects.size() && new_event; i++)
@@ -76,6 +77,8 @@ bool NotificationList::AddNotification(
 			this->mObjectFontSize,
 			bitmap,
 			this->mpActionSymbolsBitmap));
+			bitmap,
+			addedBySensor));
 
 		this->mObjects.back()->Move(2, this->mSpace);
 
@@ -245,7 +248,8 @@ void NotificationList::Draw()
 		}
 		else if ((int)this->mObjects[i]->GetButton()->GetButtonSize().top
 			> (int)this->mpRenderTarget->GetSize().height &&
-			this->mObjects[i]->GetIfNewStatus())
+			this->mObjects[i]->GetIfNewStatus() &&
+			this->mObjects[i]->GetIfAddedBySensor())
 		{
 			tick_up = true;
 		}
