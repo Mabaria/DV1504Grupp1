@@ -189,10 +189,12 @@ void System::Update(ObserverInfo * obsInf)
 					this->mpLastClickedRoom->GetIndexInDeck()
 				);
 			}
+
 			this->mpLastClickedRoom = obsInf->pRoom;
 			this->mUpdateRoomInfo();
 			this->mpMenuPanel->SetActiveRoom(this->mpLastClickedRoom);
 			this->mpMenuPanel->UpdateEventButtonImages();
+			this->mpMenuPanel->OpenAt(this->mpLastClickedRoom);
 			std::string picked_name = this->mpLastClickedRoom->GetDeckName() + "bounds";
 			this->mpTopViewPanel->rGetMeshObject(picked_name)->SetSelected(
 				true,
