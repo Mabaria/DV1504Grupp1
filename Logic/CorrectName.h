@@ -1,8 +1,5 @@
 #pragma once
 
-//#ifndef CorrectName_H
-//#define CorrectName_H
-
 #include <string>
 
 namespace Name
@@ -40,25 +37,14 @@ namespace Name
 
 	static std::string GetTabs(int stringSize)
 	{
-		if (stringSize < 4)
-			return "\t\t\t\t\t\t\t\t\t";
 		if (stringSize < 8)
-			return "\t\t\t\t\t\t\t\t";
-		if (stringSize < 12)
-			return "\t\t\t\t\t\t\t";
-		if (stringSize < 16)
-			return "\t\t\t\t\t\t";
-		if (stringSize < 20)
 			return "\t\t\t\t\t";
-		if (stringSize < 24)
+		if (stringSize < 20)
 			return "\t\t\t\t";
 		if (stringSize < 28)
 			return "\t\t\t";
-		if (stringSize < 32)
-			return "\t\t";
 		else
 			return "\t";
 	}
 };
-//#endif // !1
 

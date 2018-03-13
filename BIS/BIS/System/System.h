@@ -51,6 +51,7 @@ private:
 	void mUpdateRoomInfo();
 
 	void mUpdateEvents(Room *room);
+	void mUpdateEvent(Room *pRoom, LogEvent *pEvent);
 
 	void mUpdateGhostIcons();
 

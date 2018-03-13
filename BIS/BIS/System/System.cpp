@@ -276,7 +276,11 @@ void System::mHandleInput()
 		{
 			Actions *actions = this->mpTopViewPanel->pGetActions();
 			int *act_ptr = actions->PickAction();
-			picked_room->ClearAction(act_ptr);
+			
+			if (picked_room)
+			{
+				picked_room->ClearAction(act_ptr);
+			}
 			actions->RemoveAction(&act_ptr);
 		}
 		// If actionHandler is ready to place an action, right click rotates the pending
@@ -483,6 +487,52 @@ void System::mUpdateEvents(Room * room)
 		this->mpSideViewPanel->rGetDirect3D().GetContext(),
 		index_in_deck);
 
+	this->mpMenuPanel->UpdateEventButtonImages();
+}
+
+void System::mUpdateEvent(Room * pRoom, LogEvent * pEvent)
+{
+	// If there already is an active event of that type in that room
+	// the event is removed.
+	this->mpActiveLogPanel->AddNotification(pRoom, pEvent);
+
+	// Adding the system as an observer to the newly added notification object.
+	this->mpActiveLogPanel->
+		GetNotificationList()->
+		GetNotificationObjectByIndex(
+			this->mpActiveLogPanel->GetNotificationList()->
+			GetNumberOfNotificationObjects() - 1)->
+		AddObserver(this);
+
+	// Adds bounds to the deck name to get the name of the 
+	// mesh object holding the bounding boxes for the deck.
+	std::string bounds_name = pRoom->GetDeckName() + "bounds";
+
+	// Saving things for readability.
+	MeshObject *top_picked_deck = this->mpTopViewPanel->rGetMeshObject(bounds_name);
+	MeshObject *side_picked_deck = this->mpSideViewPanel->rGetMeshObject(bounds_name);
+	int index_in_deck = pRoom->GetIndexInDeck();
+
+	std::vector<LogEvent*> events_in_room;
+	pRoom->GetActiveEvents(events_in_room);
+
+	// Filling event data for bounding box coloring.
+	EventData event_data = { 0 };
+	for (int i = 0; (i < (int)events_in_room.size()) && (i < 4); i++)
+	{
+		event_data.slots[i] = (float)Event::GetID(events_in_room[i]->GetType()) + 1;
+	}
+	
+	top_picked_deck->SetEvent(
+		event_data,
+		this->mpTopViewPanel->rGetDirect3D().GetContext(),
+		index_in_deck);
+	
+	side_picked_deck->SetEvent(
+		event_data,
+		this->mpSideViewPanel->rGetDirect3D().GetContext(),
+		index_in_deck);
+	
 	this->mpMenuPanel->UpdateEventButtonImages();
 }
 
@@ -889,8 +939,8 @@ void System::mSetupBoat()
 
 		if (pRoom->GetActiveEventCount() > 0)
 		{
-			this->mpMenuPanel->SetActiveRoom(pRoom);
-			this->mUpdateEvents(pRoom);
+			//this->mpMenuPanel->SetActiveRoom(pRoom);
+			//this->mUpdateEvents(pRoom);
 
 			std::vector<LogEvent*> events;
 			pRoom->GetActiveEvents(events);		
@@ -910,14 +960,14 @@ void System::mSetupBoat()
 	infolist.sort();
 
 	EventInfo eventinfo;
-	do
+	while ((int)infolist.size() > 0)
 	{
-		eventinfo = infolist.back();
+		eventinfo = infolist.front();
 
 		this->mpMenuPanel->SetActiveRoom(eventinfo.pRoom);
-		this->mUpdateEvents(eventinfo.pRoom); // TODO: Skapa funktion som ej går igenom ALLA events i rummet, utan bara givet event.
+		this->mUpdateEvent(eventinfo.pRoom, eventinfo.pEvent);
 		//this->mpActiveLogPanel->AddNotification(eventinfo.pRoom, eventinfo.pEvent);
 
-		infolist.pop_back();
-	} while ((int)infolist.size() > 0);
+		infolist.pop_front();
+	}
 }
