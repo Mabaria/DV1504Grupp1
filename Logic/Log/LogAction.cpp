@@ -22,6 +22,10 @@ std::string LogAction::GetStringFromType(LogAction::Type type)
 			return Name::CorrectName("Stöttning");
 		case LogAction::Type::Damaged_Bulk:
 			return Name::CorrectName("Skadat skott");
+		case LogAction::Type::Draining:
+			return Name::CorrectName("Länsning");
+		case LogAction::Type::Seal_Hole:
+			return Name::CorrectName("Tätning");
 		default:
 			return Name::CorrectName("Okänd åtgärd");
 	}
@@ -47,9 +51,13 @@ LogAction::Type LogAction::GetTypeFromString(std::string type)
 		return LogAction::Type::Supporting_Wall;
 	if (type == Name::CorrectName("Skadat skott"))
 		return LogAction::Type::Damaged_Bulk;
+	if (type == Name::CorrectName("Länsning"))
+		return LogAction::Type::Draining;
+	if (type == Name::CorrectName("Tätning"))
+		LogAction::Type::Seal_Hole;
 
 	// Default:
-	return LogAction::Type::Damaged_Bulk;
+	return LogAction::Type::Seal_Hole;
 }
 
 LogAction::Type LogAction::GetTypeFromNumber(int number)
@@ -74,8 +82,12 @@ LogAction::Type LogAction::GetTypeFromNumber(int number)
 			return LogAction::Type::Supporting_Wall;
 		case 8:
 			return LogAction::Type::Damaged_Bulk;
+		case 9:
+			return LogAction::Type::Draining;
+		case 10:
+			return LogAction::Type::Seal_Hole;
 		default:
-			return LogAction::Type::Damaged_Bulk;
+			return LogAction::Type::Seal_Hole;
 	}
 }
 
@@ -97,6 +109,14 @@ LogAction::LogAction(LogAction::Desc desc)
 
 	this->mCoord.x = desc.pos_x;
 	this->mCoord.z = desc.pos_z;
+
+	if (LogAction::CheckHasNumber(this->mType))
+	{
+		this->mHasNumber = true;
+		this->mIconNumber = desc.numberOnIcon;
+	}
+	else
+		this->mHasNumber = false;
 }
 
 LogAction::LogAction(std::string lineFromLog, std::string metaLine)
@@ -140,6 +160,9 @@ LogAction::LogAction(std::string lineFromLog, std::string metaLine)
 	} // Exits with word == "|"
 	this->mType = LogAction::GetTypeFromString(actionType);
 
+	if (LogAction::CheckHasNumber(this->mType))
+		this->mHasNumber = true;
+
 
 	// Get active info
 	ss >> word;
@@ -174,6 +197,13 @@ LogAction::LogAction(std::string lineFromLog, std::string metaLine)
 	ss >> this->mRotation;
 	ss >> this->mCoord.x;
 	ss >> this->mCoord.z;
+
+	if (this->mHasNumber)
+	{
+		ss >> this->mIconNumber;
+	}
+	else
+		this->mIconNumber = -1;
 }
 
 LogAction::~LogAction()
@@ -329,6 +359,11 @@ std::string LogAction::GetMetaString() const
 		<< " "
 		<< this->mCoord.z;
 
+	if (this->mHasNumber)
+	{
+		ss << " " << this->mIconNumber;
+	}
+
 	return ss.str();
 }
 
@@ -377,4 +412,14 @@ Timestamp LogAction::GetTimestamp_Start() const
 int LogAction::GetSecondsSinceStart() const
 {
 	return this->mTimer.GetSecondsSinceStart();
+}
+
+bool LogAction::CheckHasNumber(LogAction::Type type)
+{
+	if (type == LogAction::Type::Injured_Moved ||
+		type == LogAction::Type::Injured_Treated ||
+		type == LogAction::Type::Injured_Reported)
+		return true;
+
+	return false;
 }

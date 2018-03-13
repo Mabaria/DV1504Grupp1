@@ -264,16 +264,44 @@ void System::mHandleInput()
 			if (picked_room)
 			{
 				XMFLOAT3 picked_position = this->mBoat.GetPickedPosition(this->mRay);
-				this->mActionHandler.AddAction(picked_position.x, picked_position.z);
+				ActionHandler::ActionInfo result = this->mActionHandler.AddAction(
+					picked_position.x,
+					picked_position.z);
+
+
+				if (result.ActionPtr != nullptr)
+				{
+					LogAction::Desc desc;
+
+					desc.active = true;
+					desc.start = true;
+					desc.pActionIndex = result.ActionPtr;
+					desc.pos_x = result.pos_x;
+					desc.pos_z = result.pos_z;
+					desc.rotation = result.rotation;
+					desc.type = (LogAction::Type)result.type;
+					desc.numberOnIcon = result.number;
+
+					picked_room->AddAction(desc);
+				}
 			}
 			this->mActionHandler.SwitchWaitingState();
 		}
 		// Temp action removal.
 		else if (Mouse::IsButtonPressed(Buttons::Left))
 		{
-			Actions *actions = this->mpTopViewPanel->pGetActions();
-			Actions::ActionPtr *act_ptr = actions->PickAction();
-			actions->RemoveAction(&act_ptr);
+			if (picked_room)
+			{
+				
+				Actions *actions = this->mpTopViewPanel->pGetActions();
+				int *act_ptr = actions->PickAction();
+
+				if (act_ptr)
+				{
+					picked_room->ClearAction(act_ptr);
+					actions->RemoveAction(&act_ptr);
+				}
+			}
 		}
 		// If actionHandler is ready to place an action, right click rotates the pending
 		// action to be placed
@@ -416,22 +444,23 @@ void System::mUpdateRoomInfo()
 	this->mpControlPanel->GetButtonByName("gasSensor")->SetOpacity(0.0f);
 
 	// Get the sensors in the room
-	std::vector<Event::Type> sensors = this->mpLastClickedRoom->GetInputTypes();
+	std::vector<Event::Type> sensors;
+	this->mpLastClickedRoom->GetInputTypes(sensors);
 
 	for (std::vector<Event::Type>::iterator it = sensors.begin(); it != sensors.end();
 		it++)
 	{
-		if (*it == 0)
+		if (*it == 1)
 		{
 			this->mpControlPanel->GetButtonByName("fireSensor")->SetOpacity(1.0f);
 		}
 		// Event 1 is currently injury
-		else if (*it == 2)
+		else if (*it == 4)
 		{
 			this->mpControlPanel->GetButtonByName("waterSensor")->SetOpacity(1.0f);
 		
 		}
-		else if (*it == 3)
+		else if (*it == 8)
 		{
 			this->mpControlPanel->GetButtonByName("gasSensor")->SetOpacity(1.0f);
 		}

@@ -27,7 +27,9 @@ public:
 		Ventilation_Out,
 		Cooling_Wall,
 		Supporting_Wall,
-		Damaged_Bulk
+		Damaged_Bulk,
+		Draining,
+		Seal_Hole
 	};
 
 	struct Desc
@@ -39,6 +41,7 @@ public:
 		float pos_z;
 		bool start;
 		bool active;
+		uint32_t numberOnIcon;
 
 		/**
 		*	0	-	No rotation
@@ -47,7 +50,7 @@ public:
 		*	48	-	270 degrees
 		*	64	-	Stationary (depending on camera)
 		*/
-		uint32_t rotation; // 0-3 
+		uint32_t rotation; // 0-4 
 
 		// Will be filled automatically
 		std::string roomName;
@@ -95,6 +98,8 @@ public:
 
 private:
 
+	static bool CheckHasNumber(LogAction::Type type);
+
 	Timer mTimer;
 
 	bool mActive;
@@ -104,6 +109,10 @@ private:
 
 	int *mpActionIndex;
 	LogAction::Coordinate mCoord;
+
+	// If action has number in icon
+	bool mHasNumber;
+	uint32_t mIconNumber;
 
 	// Used when saving/reading from file
 	int mID;

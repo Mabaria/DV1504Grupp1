@@ -143,7 +143,7 @@ void Actions::SetMoveableCamera(MovableCameraComponent *pMovableCamera)
 	this->pMovableCamera = pMovableCamera;
 }
 
-Actions::ActionPtr *Actions::AddAction(float x, float y, uint32_t data)
+int *Actions::AddAction(float x, float y, uint32_t data)
 {
 	// Early exit if it would exceed max events
 	if (this->mVertexSize + 1 >= this->mcMaxEvents)
@@ -154,7 +154,7 @@ Actions::ActionPtr *Actions::AddAction(float x, float y, uint32_t data)
 		x, 0.0f, y, data
 	};
 	// Create a new Action Pointer with the right index
-	ActionPtr *returnPtr = new ActionPtr(this->mVertexSize);
+	int *returnPtr = new int(this->mVertexSize);
 	// Store the pointer in an array
 	this->mpVertexPtrArray[this->mVertexSize++] =
 		returnPtr;
@@ -164,7 +164,7 @@ Actions::ActionPtr *Actions::AddAction(float x, float y, uint32_t data)
 	return returnPtr;
 }
 
-void Actions::RemoveAction(ActionPtr **pActionPtr)
+void Actions::RemoveAction(int **pActionPtr)
 {
 	// If the action is already removed (nullptr), then early exit
 	if ((*pActionPtr) != nullptr)
@@ -173,18 +173,18 @@ void Actions::RemoveAction(ActionPtr **pActionPtr)
 		// array and replaces the requested action. The action pointer will
 		// also be deleted so no loose ends/memory leaks remains.
 
-		this->mpVertexArray[(*pActionPtr)->index] =
+		this->mpVertexArray[**pActionPtr] =
 			this->mpVertexArray[--this->mVertexSize];
-		this->mpVertexPtrArray[(*pActionPtr)->index] =
+		this->mpVertexPtrArray[**pActionPtr] =
 			this->mpVertexPtrArray[this->mVertexSize];
-		this->mpVertexPtrArray[(*pActionPtr)->index]->index = (*pActionPtr)->index;
+		*this->mpVertexPtrArray[**pActionPtr] = **pActionPtr; // If shit breaks, check this
 		delete (*pActionPtr);
 		(*pActionPtr) = nullptr;
 		this->mVertexArrayUpdated = true;
 	}
 }
 
-Actions::ActionPtr *Actions::PickAction()
+int *Actions::PickAction()
 {
 	Ray ray;
 	Picking::GetWorldRay(
@@ -199,7 +199,7 @@ Actions::ActionPtr *Actions::PickAction()
 
 	float size = 0.027f;
 
-	ActionPtr *result = nullptr;
+	int *result = nullptr;
 	float distance = 10000.f;
 
 	for (int i = 0; i < this->mVertexSize; i++)
@@ -404,7 +404,7 @@ bool Actions::CreateVertexBuffer()
 	this->mpVertexArray = new ActionVertex[this->mcMaxEvents];
 	memset(this->mpVertexArray, 0, sizeof(ActionVertex)*this->mcMaxEvents);
 
-	this->mpVertexPtrArray = new ActionPtr*[this->mcMaxEvents];
+	this->mpVertexPtrArray = new int*[this->mcMaxEvents];
 
 	// Create buffer for the vertecies
 	D3D11_BUFFER_DESC vertex_buffer_desc{};
