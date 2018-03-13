@@ -47,6 +47,13 @@ public:
 	//	}
 	//};
 
+	struct Info
+	{
+		float x;
+		float z;
+		uint32_t data;
+	};
+
 	Actions();
 	~Actions();
 
@@ -57,6 +64,10 @@ public:
 	void RemoveAction(int **pActionPtr);
 	int *PickAction();
 	void Draw();
+
+	
+
+	void InitFromFile(std::vector<Info> input, std::vector<int*> &output);
 
 	ID3D11ShaderResourceView *GetIconResource();
 	ID3D11ShaderResourceView *GetNumberResource();

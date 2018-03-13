@@ -116,7 +116,7 @@ bool RoomLog::ClearAction(int *actionIndex)
 			desc.pActionIndex = pAction->GetActionIndex();
 			desc.pos_x = pAction->GetPos_X();
 			desc.pos_z = pAction->GetPos_Z();
-			desc.rotation = pAction->GetRotation();
+			desc.data = pAction->GetData();
 			desc.start = false;
 			desc.active = false;
 

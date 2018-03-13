@@ -41,16 +41,8 @@ public:
 		float pos_z;
 		bool start;
 		bool active;
-		uint32_t numberOnIcon;
 
-		/**
-		*	0	-	No rotation
-		*	16	-	90 degrees
-		*	32	-	180 degrees
-		*	48	-	270 degrees
-		*	64	-	Stationary (depending on camera)
-		*/
-		uint32_t rotation; // 0-4 
+		uint32_t data;
 
 		// Will be filled automatically
 		std::string roomName;
@@ -72,12 +64,13 @@ public:
 	void SetType(LogAction::Type type);
 	bool IsActive() const;
 	LogAction::Type GetType() const;
+	void SetActionIndex(int *index);
 	int* GetActionIndex();
 	void SetPos(float x, float z);
 	float GetPos_X() const;
 	float GetPos_Z() const;
 	int GetID() const;
-	uint32_t GetRotation() const;
+	uint32_t GetData() const;
 
 	// Log specific
 	std::string GetLogString() const;
@@ -110,11 +103,7 @@ private:
 	int *mpActionIndex;
 	LogAction::Coordinate mCoord;
 
-	// If action has number in icon
-	bool mHasNumber;
-	uint32_t mIconNumber;
-
 	// Used when saving/reading from file
+	uint32_t mData;
 	int mID;
-	uint32_t mRotation;
 };

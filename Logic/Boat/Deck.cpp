@@ -214,8 +214,7 @@ bool Deck::LoadRoomLogs()
 {
 	for (int i = 0; i < (int)this->mpRooms.size(); i++)
 	{
-		if (!this->mpRooms[i]->LoadRoomLog())
-			return false;
+		this->mpRooms[i]->LoadRoomLog();
 	}
 	return true;
 }

@@ -23,7 +23,6 @@ public:
 
 	bool Init(int parentWidth,
 		int parentHeight,
-		Log *pEventLog,
 		LPCTSTR windowName,
 		HWND *pWindow);
 	bool OpenAt(Room *pRoom);

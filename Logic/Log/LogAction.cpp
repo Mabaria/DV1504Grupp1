@@ -101,7 +101,6 @@ LogAction::LogAction(LogAction::Desc desc)
 	this->mStart = desc.start;
 	this->mActive = desc.active;
 	this->mID = desc.ID;
-	this->mRotation = desc.rotation;
 
 	this->mType = desc.type;
 	this->mRoomName = desc.roomName;
@@ -109,14 +108,7 @@ LogAction::LogAction(LogAction::Desc desc)
 
 	this->mCoord.x = desc.pos_x;
 	this->mCoord.z = desc.pos_z;
-
-	if (LogAction::CheckHasNumber(this->mType))
-	{
-		this->mHasNumber = true;
-		this->mIconNumber = desc.numberOnIcon;
-	}
-	else
-		this->mHasNumber = false;
+	this->mData = desc.data;
 }
 
 LogAction::LogAction(std::string lineFromLog, std::string metaLine)
@@ -125,7 +117,6 @@ LogAction::LogAction(std::string lineFromLog, std::string metaLine)
 
 	std::stringstream ss(lineFromLog);
 	std::string word;
-	//int number;
 	char scrap;
 
 	Timestamp ts;
@@ -160,9 +151,6 @@ LogAction::LogAction(std::string lineFromLog, std::string metaLine)
 	} // Exits with word == "|"
 	this->mType = LogAction::GetTypeFromString(actionType);
 
-	if (LogAction::CheckHasNumber(this->mType))
-		this->mHasNumber = true;
-
 
 	// Get active info
 	ss >> word;
@@ -194,16 +182,9 @@ LogAction::LogAction(std::string lineFromLog, std::string metaLine)
 	ss.str(metaLine);
 
 	ss >> this->mID;
-	ss >> this->mRotation;
 	ss >> this->mCoord.x;
 	ss >> this->mCoord.z;
-
-	if (this->mHasNumber)
-	{
-		ss >> this->mIconNumber;
-	}
-	else
-		this->mIconNumber = -1;
+	ss >> this->mData;
 }
 
 LogAction::~LogAction()
@@ -242,6 +223,11 @@ LogAction::Type LogAction::GetType() const
 	return this->mType;
 }
 
+void LogAction::SetActionIndex(int *index)
+{
+	this->mpActionIndex = index;
+}
+
 int* LogAction::GetActionIndex()
 {
 	return this->mpActionIndex;
@@ -268,9 +254,9 @@ int LogAction::GetID() const
 	return this->mID;
 }
 
-uint32_t LogAction::GetRotation() const
+uint32_t LogAction::GetData() const
 {
-	return this->mRotation;
+	return this->mData;
 }
 
 
@@ -353,16 +339,11 @@ std::string LogAction::GetMetaString() const
 
 	ss	<< this->mID
 		<< " "
-		<< this->mRotation
-		<< " "
 		<< this->mCoord.x
 		<< " "
-		<< this->mCoord.z;
-
-	if (this->mHasNumber)
-	{
-		ss << " " << this->mIconNumber;
-	}
+		<< this->mCoord.z
+		<< " "
+		<< this->mData;
 
 	return ss.str();
 }

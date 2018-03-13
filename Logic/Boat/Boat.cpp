@@ -410,12 +410,23 @@ void Boat::SaveToFile_Log() const
 
 bool Boat::LoadFromFile_Log()
 {
+	this->mEventLog.LoadFromFile();
+
 	for (int i = 0; i < (int)this->mpDecks.size(); i++)
 	{
-		if (!this->mpDecks[i]->LoadRoomLogs())
-			return false;
+		this->mpDecks[i]->LoadRoomLogs();
 	}
 	return true;
+}
+
+void Boat::GetAllActiveActions(std::vector<Log::ActionInfo> &output)
+{
+	this->mEventLog.GetAllActiveActions(output);
+}
+
+void Boat::UpdateActionPointers(std::vector<Log::ActionInfo> &pointers)
+{
+	this->mEventLog.UpdateActionPointers(pointers);
 }
 
 

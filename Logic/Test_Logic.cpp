@@ -404,15 +404,14 @@ void Test_Logic::FillLog(
 
 		// Create and fill a description for the new action
 		LogAction::Desc desc;
+		desc.start = true;
 		desc.active = true;
+		desc.roomName = myRoom->GetName();
 		desc.pActionIndex = indexOutput[i];
 		desc.pos_x = (float)i + 0.5f;
 		desc.pos_z = (float)-i + 0.5f;
-		desc.rotation = (i % 5) * 16;
-		desc.roomName = myRoom->GetName();
-		desc.start = true;
 		desc.type = LogAction::GetTypeFromNumber(i % 9);
-		desc.numberOnIcon = -1;
+		desc.data = 0;
 
 		// Add action to room
 		myRoom->AddAction(desc);

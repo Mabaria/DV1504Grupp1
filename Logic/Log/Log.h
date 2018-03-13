@@ -30,6 +30,13 @@ public:
 		float pos_y;
 	};
 
+	struct ActionInfo
+	{
+		int index;
+		int *pIndexPtr;
+		LogAction *pAction;
+	};
+
 	Log();
 	~Log();
 
@@ -61,7 +68,11 @@ public:
 	void ClearFiles() const;
 
 	void SaveToFile(std::string filePath, std::string metaFile) const;
+	bool LoadFromFile();
 	bool LoadFromFile(std::string filePath, std::string metaFile);
+
+	void GetAllActiveActions(std::vector<ActionInfo> &output);
+	void UpdateActionPointers(std::vector<Log::ActionInfo> &pointers);
 
 private:
 

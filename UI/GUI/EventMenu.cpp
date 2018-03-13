@@ -11,7 +11,6 @@ EventMenu::EventMenu()
 	this->mVisible = false;
 	this->mButtonFocus = false;
 	this->mDraggingWindow = false;
-	this->mpEventLog = nullptr;
 	this->mpPanel = nullptr;
 	this->mpActiveRoom = nullptr;
 
@@ -27,7 +26,6 @@ EventMenu::~EventMenu()
 
 bool EventMenu::Init(int parentWidth,
 	int parentHeight,
-	Log *pEventLog,
 	LPCTSTR windowName,
 	HWND *pWindow)
 {
@@ -36,7 +34,6 @@ bool EventMenu::Init(int parentWidth,
 
 	this->mMenuHeight = this->mParentPanelHeight;
 
-	this->mpEventLog = pEventLog;
 	this->mpPanel = new Panel2D(
 		this->mMenuWidth,										// Width
 		this->mMenuHeight,										// Height

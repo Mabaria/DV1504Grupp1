@@ -169,14 +169,6 @@ std::string LogEvent::GetFileString()
 	std::string type = Event::GetString(this->mType);
 	ss << "\t\t" << type;
 
-	//if (type.size() < 4)
-	//	ss << "\t\t\t\t\t\t\t\t\t|\t";
-	//else if (type.size() < 8)
-	//	ss << "\t\t\t\t\t\t\t\t|\t";
-	//else if (type.size() < 12)
-	//	ss << "\t\t\t\t\t\t\t|\t";
-	//else
-	//	ss << "\t\t\t\t\t\t|\t";
 	ss << Name::GetTabs(type.size());
 
 	if (this->mStartEvent)
@@ -240,6 +232,13 @@ Timer * LogEvent::GetTimer()
 int LogEvent::GetSecondsSinceStart() const
 {
 	return this->mTimer.GetSecondsSinceStart();
+}
+
+bool LogEvent::operator < (const LogEvent &other)
+{
+	if (this->mTimer.GetSecondsSinceStart() < other.GetSecondsSinceStart())
+		return true;
+	return false;
 }
 
 

@@ -186,6 +186,9 @@ public:
 	void SaveToFile_Log() const;
 	bool LoadFromFile_Log();
 
+	void GetAllActiveActions(std::vector<Log::ActionInfo> &output);
+	void UpdateActionPointers(std::vector<Log::ActionInfo> &pointers);
+
 	// Room data specific
 	bool LoadBoundingBoxes(
 		Mesh *meshList,

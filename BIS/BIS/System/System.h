@@ -11,6 +11,9 @@
 #include "../../../Logic/ActionHandler.h"
 #include "../../../UI/UIElements/CrewPanel.h"
 
+
+#include <list>
+
 class System : public Observer<ObserverInfo>, public Observer<Button>, public Observable<std::string>
 {
 public:
@@ -28,6 +31,20 @@ public:
 	bool UpdateRoom(Room* room);
 
 private:
+
+	struct EventInfo
+	{
+		Room *pRoom;
+		LogEvent *pEvent;
+
+		bool operator < (const EventInfo &other)
+		{
+			if (*pEvent < *other.pEvent)
+				return true;
+			return false;
+		}
+	};
+
 	void mUpdate();
 	void mDraw();
 	void mHandleInput();
@@ -41,6 +58,8 @@ private:
 	void mUnselect();
 	void mSelectAndFocus(Room *picked_room);
 
+	//void mUpdateEvents(Room *room);
+	void mUpdateEvent(Room *pRoom, LogEvent *pEvent);
 	void mUpdateEvents(Room *room, bool automatic_input);
 
 	void mUpdateGhostIcons();
@@ -70,7 +89,7 @@ private:
 	// Personnel Log
 	CrewPanel mpCrewPanel;
 
-	Log mEventLog;
+	//Log mEventLog;
 	Boat mBoat;
 	Ray mRay;
 
