@@ -125,7 +125,7 @@ LogAction::LogAction(std::string lineFromLog, std::string metaLine)
 
 	std::stringstream ss(lineFromLog);
 	std::string word;
-	int number;
+	//int number;
 	char scrap;
 
 	Timestamp ts;

@@ -155,45 +155,47 @@ bool EventMenu::IsVisible()
 
 void EventMenu::UpdateEventButtonImages()
 {
-
-	// Names of possible active events
-	std::string data_names[] = { "Fire", "Water", "Gas" };
-
-	// Deactivates all buttons (no event active)
-	int size = (int)floor(sizeof(data_names) / sizeof(std::string));
-	for (int i = 0; i < size; i++)
+	if (this->mpActiveRoom)
 	{
-		if (this->mpPanel->GetButtonByName(data_names[i]))
+		// Names of possible active events
+		std::string data_names[] = { "Fire", "Water", "Gas" };
+
+		// Deactivates all buttons (no event active)
+		int size = (int)floor(sizeof(data_names) / sizeof(std::string));
+		for (int i = 0; i < size; i++)
 		{
-			this->mpPanel->GetButtonByName(data_names[i])->SetBitmap(
-				this->mpPanel->GetBitmapByName(data_names[i] + "Off"));
+			if (this->mpPanel->GetButtonByName(data_names[i]))
+			{
+				this->mpPanel->GetButtonByName(data_names[i])->SetBitmap(
+					this->mpPanel->GetBitmapByName(data_names[i] + "Off"));
+			}
 		}
-	}
 
-	// Activate corresponding buttons only if there are any active events 
-	// (activate necessary events)
+		// Activate corresponding buttons only if there are any active events 
+		// (activate necessary events)
 
-	size = this->mpActiveRoom->GetActiveEventCount();
+		size = this->mpActiveRoom->GetActiveEventCount();
 
-	std::vector<LogEvent*> active_events;
-	this->mpActiveRoom->GetActiveEvents(active_events);
+		std::vector<LogEvent*> active_events;
+		this->mpActiveRoom->GetActiveEvents(active_events);
 
-	for (int i = 0; i < size; i++)
-	{
-		switch (active_events[i]->GetType())
+		for (int i = 0; i < size; i++)
 		{
-		case Event::Type::Fire:
-			this->mpPanel->GetButtonByName("Fire")->SetBitmap(
-				this->mpPanel->GetBitmapByName("FireOn"));
-			break;
-		case Event::Type::Water:
-			this->mpPanel->GetButtonByName("Water")->SetBitmap(
-				this->mpPanel->GetBitmapByName("WaterOn"));
-			break;
-		case Event::Type::Gas:
-			this->mpPanel->GetButtonByName("Gas")->SetBitmap(
-				this->mpPanel->GetBitmapByName("GasOn"));
-			break;
+			switch (active_events[i]->GetType())
+			{
+			case Event::Type::Fire:
+				this->mpPanel->GetButtonByName("Fire")->SetBitmap(
+					this->mpPanel->GetBitmapByName("FireOn"));
+				break;
+			case Event::Type::Water:
+				this->mpPanel->GetButtonByName("Water")->SetBitmap(
+					this->mpPanel->GetBitmapByName("WaterOn"));
+				break;
+			case Event::Type::Gas:
+				this->mpPanel->GetButtonByName("Gas")->SetBitmap(
+					this->mpPanel->GetBitmapByName("GasOn"));
+				break;
+			}
 		}
 	}
 }

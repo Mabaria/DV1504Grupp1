@@ -11,7 +11,7 @@
 #include "../../../Logic/ActionHandler.h"
 #include "../../../UI/UIElements/CrewPanel.h"
 
-class System : public Observer<ObserverInfo>, public Observer<Button>
+class System : public Observer<ObserverInfo>, public Observer<Button>, public Observable<std::string>
 {
 public:
 	System();
@@ -20,9 +20,12 @@ public:
 		const std::wstring windowName, 
 		const int windowWidth, 
 		const int windowHeight);
-	void Run();
+	bool Run();
 	virtual void Update(ObserverInfo *pickedRoom);
 
+	int GetNrOfRooms() const;
+	Room* GetRoomByIndex(int index);
+	bool UpdateRoom(Room* room);
 
 private:
 	void mUpdate();
@@ -34,7 +37,7 @@ private:
 	void mUpdateHover(std::string name, int index, bool activate);
 	void mUpdateRoomInfo();
 
-	void mUpdateEvents(Room *room);
+	void mUpdateEvents(Room *room, bool automatic_input);
 
 	void mUpdateGhostIcons();
 

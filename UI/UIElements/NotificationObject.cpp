@@ -8,6 +8,8 @@ NotificationObject::NotificationObject(
 	int fontSize,
 	ID2D1Bitmap *bitmap,
 	ID2D1Bitmap *actionSymbolsBitmap)
+	ID2D1Bitmap *bitmap,
+	bool addedBySensor)
 	: mButton(direct2d, bitmap, 0, 0, 0, 0)
 	, mActionButton(direct2d, actionSymbolsBitmap, 230, 7, 290, 67, "ActionButton")
 	, mTextBox(direct2d, 0, 0, 0, 0)
@@ -22,6 +24,7 @@ NotificationObject::NotificationObject(
 	this->mIndex = index;
 	this->mIsNew = true;
 	this->mNewColorCounter = 0.0f;
+	this->mAddedBySensor = addedBySensor;
 	this->mpActionSymbolsBitmap = actionSymbolsBitmap;
 	
 	this->mTextBox.SetFontSize(fontSize);
@@ -208,6 +211,11 @@ const bool NotificationObject::GetIfNewStatus()
 	return this->mIsNew;
 }
 
+const bool NotificationObject::GetIfAddedBySensor()
+{
+	return this->mAddedBySensor;
+}
+
 void NotificationObject::Update()
 {
 	this->mElapsedTime = this->mpTimer->GetTimeAsStr();
@@ -217,7 +225,7 @@ void NotificationObject::Update()
 
 void NotificationObject::Draw()
 {
-	if (this->mIsNew)
+	if (this->mIsNew && this->mAddedBySensor)
 	{
 		this->mButton.SetRectColor(
 			sin(this->mNewColorCounter += 0.2f),
