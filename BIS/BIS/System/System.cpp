@@ -694,8 +694,8 @@ void System::mSetupPanels()
 		this->mpControlPanel->GetBitmapByName("Gas"), "gasSensor");
 	this->mpControlPanel->GetButtonByName("gasSensor")->SetOpacity(0.0f);
 
-	int butt_size = 82;
-	int space = 5;
+	int butt_size = this->mpControlPanel->GetHeight() / 2;
+	int space = 0;
 
 	this->mpControlPanel->AddButton(butt_size, butt_size, space, space,
 		this->mpControlPanel->GetBitmapByName("Reset"), "Reset");
