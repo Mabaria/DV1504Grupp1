@@ -175,30 +175,14 @@ void System::Update(ObserverInfo * obsInf)
 		// If a notification object is clicked in the active log panel.
 		else if (this->mpActiveLogPanel->IsMouseInsidePanel())
 		{
-			this->mpTopViewPanel->
-				GetMovableComponent()->
-				FocusCameraOnRoom(obsInf->pRoom, true);
-
 			this->mpMenuPanel->UpdateEventButtonImages();
 
-			if (this->mpLastClickedRoom != nullptr)
-			{
-				std::string picked_name = this->mpLastClickedRoom->GetDeckName() + "bounds";
-				this->mpTopViewPanel->rGetMeshObject(picked_name)->SetSelected(
-					false,
-					this->mpTopViewPanel->rGetDirect3D().GetContext(),
-					this->mpLastClickedRoom->GetIndexInDeck()
-				);
-			}
+			this->mUnselect();
+
 			this->mpLastClickedRoom = obsInf->pRoom;
-			this->mUpdateRoomInfo();
-			this->mpMenuPanel->SetActiveRoom(this->mpLastClickedRoom);
-			std::string picked_name = this->mpLastClickedRoom->GetDeckName() + "bounds";
-			this->mpTopViewPanel->rGetMeshObject(picked_name)->SetSelected(
-				true,
-				this->mpTopViewPanel->rGetDirect3D().GetContext(),
-				this->mpLastClickedRoom->GetIndexInDeck()
-			);
+
+			this->mpMenuPanel->OpenAt(this->mpLastClickedRoom);
+			this->mSelectAndFocus(this->mpLastClickedRoom);
 		}
 	}
 }
@@ -259,8 +243,7 @@ void System::mHandleInput()
 	if (this->mpTopViewPanel->IsMouseInsidePanel() &&
 		!this->mpMenuPanel->IsMouseInsidePanel() &&
 		!this->mpInfoPanel.IsMouseInsidePanel() &&
-		!this->mpCrewPanel.IsMouseInsidePanel() &&
-		this->mpTopViewPanel->GetActiveCamera()->GetLookMode() == LOOK_TO)
+		!this->mpCrewPanel.IsMouseInsidePanel())
 	{
 
 		Picking::GetWorldRay(
@@ -299,45 +282,27 @@ void System::mHandleInput()
 		{
 			if (Mouse::IsButtonPressed(Buttons::Left))
 			{
-				this->mpMenuPanel->OpenAt(picked_room);
+				this->mUnselect();
 
-				this->mpTopViewPanel->GetMovableComponent()->FocusCameraOnRoom(picked_room, true);
-			
-				// Turn on selected effect if clicked room was actually a room
-				if (picked_room != nullptr)
+				this->mpLastClickedRoom = picked_room;
+
+				// Only open menu panel if pan mode.
+				if (this->mpTopViewPanel->GetActiveCamera()->GetLookMode() == LOOK_TO)
 				{
-					std::string picked_name = picked_room->GetDeckName() + "bounds";
-					this->mpTopViewPanel->rGetMeshObject(picked_name)->SetSelected(
-						true,
-						this->mpTopViewPanel->rGetDirect3D().GetContext(),
-						picked_room->GetIndexInDeck()
-					);
+					this->mpMenuPanel->OpenAt(this->mpLastClickedRoom);
 				}
 
-				// Save last clicked room to be used for Room Info
-				if (this->mpLastClickedRoom != picked_room)
-				{
-					// Turn off selected effect if last room existed
-					if (this->mpLastClickedRoom != nullptr)
-					{
-						std::string picked_name = this->mpLastClickedRoom->GetDeckName() + "bounds";
-						this->mpTopViewPanel->rGetMeshObject(picked_name)->SetSelected(
-							false,
-							this->mpTopViewPanel->rGetDirect3D().GetContext(),
-							this->mpLastClickedRoom->GetIndexInDeck()
-						);
-					}
-
-					this->mpLastClickedRoom = picked_room;
-					this->mUpdateRoomInfo();
-				}
+				this->mSelectAndFocus(this->mpLastClickedRoom);
 			}
 		}
 		// Closes the event menu if the user left clicks away from a room
 		// or the event menu.
-		else if (Mouse::IsButtonPressed(Buttons::Left) && this->mpMenuPanel->IsVisible())
+		else if (Mouse::IsButtonPressed(Buttons::Left))
 		{
-			this->mpMenuPanel->Close();
+			if (this->mpMenuPanel->IsVisible())
+			{
+				this->mpMenuPanel->Close();
+			}
 			this->mpTopViewPanel->GetActiveCamera()->Reset();
 		}
 		
@@ -470,6 +435,52 @@ void System::mUpdateRoomInfo()
 	}
 	this->mpControlPanel->GetTextBoxByName("roominfo")->SetText(
 		new_info_text);
+}
+
+void System::mUnselect()
+{
+	if (this->mpLastClickedRoom)
+	{
+		std::string picked_name = this->mpLastClickedRoom->GetDeckName() + "bounds";
+		this->mpTopViewPanel->rGetMeshObject(picked_name)->SetSelected(
+			false,
+			this->mpTopViewPanel->rGetDirect3D().GetContext(),
+			this->mpLastClickedRoom->GetIndexInDeck()
+		);
+	}
+}
+
+void System::mSelectAndFocus(Room * picked_room)
+{
+	this->mpTopViewPanel->GetMovableComponent()->FocusCameraOnRoom(picked_room, true);
+
+	// Turn on selected effect if clicked room was actually a room
+	if (picked_room != nullptr)
+	{
+		std::string picked_name = picked_room->GetDeckName() + "bounds";
+		this->mpTopViewPanel->rGetMeshObject(picked_name)->SetSelected(
+			true,
+			this->mpTopViewPanel->rGetDirect3D().GetContext(),
+			picked_room->GetIndexInDeck()
+		);
+	}
+
+	// Save last clicked room to be used for Room Info
+	if (this->mpLastClickedRoom != picked_room)
+	{
+		// Turn off selected effect if last room existed
+		if (this->mpLastClickedRoom != nullptr)
+		{
+			std::string picked_name = this->mpLastClickedRoom->GetDeckName() + "bounds";
+			this->mpTopViewPanel->rGetMeshObject(picked_name)->SetSelected(
+				false,
+				this->mpTopViewPanel->rGetDirect3D().GetContext(),
+				this->mpLastClickedRoom->GetIndexInDeck()
+			);
+		}
+	}
+	this->mUpdateRoomInfo();
+
 }
 
 void System::mUpdateEvents(Room * room, bool automatic_input)
