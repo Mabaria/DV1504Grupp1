@@ -175,18 +175,28 @@ void System::Update(ObserverInfo * obsInf)
 		// If a notification object is clicked in the active log panel.
 		else if (this->mpActiveLogPanel->IsMouseInsidePanel())
 		{
-			this->mpMenuPanel->UpdateEventButtonImages();
+			this->mpTopViewPanel->
+				GetMovableComponent()->
+				FocusCameraOnRoom(obsInf->pRoom, true);
 
-			this->mUnselect();
-
-			this->mpLastClickedRoom = obsInf->pRoom;
-
-			if (this->mpTopViewPanel->GetActiveCamera()->GetLookMode() == LOOK_TO)
+			if (this->mpLastClickedRoom != nullptr)
 			{
-				this->mpMenuPanel->OpenAt(this->mpLastClickedRoom);
+				std::string picked_name = this->mpLastClickedRoom->GetDeckName() + "bounds";
+				this->mpTopViewPanel->rGetMeshObject(picked_name)->SetSelected(
+					false,
+					this->mpTopViewPanel->rGetDirect3D().GetContext(),
+					this->mpLastClickedRoom->GetIndexInDeck()
+				);
 			}
-
-			this->mSelectAndFocus(this->mpLastClickedRoom);
+			this->mpLastClickedRoom = obsInf->pRoom;
+			this->mUpdateRoomInfo();
+			this->mpMenuPanel->SetActiveRoom(this->mpLastClickedRoom);
+			std::string picked_name = this->mpLastClickedRoom->GetDeckName() + "bounds";
+			this->mpTopViewPanel->rGetMeshObject(picked_name)->SetSelected(
+				true,
+				this->mpTopViewPanel->rGetDirect3D().GetContext(),
+				this->mpLastClickedRoom->GetIndexInDeck()
+			);
 		}
 	}
 }
@@ -210,18 +220,15 @@ bool System::UpdateRoom(Room * room)
 
 void System::mUpdate()
 {
-	if (!this->mpInfoPanel.IsMouseInsidePanel())
-	{
-		this->mpActiveLogPanel->Update();
-		this->mpControlPanel->Update();
-		this->mpTopViewPanel->Update();
-		this->mpSideViewPanel->Update();
-		this->mpCrewPanel.Update();
-		this->mUpdateGhostIcons();
-	}
+	this->mpWindow->Update();
+	this->mpActiveLogPanel->Update();
+	this->mpControlPanel->Update();
+	this->mpTopViewPanel->Update();
+	this->mpSideViewPanel->Update();
 	this->mpMenuPanel->Update();
 	this->mpInfoPanel.Update();
-	this->mpWindow->Update();
+	this->mpCrewPanel.Update();
+	this->mUpdateGhostIcons();
 }
 
 void System::mDraw()
@@ -247,7 +254,8 @@ void System::mHandleInput()
 	if (this->mpTopViewPanel->IsMouseInsidePanel() &&
 		!this->mpMenuPanel->IsMouseInsidePanel() &&
 		!this->mpInfoPanel.IsMouseInsidePanel() &&
-		!this->mpCrewPanel.IsMouseInsidePanel())
+		!this->mpCrewPanel.IsMouseInsidePanel() &&
+		this->mpTopViewPanel->GetActiveCamera()->GetLookMode() == LOOK_TO)
 	{
 
 		Picking::GetWorldRay(
@@ -314,27 +322,45 @@ void System::mHandleInput()
 		{
 			if (Mouse::IsButtonPressed(Buttons::Left))
 			{
-				this->mUnselect();
+				this->mpMenuPanel->OpenAt(picked_room);
 
-				this->mpLastClickedRoom = picked_room;
-
-				// Only open menu panel if pan mode.
-				if (this->mpTopViewPanel->GetActiveCamera()->GetLookMode() == LOOK_TO)
+				this->mpTopViewPanel->GetMovableComponent()->FocusCameraOnRoom(picked_room, true);
+			
+				// Turn on selected effect if clicked room was actually a room
+				if (picked_room != nullptr)
 				{
-					this->mpMenuPanel->OpenAt(this->mpLastClickedRoom);
+					std::string picked_name = picked_room->GetDeckName() + "bounds";
+					this->mpTopViewPanel->rGetMeshObject(picked_name)->SetSelected(
+						true,
+						this->mpTopViewPanel->rGetDirect3D().GetContext(),
+						picked_room->GetIndexInDeck()
+					);
 				}
 
-				this->mSelectAndFocus(this->mpLastClickedRoom);
+				// Save last clicked room to be used for Room Info
+				if (this->mpLastClickedRoom != picked_room)
+				{
+					// Turn off selected effect if last room existed
+					if (this->mpLastClickedRoom != nullptr)
+					{
+						std::string picked_name = this->mpLastClickedRoom->GetDeckName() + "bounds";
+						this->mpTopViewPanel->rGetMeshObject(picked_name)->SetSelected(
+							false,
+							this->mpTopViewPanel->rGetDirect3D().GetContext(),
+							this->mpLastClickedRoom->GetIndexInDeck()
+						);
+					}
+
+					this->mpLastClickedRoom = picked_room;
+					this->mUpdateRoomInfo();
+				}
 			}
 		}
 		// Closes the event menu if the user left clicks away from a room
 		// or the event menu.
-		else if (Mouse::IsButtonPressed(Buttons::Left))
+		else if (Mouse::IsButtonPressed(Buttons::Left) && this->mpMenuPanel->IsVisible())
 		{
-			if (this->mpMenuPanel->IsVisible())
-			{
-				this->mpMenuPanel->Close();
-			}
+			this->mpMenuPanel->Close();
 			this->mpTopViewPanel->GetActiveCamera()->Reset();
 		}
 		
@@ -383,18 +409,6 @@ void System::Update(Button * attribute)
 			if (this->mpTopViewPanel->GetActiveCamera() != this->mpTopViewCameraRotate)
 			{
 				this->mpTopViewPanel->SetCamera(this->mpTopViewCameraRotate);
-				if (this->mpMenuPanel->IsVisible())
-				{
-					this->mpMenuPanel->Close();
-				}
-				if (this->mpLastClickedRoom)
-				{
-					this->mpTopViewPanel->rGetMeshObject(
-						this->mpLastClickedRoom->GetDeckName() + "bounds")->SetSelected(
-							false,
-							this->mpTopViewPanel->rGetDirect3D().GetContext(),
-							this->mpLastClickedRoom->GetIndexInDeck());
-				}
 			}
 			else if (this->mpTopViewPanel->GetActiveCamera() != this->mpTopViewCameraPan)
 			{
@@ -470,52 +484,6 @@ void System::mUpdateRoomInfo()
 		new_info_text);
 }
 
-void System::mUnselect()
-{
-	if (this->mpLastClickedRoom)
-	{
-		std::string picked_name = this->mpLastClickedRoom->GetDeckName() + "bounds";
-		this->mpTopViewPanel->rGetMeshObject(picked_name)->SetSelected(
-			false,
-			this->mpTopViewPanel->rGetDirect3D().GetContext(),
-			this->mpLastClickedRoom->GetIndexInDeck()
-		);
-	}
-}
-
-void System::mSelectAndFocus(Room * picked_room)
-{
-	this->mpTopViewPanel->GetMovableComponent()->FocusCameraOnRoom(picked_room, true);
-
-	// Turn on selected effect if clicked room was actually a room
-	if (picked_room != nullptr)
-	{
-		std::string picked_name = picked_room->GetDeckName() + "bounds";
-		this->mpTopViewPanel->rGetMeshObject(picked_name)->SetSelected(
-			true,
-			this->mpTopViewPanel->rGetDirect3D().GetContext(),
-			picked_room->GetIndexInDeck()
-		);
-	}
-
-	// Save last clicked room to be used for Room Info
-	if (this->mpLastClickedRoom != picked_room)
-	{
-		// Turn off selected effect if last room existed
-		if (this->mpLastClickedRoom != nullptr)
-		{
-			std::string picked_name = this->mpLastClickedRoom->GetDeckName() + "bounds";
-			this->mpTopViewPanel->rGetMeshObject(picked_name)->SetSelected(
-				false,
-				this->mpTopViewPanel->rGetDirect3D().GetContext(),
-				this->mpLastClickedRoom->GetIndexInDeck()
-			);
-		}
-	}
-	this->mUpdateRoomInfo();
-
-}
-
 void System::mUpdateEvents(Room * room, bool automatic_input)
 {
 	std::vector<LogEvent*> events_in_room;
@@ -577,7 +545,7 @@ void System::mUpdateGhostIcons()
 {
 	static bool is_reset = false;
 	static bool is_set = false;
-	uint32_t action = 9001;
+
 	if (this->mActionHandler.IsWaiting() && 
 		!this->mpMenuPanel->IsMouseInsidePanel() &&
 		this->mpTopViewPanel->IsMouseInsidePanel())
@@ -585,8 +553,7 @@ void System::mUpdateGhostIcons()
 		this->mpTopViewPanel->SetActionHover(true);
 		if (!is_set)
 		{
-			action = *this->mActionHandler.GetLastAction();
-			this->mpTopViewPanel->SetIcon(action);
+			this->mpTopViewPanel->SetIcon(*this->mActionHandler.GetLastAction());
 			is_set = true;
 			is_reset = false;
 		}
@@ -607,10 +574,6 @@ void System::mUpdateGhostIcons()
 	}
 	else
 	{
-		if (action != *this->mActionHandler.GetLastAction())
-		{
-			is_set = false;
-		}
 		this->mpTopViewPanel->SetActionHover(false);
 	}
 }
@@ -668,6 +631,8 @@ void System::mSetupPanels()
 	this->mpControlPanel->GetTextBoxByName("title")->SetFontSize(35);
 	this->mpControlPanel->GetTextBoxByName("title")->SetFontWeight
 	(DWRITE_FONT_WEIGHT_NORMAL);
+	/*this->mpControlPanel->GetTextBoxByName("title")->SetTextAlignment
+	(DWRITE_TEXT_ALIGNMENT_CENTER);*/
 
 	this->mpControlPanel->AddTextbox(
 		this->mpControlPanel->GetWidth() / 2,
@@ -738,22 +703,20 @@ void System::mSetupPanels()
 		this->mpControlPanel->GetBitmapByName("Gas"), "gasSensor");
 	this->mpControlPanel->GetButtonByName("gasSensor")->SetOpacity(0.0f);
 
-	int butt_size = this->mpControlPanel->GetHeight() / 2;
-	int space = 0;
 
-	this->mpControlPanel->AddButton(butt_size, butt_size, space, space,
+	this->mpControlPanel->AddButton(70, 70, 10, 10,
 		this->mpControlPanel->GetBitmapByName("Reset"), "Reset");
-	this->mpControlPanel->AddButton(butt_size, butt_size, butt_size + space * 2, space,
+	this->mpControlPanel->AddButton(70, 70, 90, 10,
 		this->mpControlPanel->GetBitmapByName("Reset"), "Reset2");
-	this->mpControlPanel->AddButton(butt_size, butt_size, butt_size + space * 2, butt_size + space * 2,
+	this->mpControlPanel->AddButton(70, 70, 90, 90,
 		this->mpControlPanel->GetBitmapByName("Info"), "Info");
-	this->mpControlPanel->AddButton(butt_size, butt_size, butt_size + space * 2, butt_size * 2 + space * 3,
+	this->mpControlPanel->AddButton(70, 70, 90, 170,
 		this->mpControlPanel->GetBitmapByName("Crew"), "Crew");
-	this->mpControlPanel->AddButton(butt_size, butt_size, space, butt_size + space * 2,
+	this->mpControlPanel->AddButton(70, 70, 10, 90,
 		this->mpControlPanel->GetBitmapByName("ChangeCamera"), "ChangeCamera");
-	this->mpControlPanel->AddButton(butt_size, butt_size, space, butt_size * 2 + space * 3,
+	this->mpControlPanel->AddButton(70, 70, 10, 170,
 		this->mpControlPanel->GetBitmapByName("SimulationOff"), "Simulator");
-	this->mpControlPanel->AddButton(butt_size, butt_size, space, this->mpControlPanel->GetWidth() - (butt_size + space),
+	this->mpControlPanel->AddButton(70, 70, 10, this->mpControlPanel->GetWidth() - 80,
 		this->mpControlPanel->GetBitmapByName("Exit"), "Exit");
 
 	this->mpControlPanel->GetButtonByName("Reset")->

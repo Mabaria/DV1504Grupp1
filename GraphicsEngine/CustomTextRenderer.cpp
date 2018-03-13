@@ -12,10 +12,10 @@ CustomTextRenderer::CustomTextRenderer(
 	mpOutlineBrush(pOutlineBrush),
 	mpFillBrush(pFillBrush)
 {
-	this->mpD2DFactory->AddRef();
-	this->mpRT->AddRef();
-	this->mpOutlineBrush->AddRef();
-	this->mpFillBrush->AddRef();
+	mpD2DFactory->AddRef();
+	mpRT->AddRef();
+	mpOutlineBrush->AddRef();
+	mpFillBrush->AddRef();
 
 }
 
