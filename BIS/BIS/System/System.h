@@ -54,6 +54,10 @@ private:
 	void mUpdateHover(std::string name, int index, bool activate);
 	void mUpdateRoomInfo();
 
+	// Select functions
+	void mUnselect();
+	void mSelectAndFocus(Room *picked_room);
+
 	void mUpdateEvents(Room *room);
 	void mUpdateEvent(Room *pRoom, LogEvent *pEvent);
 	void mUpdateEvents(Room *room, bool automatic_input);

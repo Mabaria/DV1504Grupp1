@@ -163,6 +163,8 @@ private:
 
 	//! GHOST ACTION STUFF
 
+	bool mUsingGhosts;
+
 	// Back buffer texture for hijacking purposes.
 	ID3D11Texture2D *mpBackBuffer;
 
@@ -189,4 +191,6 @@ private:
 	bool mGhostStationary;
 
 	const void mUpdateGhostTransform();
+	const void mUpdateGhosts();
+	const void mDrawGhosts();
 };
