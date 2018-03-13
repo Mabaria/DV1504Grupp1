@@ -181,7 +181,11 @@ void System::Update(ObserverInfo * obsInf)
 
 			this->mpLastClickedRoom = obsInf->pRoom;
 
-			this->mpMenuPanel->OpenAt(this->mpLastClickedRoom);
+			if (this->mpTopViewPanel->GetActiveCamera()->GetLookMode() == LOOK_TO)
+			{
+				this->mpMenuPanel->OpenAt(this->mpLastClickedRoom);
+			}
+
 			this->mSelectAndFocus(this->mpLastClickedRoom);
 		}
 	}
