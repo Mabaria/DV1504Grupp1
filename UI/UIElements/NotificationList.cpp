@@ -5,18 +5,19 @@ NotificationList::NotificationList(
 	int posX, 
 	int posY,
 	int titleFontSize,
-	int objectFontSize)
+	int objectFontSize,
+	ID2D1Bitmap* actionSymbolsBitmap)
 	:mTitle(direct2d, 0, 0, 0, 0), 
 	mTitleFrame(direct2d, "", 0, 0, 0, 0)
 {
-	this->mPosX				= posX;
-	this->mPosY				= posY;
-	this->mListTop			= this->mPosY;
-	this->mListBottom		= this->mPosY;
-	this->mpRenderTarget	= direct2d->GetpRenderTarget();
-	this->mSpace			= 4;
-	this->mObjectFontSize	= objectFontSize;
-
+	this->mPosX					= posX;
+	this->mPosY					= posY;
+	this->mListTop				= this->mPosY;
+	this->mListBottom			= this->mPosY;
+	this->mpRenderTarget		= direct2d->GetpRenderTarget();
+	this->mSpace				= 4;
+	this->mObjectFontSize		= objectFontSize;
+	this->mpActionSymbolsBitmap	= actionSymbolsBitmap;
 
 	this->mTitle.SetTextBoxSize(
 		this->mPosX, 
@@ -74,6 +75,8 @@ bool NotificationList::AddNotification(
 			direct2d,
 			(int)this->mObjects.size() + 1,
 			this->mObjectFontSize,
+			bitmap,
+			this->mpActionSymbolsBitmap));
 			bitmap,
 			addedBySensor));
 

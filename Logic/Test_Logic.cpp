@@ -412,6 +412,7 @@ void Test_Logic::FillLog(
 		desc.roomName = myRoom->GetName();
 		desc.start = true;
 		desc.type = LogAction::GetTypeFromNumber(i % 9);
+		desc.numberOnIcon = -1;
 
 		// Add action to room
 		myRoom->AddAction(desc);
