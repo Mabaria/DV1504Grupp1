@@ -30,15 +30,17 @@ void Sensor::SetInputTypes(int types)
 	this->mInputTypes = types;
 }
 
-void Sensor::GetInputTypes(std::vector<Event::Type> &output) const
+std::vector<Event::Type> Sensor::GetInputTypes() const
 {
-	output.clear();
+	std::vector<Event::Type> types;
 
 	for (int i = 0; i < Event::nrOfTypes; i++)
 	{
 		if (this->CanDetect(Event::GetType(i)))
-			output.push_back(Event::GetType(i));
+			types.push_back(Event::GetType(i));
 	}
+
+	return types;
 }
 
 int Sensor::GetInputTypes_Int() const

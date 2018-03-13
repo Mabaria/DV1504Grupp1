@@ -54,7 +54,7 @@ public:
 	float CheckWorldRayCollision(const Ray &rRay);
 
 	// Sensor specific
-	void GetInputTypes(std::vector<Event::Type> &output) const;
+	std::vector<Event::Type> GetInputTypes() const;
 
 	// Deck specific
 	void SetDeckName(std::string name);

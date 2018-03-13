@@ -56,20 +56,7 @@ void InfoPanel::Init(int width, int height, int top, int left, HWND parent, LPCT
 	header_strings.push_back("Kontroller");
 	body_strings.push_back("Vänster musknapp: Välja rum eller händelser "
 		"samt lägga till och ta bort händelser.\n"
-		"Höger musknapp: Håll in och dra för att flytta kameran.\n\n"
-		"När du klickar på ett rum så fokuseras vyn på det rummet "
-		"och en ny meny öppnas. I denna finns knappar för att lägga "
-		"till händelser och åtgärder. Klicka någonstans utanför modellen för "
-		"att återvända till vanlig vy.\n\nKlicka på en helfärgad knapp för att "
-		"lägga till den händelsen i hela rummet.\n\nKlicka på en symbolknapp "
-		"för att välja den symbolen. Vänsterklicka sedan någonstans i rummet "
-		"för att placera den. Du kan även högerklicka för att rotera symbolen.\n\n"
-		"För att öppna närvarologgen klickar du på skrivplattan i den översta "
-		"panelen. När du klickar i närvaro på ett skeppsnummer loggas tiden "
-		"automatiskt. Du kan även klicka i om personen är skadad. När du stänger"
-		" närvarologgen sparas den automatiskt och nästa gång den öppnas så "
-		"kommer de som inte var närvarande vid förra tillfället ha sin tid "
-		"markerat i rött.");
+		"Höger musknapp: Håll in och dra för att rotera kameran.");
 
 	// Creates the title textbox.
 	this->mpPanel->AddTextbox(
@@ -107,10 +94,10 @@ void InfoPanel::Init(int width, int height, int top, int left, HWND parent, LPCT
 	info_height += header_textbox_height;
 
 	this->mpPanel->AddTextbox(
-		this->mpPanel->GetWidth() - 10,
-		body_textbox_height * 30,
+		this->mpPanel->GetWidth(),
+		body_textbox_height * 3,
 		info_height,
-		5, // Minor padding so text isnt hugging the left border
+		0,
 		body_strings[0],
 		"controls_body");
 	this->mpPanel->GetTextBoxByName("controls_body")->
@@ -162,8 +149,8 @@ void InfoPanel::Update(Button *button)
 {
 	if (button->GetName() == "Info")
 	{
-		this->mVisible = !this->mVisible;
-		(mVisible) ? this->mpPanel->ShowOnTop() : this->mpPanel->Hide();
+		this->mVisible = true;
+		this->mpPanel->ShowOnTop();
 	}
 	else if (button->GetName() == "Exit")
 	{
