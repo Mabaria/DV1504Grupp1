@@ -27,10 +27,6 @@ void InfoPanel::Init(int width, int height, int top, int left, HWND parent, LPCT
 
 	this->mpPanel->Hide();
 	this->mVisible = false;
-	this->mpPanel->LoadImageToBitmap("../../Models/Exit.png", "Exit");
-	this->mpPanel->AddButton(30, 30, 0, this->mpPanel->GetWidth() - 30,
-		this->mpPanel->GetBitmapByName("Exit"), "Exit");
-	this->mpPanel->GetButtonByName("Exit")->AddObserver(this);
 
 	//! TEXT STUFF
 
@@ -156,6 +152,11 @@ void InfoPanel::Update()
 		this->mpPanel->SetTop(top);
 		this->mpPanel->UpdateWindowPos();
 	}
+	if (!this->IsMouseInsidePanel() && Mouse::IsButtonPressed(Buttons::Left))
+	{
+		this->mVisible = false;
+		this->mpPanel->Hide();
+	}
 }
 
 void InfoPanel::Update(Button *button)
@@ -164,11 +165,6 @@ void InfoPanel::Update(Button *button)
 	{
 		this->mVisible = !this->mVisible;
 		(mVisible) ? this->mpPanel->ShowOnTop() : this->mpPanel->Hide();
-	}
-	else if (button->GetName() == "Exit")
-	{
-		this->mVisible = false;
-		this->mpPanel->Hide();
 	}
 }
 
