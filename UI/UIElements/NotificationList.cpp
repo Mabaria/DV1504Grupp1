@@ -76,8 +76,7 @@ bool NotificationList::AddNotification(
 			(int)this->mObjects.size() + 1,
 			this->mObjectFontSize,
 			bitmap,
-			this->mpActionSymbolsBitmap));
-			bitmap,
+			this->mpActionSymbolsBitmap,
 			addedBySensor));
 
 		this->mObjects.back()->Move(2, this->mSpace);

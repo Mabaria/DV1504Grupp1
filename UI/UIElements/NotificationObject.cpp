@@ -7,8 +7,7 @@ NotificationObject::NotificationObject(
 	int index,
 	int fontSize,
 	ID2D1Bitmap *bitmap,
-	ID2D1Bitmap *actionSymbolsBitmap)
-	ID2D1Bitmap *bitmap,
+	ID2D1Bitmap *actionSymbolsBitmap,
 	bool addedBySensor)
 	: mButton(direct2d, bitmap, 0, 0, 0, 0)
 	, mActionButton(direct2d, actionSymbolsBitmap, 230, 7, 290, 67, "ActionButton")

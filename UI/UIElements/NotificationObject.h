@@ -29,8 +29,7 @@ public:
 		int index,
 		int fontSize,
 		ID2D1Bitmap *bitmap = nullptr,
-		ID2D1Bitmap *actionSymbolsBitmap = nullptr);
-		ID2D1Bitmap *bitmap = nullptr,
+		ID2D1Bitmap *actionSymbolsBitmap = nullptr,
 		bool addedBySensor = false);
 	~NotificationObject();
 	
