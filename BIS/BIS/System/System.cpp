@@ -1004,13 +1004,19 @@ void System::mSetupBoat()
 
 	this->mBoat.LoadBoundingBoxes(mesh_list, floor_matrix_list, 3);
 
+
+
 	std::vector<Log::ActionInfo> activeActions;
 	std::vector<Actions::Info> actionInfos;
 	std::vector<int*> actionPointers;
 
+	// Load log and meta files
 	this->mBoat.LoadFromFile_Log();
+
+	// Get a vector of all active actions
 	this->mBoat.GetAllActiveActions(activeActions);
 
+	// Fill vector with information about all active actions
 	for (int i = 0; i < (int)activeActions.size(); i++)
 	{
 		Actions::Info info;
@@ -1021,13 +1027,21 @@ void System::mSetupBoat()
 		actionInfos.push_back(info);
 	}
 
+	// Create graphical actions of all active actions
 	this->mActionHandler.InitFromFile(actionInfos, actionPointers);
 
+	// Update all active actions with a pointer to their graphical action
 	for (int i = 0; i < (int)activeActions.size(); i++)
 		activeActions[i].pIndexPtr = actionPointers[i];
 
 	this->mBoat.UpdateActionPointers(activeActions);
 
+
+	/**
+	*	Update notification list with all active events
+	*/
+
+	// Recieve all active events
 
 	std::list<EventInfo> infolist;
 
@@ -1054,7 +1068,11 @@ void System::mSetupBoat()
 		}
 	}
 
+	// Sort all events by time
+
 	infolist.sort();
+
+	// Fill active list
 
 	EventInfo eventinfo;
 	while ((int)infolist.size() > 0)
