@@ -37,5 +37,7 @@ private:
 	ActionData mActionRotation = Rotation_0;
 	bool mWaitingForClick;
 
+
+
 	// Logical actions.
 };

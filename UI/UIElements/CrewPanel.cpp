@@ -225,12 +225,16 @@ void CrewPanel::mCreateTextBoxesAndButtons()
 {
 	ID2D1Bitmap *tempBitmap;
 	Timer tempTimer;
+
+	int space = 3;
+	int element_height = this->mpPanel->GetHeight() / 12 - space;
+
 	for (int i = 0; i < 11; i++)
 	{
 		this->mpPanel->AddTextbox(
 			this->mpPanel->GetWidth() / 2,
-			this->mpPanel->GetHeight() / 13 + 1,
-			this->mpPanel->GetHeight() / 12 * (i + 1),
+			element_height,
+			(element_height + space) * (i + 1),
 			5,
 			this->mSeaMen[i],
 			this->mSeaMen[i]);
@@ -239,9 +243,9 @@ void CrewPanel::mCreateTextBoxesAndButtons()
 
 		this->mpPanel->AddButton(
 			this->mpPanel->GetWidth() / 8,
-			this->mpPanel->GetHeight() / 13 + 1,
-			this->mpPanel->GetHeight() / 12 * (i + 1),
-			this->mpPanel->GetWidth() / 8 * 1,
+			element_height,
+			(element_height + space) * (i + 1),
+			this->mpPanel->GetWidth() / 8,
 			this->mpPanel->GetBitmapByName("Off"),
 			this->mSeaMen[i]);
 
@@ -313,8 +317,8 @@ void CrewPanel::mCreateTextBoxesAndButtons()
 	{
 		this->mpPanel->AddTextbox(
 			this->mpPanel->GetWidth() / 2,
-			this->mpPanel->GetHeight() / 13 + 1,
-			this->mpPanel->GetHeight() / 12 * ((i % 11) + 1),
+			element_height,
+			(element_height + space) * (i - 10),
 			this->mpPanel->GetWidth() / 2 + 10,
 			this->mSeaMen[i],
 			this->mSeaMen[i]);
@@ -323,8 +327,8 @@ void CrewPanel::mCreateTextBoxesAndButtons()
 
 		this->mpPanel->AddButton(
 			this->mpPanel->GetWidth() / 8,
-			this->mpPanel->GetHeight() / 13 + 1,
-			this->mpPanel->GetHeight() / 12 * ((i % 11) + 1),
+			element_height,
+			(element_height + space) * (i - 10),
 			this->mpPanel->GetWidth() / 8 * 5,
 			this->mpPanel->GetBitmapByName("Off"),
 			this->mSeaMen[i]);
