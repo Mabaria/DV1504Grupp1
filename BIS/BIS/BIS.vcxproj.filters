@@ -246,6 +246,9 @@
     <ClInclude Include="..\..\UI\UIElements\CrewPanel.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Simulation\Simulator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Logic\Boat\RoomLog.h">
       <Filter>Header Files\Logic</Filter>
     </ClInclude>
@@ -451,6 +454,9 @@
     </ClCompile>
     <ClCompile Include="..\..\UI\UIElements\CrewPanel.cpp">
       <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Simulation\Simulator.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Logic\Boat\RoomLog.cpp">
       <Filter>Source Files\Logic</Filter>

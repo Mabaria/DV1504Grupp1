@@ -23,7 +23,8 @@ public:
 		Direct2D *direct2d, 
 		Room *room, 
 		LogEvent *event,
-		ID2D1Bitmap *bitmap = nullptr);
+		ID2D1Bitmap *bitmap = nullptr,
+		bool addedBySensor = false);
 
 	bool RemoveNotification(Room *room, Event::Type type);
 	NotificationObject *GetNotificationObjectByIndex(int index);

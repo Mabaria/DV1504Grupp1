@@ -11,9 +11,10 @@
 #include "../../../Logic/ActionHandler.h"
 #include "../../../UI/UIElements/CrewPanel.h"
 
+
 #include <list>
 
-class System : public Observer<ObserverInfo>, public Observer<Button>
+class System : public Observer<ObserverInfo>, public Observer<Button>, public Observable<std::string>
 {
 public:
 	System();
@@ -22,9 +23,12 @@ public:
 		const std::wstring windowName, 
 		const int windowWidth, 
 		const int windowHeight);
-	void Run();
+	bool Run();
 	virtual void Update(ObserverInfo *pickedRoom);
 
+	int GetNrOfRooms() const;
+	Room* GetRoomByIndex(int index);
+	bool UpdateRoom(Room* room);
 
 private:
 
@@ -52,6 +56,7 @@ private:
 
 	void mUpdateEvents(Room *room);
 	void mUpdateEvent(Room *pRoom, LogEvent *pEvent);
+	void mUpdateEvents(Room *room, bool automatic_input);
 
 	void mUpdateGhostIcons();
 
