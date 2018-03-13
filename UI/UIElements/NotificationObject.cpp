@@ -229,8 +229,10 @@ void NotificationObject::Draw()
 	this->mButton.DrawButton();
 
 	if (this->mActionButton.GetOpacity() > 0.0f)
+	{
 		this->mActionButton.DrawRect();
-	this->mActionButton.DrawButton();
+		this->mActionButton.DrawButton();
+	}
 }
 
 void NotificationObject::mUpdateActionButton()
