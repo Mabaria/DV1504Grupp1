@@ -82,7 +82,6 @@ Panel3D::Panel3D(int width, int height, int top, int left,
 	// Puts the ghost action feature in a zero state.
 	this->ResetIcon();
 
-	this->mUsingGhosts = false;
 }
 
 Panel3D::~Panel3D()
@@ -528,7 +527,7 @@ const void Panel3D::mUpdateGhostTransform()
 
 	// Creating a 2D transform XMMATRIX, storing that in an XMFLOAT4X4.
 	XMFLOAT4X4 transform;
-	DirectX::XMStoreFloat4x4(&transform, XMMatrixTransformation2D(
+	XMStoreFloat4x4(&transform, XMMatrixTransformation2D(
 		ghost_center,
 		0.0f,
 		{ this->mGhostScale, this->mGhostScale, 0.0f, 0.0f },
@@ -544,70 +543,6 @@ const void Panel3D::mUpdateGhostTransform()
 		{
 			this->mGhostTransform.m[i][j] = transform.m[i][j];
 		}
-	}
-}
-
-const void Panel3D::mUpdateGhosts()
-{
-	if (this->mGhostActive && this->IsMouseInsidePanel())
-	{
-
-		// Calculating the position of the ghost
-		// with the cursor position as the center.
-		Position mouse_pos = Mouse::GetPosition();
-
-		float icon_width = this->mGhostIconRect.right - this->mGhostIconRect.left;
-		float icon_height = this->mGhostIconRect.bottom - this->mGhostIconRect.top;
-
-		this->mGhostPosition.left = mouse_pos.x - icon_width / 2.0f;
-		this->mGhostPosition.top = mouse_pos.y - icon_height / 2.0f;
-		this->mGhostPosition.right = this->mGhostPosition.left + icon_width;
-		this->mGhostPosition.bottom = this->mGhostPosition.top + icon_height;
-
-		// ----Super cool scaling----
-		static float max_zoom_in = 0.5f;
-		static float max_zoom_out = 0.15f;
-
-		static float zoom_increment = (max_zoom_in - max_zoom_out) / 10.0f;
-
-		float scroll = Mouse::GetScroll();
-		if (scroll != 0.0f)
-		{
-			this->mGhostScale += scroll * zoom_increment;
-
-			if (this->mGhostScale > max_zoom_in)
-			{
-				this->mGhostScale = max_zoom_in;
-			}
-			else if (this->mGhostScale < max_zoom_out)
-			{
-				this->mGhostScale = max_zoom_out;
-			}
-		}
-		// --------------------------
-
-		this->mUpdateGhostTransform();
-	}
-}
-
-const void Panel3D::mDrawGhosts()
-{
-	static float ghost_opacity = 0.4f;
-	if (this->mGhostActive && this->IsMouseInsidePanel())
-	{
-		this->DrawBitmapToTexture(
-			this->GetBitmapByName("iconBitmap"),
-			this->mGhostPosition,
-			this->mGhostIconRect,
-			ghost_opacity,
-			&this->mGhostTransform);
-
-		this->DrawBitmapToTexture(
-			this->GetBitmapByName("numberBitmap"),
-			this->mGhostPosition,
-			this->mGhostNumberRect,
-			ghost_opacity,
-			&this->mGhostTransform);
 	}
 }
 
@@ -799,7 +734,6 @@ void Panel3D::InitActions()
 		
 		this->LoadImageToBitmap("../../Models/Symbols.dds", "iconBitmap");
 		this->LoadImageToBitmap("../../Models/Numbers.dds", "numberBitmap");
-		this->mUsingGhosts = true;
 	}
 }
 
@@ -932,9 +866,53 @@ const void Panel3D::Update()
 		this->mShowCursor = show_cursor;
 		ShowCursor(this->mShowCursor);
 	}
-	if (this->mUsingGhosts)
+
+	//// Action picking
+	//if (this->mpActions != nullptr && Mouse::IsButtonPressed(Buttons::Right))
+	//{
+	//	Actions::ActionPtr *target = this->mpActions->PickAction();
+	//	if (target != nullptr)
+	//		this->mpActions->RemoveAction(&target);
+
+	//}	
+	if (this->mGhostActive && this->IsMouseInsidePanel())
 	{
-		this->mUpdateGhosts();
+
+		// Calculating the position of the ghost
+		// with the cursor position as the center.
+		Position mouse_pos = Mouse::GetPosition();
+
+		float icon_width = this->mGhostIconRect.right - this->mGhostIconRect.left;
+		float icon_height = this->mGhostIconRect.bottom - this->mGhostIconRect.top;
+
+		this->mGhostPosition.left	= mouse_pos.x - icon_width / 2.0f;
+		this->mGhostPosition.top	= mouse_pos.y - icon_height / 2.0f;
+		this->mGhostPosition.right	= this->mGhostPosition.left + icon_width;
+		this->mGhostPosition.bottom = this->mGhostPosition.top + icon_height;
+
+		// ----Super cool scaling----
+		static float max_zoom_in = 0.5f;
+		static float max_zoom_out = 0.15f;
+
+		static float zoom_increment = (max_zoom_in - max_zoom_out) / 10.0f;
+
+		float scroll = Mouse::GetScroll();
+		if (scroll != 0.0f)
+		{
+			this->mGhostScale += scroll * zoom_increment;
+
+			if (this->mGhostScale > max_zoom_in)
+			{
+				this->mGhostScale = max_zoom_in;
+			}
+			else if (this->mGhostScale < max_zoom_out)
+			{
+				this->mGhostScale = max_zoom_out;
+			}
+		}
+		// --------------------------
+
+		this->mUpdateGhostTransform();
 	}
 }
 
@@ -1066,9 +1044,22 @@ const void Panel3D::Draw()
 		this->mpActions->Draw();
 	}
 
-	if (this->mUsingGhosts)
-	{
-		this->mDrawGhosts();
+	static float ghost_opacity = 0.4f;
+	if (this->mGhostActive && this->IsMouseInsidePanel())
+	{	
+		this->DrawBitmapToTexture(
+			this->GetBitmapByName("iconBitmap"),
+			this->mGhostPosition,
+			this->mGhostIconRect,
+			ghost_opacity,
+			&this->mGhostTransform); 	
+
+		this->DrawBitmapToTexture(
+			this->GetBitmapByName("numberBitmap"),
+			this->mGhostPosition,
+			this->mGhostNumberRect,
+			ghost_opacity,
+			&this->mGhostTransform);
 	}
 
 	this->mDirect3D.GetSwapChain()->Present(1, 0);
