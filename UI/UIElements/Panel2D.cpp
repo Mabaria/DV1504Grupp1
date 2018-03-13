@@ -176,16 +176,12 @@ void Panel2D::SetNotificationList(
 	int titleFontSize,
 	int objectFontSize)
 {
-	// Load the action symbols so we can send them to notification list
-	this->LoadImageToBitmap("../../Models/Symbols.png", "Symbols");
-	
 	this->mNotificationList = new NotificationList(
 		this->mDirect2D,
 		posX,
 		posY,
 		titleFontSize,
-		objectFontSize,
-		this->GetBitmapByName("Symbols"));
+		objectFontSize);
 	this->mNotificationListIsActive = true;
 }
 

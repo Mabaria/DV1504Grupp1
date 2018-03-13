@@ -22,12 +22,8 @@ void ActionHandler::Update(ObserverInfo * pObsInf)
 	this->NotifyObservers(this);
 }
 
-ActionHandler::ActionInfo ActionHandler::AddAction(float x, float z)
+void ActionHandler::AddAction(float x, float z)
 {
-	ActionHandler::ActionInfo returnInfo;
-
-	
-
 	if (this->mLastEvent.actionData != No_Action)
 	{
 		ActionData transformed_action_data = (ActionData)this->mLastEvent.actionData;
@@ -35,29 +31,10 @@ ActionHandler::ActionInfo ActionHandler::AddAction(float x, float z)
 		if ((this->mLastEvent.actionData & 64) == 0) {
 			transformed_action_data = (ActionData)(this->mLastEvent.actionData + this->mActionRotation);
 		}
-		int *result = this->mpActions->AddAction(x, z, transformed_action_data);
-
+		this->mpActions->AddAction(x, z, transformed_action_data);
 		// Notify the event menu that an action has been placed so it can unlock the button
 		this->NotifyObservers(this);
-
-		returnInfo.ActionPtr = result;
-		returnInfo.pos_x = x;
-		returnInfo.pos_z = z;
-		returnInfo.type = transformed_action_data & 15;
-		returnInfo.number = (transformed_action_data >> 9) & 15;
-		returnInfo.rotation = (transformed_action_data >> 4) & 7;
-
-		return returnInfo;
 	}
-
-	returnInfo.ActionPtr = nullptr;
-	returnInfo.pos_x = 0.f;
-	returnInfo.pos_z = 0.f;
-	returnInfo.rotation = -1;
-	returnInfo.type = -1;
-	returnInfo.number = -1;
-
-	return returnInfo;
 }
 
 void ActionHandler::SwitchWaitingState()

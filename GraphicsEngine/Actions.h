@@ -39,13 +39,13 @@ enum ActionData : uint32_t
 class Actions {
 public:
 
-	//struct ActionPtr
-	//{
-	//	int index;
-	//	ActionPtr(int index) {
-	//		this->index = index;
-	//	}
-	//};
+	struct ActionPtr
+	{
+		int index;
+		ActionPtr(int index) {
+			this->index = index;
+		}
+	};
 
 	Actions();
 	~Actions();
@@ -53,9 +53,9 @@ public:
 	bool Init(D3D11 *pDirect3D);
 	void SetCamera(Camera *pCamera);
 	void SetMoveableCamera(MovableCameraComponent *pMovableCamera);
-	int *AddAction(float x, float y, uint32_t data);
-	void RemoveAction(int **pActionPtr);
-	int *PickAction();
+	ActionPtr *AddAction(float x, float y, uint32_t data);
+	void RemoveAction(ActionPtr **pActionPtr);
+	ActionPtr *PickAction();
 	void Draw();
 
 	ID3D11ShaderResourceView *GetIconResource();
@@ -89,7 +89,7 @@ private:
 
 	int mVertexSize;
 	ActionVertex *mpVertexArray;
-	int **mpVertexPtrArray;
+	ActionPtr **mpVertexPtrArray;
 	ID3D11Buffer *mpVertexBuffer;
 	bool mVertexArrayUpdated;
 
