@@ -179,7 +179,6 @@ void System::Update(ObserverInfo * obsInf)
 				GetMovableComponent()->
 				FocusCameraOnRoom(obsInf->pRoom, true);
 
-			this->mpMenuPanel->UpdateEventButtonImages();
 
 			if (this->mpLastClickedRoom != nullptr)
 			{
@@ -193,6 +192,7 @@ void System::Update(ObserverInfo * obsInf)
 			this->mpLastClickedRoom = obsInf->pRoom;
 			this->mUpdateRoomInfo();
 			this->mpMenuPanel->SetActiveRoom(this->mpLastClickedRoom);
+			this->mpMenuPanel->UpdateEventButtonImages();
 			std::string picked_name = this->mpLastClickedRoom->GetDeckName() + "bounds";
 			this->mpTopViewPanel->rGetMeshObject(picked_name)->SetSelected(
 				true,
