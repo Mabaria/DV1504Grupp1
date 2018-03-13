@@ -226,7 +226,10 @@ bool Log::LoadFromFile(std::string filePath, std::string metaFile)
 
 	int ID;
 
-	if (file_log.is_open() && file_meta.is_open())
+	// It's ok to have an OR here, because the meta file
+	// will never be used if there's no actions added. If
+	// there's actions in the log, a meta file exists.
+	if (file_log.is_open() || file_meta.is_open())
 	{
 		while (getline(file_log, line_log))
 		{
