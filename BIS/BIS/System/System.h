@@ -58,7 +58,7 @@ private:
 	void mUnselect();
 	void mSelectAndFocus(Room *picked_room);
 
-	void mUpdateEvents(Room *room);
+	//void mUpdateEvents(Room *room);
 	void mUpdateEvent(Room *pRoom, LogEvent *pEvent);
 	void mUpdateEvents(Room *room, bool automatic_input);
 

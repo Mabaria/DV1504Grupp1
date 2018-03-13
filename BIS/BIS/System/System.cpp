@@ -121,7 +121,6 @@ void System::BuildGraphicalUserInterface(
 	this->mpMenuPanel->Init(
 		this->mpTopViewPanel->GetWidth(), 
 		this->mpTopViewPanel->GetHeight(), 
-		&this->mEventLog, 
 		windowName.c_str(), 
 		this->mpTopViewPanel->GetPanelWindowHandle());
 	this->mpMenuPanel->AddObserver(this);
@@ -264,7 +263,7 @@ void System::mHandleInput()
 			if (picked_room)
 			{
 				XMFLOAT3 picked_position = this->mBoat.GetPickedPosition(this->mRay);
-				ActionHandler::ActionInfo result = this->mActionHandler.AddAction(
+				ActionHandler::Info result = this->mActionHandler.AddAction(
 					picked_position.x,
 					picked_position.z);
 
@@ -278,9 +277,8 @@ void System::mHandleInput()
 					desc.pActionIndex = result.ActionPtr;
 					desc.pos_x = result.pos_x;
 					desc.pos_z = result.pos_z;
-					desc.rotation = result.rotation;
 					desc.type = (LogAction::Type)result.type;
-					desc.numberOnIcon = result.number;
+					desc.data = result.data;
 
 					picked_room->AddAction(desc);
 				}
@@ -514,6 +512,52 @@ void System::mSelectAndFocus(Room * picked_room)
 	}
 	this->mUpdateRoomInfo();
 
+}
+
+void System::mUpdateEvent(Room * pRoom, LogEvent * pEvent)
+{
+	// If there already is an active event of that type in that room
+	// the event is removed.
+	this->mpActiveLogPanel->AddNotification(pRoom, pEvent);
+
+	// Adding the system as an observer to the newly added notification object.
+	this->mpActiveLogPanel->
+		GetNotificationList()->
+		GetNotificationObjectByIndex(
+			this->mpActiveLogPanel->GetNotificationList()->
+			GetNumberOfNotificationObjects() - 1)->
+		AddObserver(this);
+
+	// Adds bounds to the deck name to get the name of the 
+	// mesh object holding the bounding boxes for the deck.
+	std::string bounds_name = pRoom->GetDeckName() + "bounds";
+
+	// Saving things for readability.
+	MeshObject *top_picked_deck = this->mpTopViewPanel->rGetMeshObject(bounds_name);
+	MeshObject *side_picked_deck = this->mpSideViewPanel->rGetMeshObject(bounds_name);
+	int index_in_deck = pRoom->GetIndexInDeck();
+
+	std::vector<LogEvent*> events_in_room;
+	pRoom->GetActiveEvents(events_in_room);
+
+	// Filling event data for bounding box coloring.
+	EventData event_data = { 0 };
+	for (int i = 0; (i < (int)events_in_room.size()) && (i < 4); i++)
+	{
+		event_data.slots[i] = (float)Event::GetID(events_in_room[i]->GetType()) + 1;
+	}
+
+	top_picked_deck->SetEvent(
+		event_data,
+		this->mpTopViewPanel->rGetDirect3D().GetContext(),
+		index_in_deck);
+
+	side_picked_deck->SetEvent(
+		event_data,
+		this->mpSideViewPanel->rGetDirect3D().GetContext(),
+		index_in_deck);
+
+	this->mpMenuPanel->UpdateEventButtonImages();
 }
 
 void System::mUpdateEvents(Room * room, bool automatic_input)
@@ -959,4 +1003,67 @@ void System::mSetupBoat()
 	};
 
 	this->mBoat.LoadBoundingBoxes(mesh_list, floor_matrix_list, 3);
+
+	std::vector<Log::ActionInfo> activeActions;
+	std::vector<Actions::Info> actionInfos;
+	std::vector<int*> actionPointers;
+
+	this->mBoat.LoadFromFile_Log();
+	this->mBoat.GetAllActiveActions(activeActions);
+
+	for (int i = 0; i < (int)activeActions.size(); i++)
+	{
+		Actions::Info info;
+		info.x = activeActions[i].pAction->GetPos_X();
+		info.z = activeActions[i].pAction->GetPos_Z();
+		info.data = activeActions[i].pAction->GetData();
+
+		actionInfos.push_back(info);
+	}
+
+	this->mActionHandler.InitFromFile(actionInfos, actionPointers);
+
+	for (int i = 0; i < (int)activeActions.size(); i++)
+		activeActions[i].pIndexPtr = actionPointers[i];
+
+	this->mBoat.UpdateActionPointers(activeActions);
+
+
+	std::list<EventInfo> infolist;
+
+	Room *pRoom;
+	int size = this->mBoat.GetRoomCount();
+	for (int i = 0; i < size; i++)
+	{
+		pRoom = this->mBoat.GetRoomPointerAt(i);
+
+		if (pRoom->GetActiveEventCount() > 0)
+		{
+			std::vector<LogEvent*> events;
+			pRoom->GetActiveEvents(events);
+
+			EventInfo eventinfo;
+			eventinfo.pRoom = pRoom;
+
+			for (int j = 0; j < (int)events.size(); j++)
+			{
+				eventinfo.pEvent = events[j];
+
+				infolist.push_back(eventinfo);
+			}
+		}
+	}
+
+	infolist.sort();
+
+	EventInfo eventinfo;
+	while ((int)infolist.size() > 0)
+	{
+		eventinfo = infolist.front();
+
+		this->mpMenuPanel->SetActiveRoom(eventinfo.pRoom);
+		this->mUpdateEvent(eventinfo.pRoom, eventinfo.pEvent);
+
+		infolist.pop_front();
+	}
 }
