@@ -58,13 +58,13 @@ bool RoomLog::ClearEvent(Event::Type type)
 			this->mpEventLog->AddEvent(desc);
 
 			this->mpEvents.erase(this->mpEvents.begin() + i);
+
+			// Update meta file
+			this->UpdateMeta();
+
 			return true;
 		}
 	}
-
-	// Update meta file
-	this->UpdateMeta();
-
 	return false;
 }
 
